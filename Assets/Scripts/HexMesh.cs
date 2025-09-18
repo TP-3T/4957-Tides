@@ -15,6 +15,7 @@ public class HexMesh : MonoBehaviour
     {
         meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = mesh = new Mesh();
+        Debug.Log(mesh);
         mesh.name = "The Hexagon Mesh";
         mesh.indexFormat = IndexFormat.UInt32;          // This is so that we can have > 65000 vertices in the mesh, platform dependant so idk, multiple meshes (please no)
 
