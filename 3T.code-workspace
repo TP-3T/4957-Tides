@@ -14,7 +14,8 @@
       ".gitattributes",
       ".vscode",
       ".vscode-insiders",
-      "*.code-workspace"
+      "3T.code-workspace",
+      ".gitattributes"
     ],
     "files.autoSave": "afterDelay",
     "editor.detectIndentation": false,
