@@ -35,3 +35,4 @@ sysinfo.txt
 LightmapSnapshot/
 *.stackdump
 
+/Database API Server/node_modules
