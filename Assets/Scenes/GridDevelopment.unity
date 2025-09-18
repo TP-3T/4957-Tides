@@ -309,6 +309,7 @@ GameObject:
   - component: {fileID: 1469703427}
   - component: {fileID: 1469703426}
   - component: {fileID: 1469703425}
+  - component: {fileID: 1469703428}
   m_Layer: 0
   m_Name: HexMesh
   m_TagString: Untagged
@@ -406,6 +407,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469703422}
   m_Mesh: {fileID: 0}
+--- !u!114 &1469703428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469703422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab66731068b45f247804497278d9a542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1595606229
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,10 +540,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c92efbddcc54ab4681375c1de61a92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DrawGizmos: 1
+  DrawGizmos: 0
   HexOrientation: 0
-  Width: 10
-  Height: 10
+  Width: 100
+  Height: 100
   HexSize: 5
   HexCell: {fileID: 3329167254614905112, guid: 9952da0958d8e9a458f96ec90e71c63a, type: 3}
 --- !u!4 &1724694748
