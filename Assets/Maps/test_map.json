@@ -2,116 +2,31 @@
     "Name": "test_map",
     "Width": 5,
     "Height": 5,
-    "HexTiles": [
-        [
-            {
-                "TileType": 0,
-                "Height": 1
-            },
-            {
-                "TileType": 0,
-                "Height": 0
-            },
-            {
-                "TileType": 1,
-                "Height": 1
-            },
-            {
-                "TileType": 2,
-                "Height": 1
-            },
-            {
-                "TileType": 3,
-                "Height": 4
-            }
-        ],
-        [
-            {
-                "TileType": 0,
-                "Height": 1
-            },
-            {
-                "TileType": 0,
-                "Height": 0
-            },
-            {
-                "TileType": 1,
-                "Height": 1
-            },
-            {
-                "TileType": 2,
-                "Height": 1
-            },
-            {
-                "TileType": 3,
-                "Height": 4
-            }
-        ],
-        [
-            {
-                "TileType": 0,
-                "Height": 1
-            },
-            {
-                "TileType": 0,
-                "Height": 0
-            },
-            {
-                "TileType": 1,
-                "Height": 1
-            },
-            {
-                "TileType": 2,
-                "Height": 1
-            },
-            {
-                "TileType": 3,
-                "Height": 4
-            }
-        ],
-        [
-            {
-                "TileType": 0,
-                "Height": 1
-            },
-            {
-                "TileType": 0,
-                "Height": 0
-            },
-            {
-                "TileType": 1,
-                "Height": 1
-            },
-            {
-                "TileType": 2,
-                "Height": 1
-            },
-            {
-                "TileType": 3,
-                "Height": 4
-            }
-        ],
-        [
-            {
-                "TileType": 0,
-                "Height": 1
-            },
-            {
-                "TileType": 0,
-                "Height": 0
-            },
-            {
-                "TileType": 1,
-                "Height": 1
-            },
-            {
-                "TileType": 2,
-                "Height": 1
-            },
-            {
-                "TileType": 3,
-                "Height": 4
-            }
-        ]
+    "MapTilesData": [
+        { "TileType": 0, "TilePosition": { "x": 0, "y": 1, "z": 0 } },
+        { "TileType": 0, "TilePosition": { "x": 1, "y": 1, "z": 0 } },
+        { "TileType": 0, "TilePosition": { "x": 2, "y": 1, "z": 0 } },
+        { "TileType": 0, "TilePosition": { "x": 3, "y": 1, "z": 0 } },
+        { "TileType": 0, "TilePosition": { "x": 4, "y": 1, "z": 0 } },
+        { "TileType": 0, "TilePosition": { "x": 0, "y": 1, "z": 1 } },
+        { "TileType": 0, "TilePosition": { "x": 1, "y": 1, "z": 1 } },
+        { "TileType": 0, "TilePosition": { "x": 2, "y": 1, "z": 1 } },
+        { "TileType": 0, "TilePosition": { "x": 3, "y": 1, "z": 1 } },
+        { "TileType": 0, "TilePosition": { "x": 4, "y": 1, "z": 1 } },
+        { "TileType": 0, "TilePosition": { "x": 0, "y": 1, "z": 2 } },
+        { "TileType": 0, "TilePosition": { "x": 1, "y": 1, "z": 2 } },
+        { "TileType": 0, "TilePosition": { "x": 2, "y": 1, "z": 2 } },
+        { "TileType": 0, "TilePosition": { "x": 3, "y": 1, "z": 2 } },
+        { "TileType": 0, "TilePosition": { "x": 4, "y": 1, "z": 2 } },
+        { "TileType": 0, "TilePosition": { "x": 0, "y": 1, "z": 3 } },
+        { "TileType": 0, "TilePosition": { "x": 1, "y": 1, "z": 3 } },
+        { "TileType": 0, "TilePosition": { "x": 2, "y": 1, "z": 3 } },
+        { "TileType": 0, "TilePosition": { "x": 3, "y": 1, "z": 3 } },
+        { "TileType": 0, "TilePosition": { "x": 4, "y": 1, "z": 3 } },
+        { "TileType": 0, "TilePosition": { "x": 0, "y": 1, "z": 4 } },
+        { "TileType": 0, "TilePosition": { "x": 1, "y": 1, "z": 4 } },
+        { "TileType": 0, "TilePosition": { "x": 2, "y": 1, "z": 4 } },
+        { "TileType": 0, "TilePosition": { "x": 3, "y": 1, "z": 4 } },
+        { "TileType": 0, "TilePosition": { "x": 4, "y": 1, "z": 4 } }
     ]
 }

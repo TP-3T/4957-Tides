@@ -1,12 +1,20 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Numerics;
+
+public enum TileType
+{
+    grassland,
+    water,
+    forest,
+    hill
+}
 
 [Serializable]
-public class MapDataTile
+public class MapTileData
 {
     public TileType TileType;
-    public float Height;
+    public Vector3 TilePosition;
 }
 
 [Serializable]
@@ -15,5 +23,5 @@ public class MapData
     public string Name;
     public int Width;
     public int Height;
-    public List<List<MapDataTile>> HexTiles;
+    public List<MapTileData> MapTilesData;
 }

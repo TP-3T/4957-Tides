@@ -72,7 +72,8 @@ public class HexGrid : MonoBehaviour
         Debug.Log(@$"
         {gameMap.Name},
         {gameMap.Width}, {gameMap.Height}
-        {gameMap.HexTiles[0]}
+        {gameMap.MapTilesData.Count}
+        {gameMap.MapTilesData[0].TileType}
         ");
 
         Instantiate();
