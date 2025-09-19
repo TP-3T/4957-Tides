@@ -1,9 +1,116 @@
 {
-    "name": "test_map",
-    "tiles": [
+    "Name": "test_map",
+    "Width": 5,
+    "Height": 5,
+    "HexTiles": [
         [
             {
-                "type": "grassland"
+                "TileType": 0,
+                "Height": 1
+            },
+            {
+                "TileType": 0,
+                "Height": 0
+            },
+            {
+                "TileType": 1,
+                "Height": 1
+            },
+            {
+                "TileType": 2,
+                "Height": 1
+            },
+            {
+                "TileType": 3,
+                "Height": 4
+            }
+        ],
+        [
+            {
+                "TileType": 0,
+                "Height": 1
+            },
+            {
+                "TileType": 0,
+                "Height": 0
+            },
+            {
+                "TileType": 1,
+                "Height": 1
+            },
+            {
+                "TileType": 2,
+                "Height": 1
+            },
+            {
+                "TileType": 3,
+                "Height": 4
+            }
+        ],
+        [
+            {
+                "TileType": 0,
+                "Height": 1
+            },
+            {
+                "TileType": 0,
+                "Height": 0
+            },
+            {
+                "TileType": 1,
+                "Height": 1
+            },
+            {
+                "TileType": 2,
+                "Height": 1
+            },
+            {
+                "TileType": 3,
+                "Height": 4
+            }
+        ],
+        [
+            {
+                "TileType": 0,
+                "Height": 1
+            },
+            {
+                "TileType": 0,
+                "Height": 0
+            },
+            {
+                "TileType": 1,
+                "Height": 1
+            },
+            {
+                "TileType": 2,
+                "Height": 1
+            },
+            {
+                "TileType": 3,
+                "Height": 4
+            }
+        ],
+        [
+            {
+                "TileType": 0,
+                "Height": 1
+            },
+            {
+                "TileType": 0,
+                "Height": 0
+            },
+            {
+                "TileType": 1,
+                "Height": 1
+            },
+            {
+                "TileType": 2,
+                "Height": 1
+            },
+            {
+                "TileType": 3,
+                "Height": 4
             }
         ]
     ]

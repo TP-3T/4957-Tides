@@ -1,8 +1,18 @@
+using System;
 using UnityEngine;
+
+public enum TileType
+{
+    grassland,
+    water,
+    forest,
+    hill
+}
 
 public class HexCell : MonoBehaviour
 {
-    public Vector3 CenterPosition { get; set; }
-
-    public Color VertexColor { get; set; }
+    [NonSerialized]
+    public Vector3 CenterPosition = Vector3.zero;          // You will set this in the code
+    public TileType TileType;
+    public float Height;
 }

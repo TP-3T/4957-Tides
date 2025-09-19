@@ -1,4 +1,5 @@
 using UnityEditor.PackageManager;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class HexGrid : MonoBehaviour
@@ -6,21 +7,19 @@ public class HexGrid : MonoBehaviour
 
     [SerializeField]
     public bool DrawGizmos;
-
     [SerializeField]
     public HexOrientation HexOrientation;
-
     [SerializeField]
     public int Width, Height;
-
     [SerializeField]
     public float HexSize;
-
     [SerializeField]
     public HexCell HexCell;
+    [SerializeField]
+    public TextAsset MapSource;
 
+    private MapData gameMap;
     private HexCell[] hexCells;
-
     private HexMesh hexMesh;
 
     void Instantiate()
@@ -69,6 +68,13 @@ public class HexGrid : MonoBehaviour
 
     void Awake()
     {
+        gameMap = JsonUtility.FromJson<MapData>(MapSource.ToString());
+        Debug.Log(@$"
+        {gameMap.Name},
+        {gameMap.Width}, {gameMap.Height}
+        {gameMap.HexTiles[0]}
+        ");
+
         Instantiate();
     }
 }
