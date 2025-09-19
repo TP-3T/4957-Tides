@@ -26,19 +26,39 @@ public class HexGrid : MonoBehaviour
     {
         hexMesh = GetComponentInChildren<HexMesh>();
 
-        hexCells = new HexCell[Width * Height];
+        hexCells = new HexCell[gameMap.Width * gameMap.Height];
 
-        for (int z = 0, i = 0; z < Height; z++)
+        // for (int z = 0, i = 0; z < Height; z++)
+        // {
+        //     for (int x = 0; x < Width; x++)
+        //     {
+        //         Vector3 hexCenter = HexMath.GetHexCenter(HexSize, x, z, HexOrientation) + transform.position;
+        //         HexCell hexCell = Instantiate(HexCell, hexCenter, Quaternion.identity, this.transform);
+
+        //         hexCell.CenterPosition = hexCenter;
+
+        //         hexCells[i++] = hexCell;
+        //     }
+        // }
+
+        int i = 0;
+
+        foreach (var mapTileData in gameMap.MapTilesData)
         {
-            for (int x = 0; x < Width; x++)
-            {
-                Vector3 hexCenter = HexMath.GetHexCenter(HexSize, x, z, HexOrientation) + transform.position;
-                HexCell hexCell = Instantiate(HexCell, hexCenter, Quaternion.identity, this.transform);
+            Vector3 hexCenter = HexMath.GetHexCenter(
+                HexSize,
+                Mathf.FloorToInt(mapTileData.TilePosition.x),
+                Mathf.FloorToInt(mapTileData.TilePosition.y),
+                Mathf.FloorToInt(mapTileData.TilePosition.z),
+                HexOrientation
+            ) + transform.position;
 
-                hexCell.CenterPosition = hexCenter;
+            HexCell hexCell = Instantiate(HexCell, hexCenter, Quaternion.identity, this.transform);
 
-                hexCells[i++] = hexCell;
-            }
+            hexCell.CenterPosition = hexCenter;
+            hexCell.MapTileData = mapTileData;
+
+            hexCells[i++] = hexCell;
         }
 
         hexMesh.Triangulate(hexCells, HexSize, HexOrientation);
@@ -68,12 +88,20 @@ public class HexGrid : MonoBehaviour
 
     void Awake()
     {
-        gameMap = JsonUtility.FromJson<MapData>(MapSource.ToString());
+        var test = MapSource.text;
+
+        Debug.Log(test);
+
+        gameMap = JsonUtility.FromJson<MapData>(test);
+
         Debug.Log(@$"
         {gameMap.Name},
         {gameMap.Width}, {gameMap.Height}
         {gameMap.MapTilesData.Count}
         {gameMap.MapTilesData[0].TileType}
+        {gameMap.MapTilesData[0].TilePosition.x}
+        {gameMap.MapTilesData[0].TilePosition.y}
+        {gameMap.MapTilesData[0].TilePosition.z}
         ");
 
         Instantiate();

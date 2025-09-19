@@ -90,21 +90,34 @@ public static class HexMath
     /// <param name="z"></param>
     /// <param name="orientation"></param>
     /// <returns></returns>
-    public static Vector3 GetHexCenter(float hexSize, int x, int z, HexOrientation orientation)
+    public static Vector3 GetHexCenter(float hexSize, int x, int y, int z, HexOrientation orientation)
     {
         Vector3 point;
         if (orientation == HexOrientation.POINTY_TOP)
         {
             point.x = (x + z * 0.5f - z / 2) * (InnerRadius(hexSize) * 2f);     // Determine offset by even or odd row
-            point.y = 0f;
+            point.y = y;
             point.z = z * (OuterRadius(hexSize) * 1.5f);
         }
         else
         {
             point.x = x * (OuterRadius(hexSize) * 1.5f);
-            point.y = 0f;
+            point.y = y;
             point.z = (z + x * 0.5f - x / 2) * (InnerRadius(hexSize) * 2f);     // Determine offset by even or odd row
         }
         return point;
+    }
+
+    /// <summary>
+    /// No height to the center, automatically 0f in the Y component.
+    /// </summary>
+    /// <param name="hexSize"></param>
+    /// <param name="x"></param>
+    /// <param name="z"></param>
+    /// <param name="orientation"></param>
+    /// <returns></returns>
+    public static Vector3 GetHexCenter(float hexSize, int x, int z, HexOrientation orientation)
+    {
+        return GetHexCenter(hexSize, x, 0, z, orientation);
     }
 }
