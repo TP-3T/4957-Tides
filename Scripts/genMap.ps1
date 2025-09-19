@@ -18,7 +18,7 @@ function GenerateMap {
         TileType = Get-Random -Minimum 0 -Maximum 3
         TilePosition = [ordered]@{
           x = $k 
-          y = Get-Random -Minimum 0 -Maximum 3
+          y = Get-Random -Minimum 0 -Maximum $Variance
           z = $i
         }
       }

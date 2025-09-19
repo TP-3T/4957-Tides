@@ -542,12 +542,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DrawGizmos: 0
-  HexOrientation: 1
-  Width: 100
-  Height: 100
-  HexSize: 5
+  HexOrientation: 0
+  HexSize: 10
   HexCell: {fileID: 3329167254614905112, guid: 9952da0958d8e9a458f96ec90e71c63a, type: 3}
-  MapSource: {fileID: 4900000, guid: bbd340a86e7f4524fb9a0114a290e175, type: 3}
+  MapSource: {fileID: 4900000, guid: dc3bc256c1f27e84780cac0ddd0a65f9, type: 3}
 --- !u!4 &1724694748
 Transform:
   m_ObjectHideFlags: 0
