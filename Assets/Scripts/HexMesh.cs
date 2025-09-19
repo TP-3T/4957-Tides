@@ -25,6 +25,7 @@ public class HexMesh : MonoBehaviour
 
     void Triangulate(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
     {
+        bool aboveSea = hexCell.CenterPosition.y > 0f;
         int triVertexStart = vertices.Count;
 
         vertices.Add(hexCell.CenterPosition);
@@ -33,19 +34,14 @@ public class HexMesh : MonoBehaviour
 
         // Regular triangle vertices
         foreach (Vector3 corner in corners)
-        {
             vertices.Add(hexCell.CenterPosition + corner);
-
-            if (!(hexCell.CenterPosition.y > 0f))
-                continue;
-        }
 
         int sideTriVertexStart = vertices.Count;
 
         // Vertices that will be used to draw the side faces
         foreach (Vector3 corner in corners)
         {
-            if (!(hexCell.CenterPosition.y > 0f))
+            if (!aboveSea)
                 continue;
 
             vertices.Add(hexCell.CenterPosition + corner - new Vector3(0, hexCell.CenterPosition.y, 0));
@@ -57,17 +53,19 @@ public class HexMesh : MonoBehaviour
             triangles.Add(triVertexStart + ((i == 5) ? 1 : i + 2));
             triangles.Add(triVertexStart + i + 1);
 
+            if (!aboveSea)
+                continue;
+
             // Tri one of the side face
             triangles.Add(sideTriVertexStart + ((i == 5) ? 0 : i + 1));
             triangles.Add(sideTriVertexStart + i);
             triangles.Add(triVertexStart + ((i == 5) ? 1 : i + 2));
 
-            // // Tri two of the side face
+            // Tri two of the side face
             triangles.Add(triVertexStart + ((i == 5) ? 1 : i + 2));
             triangles.Add(sideTriVertexStart + i);
             triangles.Add(triVertexStart + i + 1);
         }
-
 
         // triangles.Add(triVertexStart);
         // triangles.Add(triVertexStart + 2);
