@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class HexGrid : MonoBehaviour
 {
-
     [SerializeField]
     public bool DrawGizmos;
     [SerializeField]
     public HexOrientation HexOrientation;
-    [SerializeField]
-    public int Width, Height;
     [SerializeField]
     public float HexSize;
     [SerializeField]
@@ -18,6 +15,7 @@ public class HexGrid : MonoBehaviour
     [SerializeField]
     public TextAsset MapSource;
 
+    private int Width, Height;
     private MapData gameMap;
     private HexCell[] hexCells;
     private HexMesh hexMesh;

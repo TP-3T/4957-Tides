@@ -8,13 +8,9 @@ function GenerateMap {
     $Height,
     $Variance
   )
-
-  $map = @{
-    Name = $MapName
-    Width = $Width
-    Height = $Height
-    MapTilesData = @()
-  }
+  
+  $MapDetails = @{}
+  $Tiles = @()
 
   for ($i = 0; $i -lt $Height; $i++) {
     for ($k = 0; $k -lt $Width; $k++) {
@@ -26,10 +22,33 @@ function GenerateMap {
           z = $i
         }
       }
-      $map.MapTilesData += $Tile
+      $Tiles += $Tile
     }
   }
 
-  return $map
+  $MapDetails.MapName = $MapName
+  $MapDetails.Width = $Width
+  $MapDetails.Height = $Height
+  $MapDetails.MapTilesData = $Tiles
+
+  return $MapDetails
 }
+
+function GenerateMaps {
+  <# Auto dump the map files generated into ../Assets/Maps #>
+  param(
+    $MapDetails
+  )
+  foreach ($MapDetail in $MapDetails) {
+
+    Write-Host $MapDetail
+
+    $Map = GenerateMap @MapDetail
+
+    ConvertTo-Json `
+      -InputObject $Map `
+      -Depth 3 > "$PSScriptRoot\..\Assets\Maps\$($Map.MapName).json"
+  }
+}
+
 
