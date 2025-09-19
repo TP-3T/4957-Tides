@@ -4,62 +4,23 @@ using UnityEngine;
 
 public class HexGrid : MonoBehaviour
 {
-    [SerializeField]
-    public bool DrawGizmos;
-    [SerializeField]
-    public HexOrientation HexOrientation;
-    [SerializeField]
-    public float HexSize;
-    [SerializeField]
-    public HexCell HexCell;
-    [SerializeField]
-    public TextAsset MapSource;
+    [SerializeField] public bool DrawGizmos;
+    [SerializeField] public HexOrientation HexOrientation;
+    [SerializeField] public float HexSize;
+    [SerializeField] public HexCell HexCell;
+    [SerializeField] public TextAsset MapSource;
 
     private int Width, Height;
     private MapData gameMap;
     private HexCell[] hexCells;
     private HexMesh hexMesh;
 
-    void Instantiate()
+    void Awake()
     {
         hexMesh = GetComponentInChildren<HexMesh>();
 
-        hexCells = new HexCell[gameMap.Width * gameMap.Height];
-
-        // for (int z = 0, i = 0; z < Height; z++)
-        // {
-        //     for (int x = 0; x < Width; x++)
-        //     {
-        //         Vector3 hexCenter = HexMath.GetHexCenter(HexSize, x, z, HexOrientation) + transform.position;
-        //         HexCell hexCell = Instantiate(HexCell, hexCenter, Quaternion.identity, this.transform);
-
-        //         hexCell.CenterPosition = hexCenter;
-
-        //         hexCells[i++] = hexCell;
-        //     }
-        // }
-
-        int i = 0;
-
-        foreach (var mapTileData in gameMap.MapTilesData)
-        {
-            Vector3 hexCenter = HexMath.GetHexCenter(
-                HexSize,
-                Mathf.FloorToInt(mapTileData.TilePosition.x),
-                Mathf.FloorToInt(mapTileData.TilePosition.y),
-                Mathf.FloorToInt(mapTileData.TilePosition.z),
-                HexOrientation
-            ) + transform.position;
-
-            HexCell hexCell = Instantiate(HexCell, hexCenter, Quaternion.identity, this.transform);
-
-            hexCell.CenterPosition = hexCenter;
-            hexCell.MapTileData = mapTileData;
-
-            hexCells[i++] = hexCell;
-        }
-
-        hexMesh.Triangulate(hexCells, HexSize, HexOrientation);
+        ClearMap();
+        BuildMap();
     }
 
     void OnDrawGizmos()
@@ -84,13 +45,9 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    void Awake()
+    void LoadMapTilesData()
     {
-        var test = MapSource.text;
-
-        Debug.Log(test);
-
-        gameMap = JsonUtility.FromJson<MapData>(test);
+        gameMap = JsonUtility.FromJson<MapData>(MapSource.text);
 
         Debug.Log(@$"
         {gameMap.Name},
@@ -101,7 +58,66 @@ public class HexGrid : MonoBehaviour
         {gameMap.MapTilesData[0].TilePosition.y}
         {gameMap.MapTilesData[0].TilePosition.z}
         ");
+    }
 
-        Instantiate();
+    public void BuildMap()
+    {
+        if (hexMesh == null)
+        {
+            Debug.LogError("Hex mesh is null");
+            return;
+        }
+
+        LoadMapTilesData();
+
+        hexCells = new HexCell[gameMap.Width * gameMap.Height];
+
+        int i = 0;
+
+        foreach (var mapTileData in gameMap.MapTilesData)
+        {
+            Vector3 hexCenter = HexMath.GetHexCenter(
+                HexSize,
+                Mathf.FloorToInt(mapTileData.TilePosition.x),
+                Mathf.FloorToInt(mapTileData.TilePosition.y),
+                Mathf.FloorToInt(mapTileData.TilePosition.z),
+                HexOrientation
+            ) + transform.position;
+
+            HexCell hexCell = Instantiate(HexCell, hexCenter, Quaternion.identity, this.transform);
+
+            hexCell.CenterPosition = hexCenter;
+            hexCell.MapTileData = mapTileData;
+
+            hexCells[i++] = hexCell;
+        }
+
+        hexMesh.Triangulate(hexCells, HexSize, HexOrientation);
+    }
+
+    public void ClearMap()
+    {
+        if (hexMesh == null)
+            return;
+
+        hexMesh.ClearMesh();
+
+        if (hexCells == null || hexCells.Length == 0)
+            return;
+
+        foreach (var hexCell in hexCells)
+        {
+            if (hexCell == null)
+                continue;
+
+            if (Application.isEditor && !Application.isPlaying)
+            {
+                DestroyImmediate(hexCell.gameObject);
+            }
+            else
+            {
+                Destroy(hexCell.gameObject);
+            }
+        }
     }
 }

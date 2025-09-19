@@ -7,20 +7,33 @@ public class HexMesh : MonoBehaviour
 {
     private Mesh mesh;
     private MeshFilter meshFilter;
+    private MeshCollider meshCollider;
     private List<Vector3> vertices;
 
     private List<int> triangles;
 
-    void Awake()
+    void InitializeMesh()
     {
-        meshFilter = GetComponent<MeshFilter>();
-        meshFilter.mesh = mesh = new Mesh();
-        Debug.Log(mesh);
-        mesh.name = "The Hexagon Mesh";
-        mesh.indexFormat = IndexFormat.UInt32;          // This is so that we can have > 65000 vertices in the mesh, platform dependant so idk, multiple meshes (please no)
+        if (meshFilter == null)
+            meshFilter = GetComponent<MeshFilter>();
+        if (meshCollider == null)
+            meshCollider = GetComponent<MeshCollider>();
+
+        mesh = new Mesh
+        {
+            name = "The Hexagon Mesh",
+            indexFormat = IndexFormat.UInt32          // This is so that we can have > 65000 vertices in the mesh, platform dependant so idk, multiple meshes (please no)
+        };
+        meshFilter.sharedMesh = mesh;
+        meshCollider.sharedMesh = mesh;
 
         vertices = new();
         triangles = new();
+    }
+
+    void Awake()
+    {
+        InitializeMesh();
     }
 
     void Triangulate(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
@@ -94,10 +107,7 @@ public class HexMesh : MonoBehaviour
 
     public void Triangulate(HexCell[] hexCells, float hexSize, HexOrientation hexOrientation)
     {
-        mesh.Clear();
-
-        vertices.Clear();
-        triangles.Clear();
+        ClearMesh();
 
         foreach (HexCell hexCell in hexCells)
         {
@@ -110,5 +120,12 @@ public class HexMesh : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
         mesh.Optimize();
+    }
+
+    public void ClearMesh()
+    {
+        vertices.Clear();
+        triangles.Clear();
+        mesh.Clear();
     }
 }

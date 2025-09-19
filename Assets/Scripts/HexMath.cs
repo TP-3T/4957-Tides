@@ -5,8 +5,8 @@ using UnityEngine;
 
 public enum HexOrientation
 {
-    FLAT_TOP,
-    POINTY_TOP
+    flatTop,
+    pointyTop
 }
 
 public struct AxialCoordinates
@@ -57,7 +57,7 @@ public static class HexMath
         Vector3 corner;
         float angle = cornerIndex * 60f;
 
-        if (orientation == HexOrientation.POINTY_TOP)
+        if (orientation == HexOrientation.pointyTop)
         {
             angle += 30f;
         }
@@ -93,7 +93,7 @@ public static class HexMath
     public static Vector3 GetHexCenter(float hexSize, int x, int y, int z, HexOrientation orientation)
     {
         Vector3 point;
-        if (orientation == HexOrientation.POINTY_TOP)
+        if (orientation == HexOrientation.pointyTop)
         {
             point.x = (x + z * 0.5f - z / 2) * (InnerRadius(hexSize) * 2f);     // Determine offset by even or odd row
             point.y = y;
