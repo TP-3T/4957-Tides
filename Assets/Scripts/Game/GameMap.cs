@@ -1,16 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameMap : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public string test;
+    public List<List<HexCell>> HexCells;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

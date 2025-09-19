@@ -1,0 +1,10 @@
+{
+    "name": "test_map",
+    "tiles": [
+        [
+            {
+                "type": "grassland"
+            }
+        ]
+    ]
+}
