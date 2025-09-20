@@ -80,23 +80,23 @@ public class HexGrid : MonoBehaviour
         foreach (var mapTileData in GameMapData.MapTilesData)
         {
             Vector3 hexCenter = HexMath.GetHexCenter(
-                HexSize, mapTileData.TilePosition, HexOrientation
+                HexSize, mapTileData.Height, mapTileData.OffsetCoordinates, HexOrientation
             ) + transform.position;
 
-            CubeCoordinates hexCubeCoordinates = HexMath.CubeFromPosition(
-                mapTileData.TilePosition, HexOrientation
+            CubeCoordinates hexCubeCoordinates = HexMath.OddOffsetToCube(
+                mapTileData.OffsetCoordinates, HexOrientation
             );
 
             HexCell hexCell = Instantiate(HexCell, hexCenter, Quaternion.identity, this.transform);
 
             hexCell.CellPosition = hexCenter;
-            hexCell.CellCoordinates = hexCubeCoordinates;
+            hexCell.CellCubeCoordinates = hexCubeCoordinates;
             hexCell.MapTileData = mapTileData;
 
             Debug.Log(@$"
             {hexCell.CellPosition}, The real position
-            {hexCell.CellCoordinates}, The cube position: q,r,s
-            {hexCell.MapTileData.TilePosition}, Logical map position (col,height,row): x,y,z
+            {hexCell.CellCubeCoordinates}, The cube position: q,r,s
+            {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
             ");
 
             HexCells[i++] = hexCell;

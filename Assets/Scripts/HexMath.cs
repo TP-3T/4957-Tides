@@ -1,14 +1,28 @@
-using System.IO.Compression;
-using JetBrains.Annotations;
-using Unity.Collections;
-using Unity.Mathematics;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 public enum HexOrientation
 {
     flatTop,
     pointyTop
+}
+
+[Serializable]
+public struct OffsetCoordinates
+{
+    public int x;
+    public int z;
+
+    public OffsetCoordinates(int x, int z)
+    {
+        this.x = x;
+        this.z = z;
+    }
+
+    public override string ToString()
+    {
+        return $"({x}, {z})";
+    }
 }
 
 public struct AxialCoordinates
@@ -142,9 +156,9 @@ public static class HexMath
     /// <param name="position"></param>
     /// <param name="hexOrientation"></param>
     /// <returns></returns>
-    public static Vector3 GetHexCenter(float hexSize, MapTilePosition position, HexOrientation hexOrientation)
+    public static Vector3 GetHexCenter(float hexSize, int height, OffsetCoordinates position, HexOrientation hexOrientation)
     {
-        return GetHexCenter(hexSize, position.x, position.y, position.z, hexOrientation);
+        return GetHexCenter(hexSize, position.x, height, position.z, hexOrientation);
     }
 
     /// <summary>
@@ -153,21 +167,45 @@ public static class HexMath
     /// <param name="position"></param>
     /// <param name="hexOrientation"></param>
     /// <returns></returns>
-    public static CubeCoordinates CubeFromPosition(MapTilePosition position, HexOrientation hexOrientation)
+    public static CubeCoordinates OddOffsetToCube(OffsetCoordinates position, HexOrientation hexOrientation)
     {
         int q, r;
 
         if (hexOrientation == HexOrientation.pointyTop)
         {
-            q = position.z - (position.x - position.x % 2) / 2;
-            r = position.x;
+            q = position.x - (position.z - (position.z & 1)) / 2;
+            r = position.z;
         }
         else
         {
             q = position.x;
-            r = position.z - (position.x - position.x % 2) / 2;
+            r = position.z - (position.x - (position.x & 1)) / 2;
         }
 
         return new CubeCoordinates(q, r);
+    }
+
+    /// <summary>
+    /// Calculates the offset coordinates from cube coordinates.
+    /// </summary>
+    /// <param name="cubeCoordinates"></param>
+    /// <param name=""></param>
+    /// <returns></returns>
+    public static OffsetCoordinates CubeToOddOffset(CubeCoordinates cubeCoordinates, HexOrientation hexOrientation)
+    {
+        int x, z;
+
+        if (hexOrientation == HexOrientation.pointyTop)
+        {
+            x = cubeCoordinates.q + (cubeCoordinates.r - (cubeCoordinates.r & 1)) / 2;
+            z = cubeCoordinates.r;
+        }
+        else
+        {
+            x = cubeCoordinates.q;
+            z = cubeCoordinates.r + (cubeCoordinates.q - (cubeCoordinates.q & 1)) / 2;
+        }
+
+        return new OffsetCoordinates(x, z);
     }
 }
