@@ -1,3 +1,4 @@
+using Unity.Collections;
 using UnityEditor.PackageManager;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -10,56 +11,57 @@ public class HexGrid : MonoBehaviour
     [SerializeField] public HexCell HexCell;
     [SerializeField] public TextAsset MapSource;
 
-    private int Width, Height;
-    private MapData gameMap;
-    private HexCell[] hexCells;
+    public HexCell[] HexCells;
+    public MapData GameMapData;
+
     private HexMesh hexMesh;
 
     void Awake()
     {
-        hexMesh = GetComponentInChildren<HexMesh>();
+        if (hexMesh == null)
+            hexMesh = GetComponentInChildren<HexMesh>();
+        if (hexMesh == null)
+            Debug.LogError("HexMesh failed to retrieve component  from children.");
 
         ClearMap();
         BuildMap();
     }
 
+    /// <summary>
+    /// Draws an outline around the top of each hex cell.
+    /// </summary>
     void OnDrawGizmos()
     {
         if (!DrawGizmos)
             return;
 
-        for (int z = 0; z < Height; z++)
+        foreach (HexCell hexCell in HexCells)
         {
-            for (int x = 0; x < Width; x++)
+            Vector3[] hexCorners = HexMath.GetHexCorners(HexSize, HexOrientation);
+            for (int s = 0; s < hexCorners.Length; s++)
             {
-                Vector3 hexCenter = HexMath.GetHexCenter(HexSize, x, z, HexOrientation) + transform.position;
-                Vector3[] hexCorners = HexMath.GetHexCorners(HexSize, HexOrientation);
-                for (int s = 0; s < hexCorners.Length; s++)
-                {
-                    Gizmos.DrawLine(
-                        hexCenter + hexCorners[s % 6],
-                        hexCenter + hexCorners[(s + 1) % 6]
-                    );
-                }
+                Gizmos.DrawLine(
+                    hexCell.CellPosition + hexCorners[s % 6],
+                    hexCell.CellPosition + hexCorners[(s + 1) % 6]
+                );
             }
         }
     }
 
+    /// <summary>
+    /// Loads map tile data from JSON.
+    /// </summary>
     void LoadMapTilesData()
     {
-        gameMap = JsonUtility.FromJson<MapData>(MapSource.text);
+        GameMapData = JsonUtility.FromJson<MapData>(MapSource.text);
 
-        Debug.Log(@$"
-        {gameMap.Name},
-        {gameMap.Width}, {gameMap.Height}
-        {gameMap.MapTilesData.Count}
-        {gameMap.MapTilesData[0].TileType}
-        {gameMap.MapTilesData[0].TilePosition.x}
-        {gameMap.MapTilesData[0].TilePosition.y}
-        {gameMap.MapTilesData[0].TilePosition.z}
-        ");
+        if (GameMapData == null)
+            Debug.LogError("Game map JSON failed to decode.");
     }
 
+    /// <summary>
+    /// Builds the map HexCells form JSON and initiates mesh triangulation.
+    /// </summary>
     public void BuildMap()
     {
         if (hexMesh == null)
@@ -70,31 +72,43 @@ public class HexGrid : MonoBehaviour
 
         LoadMapTilesData();
 
-        hexCells = new HexCell[gameMap.Width * gameMap.Height];
+        HexCells = new HexCell[GameMapData.Width * GameMapData.Height];
 
         int i = 0;
 
-        foreach (var mapTileData in gameMap.MapTilesData)
+        foreach (var mapTileData in GameMapData.MapTilesData)
         {
             Vector3 hexCenter = HexMath.GetHexCenter(
-                HexSize,
-                Mathf.FloorToInt(mapTileData.TilePosition.x),
-                Mathf.FloorToInt(mapTileData.TilePosition.y),
-                Mathf.FloorToInt(mapTileData.TilePosition.z),
-                HexOrientation
+                HexSize, mapTileData.TilePosition, HexOrientation
             ) + transform.position;
+
+            CubeCoordinates hexCubeCoordinates = HexMath.CubeFromPosition(
+                mapTileData.TilePosition, HexOrientation
+            );
 
             HexCell hexCell = Instantiate(HexCell, hexCenter, Quaternion.identity, this.transform);
 
-            hexCell.CenterPosition = hexCenter;
+            hexCell.CellPosition = hexCenter;
+            hexCell.CellCoordinates = hexCubeCoordinates;
             hexCell.MapTileData = mapTileData;
 
-            hexCells[i++] = hexCell;
+            Debug.Log(@$"
+            {hexCell.CellPosition}, The real position
+            {hexCell.CellCoordinates}, The cube position: q,r,s
+            {hexCell.MapTileData.TilePosition}, Logical map position (col,height,row): x,y,z
+            ");
+
+            HexCells[i++] = hexCell;
         }
 
-        hexMesh.Triangulate(hexCells, HexSize, HexOrientation);
+        hexMesh.Triangulate(HexCells, HexSize, HexOrientation);
     }
 
+    /// <summary>
+    /// Destroys the hex cells and clears the mesh.
+    /// 
+    /// For development.
+    /// </summary>
     public void ClearMap()
     {
         if (hexMesh == null)
@@ -102,22 +116,18 @@ public class HexGrid : MonoBehaviour
 
         hexMesh.ClearMesh();
 
-        if (hexCells == null || hexCells.Length == 0)
+        if (HexCell == null || HexCells.Length == 0)
             return;
 
-        foreach (var hexCell in hexCells)
+        foreach (var hexCell in HexCells)
         {
             if (hexCell == null)
                 continue;
 
             if (Application.isEditor && !Application.isPlaying)
-            {
                 DestroyImmediate(hexCell.gameObject);
-            }
             else
-            {
                 Destroy(hexCell.gameObject);
-            }
         }
     }
 }

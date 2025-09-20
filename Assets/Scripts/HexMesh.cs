@@ -24,6 +24,7 @@ public class HexMesh : MonoBehaviour
             name = "The Hexagon Mesh",
             indexFormat = IndexFormat.UInt32          // This is so that we can have > 65000 vertices in the mesh, platform dependant so idk, multiple meshes (please no)
         };
+
         meshFilter.sharedMesh = mesh;
         meshCollider.sharedMesh = mesh;
 
@@ -38,16 +39,16 @@ public class HexMesh : MonoBehaviour
 
     void Triangulate(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
     {
-        bool aboveSeaLevel = hexCell.CenterPosition.y > 0f;
+        bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
         int triVertexStart = vertices.Count;
 
-        vertices.Add(hexCell.CenterPosition);
+        vertices.Add(hexCell.CellPosition);
 
         Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
         // Regular triangle vertices
         foreach (Vector3 corner in corners)
-            vertices.Add(hexCell.CenterPosition + corner);
+            vertices.Add(hexCell.CellPosition + corner);
 
         int sideTriVertexStart = vertices.Count;
 
@@ -57,7 +58,7 @@ public class HexMesh : MonoBehaviour
             if (!aboveSeaLevel)
                 continue;
 
-            vertices.Add(hexCell.CenterPosition + corner - new Vector3(0, hexCell.CenterPosition.y, 0));
+            vertices.Add(hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0));
         }
 
         for (int i = 0; i < corners.Length; i++)

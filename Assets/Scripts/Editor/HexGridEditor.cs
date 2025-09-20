@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEditor;
+using System.Runtime.ExceptionServices;
 
 [CustomEditor(typeof(HexGrid))]
 public class HexGridEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+        DrawDefaultInspector();
 
         HexGrid t = (HexGrid)target;
 
@@ -18,6 +19,16 @@ public class HexGridEditor : Editor
         if (GUILayout.Button("Build Map"))
         {
             t.BuildMap();
+        }
+    }
+
+    void OnSceneGUI()
+    {
+        HexGrid t = (HexGrid)target;
+
+        foreach (HexCell hexCell in t.HexCells)
+        {
+            Handles.Label(hexCell.CellPosition, $"{hexCell.CellCoordinates}");
         }
     }
 }

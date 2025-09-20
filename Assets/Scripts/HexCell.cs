@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class HexCell : MonoBehaviour
 {
-    public Vector3 CenterPosition;          // You will set this in the code
+    [SerializeField] public CubeCoordinates CellCoordinates;
+    [SerializeField] public Vector3 CellPosition;
     public MapTileData MapTileData;
 }

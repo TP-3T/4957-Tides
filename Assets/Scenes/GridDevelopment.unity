@@ -707,10 +707,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DrawGizmos: 0
-  HexOrientation: 1
+  HexOrientation: 0
   HexSize: 1
   HexCell: {fileID: 3329167254614905112, guid: 9952da0958d8e9a458f96ec90e71c63a, type: 3}
   MapSource: {fileID: 4900000, guid: da459c0ba317b5247bfff3b18178f5ed, type: 3}
+  Width: 0
+  Height: 0
+  HexCells: []
 --- !u!4 &1724694748
 Transform:
   m_ObjectHideFlags: 0

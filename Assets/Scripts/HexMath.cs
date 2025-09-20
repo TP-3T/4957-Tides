@@ -1,4 +1,6 @@
+using System.IO.Compression;
 using JetBrains.Annotations;
+using Unity.Collections;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -34,9 +36,21 @@ public struct CubeCoordinates
         this.s = s;
     }
 
+    public CubeCoordinates(int q, int r)
+    {
+        this.q = q;
+        this.r = r;
+        this.s = (-q - r);
+    }
+
     public static CubeCoordinates FromAxial(AxialCoordinates ac)
     {
         return new CubeCoordinates(ac.q, ac.r, (-ac.q - ac.r));
+    }
+
+    public override string ToString()
+    {
+        return $"({q}, {r}, {s})";
     }
 }
 
@@ -119,5 +133,41 @@ public static class HexMath
     public static Vector3 GetHexCenter(float hexSize, int x, int z, HexOrientation orientation)
     {
         return GetHexCenter(hexSize, x, 0, z, orientation);
+    }
+
+    /// <summary>
+    /// Use the map tile position as a parameter.
+    /// </summary>
+    /// <param name="hexSize"></param>
+    /// <param name="position"></param>
+    /// <param name="hexOrientation"></param>
+    /// <returns></returns>
+    public static Vector3 GetHexCenter(float hexSize, MapTilePosition position, HexOrientation hexOrientation)
+    {
+        return GetHexCenter(hexSize, position.x, position.y, position.z, hexOrientation);
+    }
+
+    /// <summary>
+    /// Calculates cube coordiantes from a given position.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="hexOrientation"></param>
+    /// <returns></returns>
+    public static CubeCoordinates CubeFromPosition(MapTilePosition position, HexOrientation hexOrientation)
+    {
+        int q, r;
+
+        if (hexOrientation == HexOrientation.pointyTop)
+        {
+            q = position.z - (position.x - position.x % 2) / 2;
+            r = position.x;
+        }
+        else
+        {
+            q = position.x;
+            r = position.z - (position.x - position.x % 2) / 2;
+        }
+
+        return new CubeCoordinates(q, r);
     }
 }

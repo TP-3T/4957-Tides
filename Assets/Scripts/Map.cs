@@ -13,13 +13,18 @@ public enum TileType
 [Serializable]
 public class MapTilePosition
 {
-    public float x;
-    public float y;
-    public float z;
+    public int x;
+    public int y;
+    public int z;
 
     public Vector3 ToVector3()
     {
-        return new (x, y, z);
+        return new(x, y, z);
+    }
+
+    public override string ToString()
+    {
+        return $"({x},{y},{z})";
     }
 }
 
