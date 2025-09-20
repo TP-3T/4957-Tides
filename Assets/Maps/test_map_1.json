@@ -5,7 +5,7 @@
     {
       "TilePosition": {
         "x": 0,
-        "y": 0,
+        "y": 1,
         "z": 0
       },
       "TileType": 1
@@ -13,15 +13,15 @@
     {
       "TilePosition": {
         "x": 1,
-        "y": 1,
+        "y": 2,
         "z": 0
       },
-      "TileType": 1
+      "TileType": 2
     },
     {
       "TilePosition": {
         "x": 2,
-        "y": 0,
+        "y": 1,
         "z": 0
       },
       "TileType": 2
@@ -29,14 +29,6 @@
     {
       "TilePosition": {
         "x": 3,
-        "y": 2,
-        "z": 0
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 4,
         "y": 1,
         "z": 0
       },
@@ -44,8 +36,16 @@
     },
     {
       "TilePosition": {
+        "x": 4,
+        "y": 1,
+        "z": 0
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
         "x": 5,
-        "y": 0,
+        "y": 1,
         "z": 0
       },
       "TileType": 2
@@ -56,19 +56,11 @@
         "y": 0,
         "z": 0
       },
-      "TileType": 1
+      "TileType": 2
     },
     {
       "TilePosition": {
         "x": 7,
-        "y": 0,
-        "z": 0
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 8,
         "y": 2,
         "z": 0
       },
@@ -76,409 +68,17 @@
     },
     {
       "TilePosition": {
-        "x": 9,
-        "y": 1,
+        "x": 8,
+        "y": 2,
         "z": 0
       },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 0,
-        "y": 1,
-        "z": 1
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 1,
-        "y": 2,
-        "z": 1
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 2,
-        "y": 1,
-        "z": 1
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 3,
-        "y": 2,
-        "z": 1
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 4,
-        "y": 1,
-        "z": 1
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 5,
-        "y": 2,
-        "z": 1
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 6,
-        "y": 1,
-        "z": 1
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 7,
-        "y": 1,
-        "z": 1
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 8,
-        "y": 0,
-        "z": 1
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 9,
-        "y": 0,
-        "z": 1
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 0,
-        "y": 0,
-        "z": 2
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 1,
-        "y": 0,
-        "z": 2
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 2,
-        "y": 0,
-        "z": 2
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 3,
-        "y": 1,
-        "z": 2
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 4,
-        "y": 2,
-        "z": 2
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 5,
-        "y": 2,
-        "z": 2
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 6,
-        "y": 2,
-        "z": 2
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 7,
-        "y": 1,
-        "z": 2
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 8,
-        "y": 0,
-        "z": 2
-      },
       "TileType": 2
     },
     {
       "TilePosition": {
         "x": 9,
-        "y": 1,
-        "z": 2
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 0,
-        "y": 1,
-        "z": 3
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 1,
         "y": 0,
-        "z": 3
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 2,
-        "y": 2,
-        "z": 3
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 3,
-        "y": 1,
-        "z": 3
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 4,
-        "y": 2,
-        "z": 3
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 5,
-        "y": 1,
-        "z": 3
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 6,
-        "y": 1,
-        "z": 3
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 7,
-        "y": 1,
-        "z": 3
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 8,
-        "y": 2,
-        "z": 3
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 9,
-        "y": 0,
-        "z": 3
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 0,
-        "y": 1,
-        "z": 4
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 1,
-        "y": 2,
-        "z": 4
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 2,
-        "y": 1,
-        "z": 4
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 3,
-        "y": 0,
-        "z": 4
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 4,
-        "y": 2,
-        "z": 4
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 5,
-        "y": 1,
-        "z": 4
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 6,
-        "y": 2,
-        "z": 4
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 7,
-        "y": 0,
-        "z": 4
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 8,
-        "y": 0,
-        "z": 4
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 9,
-        "y": 1,
-        "z": 4
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 0,
-        "y": 1,
-        "z": 5
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 1,
-        "y": 2,
-        "z": 5
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 2,
-        "y": 0,
-        "z": 5
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 3,
-        "y": 1,
-        "z": 5
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 4,
-        "y": 0,
-        "z": 5
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 5,
-        "y": 0,
-        "z": 5
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 6,
-        "y": 0,
-        "z": 5
-      },
-      "TileType": 0
-    },
-    {
-      "TilePosition": {
-        "x": 7,
-        "y": 1,
-        "z": 5
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 8,
-        "y": 0,
-        "z": 5
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 9,
-        "y": 1,
-        "z": 5
+        "z": 0
       },
       "TileType": 0
     },
@@ -486,7 +86,7 @@
       "TilePosition": {
         "x": 0,
         "y": 2,
-        "z": 6
+        "z": 1
       },
       "TileType": 2
     },
@@ -494,55 +94,135 @@
       "TilePosition": {
         "x": 1,
         "y": 0,
-        "z": 6
+        "z": 1
       },
       "TileType": 0
     },
     {
       "TilePosition": {
         "x": 2,
-        "y": 1,
-        "z": 6
-      },
-      "TileType": 2
-    },
-    {
-      "TilePosition": {
-        "x": 3,
-        "y": 0,
-        "z": 6
+        "y": 2,
+        "z": 1
       },
       "TileType": 0
     },
     {
       "TilePosition": {
-        "x": 4,
-        "y": 1,
-        "z": 6
+        "x": 3,
+        "y": 0,
+        "z": 1
       },
       "TileType": 2
     },
     {
       "TilePosition": {
+        "x": 4,
+        "y": 1,
+        "z": 1
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
         "x": 5,
         "y": 2,
-        "z": 6
+        "z": 1
       },
       "TileType": 2
     },
     {
       "TilePosition": {
         "x": 6,
-        "y": 2,
-        "z": 6
+        "y": 0,
+        "z": 1
       },
       "TileType": 2
     },
     {
       "TilePosition": {
         "x": 7,
+        "y": 1,
+        "z": 1
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 8,
+        "y": 1,
+        "z": 1
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 9,
+        "y": 2,
+        "z": 1
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 0,
+        "y": 1,
+        "z": 2
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 1,
         "y": 0,
-        "z": 6
+        "z": 2
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 2,
+        "y": 0,
+        "z": 2
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 3,
+        "y": 0,
+        "z": 2
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 4,
+        "y": 0,
+        "z": 2
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 5,
+        "y": 0,
+        "z": 2
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 6,
+        "y": 1,
+        "z": 2
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 7,
+        "y": 2,
+        "z": 2
       },
       "TileType": 0
     },
@@ -550,9 +230,329 @@
       "TilePosition": {
         "x": 8,
         "y": 2,
+        "z": 2
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 9,
+        "y": 2,
+        "z": 2
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 0,
+        "y": 2,
+        "z": 3
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 1,
+        "y": 1,
+        "z": 3
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 2,
+        "y": 2,
+        "z": 3
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 3,
+        "y": 2,
+        "z": 3
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 4,
+        "y": 2,
+        "z": 3
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 5,
+        "y": 1,
+        "z": 3
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 6,
+        "y": 2,
+        "z": 3
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 7,
+        "y": 1,
+        "z": 3
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 8,
+        "y": 1,
+        "z": 3
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 9,
+        "y": 1,
+        "z": 3
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 0,
+        "y": 2,
+        "z": 4
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 1,
+        "y": 1,
+        "z": 4
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 2,
+        "y": 2,
+        "z": 4
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 3,
+        "y": 0,
+        "z": 4
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 4,
+        "y": 2,
+        "z": 4
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 5,
+        "y": 1,
+        "z": 4
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 6,
+        "y": 1,
+        "z": 4
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 7,
+        "y": 1,
+        "z": 4
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 8,
+        "y": 0,
+        "z": 4
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 9,
+        "y": 2,
+        "z": 4
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 0,
+        "y": 0,
+        "z": 5
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 1,
+        "y": 0,
+        "z": 5
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 2,
+        "y": 1,
+        "z": 5
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 3,
+        "y": 0,
+        "z": 5
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 4,
+        "y": 2,
+        "z": 5
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 5,
+        "y": 1,
+        "z": 5
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 6,
+        "y": 0,
+        "z": 5
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 7,
+        "y": 1,
+        "z": 5
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 8,
+        "y": 1,
+        "z": 5
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 9,
+        "y": 1,
+        "z": 5
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 0,
+        "y": 1,
+        "z": 6
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 1,
+        "y": 1,
+        "z": 6
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 2,
+        "y": 0,
         "z": 6
       },
       "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 3,
+        "y": 2,
+        "z": 6
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 4,
+        "y": 2,
+        "z": 6
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 5,
+        "y": 2,
+        "z": 6
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 6,
+        "y": 1,
+        "z": 6
+      },
+      "TileType": 0
+    },
+    {
+      "TilePosition": {
+        "x": 7,
+        "y": 1,
+        "z": 6
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 8,
+        "y": 1,
+        "z": 6
+      },
+      "TileType": 0
     },
     {
       "TilePosition": {
@@ -565,15 +565,15 @@
     {
       "TilePosition": {
         "x": 0,
-        "y": 2,
+        "y": 1,
         "z": 7
       },
-      "TileType": 0
+      "TileType": 2
     },
     {
       "TilePosition": {
         "x": 1,
-        "y": 2,
+        "y": 0,
         "z": 7
       },
       "TileType": 2
@@ -584,7 +584,7 @@
         "y": 0,
         "z": 7
       },
-      "TileType": 1
+      "TileType": 0
     },
     {
       "TilePosition": {
@@ -592,7 +592,7 @@
         "y": 0,
         "z": 7
       },
-      "TileType": 0
+      "TileType": 2
     },
     {
       "TilePosition": {
@@ -600,7 +600,7 @@
         "y": 0,
         "z": 7
       },
-      "TileType": 1
+      "TileType": 2
     },
     {
       "TilePosition": {
@@ -613,10 +613,10 @@
     {
       "TilePosition": {
         "x": 6,
-        "y": 1,
+        "y": 0,
         "z": 7
       },
-      "TileType": 0
+      "TileType": 1
     },
     {
       "TilePosition": {
@@ -632,12 +632,12 @@
         "y": 1,
         "z": 7
       },
-      "TileType": 1
+      "TileType": 2
     },
     {
       "TilePosition": {
         "x": 9,
-        "y": 2,
+        "y": 1,
         "z": 7
       },
       "TileType": 0
@@ -645,30 +645,22 @@
     {
       "TilePosition": {
         "x": 0,
-        "y": 0,
+        "y": 2,
         "z": 8
       },
-      "TileType": 1
+      "TileType": 0
     },
     {
       "TilePosition": {
         "x": 1,
-        "y": 1,
+        "y": 2,
         "z": 8
       },
-      "TileType": 2
+      "TileType": 0
     },
     {
       "TilePosition": {
         "x": 2,
-        "y": 2,
-        "z": 8
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 3,
         "y": 1,
         "z": 8
       },
@@ -676,8 +668,16 @@
     },
     {
       "TilePosition": {
-        "x": 4,
+        "x": 3,
         "y": 0,
+        "z": 8
+      },
+      "TileType": 1
+    },
+    {
+      "TilePosition": {
+        "x": 4,
+        "y": 1,
         "z": 8
       },
       "TileType": 2
@@ -693,14 +693,6 @@
     {
       "TilePosition": {
         "x": 6,
-        "y": 2,
-        "z": 8
-      },
-      "TileType": 1
-    },
-    {
-      "TilePosition": {
-        "x": 7,
         "y": 1,
         "z": 8
       },
@@ -708,8 +700,16 @@
     },
     {
       "TilePosition": {
-        "x": 8,
+        "x": 7,
         "y": 2,
+        "z": 8
+      },
+      "TileType": 2
+    },
+    {
+      "TilePosition": {
+        "x": 8,
+        "y": 1,
         "z": 8
       },
       "TileType": 1
@@ -717,10 +717,10 @@
     {
       "TilePosition": {
         "x": 9,
-        "y": 2,
+        "y": 1,
         "z": 8
       },
-      "TileType": 2
+      "TileType": 1
     },
     {
       "TilePosition": {
@@ -728,7 +728,7 @@
         "y": 0,
         "z": 9
       },
-      "TileType": 0
+      "TileType": 1
     },
     {
       "TilePosition": {
@@ -736,7 +736,7 @@
         "y": 2,
         "z": 9
       },
-      "TileType": 0
+      "TileType": 2
     },
     {
       "TilePosition": {
@@ -749,10 +749,10 @@
     {
       "TilePosition": {
         "x": 3,
-        "y": 0,
+        "y": 2,
         "z": 9
       },
-      "TileType": 2
+      "TileType": 1
     },
     {
       "TilePosition": {
@@ -760,15 +760,15 @@
         "y": 2,
         "z": 9
       },
-      "TileType": 0
+      "TileType": 2
     },
     {
       "TilePosition": {
         "x": 5,
-        "y": 2,
+        "y": 1,
         "z": 9
       },
-      "TileType": 1
+      "TileType": 0
     },
     {
       "TilePosition": {
@@ -776,12 +776,12 @@
         "y": 1,
         "z": 9
       },
-      "TileType": 1
+      "TileType": 2
     },
     {
       "TilePosition": {
         "x": 7,
-        "y": 0,
+        "y": 2,
         "z": 9
       },
       "TileType": 2
@@ -789,10 +789,10 @@
     {
       "TilePosition": {
         "x": 8,
-        "y": 1,
+        "y": 0,
         "z": 9
       },
-      "TileType": 1
+      "TileType": 0
     },
     {
       "TilePosition": {
@@ -800,8 +800,8 @@
         "y": 1,
         "z": 9
       },
-      "TileType": 1
+      "TileType": 2
     }
   ],
-  "Name": "test_map_2"
+  "Name": "test_map_1"
 }

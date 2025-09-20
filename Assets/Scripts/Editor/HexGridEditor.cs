@@ -26,9 +26,12 @@ public class HexGridEditor : Editor
     {
         HexGrid t = (HexGrid)target;
 
+        if (!t.DrawDebugLabels)
+            return;
+
         foreach (HexCell hexCell in t.HexCells)
-        {
-            Handles.Label(hexCell.CellPosition, $"{hexCell.CellCoordinates}");
-        }
+            {
+                Handles.Label(hexCell.CellPosition, $"{hexCell.CellCoordinates}");
+            }
     }
 }

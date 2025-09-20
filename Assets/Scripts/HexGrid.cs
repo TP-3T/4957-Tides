@@ -6,6 +6,7 @@ using UnityEngine;
 public class HexGrid : MonoBehaviour
 {
     [SerializeField] public bool DrawGizmos;
+    [SerializeField] public bool DrawDebugLabels;
     [SerializeField] public HexOrientation HexOrientation;
     [SerializeField] public float HexSize;
     [SerializeField] public HexCell HexCell;

@@ -3,7 +3,7 @@ $heightMax = 10
 
 function GenerateMap {
   param(
-    $MapName,
+    $Name,
     $Width,
     $Height,
     $Variance
@@ -26,7 +26,7 @@ function GenerateMap {
     }
   }
 
-  $MapDetails.MapName = $MapName
+  $MapDetails.Name = $Name
   $MapDetails.Width = $Width
   $MapDetails.Height = $Height
   $MapDetails.MapTilesData = $Tiles
@@ -47,7 +47,7 @@ function GenerateMaps {
 
     ConvertTo-Json `
       -InputObject $Map `
-      -Depth 3 > "$PSScriptRoot\..\Assets\Maps\$($Map.MapName).json"
+      -Depth 3 > "$PSScriptRoot\..\Assets\Maps\$($Map.Name).json"
   }
 }
 
