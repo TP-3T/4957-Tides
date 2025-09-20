@@ -1,807 +1,807 @@
 {
-  "Width": 10,
-  "Height": 10,
   "MapTilesData": [
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 0,
-        "y": 0,
         "z": 0
       },
-      "TileType": 1
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 1,
-        "y": 1,
         "z": 0
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 2,
-        "y": 0,
         "z": 0
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 3,
-        "y": 2,
         "z": 0
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 4,
-        "y": 1,
         "z": 0
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 5,
-        "y": 0,
         "z": 0
       },
-      "TileType": 2
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 6,
-        "y": 0,
         "z": 0
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 7,
-        "y": 0,
         "z": 0
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 8,
-        "y": 2,
         "z": 0
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 9,
-        "y": 1,
         "z": 0
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 0,
-        "y": 1,
         "z": 1
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 1,
-        "y": 2,
         "z": 1
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 2,
-        "y": 1,
         "z": 1
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 3,
-        "y": 2,
         "z": 1
       },
-      "TileType": 2
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 4,
-        "y": 1,
         "z": 1
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 5,
-        "y": 2,
         "z": 1
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 6,
-        "y": 1,
         "z": 1
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 7,
-        "y": 1,
         "z": 1
       },
-      "TileType": 2
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 8,
-        "y": 0,
         "z": 1
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 9,
-        "y": 0,
         "z": 1
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 0,
-        "y": 0,
         "z": 2
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 1,
-        "y": 0,
         "z": 2
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 2,
-        "y": 0,
         "z": 2
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 3,
-        "y": 1,
         "z": 2
       },
-      "TileType": 2
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 4,
-        "y": 2,
         "z": 2
       },
-      "TileType": 1
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 5,
-        "y": 2,
         "z": 2
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 6,
-        "y": 2,
         "z": 2
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 7,
-        "y": 1,
         "z": 2
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 8,
-        "y": 0,
         "z": 2
       },
-      "TileType": 2
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 9,
-        "y": 1,
         "z": 2
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 0,
-        "y": 1,
         "z": 3
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 1,
-        "y": 0,
         "z": 3
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 2,
-        "y": 2,
         "z": 3
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 3,
-        "y": 1,
         "z": 3
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 4,
-        "y": 2,
         "z": 3
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 5,
-        "y": 1,
         "z": 3
       },
-      "TileType": 2
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 6,
-        "y": 1,
         "z": 3
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 7,
-        "y": 1,
         "z": 3
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 8,
-        "y": 2,
         "z": 3
       },
-      "TileType": 1
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 9,
-        "y": 0,
         "z": 3
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 0,
-        "y": 1,
         "z": 4
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 1,
-        "y": 2,
         "z": 4
       },
-      "TileType": 2
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 2,
-        "y": 1,
         "z": 4
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 3,
-        "y": 0,
         "z": 4
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 4,
-        "y": 2,
         "z": 4
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 5,
-        "y": 1,
         "z": 4
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 6,
-        "y": 2,
         "z": 4
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 7,
-        "y": 0,
         "z": 4
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 8,
-        "y": 0,
         "z": 4
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 9,
-        "y": 1,
         "z": 4
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 0,
-        "y": 1,
         "z": 5
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 1,
-        "y": 2,
         "z": 5
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 2,
-        "y": 0,
         "z": 5
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 3,
-        "y": 1,
         "z": 5
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 4,
-        "y": 0,
         "z": 5
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 5,
-        "y": 0,
         "z": 5
       },
-      "TileType": 2
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 6,
-        "y": 0,
         "z": 5
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 7,
-        "y": 1,
         "z": 5
       },
-      "TileType": 1
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 8,
-        "y": 0,
         "z": 5
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 9,
-        "y": 1,
         "z": 5
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 0,
-        "y": 2,
         "z": 6
       },
-      "TileType": 2
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 1,
-        "y": 0,
         "z": 6
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 2,
-        "y": 1,
         "z": 6
       },
-      "TileType": 2
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 3,
-        "y": 0,
         "z": 6
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 4,
-        "y": 1,
         "z": 6
       },
-      "TileType": 2
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 5,
-        "y": 2,
         "z": 6
       },
-      "TileType": 2
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 6,
-        "y": 2,
         "z": 6
       },
-      "TileType": 2
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 7,
-        "y": 0,
         "z": 6
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 8,
-        "y": 2,
         "z": 6
       },
-      "TileType": 1
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 9,
-        "y": 0,
         "z": 6
       },
-      "TileType": 2
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 0,
-        "y": 2,
         "z": 7
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 1,
-        "y": 2,
         "z": 7
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 2,
-        "y": 0,
         "z": 7
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 3,
-        "y": 0,
         "z": 7
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 4,
-        "y": 0,
         "z": 7
       },
-      "TileType": 1
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 5,
-        "y": 0,
         "z": 7
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 6,
-        "y": 1,
         "z": 7
       },
-      "TileType": 0
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 7,
-        "y": 0,
         "z": 7
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 8,
-        "y": 1,
         "z": 7
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 9,
-        "y": 2,
         "z": 7
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 0,
-        "y": 0,
         "z": 8
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 1,
-        "y": 1,
         "z": 8
       },
-      "TileType": 2
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 2,
-        "y": 2,
         "z": 8
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 3,
-        "y": 1,
         "z": 8
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 4,
-        "y": 0,
         "z": 8
       },
-      "TileType": 2
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 5,
-        "y": 0,
         "z": 8
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 6,
-        "y": 2,
         "z": 8
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 7,
-        "y": 1,
         "z": 8
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 8,
-        "y": 2,
         "z": 8
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 9,
-        "y": 2,
         "z": 8
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 0,
-        "y": 0,
         "z": 9
       },
-      "TileType": 0
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 1,
-        "y": 2,
         "z": 9
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 2,
-        "y": 2,
         "z": 9
       },
-      "TileType": 1
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 3,
-        "y": 0,
         "z": 9
       },
-      "TileType": 2
+      "Height": 1
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 4,
-        "y": 2,
         "z": 9
       },
-      "TileType": 0
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 5,
-        "y": 2,
         "z": 9
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 6,
-        "y": 1,
         "z": 9
       },
-      "TileType": 1
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 2,
+      "OffsetCoordinates": {
         "x": 7,
-        "y": 0,
         "z": 9
       },
-      "TileType": 2
+      "Height": 2
     },
     {
-      "TilePosition": {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 8,
-        "y": 1,
         "z": 9
       },
-      "TileType": 1
+      "Height": 0
     },
     {
-      "TilePosition": {
+      "TileType": 0,
+      "OffsetCoordinates": {
         "x": 9,
-        "y": 1,
         "z": 9
       },
-      "TileType": 1
+      "Height": 0
     }
   ],
-  "Name": "test_map_2"
+  "Name": "test_map_2",
+  "Height": 10,
+  "Width": 10
 }

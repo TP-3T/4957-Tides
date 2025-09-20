@@ -31,7 +31,7 @@ public class HexGridEditor : Editor
 
         foreach (HexCell hexCell in t.HexCells)
             {
-                Handles.Label(hexCell.CellPosition, $"{hexCell.CellCubeCoordinates}");
+                Handles.Label(t.transform.position + hexCell.CellPosition, $"{hexCell.CellCubeCoordinates}");
             }
     }
 }

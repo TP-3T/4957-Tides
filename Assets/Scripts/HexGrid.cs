@@ -17,15 +17,24 @@ public class HexGrid : MonoBehaviour
 
     private HexMesh hexMesh;
 
-    void Awake()
+    void InitializeGrid()
     {
         if (hexMesh == null)
             hexMesh = GetComponentInChildren<HexMesh>();
         if (hexMesh == null)
             Debug.LogError("HexMesh failed to retrieve component  from children.");
+    }
 
+    void Awake()
+    {
+        InitializeGrid();
         ClearMap();
         BuildMap();
+    }
+
+    void OnValidate()
+    {
+        InitializeGrid();
     }
 
     /// <summary>
@@ -42,8 +51,8 @@ public class HexGrid : MonoBehaviour
             for (int s = 0; s < hexCorners.Length; s++)
             {
                 Gizmos.DrawLine(
-                    hexCell.CellPosition + hexCorners[s % 6],
-                    hexCell.CellPosition + hexCorners[(s + 1) % 6]
+                    transform.position + hexCell.CellPosition + hexCorners[s % 6],
+                    transform.position + hexCell.CellPosition + hexCorners[(s + 1) % 6]
                 );
             }
         }
@@ -81,7 +90,7 @@ public class HexGrid : MonoBehaviour
         {
             Vector3 hexCenter = HexMath.GetHexCenter(
                 HexSize, mapTileData.Height, mapTileData.OffsetCoordinates, HexOrientation
-            ) + transform.position;
+            );
 
             CubeCoordinates hexCubeCoordinates = HexMath.OddOffsetToCube(
                 mapTileData.OffsetCoordinates, HexOrientation
@@ -93,11 +102,11 @@ public class HexGrid : MonoBehaviour
             hexCell.CellCubeCoordinates = hexCubeCoordinates;
             hexCell.MapTileData = mapTileData;
 
-            Debug.Log(@$"
-            {hexCell.CellPosition}, The real position
-            {hexCell.CellCubeCoordinates}, The cube position: q,r,s
-            {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
-            ");
+            // Debug.Log(@$"
+            // {hexCell.CellPosition}, The real position
+            // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
+            // {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
+            // ");
 
             HexCells[i++] = hexCell;
         }
@@ -118,7 +127,10 @@ public class HexGrid : MonoBehaviour
         hexMesh.ClearMesh();
 
         if (HexCell == null || HexCells.Length == 0)
+        {
+            Debug.Log("Hex cell array reference lost");
             return;
+        }
 
         foreach (var hexCell in HexCells)
         {

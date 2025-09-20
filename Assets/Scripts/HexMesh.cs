@@ -37,6 +37,11 @@ public class HexMesh : MonoBehaviour
         InitializeMesh();
     }
 
+    void OnValidate()
+    {
+        InitializeMesh();
+    }
+
     void Triangulate(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
     {
         bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
