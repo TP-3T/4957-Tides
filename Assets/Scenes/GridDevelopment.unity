@@ -119,7 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
-<<<<<<< HEAD
 --- !u!43 &233150218
 Mesh:
   m_ObjectHideFlags: 0
@@ -285,8 +284,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
-=======
->>>>>>> player-controller
 --- !u!1001 &808754085
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -465,40 +462,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
-<<<<<<< HEAD
-=======
---- !u!1 &981064684
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 981064685}
-  m_Layer: 0
-  m_Name: GameMap
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &981064685
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 981064684}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 878.04047, y: 160.5871, z: 1423.8906}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> player-controller
 --- !u!1 &1469703422
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,11 +518,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-<<<<<<< HEAD
   m_Mesh: {fileID: 233150218}
-=======
-  m_Mesh: {fileID: 0}
->>>>>>> player-controller
 --- !u!23 &1469703426
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -612,11 +571,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469703422}
-<<<<<<< HEAD
   m_Mesh: {fileID: 233150218}
-=======
-  m_Mesh: {fileID: 0}
->>>>>>> player-controller
 --- !u!114 &1469703428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751,7 +706,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c92efbddcc54ab4681375c1de61a92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
   DrawGizmos: 1
   DrawDebugLabels: 1
   HexOrientation: 0
@@ -764,14 +718,6 @@ MonoBehaviour:
     Width: 0
     Height: 0
     MapTilesData: []
-=======
-  DrawGizmos: 0
-  HexOrientation: 0
-  Width: 100
-  Height: 100
-  HexSize: 5
-  HexCell: {fileID: 3329167254614905112, guid: 9952da0958d8e9a458f96ec90e71c63a, type: 3}
->>>>>>> player-controller
 --- !u!4 &1724694748
 Transform:
   m_ObjectHideFlags: 0
@@ -948,7 +894,3 @@ SceneRoots:
   - {fileID: 1724694748}
   - {fileID: 808754085}
   - {fileID: 1899314334}
-<<<<<<< HEAD
-=======
-  - {fileID: 981064685}
->>>>>>> player-controller
