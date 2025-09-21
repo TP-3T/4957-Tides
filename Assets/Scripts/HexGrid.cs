@@ -148,6 +148,12 @@ public class HexGrid : MonoBehaviour
 
     public void HandlePlayerClick(Vector3 playerClickPoint)
     {
-        Debug.Log($"Player clicked the grid {playerClickPoint}");
+        Debug.Log($"Player clicked the grid {playerClickPoint}, {HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)}");
+        Debug.Log(@$"
+        Player clicked the grid
+        {playerClickPoint} cartesian
+        {HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)}
+        {HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation))}
+        ");
     }
 }

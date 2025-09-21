@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public enum HexOrientation
@@ -60,6 +61,32 @@ public struct CubeCoordinates
     public static CubeCoordinates FromAxial(AxialCoordinates ac)
     {
         return new CubeCoordinates(ac.q, ac.r, (-ac.q - ac.r));
+    }
+
+    public override string ToString()
+    {
+        return $"({q}, {r}, {s})";
+    }
+}
+
+public struct CubeCoordinatesF
+{
+    public float q { get; set; }
+    public float r { get; set; }
+    public float s { get; set; }
+
+    public CubeCoordinatesF(float q, float r, float s)
+    {
+        this.q = q;
+        this.r = r;
+        this.s = s;
+    }
+
+    public CubeCoordinatesF(float q, float r)
+    {
+        this.q = q;
+        this.r = r;
+        this.s = -q - r;
     }
 
     public override string ToString()
@@ -162,6 +189,39 @@ public static class HexMath
     }
 
     /// <summary>
+    /// Rounds fractional cube coordinates to the integer cube coordinates.
+    /// </summary>
+    /// <param name="cubeF"></param>
+    /// <param name="hexSize"></param>
+    /// <param name="hexOrientation"></param>
+    /// <returns></returns>
+    public static CubeCoordinates RoundCube(CubeCoordinatesF cubeF)
+    {
+        int q = Mathf.RoundToInt(cubeF.q);
+        int r = Mathf.RoundToInt(cubeF.r);
+        int s = Mathf.RoundToInt(cubeF.s);
+
+        float dQ = Mathf.Abs(q - cubeF.q);
+        float dR = Mathf.Abs(r - cubeF.r);
+        float dS = Mathf.Abs(s - cubeF.s);
+
+        if (dQ > dR && dQ > dS)
+        {
+            q = -r - s;
+        }
+        else if (dR > dS)
+        {
+            r = -q - s;
+        }
+        else
+        {
+            s = -q - r;
+        }
+
+        return new CubeCoordinates(q, r, s);
+    }
+
+    /// <summary>
     /// Calculates cube coordiantes from a given position.
     /// </summary>
     /// <param name="position"></param>
@@ -209,8 +269,34 @@ public static class HexMath
         return new OffsetCoordinates(x, z);
     }
 
-    // public static CubeCoordinates PositionToCube(Vector3 position, HexOrientation hexOrientation)
-    // {
-    //     return ;
-    // }
+    /// <summary>
+    /// Converts cartesian coordinate points into fractional cube coordinates.
+    /// </summary>
+    /// <param name="hexSize"></param>
+    /// <param name="position"></param>
+    /// <param name="hexOrientation"></param>
+    /// <returns></returns>
+    public static CubeCoordinatesF PositionToCubeF(float hexSize, Vector3 position, HexOrientation hexOrientation)
+    {
+        if (hexOrientation == HexOrientation.flatTop)
+        {
+            float x = position.z / hexSize;
+            float z = position.x / hexSize;
+
+            float r = (0.57735027f * x) - (1f / 3 * z);
+            float q = (2f / 3 * z);
+
+            return new CubeCoordinatesF(q, r);
+        }
+        else
+        {
+            float x = position.z / hexSize;
+            float z = position.x / hexSize;
+
+            float r = (2f / 3 * x);
+            float q = (-1f / 3 * x ) + (0.57735027f * z);
+
+            return new CubeCoordinatesF(q, r);
+        }
+    }
 }
