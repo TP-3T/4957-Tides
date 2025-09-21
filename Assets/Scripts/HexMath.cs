@@ -208,4 +208,9 @@ public static class HexMath
 
         return new OffsetCoordinates(x, z);
     }
+
+    // public static CubeCoordinates PositionToCube(Vector3 position, HexOrientation hexOrientation)
+    // {
+    //     return ;
+    // }
 }

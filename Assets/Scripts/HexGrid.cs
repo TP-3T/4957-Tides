@@ -1,3 +1,4 @@
+using System;
 using Unity.Collections;
 using UnityEditor.PackageManager;
 using UnityEditor.SceneManagement;
@@ -12,6 +13,7 @@ public class HexGrid : MonoBehaviour
     [SerializeField] public HexCell HexCell;
     [SerializeField] public TextAsset MapSource;
 
+    public static readonly int GRID_LAYER_MASK = 1 << 10;
     public HexCell[] HexCells;
     public MapData GameMapData;
 
@@ -142,5 +144,10 @@ public class HexGrid : MonoBehaviour
             else
                 Destroy(hexCell.gameObject);
         }
+    }
+
+    public void HandlePlayerClick(Vector3 playerClickPoint)
+    {
+        Debug.Log($"Player clicked the grid {playerClickPoint}");
     }
 }
