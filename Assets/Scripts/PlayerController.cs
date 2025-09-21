@@ -113,7 +113,7 @@ public class PlayerController : NetworkBehaviour
         // Left click
         if (Input.GetMouseButton(LeftMouseIndex))
         {
-            Debug.Log("Player clicked left mouse button");
+            // Debug.Log("Player clicked left mouse button");
             Ray mousePositionRay = playerCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(mousePositionRay, out hit, Mathf.Infinity, HexGrid.GRID_LAYER_MASK))

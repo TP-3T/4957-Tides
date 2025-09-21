@@ -278,23 +278,23 @@ public static class HexMath
     /// <returns></returns>
     public static CubeCoordinatesF PositionToCubeF(float hexSize, Vector3 position, HexOrientation hexOrientation)
     {
-        if (hexOrientation == HexOrientation.flatTop)
+        if (hexOrientation == HexOrientation.pointyTop)
         {
-            float x = position.z / hexSize;
-            float z = position.x / hexSize;
+            float x = position.x / hexSize;
+            float z = position.z / hexSize;
 
-            float r = (0.57735027f * x) - (1f / 3 * z);
-            float q = (2f / 3 * z);
+            float q = (0.57735027f * x) - (1f / 3 * z);
+            float r = (2f / 3 * z);
 
             return new CubeCoordinatesF(q, r);
         }
         else
         {
-            float x = position.z / hexSize;
-            float z = position.x / hexSize;
+            float x = position.x / hexSize;
+            float z = position.z / hexSize;
 
-            float r = (2f / 3 * x);
-            float q = (-1f / 3 * x ) + (0.57735027f * z);
+            float q = (2f / 3 * x);
+            float r = (-1f / 3 * x) + (0.57735027f * z);
 
             return new CubeCoordinatesF(q, r);
         }
