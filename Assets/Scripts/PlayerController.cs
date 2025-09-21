@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -12,6 +13,7 @@ public class PlayerController : NetworkBehaviour
 {
     private Camera playerCamera;
     const float moveSpeed = 5f;
+    const int LeftMouseIndex = 0;
     const int RightMouseIndex = 1;
     const float rotationSpeed = 2f;
     readonly Vector3 startingPosition = new Vector3(0, 10, -10);
@@ -74,9 +76,9 @@ public class PlayerController : NetworkBehaviour
         forward.y = 0;
         right.y = 0;
 
-        Debug.Log("Transform.forward variable" + transform.forward);
-        Debug.Log(forward);
-        
+        // Debug.Log("Transform.forward variable" + transform.forward);
+        // Debug.Log(forward);
+
         Vector3 movement = forward * verticalInput + right * horizontalInput;
         transform.position += movement.normalized * moveSpeed * Time.deltaTime;
 
@@ -90,7 +92,7 @@ public class PlayerController : NetworkBehaviour
         {
             verticalMove = -moveSpeed;
         }
-        
+
         transform.position += Vector3.up * verticalMove * moveSpeed * Time.deltaTime;
 
         // Mouse-based Rotation
@@ -102,6 +104,21 @@ public class PlayerController : NetworkBehaviour
             // Rotate based on mouse movement
             transform.Rotate(Vector3.up, mouseX * rotationSpeed, Space.World);
             transform.Rotate(Vector3.right, -mouseY * rotationSpeed, Space.Self);
+        }
+
+        // Left click
+        if (Input.GetMouseButton(LeftMouseIndex))
+        {
+            Debug.Log("Player clicked left mouse button");
+            Ray mousePositionRay = playerCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(mousePositionRay, out hit, Mathf.Infinity))
+            {
+                Debug.Log("We hit something");
+                Debug.Log(hit.point);
+                Debug.DrawRay(transform.position, mousePositionRay.direction * hit.distance, Color.red);
+                // Debug.DrawRay(mousePositionRay.origin, mousePositionRay.direction * hit.distance, Color.yellow);
+            }
         }
     }
 }

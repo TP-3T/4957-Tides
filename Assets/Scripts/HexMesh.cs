@@ -25,9 +25,6 @@ public class HexMesh : MonoBehaviour
             indexFormat = IndexFormat.UInt32          // This is so that we can have > 65000 vertices in the mesh, platform dependant so idk, multiple meshes (please no)
         };
 
-        meshFilter.sharedMesh = mesh;
-        meshCollider.sharedMesh = mesh;
-
         vertices = new();
         triangles = new();
     }
@@ -126,6 +123,9 @@ public class HexMesh : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
         mesh.Optimize();
+
+        meshFilter.sharedMesh = mesh;
+        meshCollider.sharedMesh = mesh;
     }
 
     public void ClearMesh()
