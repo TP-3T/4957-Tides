@@ -1,5 +1,6 @@
 using System;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -103,7 +104,8 @@ public class HexGrid : MonoBehaviour
             hexCell.CellPosition = hexCenter;
             hexCell.CellCubeCoordinates = hexCubeCoordinates;
             hexCell.MapTileData = mapTileData;
-
+            hexCell.AddComponent<MeshRenderer>();
+            hexCell.GetComponent<MeshRenderer>().material.color = Color.blue;
             // Debug.Log(@$"
             // {hexCell.CellPosition}, The real position
             // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
@@ -146,14 +148,37 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public void HandlePlayerClick(Vector3 playerClickPoint)
+    public void HandlePlayerClick(Vector3 playerClickPoint, GameObject objectHit)
     {
-        Debug.Log($"Player clicked the grid {playerClickPoint}, {HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)}");
-        Debug.Log(@$"
-        Player clicked the grid
-        {playerClickPoint} cartesian
-        {HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)}
-        {HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation))}
-        ");
+        //Debug.Log($"Player clicked the grid {playerClickPoint}, {HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)}");
+        // Debug.Log(@$"
+        // Player clicked the grid
+        // {playerClickPoint} cartesian
+        // {HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)}
+        // {HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation))}
+        // ");
+        //get the hex cell that was clicked and change it's color
+
+        Debug.Log(HexCells[1].CellPosition);
+        Debug.Log(HexCells[1].CellCubeCoordinates);
+        Debug.Log(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation));
+        Debug.Log(HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)));
+
+        this.hexMesh.GetComponent<MeshRenderer>().material.color = Color.red;
+
+        // foreach (var HexCell in HexCells)
+        // {
+        //     if (HexCell.CellCubeCoordinates.q
+        //     == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).q &&
+        //     HexCell.CellCubeCoordinates.r
+        //     == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).r &&
+        //     HexCell.CellCubeCoordinates.s
+        //     == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).s)
+        //     {
+        //         Debug.Log("Player clicked on hex cell " + HexCell.CellCubeCoordinates);
+        //         //change the color of the hex cell
+        //         HexCell.GetComponent<Renderer>().material.color = Color.red;
+        //     }
+        // }
     }
 }

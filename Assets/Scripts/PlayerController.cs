@@ -13,7 +13,7 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerController : NetworkBehaviour
 {
-    public UnityEvent<Vector3> OnPlayerClick = new UnityEvent<Vector3>();
+    public UnityEvent<Vector3, GameObject> OnPlayerClick = new      UnityEvent<Vector3, GameObject>();
 
     private Camera playerCamera;
     const float moveSpeed = 5f;
@@ -119,7 +119,7 @@ public class PlayerController : NetworkBehaviour
             if (Physics.Raycast(mousePositionRay, out hit, Mathf.Infinity, HexGrid.GRID_LAYER_MASK))
             {
                 Debug.DrawRay(transform.position, mousePositionRay.direction * hit.distance, Color.red);
-                OnPlayerClick.Invoke(hit.point);
+                OnPlayerClick.Invoke(hit.point, hit.collider.gameObject);
             }
         }
     }
