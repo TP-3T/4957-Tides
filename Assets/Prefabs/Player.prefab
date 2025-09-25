@@ -225,6 +225,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  OnPlayerClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4320682551035246881
 GameObject:
   m_ObjectHideFlags: 0

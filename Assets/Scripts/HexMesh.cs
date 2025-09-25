@@ -34,11 +34,6 @@ public class HexMesh : MonoBehaviour
         InitializeMesh();
     }
 
-    void Awake()
-    {
-        InitializeMesh();
-    }
-
     void OnValidate()
     {
         InitializeMesh();

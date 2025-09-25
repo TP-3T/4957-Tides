@@ -1,9 +1,7 @@
 using System;
-using Unity.Collections;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HexGrid : MonoBehaviour
 {
@@ -13,6 +11,8 @@ public class HexGrid : MonoBehaviour
     [SerializeField] public float HexSize;
     [SerializeField] public HexCell HexCell;
     [SerializeField] public TextAsset MapSource;
+
+    [SerializeField] 
 
     public static readonly int GRID_LAYER_MASK = 1 << 10;
     public HexCell[] HexCells;

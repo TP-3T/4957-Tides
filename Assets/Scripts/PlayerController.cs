@@ -16,11 +16,13 @@ public class PlayerController : NetworkBehaviour
     public UnityEvent<Vector3> OnPlayerClick = new UnityEvent<Vector3>();
 
     private Camera playerCamera;
+    private HexGrid hexGrid;
     const int LeftMouseIndex = 0;
     const float moveSpeed = 50f;
     const int RightMouseIndex = 1;
     const float rotationSpeed = 2f;
     readonly Vector3 startingPosition = new Vector3(0, 10, -10);
+
 
     /// <summary>
     /// Called when the script instance is being loaded.
@@ -49,6 +51,14 @@ public class PlayerController : NetworkBehaviour
     {
         if (IsOwner)
         {
+            hexGrid = GameObject.FindFirstObjectByType<HexGrid>();
+
+            if (hexGrid != null)
+            {
+                OnPlayerClick.AddListener(hexGrid.HandlePlayerClick);
+            }
+
+
             transform.position = startingPosition;
             if (playerCamera != null)
             {
@@ -56,6 +66,9 @@ public class PlayerController : NetworkBehaviour
                 Debug.Log("Enable camera for local player");
             }
         }
+
+
+
     }
 
     /// <summary>
@@ -79,8 +92,8 @@ public class PlayerController : NetworkBehaviour
         Vector3 right = transform.right;
         forward.y = 0;
         right.y = 0;
-        
-        Vector3 movement = (forward * verticalInput) + (right * horizontalInput );
+
+        Vector3 movement = (forward * verticalInput) + (right * horizontalInput);
         transform.position += movement * moveSpeed * Time.deltaTime;
 
         // Q and E Vertical Movement
@@ -93,7 +106,7 @@ public class PlayerController : NetworkBehaviour
         {
             verticalMove = -moveSpeed;
         }
-        
+
         transform.position += Vector3.up * verticalMove * Time.deltaTime;
 
         // Mouse-based Rotation
@@ -110,9 +123,11 @@ public class PlayerController : NetworkBehaviour
         // Left click
         if (Input.GetMouseButton(LeftMouseIndex))
         {
+            Debug.Log(OnPlayerClick);
             // Debug.Log("Player clicked left mouse button");
             Ray mousePositionRay = playerCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+            //Ray Cast Logic
             if (Physics.Raycast(mousePositionRay, out hit, Mathf.Infinity, HexGrid.GRID_LAYER_MASK))
             {
                 Debug.DrawRay(transform.position, mousePositionRay.direction * hit.distance, Color.red);
@@ -120,4 +135,16 @@ public class PlayerController : NetworkBehaviour
             }
         }
     }
+
+    public override void OnNetworkDespawn()
+    {
+        if (IsOwner && hexGrid != null)
+        {
+            OnPlayerClick.RemoveListener(hexGrid.HandlePlayerClick);
+            Debug.Log("PlayerController unsubscribed from HexGrid's click handler.");
+        }
+    }
+
+
+
 }
