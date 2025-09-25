@@ -148,7 +148,7 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public void HandlePlayerClick(Vector3 playerClickPoint, GameObject objectHit)
+    public void HandlePlayerClick(Vector3 playerClickPoint)
     {
         //Debug.Log($"Player clicked the grid {playerClickPoint}, {HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)}");
         // Debug.Log(@$"
@@ -157,28 +157,25 @@ public class HexGrid : MonoBehaviour
         // {HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)}
         // {HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation))}
         // ");
-        //get the hex cell that was clicked and change it's color
 
-        Debug.Log(HexCells[1].CellPosition);
-        Debug.Log(HexCells[1].CellCubeCoordinates);
-        Debug.Log(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation));
-        Debug.Log(HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)));
+        Debug.Log("hexcell 1 position: " + HexCells[1].CellPosition);
+        Debug.Log("Hexcell 1 cell cube coord: " + HexCells[1].CellCubeCoordinates);
+        Debug.Log("clickpoint to cubeF" + HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation));
+        Debug.Log("clickpoint rounded cubeF" + HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)));
 
         this.hexMesh.GetComponent<MeshRenderer>().material.color = Color.red;
 
-        // foreach (var HexCell in HexCells)
-        // {
-        //     if (HexCell.CellCubeCoordinates.q
-        //     == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).q &&
-        //     HexCell.CellCubeCoordinates.r
-        //     == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).r &&
-        //     HexCell.CellCubeCoordinates.s
-        //     == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).s)
-        //     {
-        //         Debug.Log("Player clicked on hex cell " + HexCell.CellCubeCoordinates);
-        //         //change the color of the hex cell
-        //         HexCell.GetComponent<Renderer>().material.color = Color.red;
-        //     }
-        // }
+         foreach (var HexCell in HexCells)
+         {
+             if (HexCell.CellCubeCoordinates.q
+             == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).q &&
+             HexCell.CellCubeCoordinates.r
+             == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).r &&
+             HexCell.CellCubeCoordinates.s
+             == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).s)
+             {
+                Debug.Log("Player clicked on hex cell " + HexCell.CellCubeCoordinates);
+             }
+         }
     }
 }
