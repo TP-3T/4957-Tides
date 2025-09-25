@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
-public class HexMesh : MonoBehaviour
+public class HexMesh : NetworkBehaviour
 {
     private Mesh mesh;
     private MeshFilter meshFilter;

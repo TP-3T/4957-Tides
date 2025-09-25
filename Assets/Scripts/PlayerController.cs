@@ -52,13 +52,11 @@ public class PlayerController : NetworkBehaviour
         if (IsOwner)
         {
             hexGrid = GameObject.FindFirstObjectByType<HexGrid>();
-
-            if (hexGrid != null)
-            {
-                OnPlayerClick.AddListener(hexGrid.HandlePlayerClick);
-            }
-
-
+        if (hexGrid == null)
+        {
+            Debug.Log("HexGrid not found yet. Subscribing to OnClientConnectedCallback.");
+            NetworkManager.Singleton.OnClientConnectedCallback += FindHexGridAfterConnection;
+        }
             transform.position = startingPosition;
             if (playerCamera != null)
             {
@@ -66,10 +64,20 @@ public class PlayerController : NetworkBehaviour
                 Debug.Log("Enable camera for local player");
             }
         }
-
-
-
     }
+    private void FindHexGridAfterConnection(ulong clientId)
+{
+        // The event fires for *all* clients connecting, but we only care about the local player's logic.
+        if (NetworkManager.Singleton.LocalClientId == clientId)
+        {
+            // Unsubscribe immediately to prevent running again.
+            NetworkManager.Singleton.OnClientConnectedCallback -= FindHexGridAfterConnection;
+
+            // Search the scene again now that the server's spawn message (for the HexGrid) 
+            // has had time to process.
+            hexGrid = GameObject.FindFirstObjectByType<HexGrid>();
+        }
+}
 
     /// <summary>
     /// Called once per frame to handle real-time input and camera controls.
@@ -121,30 +129,23 @@ public class PlayerController : NetworkBehaviour
         }
 
         // Left click
-        if (Input.GetMouseButton(LeftMouseIndex))
+        if (Input.GetMouseButtonDown(LeftMouseIndex))
         {
-            Debug.Log(OnPlayerClick);
             // Debug.Log("Player clicked left mouse button");
             Ray mousePositionRay = playerCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             //Ray Cast Logic
             if (Physics.Raycast(mousePositionRay, out hit, Mathf.Infinity, HexGrid.GRID_LAYER_MASK))
             {
-                Debug.DrawRay(transform.position, mousePositionRay.direction * hit.distance, Color.red);
-                OnPlayerClick.Invoke(hit.point);
+                Debug.Log(hexGrid);
+                if (hexGrid != null)
+                {
+                    hexGrid.HandlePlayerClickServerRpc(hit.point);
+                }
+                
             }
         }
     }
-
-    public override void OnNetworkDespawn()
-    {
-        if (IsOwner && hexGrid != null)
-        {
-            OnPlayerClick.RemoveListener(hexGrid.HandlePlayerClick);
-            Debug.Log("PlayerController unsubscribed from HexGrid's click handler.");
-        }
-    }
-
 
 
 }

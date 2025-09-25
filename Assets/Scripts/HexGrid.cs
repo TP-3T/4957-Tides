@@ -1,9 +1,10 @@
 using System;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class HexGrid : MonoBehaviour
+public class HexGrid : NetworkBehaviour
 {
     [SerializeField] public bool DrawGizmos;
     [SerializeField] public bool DrawDebugLabels;
@@ -12,13 +13,20 @@ public class HexGrid : MonoBehaviour
     [SerializeField] public HexCell HexCell;
     [SerializeField] public TextAsset MapSource;
 
-    [SerializeField] 
-
     public static readonly int GRID_LAYER_MASK = 1 << 10;
     public HexCell[] HexCells;
     public MapData GameMapData;
 
     private HexMesh hexMesh;
+
+    public NetworkVariable<Color> meshColor = new NetworkVariable<Color>(
+        Color.white,
+        //settings for the network variable
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Owner
+
+        );
+
 
     void InitializeGrid()
     {
@@ -27,8 +35,47 @@ public class HexGrid : MonoBehaviour
         if (hexMesh == null)
             Debug.LogError("HexMesh failed to retrieve component  from children.");
     }
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
 
-    void Awake()
+        BuildandCreateGrid();
+
+
+        // ⭐ NEW: Subscribe to the value changed event on ALL clients
+        meshColor.OnValueChanged += OnMeshColorChanged;
+
+        // Apply the current color immediately when a client connects/spawns.
+        // This is important for clients joining mid-game.
+        if (hexMesh != null)
+        {
+            ApplyColorToMesh(meshColor.Value);
+        }
+    }
+    
+    // ⭐ NEW: Unsubscribe on despawn to prevent memory leaks
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        meshColor.OnValueChanged -= OnMeshColorChanged;
+    }
+
+    // ⭐ NEW: Callback method to apply the new color
+    private void OnMeshColorChanged(Color previousColor, Color newColor)
+    {
+        Debug.Log($"HexGrid mesh color changed from {previousColor} to {newColor}");
+        ApplyColorToMesh(newColor);
+    }
+
+    private void ApplyColorToMesh(Color colorToApply)
+    {
+        if (hexMesh != null && hexMesh.GetComponent<MeshRenderer>() != null)
+        {
+            hexMesh.GetComponent<MeshRenderer>().material.color = colorToApply;
+        }
+    }
+
+    void BuildandCreateGrid()
     {
         InitializeGrid();
         ClearMap();
@@ -147,34 +194,39 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public void HandlePlayerClick(Vector3 playerClickPoint)
+    [ServerRpc(RequireOwnership = false)]
+    public void HandlePlayerClickServerRpc(Vector3 playerClickPoint)
     {
-        //Debug.Log($"Player clicked the grid {playerClickPoint}, {HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)}");
-        // Debug.Log(@$"
-        // Player clicked the grid
-        // {playerClickPoint} cartesian
-        // {HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)}
-        // {HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation))}
-        // ");
+        Color nextColor;
 
-        Debug.Log("hexcell 1 position: " + HexCells[1].CellPosition);
-        Debug.Log("Hexcell 1 cell cube coord: " + HexCells[1].CellCubeCoordinates);
-        Debug.Log("clickpoint to cubeF" + HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation));
-        Debug.Log("clickpoint rounded cubeF" + HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)));
+        Color currentColor = this.meshColor.Value;
 
-        this.hexMesh.GetComponent<MeshRenderer>().material.color = Color.red;
+        if (currentColor == Color.red)
+        {
+            nextColor = Color.blue;
+        }
+        else
+        {
+            nextColor = Color.red;
+        }
 
-         foreach (var HexCell in HexCells)
-         {
-             if (HexCell.CellCubeCoordinates.q
-             == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).q &&
-             HexCell.CellCubeCoordinates.r
-             == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).r &&
-             HexCell.CellCubeCoordinates.s
-             == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize,playerClickPoint, HexOrientation)).s)
-             {
-                Debug.Log("Player clicked on hex cell " + HexCell.CellCubeCoordinates);
-             }
-         }
+        // Debug.Log("hexcell 1 position: " + HexCells[1].CellPosition);
+        // Debug.Log("Hexcell 1 cell cube coord: " + HexCells[1].CellCubeCoordinates);
+        // Debug.Log("clickpoint to cubeF" + HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation));
+        // Debug.Log("clickpoint rounded cubeF" + HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)));
+
+        foreach (var HexCell in HexCells)
+        {
+            if (HexCell.CellCubeCoordinates.q
+            == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)).q &&
+            HexCell.CellCubeCoordinates.r
+            == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)).r &&
+            HexCell.CellCubeCoordinates.s
+            == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)).s)
+            {
+                // Debug.Log("Player clicked on hex cell " + HexCell.CellCubeCoordinates);
+            }
+        }
+        this.meshColor.Value = nextColor;
     }
 }
