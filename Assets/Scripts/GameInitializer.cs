@@ -20,6 +20,5 @@ public class GameInitializer : MonoBehaviour
 
         gridInstance.Spawn();
 
-
     }
 }
