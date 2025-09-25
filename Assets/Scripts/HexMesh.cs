@@ -31,7 +31,7 @@ public class HexMesh : MonoBehaviour
         vertices = new();
         triangles = new();
     }
-
+    
     void Awake()
     {
         InitializeMesh();
