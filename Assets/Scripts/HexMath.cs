@@ -50,17 +50,12 @@ public struct CubeCoordinates
         this.r = r;
         this.s = s;
     }
-
+  
     public CubeCoordinates(int q, int r)
     {
         this.q = q;
         this.r = r;
         this.s = (-q - r);
-    }
-
-    public static CubeCoordinates FromAxial(AxialCoordinates ac)
-    {
-        return new CubeCoordinates(ac.q, ac.r, (-ac.q - ac.r));
     }
 
     public override string ToString()

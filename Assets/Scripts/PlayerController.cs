@@ -16,8 +16,8 @@ public class PlayerController : NetworkBehaviour
     public UnityEvent<Vector3> OnPlayerClick = new UnityEvent<Vector3>();
 
     private Camera playerCamera;
-    const float moveSpeed = 5f;
     const int LeftMouseIndex = 0;
+    const float moveSpeed = 50f;
     const int RightMouseIndex = 1;
     const float rotationSpeed = 2f;
     readonly Vector3 startingPosition = new Vector3(0, 10, -10);
@@ -79,12 +79,9 @@ public class PlayerController : NetworkBehaviour
         Vector3 right = transform.right;
         forward.y = 0;
         right.y = 0;
-
-        // Debug.Log("Transform.forward variable" + transform.forward);
-        // Debug.Log(forward);
-
-        Vector3 movement = forward * verticalInput + right * horizontalInput;
-        transform.position += movement.normalized * moveSpeed * Time.deltaTime;
+        
+        Vector3 movement = (forward * verticalInput) + (right * horizontalInput );
+        transform.position += movement * moveSpeed * Time.deltaTime;
 
         // Q and E Vertical Movement
         float verticalMove = 0f;
@@ -96,8 +93,8 @@ public class PlayerController : NetworkBehaviour
         {
             verticalMove = -moveSpeed;
         }
-
-        transform.position += Vector3.up * verticalMove * moveSpeed * Time.deltaTime;
+        
+        transform.position += Vector3.up * verticalMove * Time.deltaTime;
 
         // Mouse-based Rotation
         if (Input.GetMouseButton(RightMouseIndex)) // Right-click held down

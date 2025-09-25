@@ -110,7 +110,6 @@ public class HexGrid : MonoBehaviour
             // {hexCell.CellPosition}, The real position
             // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
             // {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
-            // ");
 
             HexCells[i++] = hexCell;
         }
