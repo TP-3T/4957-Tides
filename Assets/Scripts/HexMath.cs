@@ -1,12 +1,14 @@
+using System.IO.Compression;
 using JetBrains.Annotations;
+using Unity.Collections;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public enum HexOrientation
 {
-    FLAT_TOP,
-    POINTY_TOP
+    flatTop,
+    pointyTop
 }
 
 public struct AxialCoordinates
@@ -33,10 +35,17 @@ public struct CubeCoordinates
         this.r = r;
         this.s = s;
     }
-
-    public static CubeCoordinates FromAxial(AxialCoordinates ac)
+  
+    public CubeCoordinates(int q, int r)
     {
-        return new CubeCoordinates(ac.q, ac.r, (-ac.q - ac.r));
+        this.q = q;
+        this.r = r;
+        this.s = (-q - r);
+    }
+
+    public override string ToString()
+    {
+        return $"({q}, {r}, {s})";
     }
 }
 
@@ -57,7 +66,7 @@ public static class HexMath
         Vector3 corner;
         float angle = cornerIndex * 60f;
 
-        if (orientation == HexOrientation.POINTY_TOP)
+        if (orientation == HexOrientation.pointyTop)
         {
             angle += 30f;
         }
@@ -90,21 +99,70 @@ public static class HexMath
     /// <param name="z"></param>
     /// <param name="orientation"></param>
     /// <returns></returns>
-    public static Vector3 GetHexCenter(float hexSize, int x, int z, HexOrientation orientation)
+    public static Vector3 GetHexCenter(float hexSize, int x, int y, int z, HexOrientation orientation)
     {
         Vector3 point;
-        if (orientation == HexOrientation.POINTY_TOP)
+        if (orientation == HexOrientation.pointyTop)
         {
             point.x = (x + z * 0.5f - z / 2) * (InnerRadius(hexSize) * 2f);     // Determine offset by even or odd row
-            point.y = 0f;
+            point.y = y;
             point.z = z * (OuterRadius(hexSize) * 1.5f);
         }
         else
         {
             point.x = x * (OuterRadius(hexSize) * 1.5f);
-            point.y = 0f;
+            point.y = y;
             point.z = (z + x * 0.5f - x / 2) * (InnerRadius(hexSize) * 2f);     // Determine offset by even or odd row
         }
         return point;
+    }
+
+    /// <summary>
+    /// No height to the center, automatically 0f in the Y component.
+    /// </summary>
+    /// <param name="hexSize"></param>
+    /// <param name="x"></param>
+    /// <param name="z"></param>
+    /// <param name="orientation"></param>
+    /// <returns></returns>
+    public static Vector3 GetHexCenter(float hexSize, int x, int z, HexOrientation orientation)
+    {
+        return GetHexCenter(hexSize, x, 0, z, orientation);
+    }
+
+    /// <summary>
+    /// Use the map tile position as a parameter.
+    /// </summary>
+    /// <param name="hexSize"></param>
+    /// <param name="position"></param>
+    /// <param name="hexOrientation"></param>
+    /// <returns></returns>
+    public static Vector3 GetHexCenter(float hexSize, MapTilePosition position, HexOrientation hexOrientation)
+    {
+        return GetHexCenter(hexSize, position.x, position.y, position.z, hexOrientation);
+    }
+
+    /// <summary>
+    /// Calculates cube coordiantes from a given position.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="hexOrientation"></param>
+    /// <returns></returns>
+    public static CubeCoordinates CubeFromPosition(MapTilePosition position, HexOrientation hexOrientation)
+    {
+        int q, r;
+
+        if (hexOrientation == HexOrientation.pointyTop)
+        {
+            q = position.z - (position.x - position.x % 2) / 2;
+            r = position.x;
+        }
+        else
+        {
+            q = position.x;
+            r = position.z - (position.x - position.x % 2) / 2;
+        }
+
+        return new CubeCoordinates(q, r);
     }
 }
