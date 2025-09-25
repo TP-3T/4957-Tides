@@ -73,9 +73,6 @@ public class PlayerController : NetworkBehaviour
         Vector3 right = transform.right;
         forward.y = 0;
         right.y = 0;
-
-        Debug.Log("Transform.forward variable" + transform.forward);
-        Debug.Log(forward);
         
         Vector3 movement = (forward * verticalInput) + (right * horizontalInput );
         transform.position += movement * moveSpeed * Time.deltaTime;

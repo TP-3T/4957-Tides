@@ -93,11 +93,11 @@ public class HexGrid : MonoBehaviour
             hexCell.CellCoordinates = hexCubeCoordinates;
             hexCell.MapTileData = mapTileData;
 
-            Debug.Log(@$"
-            {hexCell.CellPosition}, The real position
-            {hexCell.CellCoordinates}, The cube position: q,r,s
-            {hexCell.MapTileData.TilePosition}, Logical map position (col,height,row): x,y,z
-            ");
+            // Debug.Log(@$"
+            // {hexCell.CellPosition}, The real position
+            // {hexCell.CellCoordinates}, The cube position: q,r,s
+            // {hexCell.MapTileData.TilePosition}, Logical map position (col,height,row): x,y,z
+            // ");
 
             HexCells[i++] = hexCell;
         }
