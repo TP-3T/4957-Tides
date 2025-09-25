@@ -9,15 +9,15 @@
       "Height": 0
     },
     {
-      "TileType": 1,
+      "TileType": 0,
       "OffsetCoordinates": {
         "x": 1,
         "z": 0
       },
-      "Height": 1
+      "Height": 2
     },
     {
-      "TileType": 1,
+      "TileType": 0,
       "OffsetCoordinates": {
         "x": 2,
         "z": 0
@@ -25,12 +25,12 @@
       "Height": 2
     },
     {
-      "TileType": 0,
+      "TileType": 1,
       "OffsetCoordinates": {
         "x": 3,
         "z": 0
       },
-      "Height": 0
+      "Height": 2
     },
     {
       "TileType": 1,
@@ -38,15 +38,15 @@
         "x": 4,
         "z": 0
       },
-      "Height": 2
+      "Height": 1
     },
     {
-      "TileType": 2,
+      "TileType": 0,
       "OffsetCoordinates": {
         "x": 5,
         "z": 0
       },
-      "Height": 1
+      "Height": 0
     },
     {
       "TileType": 0,
@@ -54,18 +54,18 @@
         "x": 6,
         "z": 0
       },
-      "Height": 2
+      "Height": 1
     },
     {
-      "TileType": 1,
+      "TileType": 2,
       "OffsetCoordinates": {
         "x": 7,
         "z": 0
       },
-      "Height": 1
+      "Height": 0
     },
     {
-      "TileType": 1,
+      "TileType": 2,
       "OffsetCoordinates": {
         "x": 8,
         "z": 0
@@ -89,28 +89,28 @@
       "Height": 2
     },
     {
-      "TileType": 0,
+      "TileType": 1,
       "OffsetCoordinates": {
         "x": 1,
         "z": 1
       },
-      "Height": 2
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 2,
-        "z": 1
-      },
-      "Height": 2
+      "Height": 0
     },
     {
       "TileType": 0,
       "OffsetCoordinates": {
-        "x": 3,
+        "x": 2,
         "z": 1
       },
       "Height": 1
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 3,
+        "z": 1
+      },
+      "Height": 2
     },
     {
       "TileType": 1,
@@ -121,7 +121,7 @@
       "Height": 1
     },
     {
-      "TileType": 1,
+      "TileType": 0,
       "OffsetCoordinates": {
         "x": 5,
         "z": 1
@@ -129,12 +129,12 @@
       "Height": 0
     },
     {
-      "TileType": 2,
+      "TileType": 1,
       "OffsetCoordinates": {
         "x": 6,
         "z": 1
       },
-      "Height": 2
+      "Height": 1
     },
     {
       "TileType": 2,
@@ -142,10 +142,10 @@
         "x": 7,
         "z": 1
       },
-      "Height": 1
+      "Height": 2
     },
     {
-      "TileType": 0,
+      "TileType": 2,
       "OffsetCoordinates": {
         "x": 8,
         "z": 1
@@ -158,15 +158,15 @@
         "x": 9,
         "z": 1
       },
-      "Height": 2
+      "Height": 0
     },
     {
-      "TileType": 1,
+      "TileType": 0,
       "OffsetCoordinates": {
         "x": 0,
         "z": 2
       },
-      "Height": 1
+      "Height": 0
     },
     {
       "TileType": 1,
@@ -174,23 +174,23 @@
         "x": 1,
         "z": 2
       },
-      "Height": 2
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 2,
-        "z": 2
-      },
       "Height": 0
     },
     {
       "TileType": 0,
       "OffsetCoordinates": {
+        "x": 2,
+        "z": 2
+      },
+      "Height": 2
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
         "x": 3,
         "z": 2
       },
-      "Height": 1
+      "Height": 0
     },
     {
       "TileType": 1,
@@ -201,15 +201,15 @@
       "Height": 0
     },
     {
-      "TileType": 2,
+      "TileType": 0,
       "OffsetCoordinates": {
         "x": 5,
         "z": 2
       },
-      "Height": 2
+      "Height": 1
     },
     {
-      "TileType": 1,
+      "TileType": 2,
       "OffsetCoordinates": {
         "x": 6,
         "z": 2
@@ -217,258 +217,18 @@
       "Height": 1
     },
     {
-      "TileType": 2,
+      "TileType": 0,
       "OffsetCoordinates": {
         "x": 7,
         "z": 2
       },
-      "Height": 2
+      "Height": 0
     },
     {
       "TileType": 2,
       "OffsetCoordinates": {
         "x": 8,
         "z": 2
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 9,
-        "z": 2
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 0,
-        "z": 3
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 1,
-        "z": 3
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 2,
-        "z": 3
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 3,
-        "z": 3
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 4,
-        "z": 3
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 5,
-        "z": 3
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 6,
-        "z": 3
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 7,
-        "z": 3
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 8,
-        "z": 3
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 9,
-        "z": 3
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 0,
-        "z": 4
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 1,
-        "z": 4
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 2,
-        "z": 4
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 3,
-        "z": 4
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 4,
-        "z": 4
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 5,
-        "z": 4
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 6,
-        "z": 4
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 7,
-        "z": 4
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 8,
-        "z": 4
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 9,
-        "z": 4
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 0,
-        "z": 5
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 1,
-        "z": 5
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 2,
-        "z": 5
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 3,
-        "z": 5
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 4,
-        "z": 5
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 5,
-        "z": 5
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 6,
-        "z": 5
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 7,
-        "z": 5
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 8,
-        "z": 5
       },
       "Height": 1
     },
@@ -476,6 +236,190 @@
       "TileType": 2,
       "OffsetCoordinates": {
         "x": 9,
+        "z": 2
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 0,
+        "z": 3
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 1,
+        "z": 3
+      },
+      "Height": 2
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 2,
+        "z": 3
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 3,
+        "z": 3
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 4,
+        "z": 3
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 5,
+        "z": 3
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 6,
+        "z": 3
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 7,
+        "z": 3
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 8,
+        "z": 3
+      },
+      "Height": 2
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 9,
+        "z": 3
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 0,
+        "z": 4
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 1,
+        "z": 4
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 2,
+        "z": 4
+      },
+      "Height": 2
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 3,
+        "z": 4
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 4,
+        "z": 4
+      },
+      "Height": 2
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 5,
+        "z": 4
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 6,
+        "z": 4
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 7,
+        "z": 4
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 8,
+        "z": 4
+      },
+      "Height": 2
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 9,
+        "z": 4
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 0,
+        "z": 5
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 1,
+        "z": 5
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 2,
         "z": 5
       },
       "Height": 0
@@ -483,48 +427,24 @@
     {
       "TileType": 1,
       "OffsetCoordinates": {
-        "x": 0,
-        "z": 6
+        "x": 3,
+        "z": 5
       },
-      "Height": 0
+      "Height": 1
     },
     {
       "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 1,
-        "z": 6
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 2,
-        "z": 6
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 3,
-        "z": 6
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 0,
       "OffsetCoordinates": {
         "x": 4,
-        "z": 6
+        "z": 5
       },
-      "Height": 0
+      "Height": 2
     },
     {
-      "TileType": 1,
+      "TileType": 0,
       "OffsetCoordinates": {
         "x": 5,
-        "z": 6
+        "z": 5
       },
       "Height": 1
     },
@@ -532,7 +452,7 @@
       "TileType": 2,
       "OffsetCoordinates": {
         "x": 6,
-        "z": 6
+        "z": 5
       },
       "Height": 1
     },
@@ -540,6 +460,62 @@
       "TileType": 1,
       "OffsetCoordinates": {
         "x": 7,
+        "z": 5
+      },
+      "Height": 2
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 8,
+        "z": 5
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 9,
+        "z": 5
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 0,
+        "z": 6
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 1,
+        "z": 6
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 2,
+        "z": 6
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 3,
+        "z": 6
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 4,
         "z": 6
       },
       "Height": 1
@@ -547,13 +523,37 @@
     {
       "TileType": 2,
       "OffsetCoordinates": {
-        "x": 8,
+        "x": 5,
         "z": 6
       },
       "Height": 0
     },
     {
       "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 6,
+        "z": 6
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 7,
+        "z": 6
+      },
+      "Height": 2
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 8,
+        "z": 6
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 2,
       "OffsetCoordinates": {
         "x": 9,
         "z": 6
@@ -561,9 +561,25 @@
       "Height": 0
     },
     {
-      "TileType": 1,
+      "TileType": 2,
       "OffsetCoordinates": {
         "x": 0,
+        "z": 7
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 1,
+        "z": 7
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 2,
         "z": 7
       },
       "Height": 0
@@ -571,29 +587,13 @@
     {
       "TileType": 1,
       "OffsetCoordinates": {
-        "x": 1,
-        "z": 7
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 2,
-        "z": 7
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
         "x": 3,
         "z": 7
       },
-      "Height": 1
+      "Height": 0
     },
     {
-      "TileType": 0,
+      "TileType": 2,
       "OffsetCoordinates": {
         "x": 4,
         "z": 7
@@ -614,101 +614,21 @@
         "x": 6,
         "z": 7
       },
-      "Height": 0
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 7,
-        "z": 7
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 8,
-        "z": 7
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 9,
-        "z": 7
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 0,
-        "z": 8
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 1,
-        "z": 8
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 0,
-      "OffsetCoordinates": {
-        "x": 2,
-        "z": 8
-      },
-      "Height": 2
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 3,
-        "z": 8
-      },
       "Height": 1
-    },
-    {
-      "TileType": 2,
-      "OffsetCoordinates": {
-        "x": 4,
-        "z": 8
-      },
-      "Height": 0
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 5,
-        "z": 8
-      },
-      "Height": 1
-    },
-    {
-      "TileType": 1,
-      "OffsetCoordinates": {
-        "x": 6,
-        "z": 8
-      },
-      "Height": 2
     },
     {
       "TileType": 2,
       "OffsetCoordinates": {
         "x": 7,
-        "z": 8
+        "z": 7
       },
       "Height": 1
     },
     {
-      "TileType": 0,
+      "TileType": 1,
       "OffsetCoordinates": {
         "x": 8,
-        "z": 8
+        "z": 7
       },
       "Height": 2
     },
@@ -716,22 +636,94 @@
       "TileType": 0,
       "OffsetCoordinates": {
         "x": 9,
+        "z": 7
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 0,
         "z": 8
       },
       "Height": 2
     },
     {
-      "TileType": 0,
+      "TileType": 1,
       "OffsetCoordinates": {
-        "x": 0,
-        "z": 9
+        "x": 1,
+        "z": 8
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 2,
+        "z": 8
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 3,
+        "z": 8
       },
       "Height": 1
     },
     {
       "TileType": 2,
       "OffsetCoordinates": {
-        "x": 1,
+        "x": 4,
+        "z": 8
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 5,
+        "z": 8
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 6,
+        "z": 8
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 7,
+        "z": 8
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 0,
+      "OffsetCoordinates": {
+        "x": 8,
+        "z": 8
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 9,
+        "z": 8
+      },
+      "Height": 1
+    },
+    {
+      "TileType": 2,
+      "OffsetCoordinates": {
+        "x": 0,
         "z": 9
       },
       "Height": 2
@@ -739,13 +731,21 @@
     {
       "TileType": 0,
       "OffsetCoordinates": {
-        "x": 2,
+        "x": 1,
         "z": 9
       },
       "Height": 1
     },
     {
-      "TileType": 2,
+      "TileType": 1,
+      "OffsetCoordinates": {
+        "x": 2,
+        "z": 9
+      },
+      "Height": 0
+    },
+    {
+      "TileType": 0,
       "OffsetCoordinates": {
         "x": 3,
         "z": 9
@@ -758,23 +758,23 @@
         "x": 4,
         "z": 9
       },
-      "Height": 2
+      "Height": 0
     },
     {
-      "TileType": 0,
+      "TileType": 1,
       "OffsetCoordinates": {
         "x": 5,
         "z": 9
       },
-      "Height": 2
+      "Height": 1
     },
     {
-      "TileType": 0,
+      "TileType": 1,
       "OffsetCoordinates": {
         "x": 6,
         "z": 9
       },
-      "Height": 2
+      "Height": 0
     },
     {
       "TileType": 2,
@@ -782,18 +782,18 @@
         "x": 7,
         "z": 9
       },
-      "Height": 2
+      "Height": 1
     },
     {
-      "TileType": 1,
+      "TileType": 2,
       "OffsetCoordinates": {
         "x": 8,
         "z": 9
       },
-      "Height": 0
+      "Height": 1
     },
     {
-      "TileType": 0,
+      "TileType": 2,
       "OffsetCoordinates": {
         "x": 9,
         "z": 9
@@ -801,7 +801,7 @@
       "Height": 0
     }
   ],
-  "Name": "test_map_2",
+  "Name": "Test",
   "Height": 10,
   "Width": 10
 }

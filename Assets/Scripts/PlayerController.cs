@@ -1,5 +1,8 @@
+using System;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Controls the camera for a local player in a multiplayer game.
@@ -10,7 +13,10 @@ using UnityEngine;
 /// </summary>
 public class PlayerController : NetworkBehaviour
 {
+    public UnityEvent<Vector3> OnPlayerClick = new UnityEvent<Vector3>();
+
     private Camera playerCamera;
+    const int LeftMouseIndex = 0;
     const float moveSpeed = 50f;
     const int RightMouseIndex = 1;
     const float rotationSpeed = 2f;
@@ -99,6 +105,19 @@ public class PlayerController : NetworkBehaviour
             // Rotate based on mouse movement
             transform.Rotate(Vector3.up, mouseX * rotationSpeed, Space.World);
             transform.Rotate(Vector3.right, -mouseY * rotationSpeed, Space.Self);
+        }
+
+        // Left click
+        if (Input.GetMouseButton(LeftMouseIndex))
+        {
+            // Debug.Log("Player clicked left mouse button");
+            Ray mousePositionRay = playerCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(mousePositionRay, out hit, Mathf.Infinity, HexGrid.GRID_LAYER_MASK))
+            {
+                Debug.DrawRay(transform.position, mousePositionRay.direction * hit.distance, Color.red);
+                OnPlayerClick.Invoke(hit.point);
+            }
         }
     }
 }
