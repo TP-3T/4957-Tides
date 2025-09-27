@@ -6,15 +6,15 @@ using UnityEngine.Events;
 
 public class HexGrid : NetworkBehaviour
 {
-    [SerializeField] public bool DrawGizmos;
-    [SerializeField] public bool DrawDebugLabels;
-    [SerializeField] public HexOrientation HexOrientation;
-    [SerializeField] public float HexSize;
-    [SerializeField] public HexCell HexCell;
-    [SerializeField] public TextAsset MapSource;
-
     public static readonly int GRID_LAYER_MASK = 1 << 10;
+    public bool DrawGizmos;
+    public bool DrawDebugLabels;
+    public float HexSize;
+    public HexOrientation HexOrientation;
+    public HexCell HexCell;
+    public TextAsset MapSource;
     public HexCell[] HexCells;
+    public HexCell[,] NewHexCells;
     public MapData GameMapData;
 
     private HexMesh hexMesh;
@@ -35,6 +35,7 @@ public class HexGrid : NetworkBehaviour
         if (hexMesh == null)
             Debug.LogError("HexMesh failed to retrieve component  from children.");
     }
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -120,6 +121,22 @@ public class HexGrid : NetworkBehaviour
     }
 
     /// <summary>
+    /// Gets a HexCell from the HexCells array (takes care of adding paddings to indicies).
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public HexCell GetCellFromPosition(Vector3 position)
+    {
+        CubeCoordinatesF hcf = HexMath.PositionToCubeF(
+            HexSize, position, HexOrientation);
+        CubeCoordinates hc = HexMath.RoundCube(hcf);
+
+        Debug.Log(hc);
+
+        return null;
+    }
+
+    /// <summary>
     /// Builds the map HexCells form JSON and initiates mesh triangulation.
     /// </summary>
     public void BuildMap()
@@ -132,34 +149,50 @@ public class HexGrid : NetworkBehaviour
 
         LoadMapTilesData();
 
+        // Create the grid storage
         HexCells = new HexCell[GameMapData.Width * GameMapData.Height];
 
-        int i = 0;
+        int padding = ((GameMapData.Width & 1) == 0
+            ? GameMapData.Width / 2
+            : (GameMapData.Width + 1) / 2) - 1;
 
+        NewHexCells = new HexCell[
+            GameMapData.Height, GameMapData.Width + padding];
+
+        Debug.Log(padding);
+        Debug.Log(NewHexCells);
+
+        // Add HexCell prefabs according to mapdata
+        int i = 0;
         foreach (var mapTileData in GameMapData.MapTilesData)
         {
             Vector3 hexCenter = HexMath.GetHexCenter(
-                HexSize, mapTileData.Height, mapTileData.OffsetCoordinates, HexOrientation
-            );
+                HexSize, mapTileData.Height, mapTileData.OffsetCoordinates, HexOrientation);
 
             CubeCoordinates hexCubeCoordinates = HexMath.OddOffsetToCube(
-                mapTileData.OffsetCoordinates, HexOrientation
-            );
+                mapTileData.OffsetCoordinates, HexOrientation);
 
-            HexCell hexCell = Instantiate(HexCell, hexCenter, Quaternion.identity, this.transform);
+            HexCell hexCell = Instantiate(
+                HexCell, hexCenter, Quaternion.identity, this.transform);
 
             hexCell.CellPosition = hexCenter;
             hexCell.CellCubeCoordinates = hexCubeCoordinates;
             hexCell.MapTileData = mapTileData;
+
             hexCell.AddComponent<MeshRenderer>();
             hexCell.GetComponent<MeshRenderer>().material.color = Color.blue;
+
             // Debug.Log(@$"
             // {hexCell.CellPosition}, The real position
             // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
             // {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
 
-            HexCells[i++] = hexCell;
+            // HexCells[i++] = hexCell;
+            NewHexCells[
+                hexCubeCoordinates.r, hexCubeCoordinates.q + padding] = hexCell;
         }
+
+        Debug.Log(NewHexCells[0,5]);
 
         hexMesh.Triangulate(HexCells, HexSize, HexOrientation);
     }
@@ -215,18 +248,8 @@ public class HexGrid : NetworkBehaviour
         // Debug.Log("clickpoint to cubeF" + HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation));
         // Debug.Log("clickpoint rounded cubeF" + HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)));
 
-        foreach (var HexCell in HexCells)
-        {
-            if (HexCell.CellCubeCoordinates.q
-            == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)).q &&
-            HexCell.CellCubeCoordinates.r
-            == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)).r &&
-            HexCell.CellCubeCoordinates.s
-            == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)).s)
-            {
-                // Debug.Log("Player clicked on hex cell " + HexCell.CellCubeCoordinates);
-            }
-        }
         this.meshColor.Value = nextColor;
+
+        GetCellFromPosition(playerClickPoint);
     }
 }
