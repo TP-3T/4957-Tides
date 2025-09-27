@@ -18,6 +18,7 @@ public class HexGrid : NetworkBehaviour
     public MapData GameMapData;
 
     private HexMesh hexMesh;
+    private int padding;
 
     public NetworkVariable<Color> meshColor = new NetworkVariable<Color>(
         Color.white,
@@ -121,6 +122,23 @@ public class HexGrid : NetworkBehaviour
     }
 
     /// <summary>
+    /// Retrieves a HexCell from the HexCells array given its cube coordinates.
+    /// </summary>
+    /// <param name="coords"></param>
+    /// <returns></returns>
+    public HexCell GetCellFromCubeCoordinates(CubeCoordinates coords)
+    {
+        if (HexOrientation == HexOrientation.pointyTop)
+        {
+            return NewHexCells[coords.r, coords.q + padding];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Gets a HexCell from the HexCells array (takes care of adding paddings to indicies).
     /// </summary>
     /// <param name="position"></param>
@@ -131,9 +149,9 @@ public class HexGrid : NetworkBehaviour
             HexSize, position, HexOrientation);
         CubeCoordinates hc = HexMath.RoundCube(hcf);
 
-        Debug.Log(hc);
+        // Debug.Log(hc);
 
-        return null;
+        return GetCellFromCubeCoordinates(hc);
     }
 
     /// <summary>
@@ -152,7 +170,7 @@ public class HexGrid : NetworkBehaviour
         // Create the grid storage
         HexCells = new HexCell[GameMapData.Width * GameMapData.Height];
 
-        int padding = ((GameMapData.Width & 1) == 0
+        padding = ((GameMapData.Width & 1) == 0
             ? GameMapData.Width / 2
             : (GameMapData.Width + 1) / 2) - 1;
 
@@ -187,12 +205,12 @@ public class HexGrid : NetworkBehaviour
             // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
             // {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
 
-            // HexCells[i++] = hexCell;
+            HexCells[i++] = hexCell;
             NewHexCells[
                 hexCubeCoordinates.r, hexCubeCoordinates.q + padding] = hexCell;
         }
 
-        Debug.Log(NewHexCells[0,5]);
+        Debug.Log(NewHexCells[2,3]);
 
         hexMesh.Triangulate(HexCells, HexSize, HexOrientation);
     }
@@ -250,6 +268,6 @@ public class HexGrid : NetworkBehaviour
 
         this.meshColor.Value = nextColor;
 
-        GetCellFromPosition(playerClickPoint);
+        Debug.Log(GetCellFromPosition(playerClickPoint));
     }
 }

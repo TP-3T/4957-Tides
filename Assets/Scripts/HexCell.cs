@@ -12,6 +12,6 @@ public class HexCell : MonoBehaviour
     /// <returns></returns>
     public override string ToString()
     {
-        return $"{{ cellPosition: '{CellPosition}', cellCubeCoordinates: {CellCubeCoordinates} }}";
+        return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates} }}";
     }
 }
