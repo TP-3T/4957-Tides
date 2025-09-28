@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 27, y: 2, z: 10.392304}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 2
@@ -143,6 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 18, y: 0, z: 31.176914}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 0
@@ -240,6 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 36, y: 4, z: 36.373066}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 4
@@ -337,6 +340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 0, y: 2, z: 15.588457}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 2
@@ -434,6 +438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 36, y: 1, z: 0}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 1
@@ -531,6 +536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 4.5, y: 0, z: 12.99038}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 0
@@ -628,6 +634,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 22.5, y: 1, z: 23.382685}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 1
@@ -725,6 +732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 13.5, y: 3, z: 33.77499}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 3
@@ -822,6 +830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 13.5, y: 3, z: 7.7942286}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 3
@@ -919,6 +928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 13.5, y: 0, z: 23.382685}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 0
@@ -1016,6 +1026,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 13.5, y: 2, z: 2.598076}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 2
@@ -1113,6 +1124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 4.5, y: 2, z: 44.167294}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 2
@@ -1210,6 +1222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 0, y: 2, z: 0}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 2
@@ -1307,6 +1320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 31.5, y: 1, z: 44.167294}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 1
@@ -1404,6 +1418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 22.5, y: 2, z: 28.578836}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 2
@@ -1501,6 +1516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 27, y: 3, z: 31.176914}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 3
@@ -1598,6 +1614,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 13.5, y: 3, z: 12.99038}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 3
@@ -1695,6 +1712,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 4.5, y: 1, z: 28.578836}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 1
@@ -1792,6 +1810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 27, y: 4, z: 15.588457}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 4
@@ -1889,6 +1908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 22.5, y: 3, z: 18.186533}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 3
@@ -1986,6 +2006,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 4.5, y: 0, z: 23.382685}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 0
@@ -2083,6 +2104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 18, y: 2, z: 10.392304}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 2
@@ -2180,6 +2202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 22.5, y: 3, z: 44.167294}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 3
@@ -2277,6 +2300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 9, y: 3, z: 20.784609}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 3
@@ -2374,6 +2398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 27, y: 2, z: 20.784609}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 2
@@ -2471,6 +2496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 27, y: 3, z: 41.569218}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 3
@@ -2568,6 +2594,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 27, y: 0, z: 5.196152}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 0
@@ -2665,6 +2692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 9, y: 4, z: 41.569218}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 4
@@ -2762,6 +2790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 13.5, y: 3, z: 44.167294}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 3
@@ -2859,6 +2888,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 0, y: 0, z: 36.373066}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 0
@@ -3066,92 +3096,10 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   DrawGizmos: 0
   DrawDebugLabels: 0
-  HexOrientation: 1
   HexSize: 3
+  HexOrientation: 1
   HexCell: {fileID: 3329167254614905112, guid: 9952da0958d8e9a458f96ec90e71c63a, type: 3}
   MapSource: {fileID: 4900000, guid: 5e7fae32110a9104e86b9ca308509e1b, type: 3}
-  HexCells:
-  - {fileID: 9048014965016139405}
-  - {fileID: 2187857078727176401}
-  - {fileID: 9161883128033347690}
-  - {fileID: 8931985502139725324}
-  - {fileID: 248469635126334787}
-  - {fileID: 5137201062133693266}
-  - {fileID: 834442794383993904}
-  - {fileID: 954491223618145834}
-  - {fileID: 2086726111458144574}
-  - {fileID: 8317541887194838428}
-  - {fileID: 3439852295035129285}
-  - {fileID: 6209159802048145972}
-  - {fileID: 9030124438834764283}
-  - {fileID: 8859793069402710440}
-  - {fileID: 6476171246691028080}
-  - {fileID: 1562587636740081994}
-  - {fileID: 387096699041604218}
-  - {fileID: 3867491627012769107}
-  - {fileID: 4385590721248250386}
-  - {fileID: 4897769843387082083}
-  - {fileID: 6019988935101660852}
-  - {fileID: 5100564108361377120}
-  - {fileID: 6102780137921712500}
-  - {fileID: 6500960025279019742}
-  - {fileID: 3641244552599865829}
-  - {fileID: 2646955726843020220}
-  - {fileID: 8309301470259873300}
-  - {fileID: 5463966145525440024}
-  - {fileID: 5441382860071216362}
-  - {fileID: 3095290193871909589}
-  - {fileID: 4710493683452495416}
-  - {fileID: 7868853706332060385}
-  - {fileID: 1135389241788396008}
-  - {fileID: 6392474000698594394}
-  - {fileID: 7687706766934318987}
-  - {fileID: 707458648114762029}
-  - {fileID: 1340660049875424554}
-  - {fileID: 3206559202267400282}
-  - {fileID: 7398557182978513241}
-  - {fileID: 3747859559809014608}
-  - {fileID: 6080486368719599295}
-  - {fileID: 6234780371498544222}
-  - {fileID: 7791958001233340933}
-  - {fileID: 4516344740809291259}
-  - {fileID: 4827053045476603715}
-  - {fileID: 7846121380467203885}
-  - {fileID: 8440199587685975395}
-  - {fileID: 5797517661197772796}
-  - {fileID: 7119618949295114124}
-  - {fileID: 6980980865628511260}
-  - {fileID: 968790041383981973}
-  - {fileID: 2515001919712223157}
-  - {fileID: 5954366580462945746}
-  - {fileID: 7052312307741011900}
-  - {fileID: 4926143257301834344}
-  - {fileID: 4053457942235187581}
-  - {fileID: 2570418081363210986}
-  - {fileID: 5726762399772940707}
-  - {fileID: 513959805061753086}
-  - {fileID: 1123574349407327743}
-  - {fileID: 3045661160011857533}
-  - {fileID: 7556558135066945991}
-  - {fileID: 4135751554461269373}
-  - {fileID: 6942095734257757645}
-  - {fileID: 8379718634359725839}
-  - {fileID: 8041248691783844222}
-  - {fileID: 5728308721966524587}
-  - {fileID: 7171104131490999750}
-  - {fileID: 4956831764118581853}
-  - {fileID: 7383854654927177745}
-  - {fileID: 267680504389330487}
-  - {fileID: 9016590544106994793}
-  - {fileID: 1820377386704462322}
-  - {fileID: 5277126361161421248}
-  - {fileID: 8001170251861224908}
-  - {fileID: 8432525133808291871}
-  - {fileID: 7518652901184064047}
-  - {fileID: 752094959525494115}
-  - {fileID: 323559998469530805}
-  - {fileID: 4116132981140014417}
-  - {fileID: 4318895568317801275}
   GameMapData:
     Name: 
     Width: 9
@@ -3656,6 +3604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 4.5, y: 3, z: 33.77499}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 3
@@ -3753,6 +3702,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 9, y: 2, z: 5.196152}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 2
@@ -3850,6 +3800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 9, y: 4, z: 25.98076}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 4
@@ -3947,6 +3898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 27, y: 2, z: 0}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 2
@@ -4044,6 +3996,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 9, y: 4, z: 31.176914}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 4
@@ -4141,6 +4094,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 31.5, y: 2, z: 2.598076}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 2
@@ -4238,6 +4192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 0, y: 2, z: 20.784609}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 2
@@ -4335,6 +4290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 36, y: 0, z: 15.588457}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 0
@@ -4432,6 +4388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 31.5, y: 1, z: 33.77499}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 1
@@ -4529,6 +4486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 18, y: 2, z: 15.588457}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 2
@@ -4626,6 +4584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 0, y: 3, z: 31.176914}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 3
@@ -4723,6 +4682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 13.5, y: 4, z: 18.186533}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 4
@@ -4820,6 +4780,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 4.5, y: 1, z: 18.186533}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 1
@@ -4917,6 +4878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 31.5, y: 2, z: 12.99038}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 2
@@ -5014,6 +4976,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 36, y: 1, z: 5.196152}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 1
@@ -5111,6 +5074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 0, y: 4, z: 41.569218}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 4
@@ -5229,7 +5193,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14a27c05686f7404a93c0f11e92ee30b, type: 2}
+  - {fileID: 2100000, guid: 4f9ebee80ac3cad469170eb442eaff5d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5378,6 +5342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 22.5, y: 1, z: 33.77499}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 1
@@ -5475,6 +5440,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 36, y: 2, z: 31.176914}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 2
@@ -5572,6 +5538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 9, y: 2, z: 10.392304}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 2
@@ -5669,6 +5636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 22.5, y: 4, z: 2.598076}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 4
@@ -5766,6 +5734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 9, y: 4, z: 36.373066}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 4
@@ -5863,6 +5832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 22.5, y: 4, z: 38.97114}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 4
@@ -5960,6 +5930,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 36, y: 0, z: 20.784609}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 0
@@ -6057,6 +6028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 36, y: 1, z: 10.392304}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 1
@@ -6154,6 +6126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 31.5, y: 4, z: 38.97114}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 4
@@ -6251,6 +6224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 27, y: 0, z: 25.98076}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 0
@@ -6348,6 +6322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 31.5, y: 4, z: 28.578836}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 4
@@ -6445,6 +6420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 36, y: 1, z: 41.569218}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 1
@@ -6542,6 +6518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 0, y: 2, z: 10.392304}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 2
@@ -6639,6 +6616,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 4.5, y: 2, z: 7.7942286}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 2
@@ -6736,6 +6714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 0, y: 3, z: 5.196152}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 3
@@ -6833,6 +6812,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 22.5, y: 4, z: 7.7942286}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 4
@@ -6930,6 +6910,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 18, y: 2, z: 25.98076}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 2
@@ -7027,6 +7008,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 0, y: 1, z: 25.98076}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 1
@@ -7124,6 +7106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 18, y: 3, z: 5.196152}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 3
@@ -7221,6 +7204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 4.5, y: 4, z: 38.97114}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 4
@@ -7318,6 +7302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 31.5, y: 3, z: 7.7942286}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 3
@@ -7415,6 +7400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 18, y: 4, z: 0}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 4
@@ -7512,6 +7498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 22.5, y: 0, z: 12.99038}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 0
@@ -7609,6 +7596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 36, y: 3, z: 25.98076}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 3
@@ -7706,6 +7694,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 9, y: 1, z: 15.588457}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 1
@@ -7803,6 +7792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 13.5, y: 0, z: 38.97114}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 0
@@ -7900,6 +7890,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 18, y: 0, z: 41.569218}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 0
@@ -7997,6 +7988,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 4.5, y: 4, z: 2.598076}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 4
@@ -8094,6 +8086,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 27, y: 2, z: 36.373066}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 2
@@ -8191,6 +8184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 18, y: 4, z: 36.373066}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 4
@@ -8288,6 +8282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 18, y: 3, z: 20.784609}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 3
@@ -8385,6 +8380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 13.5, y: 4, z: 28.578836}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 4
@@ -8482,6 +8478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 31.5, y: 1, z: 18.186533}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 2
     Height: 1
@@ -8579,6 +8576,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 31.5, y: 1, z: 23.382685}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 1
     Height: 1
@@ -8676,6 +8674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 9, y: 3, z: 0}
+  CellColor: {r: 0, g: 0, b: 0, a: 0}
   MapTileData:
     TileType: 0
     Height: 3

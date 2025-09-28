@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class HexCell : MonoBehaviour
 {
-    [SerializeField] public CubeCoordinates CellCubeCoordinates;
-    [SerializeField] public Vector3 CellPosition;
+    public CubeCoordinates CellCubeCoordinates;
+    public Vector3 CellPosition;
+    public Color CellColor = Color.white;
     public MapTileData MapTileData;
 
     /// <summary>
@@ -12,6 +13,6 @@ public class HexCell : MonoBehaviour
     /// <returns></returns>
     public override string ToString()
     {
-        return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates} }}";
+        return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor} }}";
     }
 }
