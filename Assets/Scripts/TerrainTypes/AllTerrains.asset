@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddab256363fa4364a9b9c783720612f2, type: 3}
   m_Name: AllTerrains
   m_EditorClassIdentifier: 
-  Values: []
+  Values:
+  - {fileID: 11400000, guid: a0bfe455dcde2f348b2a9a88f8d0cb0c, type: 2}
+  - {fileID: 11400000, guid: bbf1927decf0b83429343952dbf6ea8b, type: 2}
+  - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}

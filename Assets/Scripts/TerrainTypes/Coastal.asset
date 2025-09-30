@@ -16,3 +16,4 @@ MonoBehaviour:
     UseConstant: 0
     Constant: {r: 0.7176471, g: 0.7176471, b: 0.7176471, a: 0}
     Variable: {fileID: 11400000, guid: 9c39af8aceb7fac4ba55610c6405f931, type: 2}
+  uid: coastal

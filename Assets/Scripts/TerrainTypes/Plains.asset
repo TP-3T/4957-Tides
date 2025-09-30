@@ -16,3 +16,4 @@ MonoBehaviour:
     UseConstant: 0
     Constant: {r: 0, g: 0, b: 0, a: 0}
     Variable: {fileID: 11400000, guid: 63b843bcd46c5d742bb1f423f094101e, type: 2}
+  uid: plains
