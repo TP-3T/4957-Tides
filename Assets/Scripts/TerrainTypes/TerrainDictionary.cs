@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A lookup table for finding terrain types from their UIDs.
+/// </summary>
 [CreateAssetMenu(fileName = "TerrainDictionary", menuName = "Scriptable Objects/TerrainDictionary")]
 public class TerrainDictionary : ScriptableObject
 {

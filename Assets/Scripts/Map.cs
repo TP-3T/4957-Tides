@@ -4,7 +4,10 @@ using System.Collections.Generic;
 [Serializable]
 public class MapTileData
 {
-    public string TileTypeUid;
+    /// <summary>
+    /// The UID of the tile's terrain type.
+    /// </summary>
+    public string TileType;
     public int Height;
     public OffsetCoordinates OffsetCoordinates;
 }
