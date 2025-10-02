@@ -22,14 +22,6 @@ public class HexGrid : NetworkBehaviour
     [SerializeField]
     private TerrainDictionary AllowedTerrains;
 
-    public NetworkVariable<Color> meshColor = new NetworkVariable<Color>(
-        Color.white,
-        //settings for the network variable
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Owner
-
-        );
-
 
     void InitializeGrid()
     {
@@ -43,33 +35,16 @@ public class HexGrid : NetworkBehaviour
         base.OnNetworkSpawn();
 
         BuildandCreateGrid();
-
-
-        // ⭐ NEW: Subscribe to the value changed event on ALL clients
-        meshColor.OnValueChanged += OnMeshColorChanged;
-
-        // Apply the current color immediately when a client connects/spawns.
-        // This is important for clients joining mid-game.
-        if (hexMesh != null)
-        {
-            ApplyColorToMesh(meshColor.Value);
-        }
     }
     
-    // ⭐ NEW: Unsubscribe on despawn to prevent memory leaks
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        meshColor.OnValueChanged -= OnMeshColorChanged;
     }
 
-    // ⭐ NEW: Callback method to apply the new color
-    private void OnMeshColorChanged(Color previousColor, Color newColor)
-    {
-        Debug.Log($"HexGrid mesh color changed from {previousColor} to {newColor}");
-        ApplyColorToMesh(newColor);
-    }
-
+    /// <summary>
+    /// Applies the specified color to the HexMesh material on the local client.
+    /// </summary>
     private void ApplyColorToMesh(Color colorToApply)
     {
         if (hexMesh != null && hexMesh.GetComponent<MeshRenderer>() != null)
@@ -77,6 +52,15 @@ public class HexGrid : NetworkBehaviour
             hexMesh.GetComponent<MeshRenderer>().material.color = colorToApply;
         }
     }
+
+    // ClientRpc to tell all clients to apply the new color received from the server.
+    [ClientRpc]
+    private void ApplyColorToMeshClientRpc(Color colorToApply)
+    {
+        Debug.Log($"Applying new mesh color: {colorToApply}");
+        ApplyColorToMesh(colorToApply);
+    }
+
 
     void BuildandCreateGrid()
     {
@@ -201,26 +185,14 @@ public class HexGrid : NetworkBehaviour
         }
     }
 
+    //Now accepts the playerColor passed from the PlayerController.
     [ServerRpc(RequireOwnership = false)]
-    public void HandlePlayerClickServerRpc(Vector3 playerClickPoint)
+    public void HandlePlayerClickServerRpc(Vector3 playerClickPoint, Color playerColor)
     {
-        Color nextColor;
+        // On the server, we receive the player's unique color.
+        Color nextColor = playerColor; 
 
-        Color currentColor = this.meshColor.Value;
-
-        if (currentColor == Color.red)
-        {
-            nextColor = Color.blue;
-        }
-        else
-        {
-            nextColor = Color.red;
-        }
-
-        // Debug.Log("hexcell 1 position: " + HexCells[1].CellPosition);
-        // Debug.Log("Hexcell 1 cell cube coord: " + HexCells[1].CellCubeCoordinates);
-        // Debug.Log("clickpoint to cubeF" + HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation));
-        // Debug.Log("clickpoint rounded cubeF" + HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)));
+        // The current logic changes the entire grid mesh color to the player's color.
 
         foreach (var HexCell in HexCells)
         {
@@ -231,9 +203,11 @@ public class HexGrid : NetworkBehaviour
             HexCell.CellCubeCoordinates.s
             == HexMath.RoundCube(HexMath.PositionToCubeF(HexSize, playerClickPoint, HexOrientation)).s)
             {
-                // Debug.Log("Player clicked on hex cell " + HexCell.CellCubeCoordinates);
+                // Logic for handling the clicked cell would go here.
             }
         }
-        this.meshColor.Value = nextColor;
+        
+        // Call a ClientRpc to send the color change instruction to ALL clients.
+        ApplyColorToMeshClientRpc(nextColor);
     }
 }
