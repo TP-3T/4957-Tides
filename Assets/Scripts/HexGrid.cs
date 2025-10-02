@@ -191,6 +191,9 @@ public class HexGrid : NetworkBehaviour
                 hexCell.CellCubeCoordinates = hexCubeCoordinates;
                 hexCell.MapTileData = mapTileData;
 
+                string terrainUid = mapTileData.TileType;
+                hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
+
                 hexCell.AddComponent<MeshRenderer>();
                 hexCell.GetComponent<MeshRenderer>().material.color = Color.blue;
 

@@ -100,7 +100,7 @@ public class HexMesh : NetworkBehaviour
 
             vertices.Add(
                 hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0));
-            colors.Add(hexCell.CellColor);
+            colors.Add(hexCell.TerrainType.tileColor.Constant);
         }
 
         // Populate triangle and color arrays
