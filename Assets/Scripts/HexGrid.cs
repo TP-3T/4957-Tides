@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
+
 public class HexGrid : NetworkBehaviour
 {
     [SerializeField] public bool DrawGizmos;
@@ -18,6 +19,9 @@ public class HexGrid : NetworkBehaviour
     public MapData GameMapData;
 
     private HexMesh hexMesh;
+
+    [SerializeField]
+    private TerrainDictionary AllowedTerrains;
 
     public NetworkVariable<Color> meshColor = new NetworkVariable<Color>(
         Color.white,
@@ -52,7 +56,7 @@ public class HexGrid : NetworkBehaviour
             ApplyColorToMesh(meshColor.Value);
         }
     }
-    
+
     // ⭐ NEW: Unsubscribe on despawn to prevent memory leaks
     public override void OnNetworkDespawn()
     {
@@ -151,6 +155,10 @@ public class HexGrid : NetworkBehaviour
             hexCell.CellPosition = hexCenter;
             hexCell.CellCubeCoordinates = hexCubeCoordinates;
             hexCell.MapTileData = mapTileData;
+
+            string terrainUid = mapTileData.TileType;
+            hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
+
             hexCell.AddComponent<MeshRenderer>();
             hexCell.GetComponent<MeshRenderer>().material.color = Color.blue;
             // Debug.Log(@$"
