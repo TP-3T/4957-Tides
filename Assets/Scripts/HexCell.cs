@@ -6,6 +6,7 @@ public class HexCell : MonoBehaviour
     public Vector3 CellPosition;
     public Color CellColor = Color.white;
     public MapTileData MapTileData;
+    public TerrainType TerrainType;
 
     /// <summary>
     /// Mainly for debugging.
