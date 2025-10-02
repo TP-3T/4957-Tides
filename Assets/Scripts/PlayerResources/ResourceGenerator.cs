@@ -6,8 +6,8 @@ using UnityEngine;
 public class ResourceGenerator : MonoBehaviour
 {
     [SerializeField]
-    [Tooltip("Points to the resource count")]
-    private IntReference resourceCount;
+    [Tooltip("The resource to generate")]
+    private PlayerResource resource;
 
     // Update is called once per frame
     void Update()
@@ -17,6 +17,6 @@ public class ResourceGenerator : MonoBehaviour
 
     private void Generate(int amount)
     {
-        resourceCount.Variable.ApplyChange(amount);
+        resource.ApplyChange(1);
     }
 }

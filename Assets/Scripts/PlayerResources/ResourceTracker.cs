@@ -11,21 +11,20 @@ public class ResourceTracker : MonoBehaviour
     private TextMeshProUGUI tmpText;
 
     [SerializeField]
-    [Tooltip("Points to the resource count")]
-    private IntReference resourceCount;
+    [Tooltip("The resource to track")]
+    private PlayerResource resource;
 
     /// <summary>
     /// Updates textbox
     /// </summary>
     private void UpdateUI()
     {
-        tmpText.text = $"Resources: {resourceCount.Value}";
+        tmpText.text = $"{resource.Name}: {resource.Amount}";
     }
 
     void Start()
     {
-        resourceCount.Variable.Value = 0;
-        UpdateUI();
+        resource.Set(0);
     }
 
     void Update()
