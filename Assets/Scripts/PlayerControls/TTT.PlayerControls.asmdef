@@ -1,0 +1,18 @@
+{
+    "name": "TTT.PlayerControls",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0061587d97f6fd341834706c19c90efa",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:4c861275823ef884d91df8647f4caa34"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
