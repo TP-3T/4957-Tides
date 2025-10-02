@@ -28,4 +28,22 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_TEST_RUNNER_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_TEST_RUNNER_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_TEST_RUNNER_PASSWORD }}
-          
+  
+  stylecop:
+    runs-on: ubuntu-latest
+    name: docstring enforcement
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up .NET core SDK
+        uses: actions/@setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Install StyleCop Analyzers
+        run: |
+          dotnet add package StyleCop.Analyzers --version 1.1.118 
+      - name: Restore dependencies 
+        run: dotnet restore
+      - name: Run StyleCop and build
+        run: | 
+          dotnet stylecop analyze
+          dotnet build --configuration Release
