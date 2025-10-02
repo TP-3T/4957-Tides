@@ -14,6 +14,7 @@ using UnityEngine.Events;
 public class PlayerController : NetworkBehaviour
 {
     public UnityEvent<Vector3> OnPlayerClick = new UnityEvent<Vector3>();
+    public Color PlayerColor = Color.red;
 
     private Camera playerCamera;
     private HexGrid hexGrid;
@@ -172,16 +173,11 @@ public class PlayerController : NetworkBehaviour
             //Ray Cast Logic
             if (Physics.Raycast(mousePositionRay, out hit, Mathf.Infinity, HexGrid.GRID_LAYER_MASK))
             {
-                Debug.Log(hexGrid);
                 if (hexGrid != null)
                 {
-                    Color colorToSend = PlayerColor.Value;
-                    hexGrid.HandlePlayerClickServerRpc(hit.point, colorToSend);
+                    hexGrid.HandlePlayerClickServerRpc(hit.point, PlayerColor);
                 }
-                
             }
         }
     }
-
-
 }

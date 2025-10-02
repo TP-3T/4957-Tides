@@ -30,8 +30,11 @@ public class HexGridEditor : Editor
             return;
 
         foreach (HexCell hexCell in t.HexCells)
-            {
-                Handles.Label(t.transform.position + hexCell.CellPosition, $"{hexCell.CellCubeCoordinates}");
-            }
+        {
+            if (hexCell == null)
+                continue;
+
+            Handles.Label(t.transform.position + hexCell.CellPosition, $"{hexCell.CellCubeCoordinates}");
+        }
     }
 }

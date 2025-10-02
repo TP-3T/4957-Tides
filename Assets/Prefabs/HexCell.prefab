@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CellPosition: {x: 0, y: 0, z: 0}
+  CellColor: {r: 1, g: 1, b: 1, a: 0}
   MapTileData:
-    TileType: 
+    TileType: 0
     Height: 0
     OffsetCoordinates:
       x: 0
