@@ -22,9 +22,6 @@ public class HexGrid : NetworkBehaviour
     [SerializeField]
     private TerrainDictionary AllowedTerrains;
 
-    // ⭐ REMOVED: The meshColor NetworkVariable and its associated logic are removed.
-    // Color changes will now be propagated using a ClientRpc directly from the click handler.
-
 
     void InitializeGrid()
     {
@@ -38,8 +35,6 @@ public class HexGrid : NetworkBehaviour
         base.OnNetworkSpawn();
 
         BuildandCreateGrid();
-
-        // The initial color set in the editor will remain until the first click.
     }
     
     public override void OnNetworkDespawn()
@@ -58,7 +53,7 @@ public class HexGrid : NetworkBehaviour
         }
     }
 
-    // ⭐ NEW: ClientRpc to tell all clients to apply the new color received from the server.
+    // ClientRpc to tell all clients to apply the new color received from the server.
     [ClientRpc]
     private void ApplyColorToMeshClientRpc(Color colorToApply)
     {
@@ -190,7 +185,7 @@ public class HexGrid : NetworkBehaviour
         }
     }
 
-    // ⭐ UPDATED: Now accepts the playerColor passed from the PlayerController.
+    //Now accepts the playerColor passed from the PlayerController.
     [ServerRpc(RequireOwnership = false)]
     public void HandlePlayerClickServerRpc(Vector3 playerClickPoint, Color playerColor)
     {
@@ -212,7 +207,7 @@ public class HexGrid : NetworkBehaviour
             }
         }
         
-        // ⭐ NEW: Call a ClientRpc to send the color change instruction to ALL clients.
+        // Call a ClientRpc to send the color change instruction to ALL clients.
         ApplyColorToMeshClientRpc(nextColor);
     }
 }
