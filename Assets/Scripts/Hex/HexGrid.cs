@@ -178,8 +178,8 @@ namespace Hex
                 string terrainUid = mapTileData.TileType;
                 hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
 
-                hexCell.AddComponent<MeshRenderer>();
-                hexCell.GetComponent<MeshRenderer>().material.color = Color.blue;
+                hexCell.gameObject.AddComponent<MeshRenderer>();
+                hexCell.gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
                 // Debug.Log(@$"
                 // {hexCell.CellPosition}, The real position
                 // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
