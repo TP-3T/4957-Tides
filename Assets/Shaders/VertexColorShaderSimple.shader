@@ -2,7 +2,9 @@ Shader "Custom/VertexColorShaderSimple"
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1) // This property is not used for vertex colors, but is good practice to have
+        _Color ("Color", Color) = (1,1,1,1)
+        _Glossiness ("Smoothness", Range(0,1)) = 0.5
+        _Metallic ("Metallic", Range(0,1)) = 0.0
     }
     SubShader
     {
@@ -19,13 +21,13 @@ Shader "Custom/VertexColorShaderSimple"
             struct appdata
             {
                 float4 vertex : POSITION;
-                float4 color : COLOR; // Reads vertex color data
+                float4 color : COLOR;
             };
 
             struct v2f
             {
                 float4 vertex : SV_POSITION;
-                float4 color : COLOR; // Passes color to the fragment shader
+                float4 color : COLOR;
             };
 
             v2f vert (appdata v)
@@ -38,8 +40,9 @@ Shader "Custom/VertexColorShaderSimple"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                return i.color; // Returns the interpolated vertex color
+                return i.color;
             }
+
             ENDCG
         }
     }
