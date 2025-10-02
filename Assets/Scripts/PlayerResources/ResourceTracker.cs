@@ -24,6 +24,7 @@ public class ResourceTracker : MonoBehaviour
 
     void Start()
     {
+        resourceCount.Variable.Value = 0;
         UpdateUI();
     }
 
