@@ -23,7 +23,22 @@ public class TerrainDictionary : ScriptableObject
     /// <summary>
     /// Gets an indexed terrain type from its UID
     /// </summary>
-    public TerrainType Get(string uid) => UidToTerrain[uid];
+    public TerrainType Get(string uid)
+    {
+        TerrainType terrain;
+        try
+        {
+            terrain = UidToTerrain[uid];
+        }
+        catch (KeyNotFoundException)
+        {
+            throw new KeyNotFoundException(
+                $"The given terrain UID ({uid}) does not match any of the defined UIDs. Defined UIDs: {string.Join(", ", UidToTerrain.Keys)}"
+            );
+        }
+
+        return terrain;
+    }
 
     /// <summary>
     /// Makes a dictionary from the List of terrain types and their UIDs
@@ -33,7 +48,7 @@ public class TerrainDictionary : ScriptableObject
         Dictionary<string, TerrainType> uidToTerrain = new();
         foreach (TerrainType terrain in Values)
         {
-            uidToTerrain[terrain.uid] = terrain;
+            uidToTerrain[terrain.UniqueID] = terrain;
         }
         return uidToTerrain;
     }

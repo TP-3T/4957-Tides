@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edfba43e484fc17418585fa87cd85427, type: 3}
   m_Name: Coastal
   m_EditorClassIdentifier: 
-  tileColor:
-    UseConstant: 0
-    Constant: {r: 0.7176471, g: 0.7176471, b: 0.7176471, a: 0}
-    Variable: {fileID: 11400000, guid: 9c39af8aceb7fac4ba55610c6405f931, type: 2}
-  uid: coastal
+  TileColor:
+    UseConstant: 1
+    Constant: {r: 0, g: 0, b: 0, a: 0}
+    Variable: {fileID: 0}
+  Uid: coastal

@@ -7,14 +7,4 @@ using UnityEngine;
 public class IntVariable : ScriptableObject
 {
     public int Value;
-
-    public void ApplyChange(int amount)
-    {
-        Value += amount;
-    }
-
-    public void ApplyChange(IntVariable amount)
-    {
-        Value += amount.Value;
-    }
 }
