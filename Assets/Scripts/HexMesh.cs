@@ -79,7 +79,7 @@ public class HexMesh : NetworkBehaviour
         int triVertexStart = vertices.Count;
 
         vertices.Add(hexCell.CellPosition);
-        colors.Add(hexCell.CellColor);
+        colors.Add(hexCell.TerrainType.tileColor.Constant);
 
         Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -87,7 +87,7 @@ public class HexMesh : NetworkBehaviour
         foreach (Vector3 corner in corners)
         {
             vertices.Add(hexCell.CellPosition + corner);
-            colors.Add(hexCell.CellColor);
+            colors.Add(hexCell.TerrainType.tileColor.Constant);
         }
 
         int sideTriVertexStart = vertices.Count;
