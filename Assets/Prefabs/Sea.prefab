@@ -150,5 +150,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   SeaLevel: 10
-  RisingRate: 0.1
+  RisingRate: 0
   grid: {fileID: 2147203830767427816, guid: 8587b9b8bba1a2f42a61ce627622b416, type: 3}

@@ -6,12 +6,13 @@ public class Sea : NetworkBehaviour
 {
     [SerializeField] public float SeaLevel = 0.0f;
     private float seaLevelOffset = 12.66f;
-    [SerializeField] public float RisingRate = 0f;
+    [SerializeField] public float RisingRate;
 
     public HexGrid grid;
 
     void Start()
     {
+        this.RisingRate = 0.0f;
         this.SeaLevel = this.seaLevelOffset;
         this.transform.position = new Vector3(0, this.SeaLevel, 0);
         grid = GameObject.FindFirstObjectByType<HexGrid>();
@@ -25,15 +26,15 @@ public class Sea : NetworkBehaviour
         {
             if (cell.transform.position.y < this.SeaLevel - this.seaLevelOffset)
             {
-                if (cell.getIsFlooded()) continue;
+                if (cell.IsFlooded()) continue;
                 cell.FloodCell();
+                FloodFill(cell);
             }
         }
     }
 
-    private void floodFill(HexCell startCell)
+    private void FloodFill(HexCell startCell)
     {
-        //this will be implemented properly after the sea level is bound to the edges of the map
         Queue<HexCell> q = new Queue<HexCell>();
         q.Enqueue(startCell);
         while (q.Count > 0)
@@ -42,13 +43,13 @@ public class Sea : NetworkBehaviour
             if (cell.transform.position.y < this.SeaLevel - seaLevelOffset)
             {
                 cell.FloodCell();
-                // foreach (HexCell neighbor in cell.getNeighbors(cell))
-                // {
-                //     if (!neighbor.getIsFlooded())
-                //     {
-                //         q.Enqueue(neighbor);
-                //     }
-                // }
+                foreach (HexCell neighbor in cell.GetNeighbors())
+                {
+                    if (!neighbor.IsFlooded() && neighbor.transform.position.y < this.SeaLevel - seaLevelOffset)
+                    {
+                        q.Enqueue(neighbor);
+                    }
+                }
             }
         }
     }
