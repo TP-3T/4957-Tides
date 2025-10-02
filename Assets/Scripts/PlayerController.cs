@@ -14,8 +14,6 @@ using UnityEngine.Events;
 public class PlayerController : NetworkBehaviour
 {
     public UnityEvent<Vector3> OnPlayerClick = new UnityEvent<Vector3>();
-    public Color PlayerColor = Color.red;
-
     private Camera playerCamera;
     private HexGrid hexGrid;
     const int LeftMouseIndex = 0;
@@ -175,7 +173,8 @@ public class PlayerController : NetworkBehaviour
             {
                 if (hexGrid != null)
                 {
-                    hexGrid.HandlePlayerClickServerRpc(hit.point, PlayerColor);
+                    hexGrid.HandlePlayerClickServerRpc(
+                        hit.point, PlayerColor.Value);
                 }
             }
         }
