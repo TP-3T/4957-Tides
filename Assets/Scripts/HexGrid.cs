@@ -248,6 +248,19 @@ public class HexGrid : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    private void ApplyColorToMeshClientRpc(
+        Vector3 playerClickPoint, Color playerColor)
+    {
+        HexCell hc = GetCellFromPosition(playerClickPoint);
+        hc.CellColor = playerColor;
+
+        Debug.Log(hc.CellColor);
+        Debug.Log(hc);
+
+        hexMesh.Triangulate(HexCells, HexSize, HexOrientation); // for now just remake the mesh
+    }
+
     //Now accepts the playerColor passed from the PlayerController.
     [ServerRpc(RequireOwnership = false)]
     public void HandlePlayerClickServerRpc(
@@ -274,5 +287,7 @@ public class HexGrid : NetworkBehaviour
         Debug.Log(hc);
 
         hexMesh.Triangulate(HexCells, HexSize, HexOrientation); // for now just remake the mesh
+
+        ApplyColorToMeshClientRpc(playerClickPoint, playerColor);
     }
 }
