@@ -19,6 +19,9 @@ public class HexGrid : NetworkBehaviour
 
     private HexMesh hexMesh;
 
+    [SerializeField]
+    private TerrainDictionary AllowedTerrains;
+
     public NetworkVariable<Color> meshColor = new NetworkVariable<Color>(
         Color.white,
         //settings for the network variable
@@ -151,6 +154,10 @@ public class HexGrid : NetworkBehaviour
             hexCell.CellPosition = hexCenter;
             hexCell.CellCubeCoordinates = hexCubeCoordinates;
             hexCell.MapTileData = mapTileData;
+
+            string terrainUid = mapTileData.TileType;
+            hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
+
             hexCell.AddComponent<MeshRenderer>();
             hexCell.GetComponent<MeshRenderer>().material.color = Color.blue;
             // Debug.Log(@$"
