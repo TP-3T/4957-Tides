@@ -4,7 +4,7 @@ public class HexCell : MonoBehaviour
 {
     public CubeCoordinates CellCubeCoordinates;
     public Vector3 CellPosition;
-    public Color CellColor = Color.white;
+    public Color? CellColor = null;
     public MapTileData MapTileData;
     public TerrainType TerrainType;
 
