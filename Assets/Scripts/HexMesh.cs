@@ -79,7 +79,7 @@ public class HexMesh : NetworkBehaviour
         int triVertexStart = vertices.Count;
 
         vertices.Add(hexCell.CellPosition);
-        colors.Add(hexCell.TerrainType.tileColor.Constant);
+        colors.Add(hexCell.TerrainType.tileColor.Value);
 
         Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -87,7 +87,7 @@ public class HexMesh : NetworkBehaviour
         foreach (Vector3 corner in corners)
         {
             vertices.Add(hexCell.CellPosition + corner);
-            colors.Add(hexCell.TerrainType.tileColor.Constant);
+            colors.Add(hexCell.TerrainType.tileColor.Value);
         }
 
         int sideTriVertexStart = vertices.Count;
@@ -100,7 +100,7 @@ public class HexMesh : NetworkBehaviour
 
             vertices.Add(
                 hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0));
-            colors.Add(hexCell.TerrainType.tileColor.Constant);
+            colors.Add(hexCell.TerrainType.tileColor.Value);
         }
 
         // Populate triangle and color arrays
