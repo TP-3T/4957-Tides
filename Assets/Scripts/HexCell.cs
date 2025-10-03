@@ -7,6 +7,7 @@ public class HexCell : MonoBehaviour
     public Color? CellColor = null;
     public MapTileData MapTileData;
     public TerrainType TerrainType;
+    public int CenterVertexIndex;
 
     /// <summary>
     /// Mainly for debugging.
