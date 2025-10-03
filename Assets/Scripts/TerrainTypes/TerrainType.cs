@@ -7,12 +7,20 @@ using UnityEngine;
 public class TerrainType : ScriptableObject
 {
     [Tooltip("The color that represents this terrain.")]
-    public ColorReference tileColor;
+    [SerializeField]
+    private ColorReference TileColor;
 
     [Tooltip("Identifier unique for all terrain types")]
-    public string uid;
+    [SerializeField]
+    private string Uid;
 
-    // We can add more variables here as we scale. Example:
-    // [Tooltip("The multiplier to be applied to get local temperatures")]
-    // public float temperatureMultiplier = 1.0f;
+    /// <summary>
+    /// The color of this terrain type.
+    /// </summary>
+    public Color Color => TileColor.Value;
+
+    /// <summary>
+    /// The unique ID representing this terrain type.
+    /// </summary>
+    public string UniqueID => Uid;
 }

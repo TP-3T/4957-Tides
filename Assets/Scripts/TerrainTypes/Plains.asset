@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edfba43e484fc17418585fa87cd85427, type: 3}
   m_Name: Plains
   m_EditorClassIdentifier: 
-  tileColor:
-    UseConstant: 0
+  TileColor:
+    UseConstant: 1
     Constant: {r: 0, g: 0, b: 0, a: 0}
-    Variable: {fileID: 11400000, guid: 63b843bcd46c5d742bb1f423f094101e, type: 2}
-  uid: plains
+    Variable: {fileID: 0}
+  Uid: plains

@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edfba43e484fc17418585fa87cd85427, type: 3}
-  m_Name: Desert
+  m_Script: {fileID: 11500000, guid: cfe355f656467054a8ff105106e9592b, type: 3}
+  m_Name: SecondaryResource
   m_EditorClassIdentifier: 
-  TileColor:
-    UseConstant: 1
-    Constant: {r: 0, g: 0, b: 0, a: 0}
-    Variable: {fileID: 0}
-  Uid: desert
+  resourceName: Population
+  amount: 20

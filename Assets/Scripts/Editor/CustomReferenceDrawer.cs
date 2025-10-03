@@ -5,8 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Custom property drawer code from Ryan Hipple (Unite 2017)
 /// </summary>
-[CustomPropertyDrawer(typeof(ColorReference))]
-public class CustomReferenceDrawer : PropertyDrawer
+public abstract class CustomReferenceDrawer : PropertyDrawer
 {
     /// <summary>
     /// Options to display in the popup to select constant or variable.
