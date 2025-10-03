@@ -10,8 +10,8 @@ public class HexMesh : NetworkBehaviour
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
     private List<Vector3> vertices;
-
     private List<int> triangles;
+    private List<Color> colors;
 
     void InitializeMesh()
     {
@@ -28,6 +28,7 @@ public class HexMesh : NetworkBehaviour
 
         vertices = new();
         triangles = new();
+        colors = new();
     }
     
     void Awake()
@@ -40,18 +41,54 @@ public class HexMesh : NetworkBehaviour
         InitializeMesh();
     }
 
-    void Triangulate(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
+    /// <summary>
+    /// Adds of the HexCell.
+    /// </summary>
+    /// <param name="triVertexStart"></param>
+    /// <param name="i"></param>
+    void AddTopTriangles(int triVertexStart, int i)
+    {
+        triangles.Add(triVertexStart);
+        triangles.Add(triVertexStart + ((i == 5) ? 1 : i + 2));
+        triangles.Add(triVertexStart + i + 1);
+    }
+
+    /// <summary>
+    /// Adds the triangles to the side of each cell.
+    /// </summary>
+    /// <param name="triVertexStart"></param>
+    /// <param name="sideTriVertexStart"></param>
+    /// <param name="i"></param>
+    void AddSideTriangles(int triVertexStart, int sideTriVertexStart, int i)
+    {
+        // Tri one of the side face
+        triangles.Add(sideTriVertexStart + ((i == 5) ? 0 : i + 1));
+        triangles.Add(sideTriVertexStart + i);
+        triangles.Add(triVertexStart + ((i == 5) ? 1 : i + 2));
+
+        // Tri two of the side face
+        triangles.Add(triVertexStart + ((i == 5) ? 1 : i + 2));
+        triangles.Add(sideTriVertexStart + i);
+        triangles.Add(triVertexStart + i + 1);
+    }
+
+    void Triangulate(
+        HexCell hexCell, float hexSize, HexOrientation hexOrientation)
     {
         bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
         int triVertexStart = vertices.Count;
 
         vertices.Add(hexCell.CellPosition);
+        colors.Add(hexCell.CellColor);
 
         Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
         // Regular triangle vertices
         foreach (Vector3 corner in corners)
+        {
             vertices.Add(hexCell.CellPosition + corner);
+            colors.Add(hexCell.CellColor);
+        }
 
         int sideTriVertexStart = vertices.Count;
 
@@ -61,65 +98,39 @@ public class HexMesh : NetworkBehaviour
             if (!aboveSeaLevel)
                 continue;
 
-            vertices.Add(hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0));
+            vertices.Add(
+                hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0));
+            colors.Add(hexCell.CellColor);
         }
 
+        // Populate triangle and color arrays
         for (int i = 0; i < corners.Length; i++)
         {
-            triangles.Add(triVertexStart);
-            triangles.Add(triVertexStart + ((i == 5) ? 1 : i + 2));
-            triangles.Add(triVertexStart + i + 1);
+            AddTopTriangles(triVertexStart, i);
 
             if (!aboveSeaLevel)
                 continue;
 
-            // Tri one of the side face
-            triangles.Add(sideTriVertexStart + ((i == 5) ? 0 : i + 1));
-            triangles.Add(sideTriVertexStart + i);
-            triangles.Add(triVertexStart + ((i == 5) ? 1 : i + 2));
-
-            // Tri two of the side face
-            triangles.Add(triVertexStart + ((i == 5) ? 1 : i + 2));
-            triangles.Add(sideTriVertexStart + i);
-            triangles.Add(triVertexStart + i + 1);
+            AddSideTriangles(triVertexStart, sideTriVertexStart, i);
         }
-
-        // triangles.Add(triVertexStart);
-        // triangles.Add(triVertexStart + 2);
-        // triangles.Add(triVertexStart + 1);
-
-        // triangles.Add(triVertexStart);
-        // triangles.Add(triVertexStart + 3);
-        // triangles.Add(triVertexStart + 2);
-
-        // triangles.Add(triVertexStart);
-        // triangles.Add(triVertexStart + 4);
-        // triangles.Add(triVertexStart + 3);
-
-        // triangles.Add(triVertexStart);
-        // triangles.Add(triVertexStart + 5);
-        // triangles.Add(triVertexStart + 4);
-
-        // triangles.Add(triVertexStart);
-        // triangles.Add(triVertexStart + 6);
-        // triangles.Add(triVertexStart + 5);
-
-        // triangles.Add(triVertexStart);
-        // triangles.Add(triVertexStart + 1);
-        // triangles.Add(triVertexStart + 6);
     }
 
-    public void Triangulate(HexCell[] hexCells, float hexSize, HexOrientation hexOrientation)
+    public void Triangulate(
+        HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
     {
         ClearMesh();
 
         foreach (HexCell hexCell in hexCells)
         {
+            if (hexCell is null)
+                continue;
+
             Triangulate(hexCell, hexSize, hexOrientation);
         }
 
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
+        mesh.colors = colors.ToArray();
 
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
@@ -133,6 +144,7 @@ public class HexMesh : NetworkBehaviour
     {
         vertices.Clear();
         triangles.Clear();
+        colors.Clear();
         mesh.Clear();
     }
 }

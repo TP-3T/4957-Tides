@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class HexCell : MonoBehaviour
 {
-    [SerializeField] public CubeCoordinates CellCubeCoordinates;
-    [SerializeField] public Vector3 CellPosition;
+    public CubeCoordinates CellCubeCoordinates;
+    public Vector3 CellPosition;
+    public Color CellColor = Color.white;
     public MapTileData MapTileData;
     public TerrainType TerrainType;
     [SerializeField] public bool flooded = false;
@@ -13,6 +14,7 @@ public class HexCell : MonoBehaviour
     public void FloodCell()
     {
         this.flooded = true;
+        this.CellColor = Color.blue;
     }
 
     public bool IsFlooded()
@@ -39,15 +41,21 @@ public class HexCell : MonoBehaviour
                 this.CellCubeCoordinates.r + dir.y,
                 this.CellCubeCoordinates.s + dir.z
             );
-            int index = (int)(neighborPos.x + neighborPos.z * 20);
-            if (index <= 0 || index > grid.HexCells.Length) continue;
-            HexCell neighbor = grid.HexCells[index];
-            Debug.Log(index + " " + neighborPos + " " + neighbor);
+            HexCell neighbor = grid.HexCells[(int)neighborPos.x, (int)neighborPos.z];
             if (neighbor != null)
             {
                 neighbors.Add(neighbor);
             }
         }
         return neighbors;
+    }
+
+        /// <summary>
+    /// Mainly for debugging.
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString()
+    {
+        return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor} }}";
     }
 }

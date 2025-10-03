@@ -14,7 +14,6 @@ using UnityEngine.Events;
 public class PlayerController : NetworkBehaviour
 {
     public UnityEvent<Vector3> OnPlayerClick = new UnityEvent<Vector3>();
-
     private Camera playerCamera;
     private HexGrid hexGrid;
     const int LeftMouseIndex = 0;
@@ -22,7 +21,11 @@ public class PlayerController : NetworkBehaviour
     const int RightMouseIndex = 1;
     const float rotationSpeed = 2f;
     readonly Vector3 startingPosition = new Vector3(0, 10, -10);
-
+    public NetworkVariable<Color> PlayerColor = new NetworkVariable<Color>(
+        Color.white,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
 
     /// <summary>
     /// Called when the script instance is being loaded.
@@ -49,6 +52,12 @@ public class PlayerController : NetworkBehaviour
     /// </summary>
     public override void OnNetworkSpawn()
     {
+        // ⭐ NEW: Server assigns a unique color when the player spawns.
+        if (IsServer)
+        {
+            AssignUniquePlayerColor(OwnerClientId);
+        }
+
         if (IsOwner)
         {
             hexGrid = GameObject.FindFirstObjectByType<HexGrid>();
@@ -65,8 +74,33 @@ public class PlayerController : NetworkBehaviour
             }
         }
     }
+    private void AssignUniquePlayerColor(ulong clientId)
+    {
+        Color uniqueColor;
+        // Simple color assignment logic based on client ID. You can make this more robust.
+        switch (clientId % 4) // Cycle through 4 basic colors
+        {
+            case 0:
+                uniqueColor = Color.red;
+                break;
+            case 1:
+                uniqueColor = Color.blue;
+                break;
+            case 2:
+                uniqueColor = Color.green;
+                break;
+            case 3:
+                uniqueColor = Color.yellow;
+                break;
+            default:
+                uniqueColor = Color.white;
+                break;
+        }
+        PlayerColor.Value = uniqueColor;
+        Debug.Log($"Assigned color {PlayerColor.Value} to Player {clientId}");
+    }
     private void FindHexGridAfterConnection(ulong clientId)
-{
+    {
         // The event fires for *all* clients connecting, but we only care about the local player's logic.
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
@@ -77,7 +111,7 @@ public class PlayerController : NetworkBehaviour
             // has had time to process.
             hexGrid = GameObject.FindFirstObjectByType<HexGrid>();
         }
-}
+    }
 
     /// <summary>
     /// Called once per frame to handle real-time input and camera controls.
@@ -137,15 +171,12 @@ public class PlayerController : NetworkBehaviour
             //Ray Cast Logic
             if (Physics.Raycast(mousePositionRay, out hit, Mathf.Infinity, HexGrid.GRID_LAYER_MASK))
             {
-                Debug.Log(hexGrid);
                 if (hexGrid != null)
                 {
-                    hexGrid.HandlePlayerClickServerRpc(hit.point);
+                    hexGrid.HandlePlayerClickServerRpc(
+                        hit.point, PlayerColor.Value);
                 }
-                
             }
         }
     }
-
-
 }
