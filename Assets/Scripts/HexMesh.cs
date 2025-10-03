@@ -12,6 +12,8 @@ public class HexMesh : NetworkBehaviour
     private List<Vector3> vertices;
     private List<int> triangles;
     private List<Color> colors;
+    private Vector3[] cvertices;
+    private Color[] ccolors;
 
     void InitializeMesh()
     {
@@ -53,11 +55,6 @@ public class HexMesh : NetworkBehaviour
         triangles.Add(triVertexStart + i + 1);
     }
 
-    void ModifyTopTriangles(int triVertexStart, int i)
-    {
-
-    }
-
     /// <summary>
     /// Adds the triangles to the side of each cell.
     /// </summary>
@@ -77,12 +74,7 @@ public class HexMesh : NetworkBehaviour
         triangles.Add(triVertexStart + i + 1);
     }
 
-    void ModifySideTriangles(int triVertexStart, int sideTriVertexStart, int i)
-    {
-
-    }
-
-    void Triangulate(
+    void TriangulateHelper(
         HexCell hexCell, float hexSize, HexOrientation hexOrientation)
     {
         bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
@@ -139,16 +131,15 @@ public class HexMesh : NetworkBehaviour
             if (hexCell is null)
                 continue;
 
-            Triangulate(hexCell, hexSize, hexOrientation);
+            TriangulateHelper(hexCell, hexSize, hexOrientation);
         }
 
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.colors = colors.ToArray();
+        mesh.vertices   = cvertices = vertices.ToArray();
+        mesh.colors     = ccolors   = colors.ToArray();
+        mesh.triangles  = triangles.ToArray();
 
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
-        mesh.Optimize();
 
         meshFilter.sharedMesh = mesh;
         meshCollider.sharedMesh = mesh;
@@ -162,15 +153,13 @@ public class HexMesh : NetworkBehaviour
     public void TriangulateCell(
         HexCell hexCell, float hexSize, HexOrientation hexOrientation)
     {
-        // mesh.vertices already an array
-        // mesh.colors already and array, probably
-
         bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
-        int triVertexStart; // c -> counter, 😉
-        int c = triVertexStart = hexCell.CenterVertexIndex;
+        int c = hexCell.CenterVertexIndex; // c = counter, 😉
 
-        mesh.vertices[triVertexStart] = hexCell.CellPosition;
-        mesh.colors[triVertexStart] = (hexCell.CellColor
+        Debug.Log(c);
+
+        cvertices[c] = hexCell.CellPosition;
+        ccolors[c++] = (hexCell.CellColor
             ?? hexCell.TerrainType.tileColor.Value);
 
         Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
@@ -178,12 +167,10 @@ public class HexMesh : NetworkBehaviour
         // Regular triangle vertices
         foreach (Vector3 corner in corners)
         {
-            mesh.vertices[++c] = (hexCell.CellPosition + corner);
-            mesh.colors[c] = (hexCell.CellColor
-                ?? hexCell.TerrainType.tileColor.Value);
+            cvertices[c] = hexCell.CellPosition + corner;
+            ccolors[c++] = hexCell.CellColor
+                ?? hexCell.TerrainType.tileColor.Value;
         }
-
-        int sideTriVertexStart = c;
 
         // Vertices that will be used to draw the side faces
         foreach (Vector3 corner in corners)
@@ -191,29 +178,22 @@ public class HexMesh : NetworkBehaviour
             if (!aboveSeaLevel)
                 continue;
 
-            mesh.vertices[++c] = (
-                hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0));
-            mesh.colors[c] = (hexCell.CellColor
-                ?? hexCell.TerrainType.tileColor.Value);
+            cvertices[c] = hexCell.CellPosition + corner
+               - new Vector3(0, hexCell.CellPosition.y, 0);
+            ccolors[c++] = hexCell.CellColor
+                ?? hexCell.TerrainType.tileColor.Value;
         }
 
-        // Populate triangle and color arrays
-        for (int i = 0; i < corners.Length; i++)
-        {
-            AddTopTriangles(triVertexStart, i);
-
-            if (!aboveSeaLevel)
-                continue;
-
-            AddSideTriangles(triVertexStart, sideTriVertexStart, i);
-        }
+        mesh.vertices   = cvertices;
+        mesh.colors     = ccolors;
 
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
-        mesh.Optimize();
 
         meshFilter.sharedMesh = mesh;
         meshCollider.sharedMesh = mesh;
+
+        Debug.Log("We are fine.");
     }
 
     public void ClearMesh()
