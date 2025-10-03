@@ -1,0 +1,69 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "cSpell.ignorePaths": [
+            "package-lock.json",
+            "node_modules",
+            "vscode-extension",
+            ".git/{info,lfs,logs,refs,objects}/**",
+            ".git/{index,*refs,*HEAD}",
+            ".gitattributes",
+            ".vscode",
+            ".vscode-insiders",
+            "3T.code-workspace",
+            ".gitattributes"
+        ],
+        "files.autoSave": "afterDelay",
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 80,
+        "editor.rulers": [
+            80
+        ],
+        "editor.autoClosingBrackets": "always",
+        "editor.autoClosingComments": "always",
+        "editor.autoClosingOvertype": "auto",
+        "editor.autoClosingQuotes": "always",
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true,
+        //CB: This allows us to set a default formatter for **all** files
+        //  I've disabled it for now, but we can enable it if we feel its warrented.
+        //"editor.defaultFormatter": "csharpier.csharpier-vscode",
+        "[csharp]": {
+            "editor.defaultFormatter": "csharpier.csharpier-vscode"
+        },
+        "workbench.colorCustomizations": {
+            "minimap.background": "#00000000",
+            "scrollbar.shadow": "#00000000"
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            //Csharp requirements
+            "ms-dotnettools.csdevkit",
+            "visualstudiotoolsforunity.vstuc",
+            //Intellicode autocomplete
+            "visualstudioexptteam.vscodeintellicode",
+            "visualstudioexptteam.intellicode-api-usage-examples",
+            //Style
+            "sdras.night-owl",
+            "aaron-bond.better-comments",
+            //In-Editor git support
+            "eamodio.gitlens",
+            "mhutchie.git-graph",
+            "donjayamanne.githistory",
+            //Utilities
+            "maptz.regionfolder",
+            "ms-vsliveshare.vsliveshare",
+            "usernamehw.errorlens",
+            "csharpier.csharpier-vscode"
+            //Unsorted
+        ]
+    }
+}
