@@ -26,6 +26,7 @@ public class PlayerController : NetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
+    public float DesiredCellHeight = 1.0f;
 
     /// <summary>
     /// Called when the script instance is being loaded.
@@ -174,7 +175,7 @@ public class PlayerController : NetworkBehaviour
                 if (hexGrid != null)
                 {
                     hexGrid.HandlePlayerClickServerRpc(
-                        hit.point, PlayerColor.Value);
+                        hit.point, PlayerColor.Value, DesiredCellHeight);
                 }
             }
         }
