@@ -9,7 +9,6 @@ public class HexCell : MonoBehaviour
     public MapTileData MapTileData;
     public TerrainType TerrainType;
     [SerializeField] public bool flooded = false;
-    [SerializeField] public bool floodedWithFloodFill = false;
 
     public void FloodCell()
     {
@@ -22,18 +21,34 @@ public class HexCell : MonoBehaviour
         return this.flooded;
     }
 
-    public List<HexCell> GetNeighbors(HexGrid grid)
+    public List<HexCell> GetNeighbors(HexCell[,] HexCells)
     {
         List<HexCell> neighbors = new List<HexCell>();
-        Vector3[] directions = new Vector3[]
+        Vector3[] directions;
+        if (GameObject.FindFirstObjectByType<HexGrid>().HexOrientation == HexOrientation.pointyTop)
         {
-            new Vector3(1, 0, 0),   // Right
-            new Vector3(-1, 0, 0),  // Left
-            new Vector3(0, 0, 1),   // Up
-            new Vector3(0, 0, -1),  // Down
-            new Vector3(1, 0, 1),   // Up-Right
-            new Vector3(-1, 0, -1)  // Down-Left
-        };
+            directions = new Vector3[]
+            {
+                new Vector3(1, 0, -1),    // East
+                new Vector3(-1, 0, 1),   // West  
+                new Vector3(0, 1, -1),    // Northeast
+                new Vector3(0, -1, 1),   // Southwest
+                new Vector3(1, -1, 0),   // Southeast
+                new Vector3(-1, 1, 0)    // Northwest
+            };
+        }
+        else
+        { 
+            directions = new Vector3[]
+            {
+                new Vector3(0, -1, 1),    // North
+                new Vector3(0, 1, -1),   // South
+                new Vector3(1, -1, 0),    // Northeast  
+                new Vector3(-1, 1, 0),   // Southwest
+                new Vector3(1, 0, -1),   // Southeast
+                new Vector3(-1, 0, 1)    // Northwest
+            };
+        }
         foreach (Vector3 dir in directions)
         {
             Vector3 neighborPos = new Vector3(
@@ -41,10 +56,16 @@ public class HexCell : MonoBehaviour
                 this.CellCubeCoordinates.r + dir.y,
                 this.CellCubeCoordinates.s + dir.z
             );
-            HexCell neighbor = grid.HexCells[(int)neighborPos.x, (int)neighborPos.z];
-            if (neighbor != null)
+            foreach (HexCell cell in HexCells)
             {
-                neighbors.Add(neighbor);
+                if (cell == null) continue;
+                if (cell.CellCubeCoordinates.q == neighborPos.x &&
+                    cell.CellCubeCoordinates.r == neighborPos.y &&
+                    cell.CellCubeCoordinates.s == neighborPos.z)
+                {
+                    neighbors.Add(cell);
+                    break;
+                }
             }
         }
         return neighbors;

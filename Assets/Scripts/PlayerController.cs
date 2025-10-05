@@ -61,11 +61,11 @@ public class PlayerController : NetworkBehaviour
         if (IsOwner)
         {
             hexGrid = GameObject.FindFirstObjectByType<HexGrid>();
-        if (hexGrid == null)
-        {
-            Debug.Log("HexGrid not found yet. Subscribing to OnClientConnectedCallback.");
-            NetworkManager.Singleton.OnClientConnectedCallback += FindHexGridAfterConnection;
-        }
+            if (hexGrid == null)
+            {
+                Debug.Log("HexGrid not found yet. Subscribing to OnClientConnectedCallback.");
+                NetworkManager.Singleton.OnClientConnectedCallback += FindHexGridAfterConnection;
+            }
             transform.position = startingPosition;
             if (playerCamera != null)
             {

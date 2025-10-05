@@ -1,59 +1,77 @@
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
+using System;
 
 public class Sea : NetworkBehaviour
 {
     [SerializeField] public float SeaLevel = 0.0f;
-    private float seaLevelOffset = 12.66f;
+    //private float seaLevelOffset = 12.66f;
     [SerializeField] public float RisingRate;
 
-    public HexGrid grid;
+    public HexCell[,] HexCells;
 
     void Start()
     {
         this.RisingRate = 0.0f;
-        this.SeaLevel = this.seaLevelOffset;
+        this.SeaLevel = 0.0f;
         this.transform.position = new Vector3(0, this.SeaLevel, 0);
-        grid = GameObject.FindFirstObjectByType<HexGrid>();
+        if (HexCells == null)
+        {
+            HexCells = GameObject.FindFirstObjectByType<HexGrid>().HexCells;
+        }
+        else
+        {
+            Debug.Log("HexCells already assigned to Sea script.");
+        }
     }
 
     void Update()
     {
         this.SeaLevel += Time.deltaTime * this.RisingRate;
-        this.transform.position = new Vector3(0, this.SeaLevel, 0);
-        foreach (HexCell cell in grid.HexCells)
+        //this.transform.position = new Vector3(0, this.SeaLevel, 0);
+        for (int x = 0; x < 20; x++)
         {
-            if (cell.transform.position.y < this.SeaLevel - this.seaLevelOffset
-            && (cell.CellCubeCoordinates.q == 0 || cell.CellCubeCoordinates.q == 20 || cell.CellCubeCoordinates.s == 0 || cell.CellCubeCoordinates.s == 20))
+            for (int z = 0; z < 20; z++)
             {
-                if (cell.IsFlooded()) continue;
-                cell.FloodCell();
-                FloodFill(cell);
+                if (HexCells[x, z] == null)
+                { 
+                    Debug.LogWarning($"HexCells[{x}, {z}] is null.");
+                    continue;
+                }
+                if (HexCells[x,z].IsFlooded()) continue;
+                if (HexCells[x, z].CellCubeCoordinates.q == 0
+                || HexCells[x, z].CellCubeCoordinates.q == 19)
+                {
+                    //HexCells[x, z].FloodCell();
+                    FloodFill(HexCells[x, z]);
+                }
             }
         }
     }
 
     public void FloodFill(HexCell startCell)
     {
-        Queue<HexCell> q = new Queue<HexCell>();
-        q.Enqueue(startCell);
-        while (q.Count > 0)
+        if (startCell.CellPosition.y < this.SeaLevel)
         {
-            HexCell cell = q.Dequeue();
-            //if water level is higher and cell is a border cell.
-            if (cell.transform.position.y < this.SeaLevel - seaLevelOffset)
+            Queue<HexCell> q = new Queue<HexCell>();
+            q.Enqueue(startCell);
+            while (q.Count > 0)
             {
+                HexCell cell = q.Dequeue();
+                //if water level is higher and cell is a border cell.
                 cell.FloodCell();
-                cell.floodedWithFloodFill = true;
-                foreach (HexCell neighbor in cell.GetNeighbors(grid))
+                foreach (HexCell neighbor in cell.GetNeighbors(HexCells))
                 {
-                    if (!neighbor.IsFlooded() && neighbor.transform.position.y < this.SeaLevel - seaLevelOffset)
+                    if (!neighbor.IsFlooded() && neighbor.CellPosition.y < this.SeaLevel)
                     {
                         q.Enqueue(neighbor);
                     }
                 }
             }
+            GameObject.FindFirstObjectByType<HexMesh>()
+                .Triangulate(HexCells, 3,
+                    GameObject.FindFirstObjectByType<HexGrid>().HexOrientation);
         }
     }
 }
