@@ -209,9 +209,8 @@ public class HexGrid : NetworkBehaviour
             }
             else
             {
-                // HexCells[
-                //     hexCubeCoordinates.r + padding, hexCubeCoordinates.q] = hexCell;
-                    HexCells[mapTileData.OffsetCoordinates.x, mapTileData.OffsetCoordinates.z] = hexCell;
+                HexCells[
+                    hexCubeCoordinates.r + padding, hexCubeCoordinates.q] = hexCell;
                 }
             }
 
