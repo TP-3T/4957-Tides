@@ -52,4 +52,5 @@ MonoBehaviour:
     OffsetCoordinates:
       x: 0
       z: 0
-  TerrainType: {fileID: 0}
+  TerrainType: {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
+  flooded: 0
