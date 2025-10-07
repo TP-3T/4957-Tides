@@ -11,6 +11,9 @@ public class Sea : NetworkBehaviour
 
     public HexCell[,] HexCells;
 
+    /// <summary>
+    /// Unity build in method, gets once at the beginning.
+    /// </summary>
     void Start()
     {
         this.RisingRate = 0.0f;
@@ -26,6 +29,9 @@ public class Sea : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Unity build in method, gets called every frame.
+    /// </summary>
     void Update()
     {
         this.SeaLevel += Time.deltaTime * this.RisingRate;
@@ -50,6 +56,10 @@ public class Sea : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Flood-fill algorithm to flood all applicable cells.
+    /// <param name="startCell">The cell to start the flood-fill from.</param>
+    /// </summary>
     public void FloodFill(HexCell startCell)
     {
         if (startCell.CellPosition.y < this.SeaLevel)

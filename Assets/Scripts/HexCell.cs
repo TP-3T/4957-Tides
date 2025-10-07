@@ -10,17 +10,27 @@ public class HexCell : MonoBehaviour
     public TerrainType TerrainType;
     [SerializeField] public bool flooded = false;
 
+    /// <summary>
+    /// Flood this cell
+    /// </summary>
     public void FloodCell()
     {
         this.flooded = true;
         this.CellColor = Color.blue;
     }
 
+    /// <summary>
+    /// Get the flooded state of the cell.
+    /// </summary>
     public bool IsFlooded()
     {
         return this.flooded;
     }
 
+    /// <summary>
+    /// Get the [upto] 6 neighbors of a cell.
+    /// <param name="HexCells">The full hex cell array to search within.</param>
+    /// </summary>
     public List<HexCell> GetNeighbors(HexCell[,] HexCells)
     {
         List<HexCell> neighbors = new List<HexCell>();
@@ -38,7 +48,7 @@ public class HexCell : MonoBehaviour
             };
         }
         else
-        { 
+        {
             directions = new Vector3[]
             {
                 new Vector3(0, -1, 1),    // North
