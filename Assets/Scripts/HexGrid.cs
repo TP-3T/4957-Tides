@@ -180,7 +180,7 @@ public class HexGrid : NetworkBehaviour
             foreach (var mapTileData in GameMapData.MapTilesData)
             {
                 Vector3 hexCenter = HexMath.GetHexCenter(
-                    HexSize, mapTileData.Height, mapTileData.OffsetCoordinates, HexOrientation);
+                    HexSize, mapTileData.Height + 1, mapTileData.OffsetCoordinates, HexOrientation);
 
                 CubeCoordinates hexCubeCoordinates = HexMath.OddOffsetToCube(
                     mapTileData.OffsetCoordinates, HexOrientation);
@@ -191,6 +191,9 @@ public class HexGrid : NetworkBehaviour
                 hexCell.CellPosition = hexCenter;
                 hexCell.CellCubeCoordinates = hexCubeCoordinates;
                 hexCell.MapTileData = mapTileData;
+
+                string terrainUid = mapTileData.TileType;
+                hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
 
                 hexCell.AddComponent<MeshRenderer>();
                 hexCell.GetComponent<MeshRenderer>().material.color = Color.blue;
@@ -251,21 +254,22 @@ public class HexGrid : NetworkBehaviour
 
     [ClientRpc]
     private void ApplyColorToMeshClientRpc(
-        Vector3 playerClickPoint, Color playerColor)
+        Vector3 playerClickPoint, Color playerColor, float desiredCellHeight)
     {
         HexCell hc = GetCellFromPosition(playerClickPoint);
         hc.CellColor = playerColor;
+        hc.CellPosition.y = desiredCellHeight;
 
         Debug.Log(hc.CellColor);
         Debug.Log(hc);
 
-        hexMesh.Triangulate(HexCells, HexSize, HexOrientation); // for now just remake the mesh
+        hexMesh.TriangulateCell(hc, HexSize, HexOrientation);
     }
 
     //Now accepts the playerColor passed from the PlayerController.
     [ServerRpc(RequireOwnership = false)]
     public void HandlePlayerClickServerRpc(
-        Vector3 playerClickPoint, Color playerColor)
+        Vector3 playerClickPoint, Color playerColor, float desiredCellHeight)
     {
         // Color nextColor;
         // Color currentColor = this.meshColor.Value;
@@ -283,12 +287,11 @@ public class HexGrid : NetworkBehaviour
 
         HexCell hc = GetCellFromPosition(playerClickPoint);
         hc.CellColor = playerColor;
+        hc.CellPosition.y = desiredCellHeight;
 
-        Debug.Log(hc.CellColor);
-        Debug.Log(hc);
+        hexMesh.TriangulateCell(hc, HexSize, HexOrientation);
 
-        hexMesh.Triangulate(HexCells, HexSize, HexOrientation); // for now just remake the mesh
-
-        ApplyColorToMeshClientRpc(playerClickPoint, playerColor);
+        ApplyColorToMeshClientRpc(
+            playerClickPoint, playerColor, desiredCellHeight);
     }
 }
