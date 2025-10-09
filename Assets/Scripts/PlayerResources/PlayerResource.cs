@@ -5,7 +5,10 @@ namespace PlayerResources
     /// <summary>
     /// Represents a player resource, such as a material or population count.
     /// </summary>
-    [CreateAssetMenu(fileName = "PlayerResource", menuName = "Scriptable Objects/PlayerResource")]
+    [CreateAssetMenu(
+        fileName = "PlayerResource",
+        menuName = "Scriptable Objects/Player Resources/PlayerResource"
+    )]
     public class PlayerResource : ScriptableObject
     {
         [Tooltip("Name of the resource")]

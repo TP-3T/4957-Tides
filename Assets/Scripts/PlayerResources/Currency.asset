@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfe355f656467054a8ff105106e9592b, type: 3}
-  m_Name: SecondaryResource
+  m_Name: Currency
   m_EditorClassIdentifier: 
-  resourceName: Population
-  amount: 20
+  resourceName: 
+  amount: 0
