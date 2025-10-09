@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
@@ -50,7 +51,7 @@ public struct CubeCoordinates
         this.r = r;
         this.s = s;
     }
-  
+
     public CubeCoordinates(int q, int r)
     {
         this.q = q;
@@ -61,6 +62,16 @@ public struct CubeCoordinates
     public override string ToString()
     {
         return $"({q}, {r}, {s})";
+    }
+
+    public static CubeCoordinates operator +(
+        CubeCoordinates one, CubeCoordinates two)
+    {
+        return new CubeCoordinates(
+            one.q + two.q,
+            one.r + two.r,
+            one.s + two.s
+        );
     }
 }
 

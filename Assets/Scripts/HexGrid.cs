@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,22 +9,31 @@ using UnityEngine.Events;
 public class HexGrid : NetworkBehaviour
 {
     public static readonly int GRID_LAYER_MASK = 1 << 10;
+
+    private static readonly CubeCoordinates[] neighbourDirections = {
+        new CubeCoordinates(1, 0, -1),
+        new CubeCoordinates(-1, 0, 1),
+        new CubeCoordinates(0, 1, -1),
+        new CubeCoordinates(0, -1, 1),
+        new CubeCoordinates(1, -1, 0),
+        new CubeCoordinates(-1, 1, 0)
+    };
+
     public bool DrawGizmos;
     public bool DrawDebugLabels;
     public float HexSize;
     public HexOrientation HexOrientation;
     public HexCell HexCell;
     public TextAsset MapSource;
-    // public HexCell[] HexCells;
     public HexCell[,] HexCells;
     public MapData GameMapData;
 
     private HexMesh hexMesh;
     private int padding;
 
+
     [SerializeField]
     private TerrainDictionary AllowedTerrains;
-
 
     void InitializeGrid()
     {
@@ -116,7 +126,6 @@ public class HexGrid : NetworkBehaviour
     /// <returns></returns>
     public HexCell GetCellFromCubeCoordinates(CubeCoordinates coords)
     {
-        Debug.Log(coords);
         if (HexOrientation == HexOrientation.pointyTop)
         {
             if (    (coords.q + padding) < 0
@@ -158,6 +167,28 @@ public class HexGrid : NetworkBehaviour
     }
 
     /// <summary>
+    /// Returns the neighbours of a HexCell.
+    /// </summary>
+    /// <param name="c"></param>
+    /// <returns></returns>
+    public List<HexCell> GetCellNeighbours(HexCell c)
+    {
+        List<HexCell> neighbours = new List<HexCell>();
+
+        foreach (CubeCoordinates dir in neighbourDirections)
+        {
+            CubeCoordinates neighborPos = c.CellCubeCoordinates + dir;
+
+            HexCell n = GetCellFromCubeCoordinates(neighborPos);
+
+            if (n != null)
+                neighbours.Add(n);
+        }
+
+        return neighbours;
+    }
+
+    /// <summary>
     /// Builds the map HexCells form JSON and initiates mesh triangulation.
     /// </summary>
     public void BuildMap()
@@ -189,29 +220,29 @@ public class HexGrid : NetworkBehaviour
         }
 
         // Debug.Log(padding);
-            // Debug.Log(HexCells);
+        // Debug.Log(HexCells);
 
-            // Add HexCell prefabs according to mapdata
-            foreach (var mapTileData in GameMapData.MapTilesData)
-            {
-                Vector3 hexCenter = HexMath.GetHexCenter(
-                    HexSize, mapTileData.Height + 1, mapTileData.OffsetCoordinates, HexOrientation);
+        // Add HexCell prefabs according to mapdata
+        foreach (var mapTileData in GameMapData.MapTilesData)
+        {
+            Vector3 hexCenter = HexMath.GetHexCenter(
+                HexSize, mapTileData.Height + 1, mapTileData.OffsetCoordinates, HexOrientation);
 
-                CubeCoordinates hexCubeCoordinates = HexMath.OddOffsetToCube(
-                    mapTileData.OffsetCoordinates, HexOrientation);
+            CubeCoordinates hexCubeCoordinates = HexMath.OddOffsetToCube(
+                mapTileData.OffsetCoordinates, HexOrientation);
 
-                HexCell hexCell = Instantiate(
-                    HexCell, hexCenter, Quaternion.identity, this.transform);
+            HexCell hexCell = Instantiate(
+                HexCell, hexCenter, Quaternion.identity, this.transform);
 
-                hexCell.CellPosition = hexCenter;
-                hexCell.CellCubeCoordinates = hexCubeCoordinates;
-                hexCell.MapTileData = mapTileData;
+            hexCell.CellPosition = hexCenter;
+            hexCell.CellCubeCoordinates = hexCubeCoordinates;
+            hexCell.MapTileData = mapTileData;
 
-                string terrainUid = mapTileData.TileType;
-                hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
+            string terrainUid = mapTileData.TileType;
+            hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
 
-                hexCell.AddComponent<MeshRenderer>();
-                hexCell.GetComponent<MeshRenderer>().material.color = Color.blue;
+            hexCell.AddComponent<MeshRenderer>();
+            hexCell.GetComponent<MeshRenderer>().material.color = Color.blue;
 
             // Debug.Log(@$"
             // {hexCell.CellPosition}, The real position
@@ -229,8 +260,8 @@ public class HexGrid : NetworkBehaviour
             {
                 HexCells[
                     hexCubeCoordinates.r + padding, hexCubeCoordinates.q] = hexCell;
-                }
             }
+        }
 
         // Debug.Log(NewHexCells[2,3]);
 
@@ -278,7 +309,7 @@ public class HexGrid : NetworkBehaviour
         // Debug.Log(hc.CellColor);
         // Debug.Log(hc);
 
-        hexMesh.TriangulateCell(hc, HexSize, HexOrientation);
+        hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
     }
 
     //Now accepts the playerColor passed from the PlayerController.
@@ -303,7 +334,7 @@ public class HexGrid : NetworkBehaviour
         HexCell hc = GetCellFromPosition(playerClickPoint);
         hc.CellColor = playerColor;
 
-        hexMesh.TriangulateCell(hc, HexSize, HexOrientation);
+        hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
 
         ApplyColorToMeshClientRpc(
             playerClickPoint, playerColor, desiredCellHeight);

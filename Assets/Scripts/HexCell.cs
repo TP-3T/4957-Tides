@@ -29,37 +29,6 @@ public class HexCell : MonoBehaviour
     }
 
     /// <summary>
-    /// Get the [upto] 6 neighbors of a cell.
-    /// <param name="HexCells">The full hex cell array to search within.</param>
-    /// </summary>
-    public List<HexCell> GetNeighbors(HexCell[,] HexCells)
-    {
-        List<HexCell> neighbors = new List<HexCell>();
-        Vector3[] directions = new Vector3[]
-        {
-            new Vector3(1, 0, -1),    // East
-            new Vector3(-1, 0, 1),   // West  
-            new Vector3(0, 1, -1),    // Northeast
-            new Vector3(0, -1, 1),   // Southwest
-            new Vector3(1, -1, 0),   // Southeast
-            new Vector3(-1, 1, 0)    // Northwest
-        };
-
-        foreach (Vector3 dir in directions)
-        {
-            CubeCoordinates neighborPos = new CubeCoordinates(
-                this.CellCubeCoordinates.q + (int)dir.x,
-                this.CellCubeCoordinates.r + (int)dir.y,
-                this.CellCubeCoordinates.s + (int)dir.z
-            );
-            HexCell n = GameObject.FindFirstObjectByType<HexGrid>().GetCellFromCubeCoordinates(neighborPos);
-            if (n != null)
-                neighbors.Add(n);
-        }
-        return neighbors;
-    }
-
-        /// <summary>
     /// Mainly for debugging.
     /// </summary>
     /// <returns></returns>

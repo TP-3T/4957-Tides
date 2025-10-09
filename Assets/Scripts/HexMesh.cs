@@ -121,36 +121,10 @@ public class HexMesh : NetworkBehaviour
         }
     }
 
-    public void Triangulate(
-        HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
-    {
-        ClearMesh();
-
-        foreach (HexCell hexCell in hexCells)
-        {
-            if (hexCell is null)
-                continue;
-
-            TriangulateHelper(hexCell, hexSize, hexOrientation);
-        }
-
-        mesh.vertices   = cvertices = vertices.ToArray();
-        mesh.colors     = ccolors   = colors.ToArray();
-        mesh.triangles  = triangles.ToArray();
-
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
-
-        meshFilter.sharedMesh = mesh;
-        meshCollider.sharedMesh = mesh;
-    }
-
     /// <summary>
+    /// Does the re-triangulation (reassigning vertex and color values).
     /// </summary>
-    /// <param name="hexCell"></param>
-    /// <param name="hexSize"></param>
-    /// <param name="hexOrientation"></param>
-    public void TriangulateCell(
+    void ReTriangulateHelper(
         HexCell hexCell, float hexSize, HexOrientation hexOrientation)
     {
         bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
@@ -181,6 +155,42 @@ public class HexMesh : NetworkBehaviour
             ccolors[c++] = hexCell.CellColor
                 ?? hexCell.TerrainType.Color;
         }
+    }
+
+    public void Triangulate(
+        HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
+    {
+        ClearMesh();
+
+        foreach (HexCell hexCell in hexCells)
+        {
+            if (hexCell is null)
+                continue;
+
+            TriangulateHelper(hexCell, hexSize, hexOrientation);
+        }
+
+        mesh.vertices = cvertices = vertices.ToArray();
+        mesh.colors = ccolors = colors.ToArray();
+        mesh.triangles = triangles.ToArray();
+
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+
+        meshFilter.sharedMesh = mesh;
+        meshCollider.sharedMesh = mesh;
+    }
+
+    /// <summary>
+    /// Retriangulates a single cell in the mesh.
+    /// </summary>
+    /// <param name="hexCell"></param>
+    /// <param name="hexSize"></param>
+    /// <param name="hexOrientation"></param>
+    public void ReTriangulateCell(
+        HexCell hexCell, float hexSize, HexOrientation hexOrientation)
+    {
+        ReTriangulateHelper(hexCell, hexSize, hexOrientation);
 
         mesh.vertices   = cvertices;
         mesh.colors     = ccolors;
@@ -190,8 +200,28 @@ public class HexMesh : NetworkBehaviour
 
         meshFilter.sharedMesh = mesh;
         meshCollider.sharedMesh = mesh;
+    }
 
-        // Debug.Log("We are fine.");
+    /// <summary>
+    /// Retriangualtes a subset of the mesh.
+    /// </summary>
+    /// <param name="hexCells"></param>
+    /// <param name="hexSize"></param>
+    /// <param name="hexOrientation"></param>
+    public void ReTriangulateCells(
+        HexCell[] hexCells, float hexSize, HexOrientation hexOrientation)
+    {
+        foreach (HexCell c in hexCells)
+            ReTriangulateHelper(c, hexSize, hexOrientation);
+
+        mesh.vertices = cvertices;
+        mesh.colors = ccolors;
+
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+
+        meshFilter.sharedMesh = mesh;
+        meshCollider.sharedMesh = mesh;
     }
 
     public void ClearMesh()
