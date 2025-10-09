@@ -4,6 +4,7 @@ using Unity.Netcode;
 public class GameInitializer : MonoBehaviour
 {
     public NetworkObject HexGridPrefab;
+    public NetworkObject SeaPrefab;
 
 
 
@@ -17,8 +18,8 @@ public class GameInitializer : MonoBehaviour
     private void SpawnGrid()
     {
         NetworkObject gridInstance = Instantiate(HexGridPrefab);
-
+        NetworkObject seaInstance = Instantiate(SeaPrefab);
         gridInstance.Spawn();
-
+        seaInstance.Spawn();
     }
 }

@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
+
 public class HexGrid : NetworkBehaviour
 {
     public static readonly int GRID_LAYER_MASK = 1 << 10;
@@ -197,22 +198,22 @@ public class HexGrid : NetworkBehaviour
                 hexCell.AddComponent<MeshRenderer>();
                 hexCell.GetComponent<MeshRenderer>().material.color = Color.blue;
 
-                // Debug.Log(@$"
-                // {hexCell.CellPosition}, The real position
-                // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
-                // {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
+            // Debug.Log(@$"
+            // {hexCell.CellPosition}, The real position
+            // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
+            // {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
 
-                // HexCells[i++] = hexCell;
+            // HexCells[i++] = hexCell;
 
-                if (HexOrientation == HexOrientation.pointyTop)
-                {
-                    HexCells[
-                        hexCubeCoordinates.r, hexCubeCoordinates.q + padding] = hexCell;
-                }
-                else
-                {
-                    HexCells[
-                        hexCubeCoordinates.r + padding, hexCubeCoordinates.q] = hexCell;
+            if (HexOrientation == HexOrientation.pointyTop)
+            {
+                HexCells[
+                    hexCubeCoordinates.r, hexCubeCoordinates.q + padding] = hexCell;
+            }
+            else
+            {
+                HexCells[
+                    hexCubeCoordinates.r + padding, hexCubeCoordinates.q] = hexCell;
                 }
             }
 
