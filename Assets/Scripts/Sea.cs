@@ -9,7 +9,6 @@ public class Sea : NetworkBehaviour
     //private float seaLevelOffset = 12.66f;
     [SerializeField] public float RisingRate;
 
-    public HexCell[,] HexCells;
     public Queue<HexCell> Unflooded;
     public Queue<HexCell> Unflooded2;
 
@@ -28,15 +27,6 @@ public class Sea : NetworkBehaviour
         this.Unflooded2 = new();
         this.hexGrid = FindFirstObjectByType<HexGrid>();
         this.hexMesh = hexGrid.GetComponentInChildren<HexMesh>();
-
-        if (HexCells == null)
-        {
-            HexCells = GameObject.FindFirstObjectByType<HexGrid>().HexCells;
-        }
-        else
-        {
-            Debug.Log("HexCells already assigned to Sea script.");
-        }
 
         // Start flooding from the first cell
         FloodFill(hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0,0)));
@@ -62,7 +52,7 @@ public class Sea : NetworkBehaviour
             }
         }
 
-        while (Unflooded2.Count > 0)
+        while (this.Unflooded2.Count > 0)
         {
             Unflooded.Enqueue(Unflooded2.Dequeue());
         }
@@ -87,15 +77,16 @@ public class Sea : NetworkBehaviour
             cell.FloodCell();
             flooded.Add(cell);
 
-            List<HexCell> test = hexGrid.GetCellNeighbours(cell);
-
-            foreach (HexCell neighbor in test)
+            foreach (HexCell neighbor in hexGrid.GetCellNeighbours(cell))
             {
                 if (neighbor.IsFlooded())
                     continue;
 
+                if (q.Contains(neighbor) || this.Unflooded.Contains(neighbor))
+                    continue;
+
                 if (neighbor.CellPosition.y <= this.SeaLevel)
-                    q.Enqueue(neighbor);
+                        q.Enqueue(neighbor);
                 else
                     this.Unflooded.Enqueue(neighbor);
             }
