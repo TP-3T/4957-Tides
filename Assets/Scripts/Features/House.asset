@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8a447a0febedb24e8cd2e631a1f15d7, type: 3}
+  m_Name: House
+  m_EditorClassIdentifier: 
+  Uid: house
+  zoneOfControlRadius: 2
+  polutionEmission: 5
+  resourceProducers:
+  - {fileID: 11400000, guid: ef786455493359a40abff885eaf7cb49, type: 2}
+  allowedTerrains:
+  - {fileID: 11400000, guid: a0bfe455dcde2f348b2a9a88f8d0cb0c, type: 2}
+  - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
