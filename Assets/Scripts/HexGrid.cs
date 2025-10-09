@@ -119,7 +119,10 @@ public class HexGrid : NetworkBehaviour
         Debug.Log(coords);
         if (HexOrientation == HexOrientation.pointyTop)
         {
-            if ((coords.q + padding) < 0)
+            if (    (coords.q + padding) < 0
+                ||  (coords.r) < 0
+                ||  (coords.q + padding) >= (GameMapData.Height + padding)
+                ||  (coords.r) >= (GameMapData.Width))
             {
                 return null;
             }
@@ -128,7 +131,9 @@ public class HexGrid : NetworkBehaviour
         else
         {
             if (    (coords.r + padding) < 0
-                ||  (coords.q) < 0)
+                ||  (coords.q) < 0
+                ||  (coords.r + padding) >= (GameMapData.Height + padding)
+                ||  (coords.q) >= (GameMapData.Width))
             {
                 return null;
             }
