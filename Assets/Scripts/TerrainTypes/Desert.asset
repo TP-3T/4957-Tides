@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileColor:
     UseConstant: 1
-    Constant: {r: 0, g: 0, b: 0, a: 0}
+    Constant: {r: 1, g: 0.88149357, b: 0, a: 0}
     Variable: {fileID: 0}
   Uid: desert

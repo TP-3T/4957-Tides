@@ -257,10 +257,10 @@ public class HexGrid : NetworkBehaviour
     {
         HexCell hc = GetCellFromPosition(playerClickPoint);
         hc.CellColor = playerColor;
-        hc.CellPosition.y = desiredCellHeight;
+        // hc.CellPosition.y = desiredCellHeight;
 
-        Debug.Log(hc.CellColor);
-        Debug.Log(hc);
+        // Debug.Log(hc.CellColor);
+        // Debug.Log(hc);
 
         hexMesh.TriangulateCell(hc, HexSize, HexOrientation);
     }
@@ -286,7 +286,6 @@ public class HexGrid : NetworkBehaviour
 
         HexCell hc = GetCellFromPosition(playerClickPoint);
         hc.CellColor = playerColor;
-        hc.CellPosition.y = desiredCellHeight;
 
         hexMesh.TriangulateCell(hc, HexSize, HexOrientation);
 

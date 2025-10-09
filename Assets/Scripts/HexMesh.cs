@@ -83,7 +83,7 @@ public class HexMesh : NetworkBehaviour
 
         vertices.Add(hexCell.CellPosition);
         colors.Add(hexCell.CellColor
-            ?? hexCell.TerrainType.tileColor.Value);
+            ?? hexCell.TerrainType.Color);
 
         Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -92,7 +92,7 @@ public class HexMesh : NetworkBehaviour
         {
             vertices.Add(hexCell.CellPosition + corner);
             colors.Add(hexCell.CellColor
-                ?? hexCell.TerrainType.tileColor.Value);
+                ?? hexCell.TerrainType.Color);
         }
 
         int sideTriVertexStart = vertices.Count;
@@ -106,7 +106,7 @@ public class HexMesh : NetworkBehaviour
             vertices.Add(
                 hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0));
             colors.Add(hexCell.CellColor
-                ?? hexCell.TerrainType.tileColor.Value);
+                ?? hexCell.TerrainType.Color);
         }
 
         // Populate triangle and color arrays
@@ -156,11 +156,9 @@ public class HexMesh : NetworkBehaviour
         bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
         int c = hexCell.CenterVertexIndex; // c = counter, 😉
 
-        Debug.Log(c);
-
         cvertices[c] = hexCell.CellPosition;
         ccolors[c++] = (hexCell.CellColor
-            ?? hexCell.TerrainType.tileColor.Value);
+            ?? hexCell.TerrainType.Color);
 
         Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -169,7 +167,7 @@ public class HexMesh : NetworkBehaviour
         {
             cvertices[c] = hexCell.CellPosition + corner;
             ccolors[c++] = hexCell.CellColor
-                ?? hexCell.TerrainType.tileColor.Value;
+                ?? hexCell.TerrainType.Color;
         }
 
         // Vertices that will be used to draw the side faces
@@ -181,7 +179,7 @@ public class HexMesh : NetworkBehaviour
             cvertices[c] = hexCell.CellPosition + corner
                - new Vector3(0, hexCell.CellPosition.y, 0);
             ccolors[c++] = hexCell.CellColor
-                ?? hexCell.TerrainType.tileColor.Value;
+                ?? hexCell.TerrainType.Color;
         }
 
         mesh.vertices   = cvertices;
@@ -193,7 +191,7 @@ public class HexMesh : NetworkBehaviour
         meshFilter.sharedMesh = mesh;
         meshCollider.sharedMesh = mesh;
 
-        Debug.Log("We are fine.");
+        // Debug.Log("We are fine.");
     }
 
     public void ClearMesh()
