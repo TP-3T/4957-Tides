@@ -20,3 +20,4 @@ MonoBehaviour:
   allowedTerrains:
   - {fileID: 11400000, guid: a0bfe455dcde2f348b2a9a88f8d0cb0c, type: 2}
   - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
+  prefab: {fileID: 8279673912947900310, guid: 8fb05ce9c66aece45b27a4824851e677, type: 3}

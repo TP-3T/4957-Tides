@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Features;
 using Terrain;
 using Unity.Netcode;
 using Unity.VisualScripting;
@@ -337,6 +338,38 @@ namespace Hex
 
             ApplyColorToMeshClientRpc(
                 playerClickPoint, playerColor, desiredCellHeight);
+
+            ToggleFeature(hc); // ! Temporary test stuff (feel free to delete)
+        }
+
+        /// <summary>
+        /// ! Temporary test stuff (feel free to delete)
+        /// </summary>
+        [SerializeField]
+        private FeatureType placeholderFeatureType;
+        private GameObject placeholderFeature;
+
+        // <summary>
+        /// ! Temporary test stuff (feel free to delete)
+        /// </summary>
+        private void ToggleFeature(HexCell hexCell)
+        {
+            if (hexCell.FeatureType != null)
+            {
+                hexCell.FeatureType = null;
+                Destroy(placeholderFeature);
+                return;
+            }
+
+            Vector3 cellPos = hexCell.CellPosition;
+            Vector3 featurePos = new(cellPos.x, cellPos.y, cellPos.z);
+
+            hexCell.FeatureType = placeholderFeatureType;
+
+            Destroy(placeholderFeature);
+            placeholderFeature = Instantiate(hexCell.FeatureType.Prefab);
+            featurePos.y += 0.5f * placeholderFeature.transform.localScale.y;
+            placeholderFeature.transform.position = featurePos;
         }
     }
 }
