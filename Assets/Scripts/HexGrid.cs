@@ -116,12 +116,22 @@ public class HexGrid : NetworkBehaviour
     /// <returns></returns>
     public HexCell GetCellFromCubeCoordinates(CubeCoordinates coords)
     {
+        Debug.Log(coords);
         if (HexOrientation == HexOrientation.pointyTop)
         {
+            if ((coords.q + padding) < 0)
+            {
+                return null;
+            }
             return HexCells[coords.r, coords.q + padding];
         }
         else
         {
+            if (    (coords.r + padding) < 0
+                ||  (coords.q) < 0)
+            {
+                return null;
+            }
             return HexCells[coords.r + padding, coords.q];
         }
     }
