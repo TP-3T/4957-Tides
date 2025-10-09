@@ -1,10 +1,13 @@
 using UnityEngine;
 
-[CreateAssetMenu(
-    fileName = "IntVariable",
-    menuName = "Scriptable Objects/Modular Data/IntVariable"
-)]
-public class IntVariable : ScriptableObject
+namespace ModularData
 {
-    public int Value;
+    [CreateAssetMenu(
+        fileName = "IntVariable",
+        menuName = "Scriptable Objects/Modular Data/IntVariable"
+    )]
+    public class IntVariable : ScriptableObject
+    {
+        public int Value;
+    }
 }

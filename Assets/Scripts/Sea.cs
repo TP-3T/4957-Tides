@@ -1,13 +1,17 @@
-using UnityEngine;
-using Unity.Netcode;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using Hex;
+using Unity.Netcode;
+using UnityEngine;
 
 public class Sea : NetworkBehaviour
 {
-    [SerializeField] public float SeaLevel = 0.0f;
+    [SerializeField]
+    public float SeaLevel = 0.0f;
+
     //private float seaLevelOffset = 12.66f;
-    [SerializeField] public float RisingRate;
+    [SerializeField]
+    public float RisingRate;
 
     public HexCell[,] HexCells;
 
@@ -41,13 +45,16 @@ public class Sea : NetworkBehaviour
             for (int z = 0; z < 20; z++)
             {
                 if (HexCells[x, z] == null)
-                { 
+                {
                     Debug.LogWarning($"HexCells[{x}, {z}] is null.");
                     continue;
                 }
-                if (HexCells[x,z].IsFlooded()) continue;
-                if (HexCells[x, z].CellCubeCoordinates.q == 0
-                || HexCells[x, z].CellCubeCoordinates.q == 19)
+                if (HexCells[x, z].IsFlooded())
+                    continue;
+                if (
+                    HexCells[x, z].CellCubeCoordinates.q == 0
+                    || HexCells[x, z].CellCubeCoordinates.q == 19
+                )
                 {
                     //HexCells[x, z].FloodCell();
                     FloodFill(HexCells[x, z]);
@@ -79,9 +86,13 @@ public class Sea : NetworkBehaviour
                     }
                 }
             }
-            GameObject.FindFirstObjectByType<HexMesh>()
-                .Triangulate(HexCells, 3,
-                    GameObject.FindFirstObjectByType<HexGrid>().HexOrientation);
+            GameObject
+                .FindFirstObjectByType<HexMesh>()
+                .Triangulate(
+                    HexCells,
+                    3,
+                    GameObject.FindFirstObjectByType<HexGrid>().HexOrientation
+                );
         }
     }
 }
