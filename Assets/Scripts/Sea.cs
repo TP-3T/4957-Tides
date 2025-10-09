@@ -1,13 +1,15 @@
-using UnityEngine;
-using Unity.Netcode;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using Hex;
+using Unity.Netcode;
+using UnityEngine;
 
 public class Sea : NetworkBehaviour
 {
     [SerializeField] public float SeaLevel;
     //private float seaLevelOffset = 12.66f;
-    [SerializeField] public float RisingRate;
+    [SerializeField]
+    public float RisingRate;
 
     public Queue<HexCell> Unflooded;
     public Queue<HexCell> Unflooded2;
