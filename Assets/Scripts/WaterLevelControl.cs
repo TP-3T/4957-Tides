@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +16,7 @@ public class WaterLevelControl : MonoBehaviour
     private RectMask2D _mask;
 
     [SerializeField]
-    private TMP_Text _waterLevelText;
+    private TextMeshProUGUI _waterLevelText;
 
     [Tooltip("The amount to increase or decrease the water level by for testing.")]
     private int _testChangeAmount = 1;
@@ -24,9 +26,9 @@ public class WaterLevelControl : MonoBehaviour
 
     void Start()
     {
-        _maxBarHeight = _barRect.rect.height - _mask.padding.w - _mask.padding.y;
-        _waterLevelText.SetText($"{_waterLevel.WaterLevelValue}/{_waterLevel.MaxWaterLevel}");
         _initialTopMaskPadding = _mask.padding.w;
+        _maxBarHeight = _barRect.rect.height - _initialTopMaskPadding;
+        _waterLevelText.SetText($"{_waterLevel.WaterLevelValue}/{_waterLevel.MaxWaterLevel}");
         SetValue(_waterLevel.WaterLevelValue);
     }
 
@@ -38,20 +40,23 @@ public class WaterLevelControl : MonoBehaviour
         // padding.y = newTopPadding;
         // _mask.padding = padding;
         // _waterLevelText.SetText($"{_waterLevel.WaterLevelValue}/{_waterLevel.MaxWaterLevel}");
+        newValue = Mathf.Clamp(newValue, 0, _waterLevel.MaxWaterLevel);
 
-        float ratio = (float)newValue / _waterLevel.MaxWaterLevel;
+        float ratio = (float) newValue / _waterLevel.MaxWaterLevel;
         float targetFilledHeight = ratio * _maxBarHeight;
-        float newTopPadding = (_maxBarHeight - targetFilledHeight) + _initialTopMaskPadding;
+        float newTopPadding = _maxBarHeight - targetFilledHeight + _initialTopMaskPadding;
+
         newTopPadding = Mathf.Clamp(
             newTopPadding,
             _initialTopMaskPadding,
             _maxBarHeight + _initialTopMaskPadding
         );
+
         var padding = _mask.padding;
         padding.w = newTopPadding;
         _mask.padding = padding;
-        _waterLevelText.SetText($"{newValue}/{_waterLevel.MaxWaterLevel}");
-        _waterLevelText.ForceMeshUpdate();
+
+        _waterLevelText.text = $"{newValue}/{_waterLevel.MaxWaterLevel}";
     }
 
     void Update()
@@ -63,12 +68,14 @@ public class WaterLevelControl : MonoBehaviour
     {
         bool changed = false;
 
-        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.UpArrow) ||
+        Input.GetKeyDown(KeyCode.W))
         {
             _waterLevel.RiseWaterLevel(_testChangeAmount);
             changed = true;
         }
-        else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+        else if (Input.GetKeyDown(KeyCode.DownArrow) ||
+        Input.GetKeyDown(KeyCode.S))
         {
             _waterLevel.LowerWaterLevel(_testChangeAmount);
             changed = true;
