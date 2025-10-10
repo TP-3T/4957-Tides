@@ -296,10 +296,10 @@ namespace Hex
             Vector3 playerClickPoint, Color playerColor, float desiredCellHeight)
         {
 
-            HexCell hc = GetCellFromPosition(playerClickPoint);
-            hc.CellColor = playerColor;
+            // HexCell hc = GetCellFromPosition(playerClickPoint);
+            // hc.CellColor = playerColor;
 
-            hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
+            // hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
 
             ApplyColorToMeshClientRpc(
                 playerClickPoint, playerColor, desiredCellHeight);
