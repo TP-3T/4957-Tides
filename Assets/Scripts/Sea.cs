@@ -11,6 +11,9 @@ public class Sea : NetworkBehaviour
     [SerializeField]
     public float RisingRate;
 
+    [SerializeField] public float temp; //approx 4 deg change per 1m sea level
+    [SerializeField] public float pollution;
+
     public Queue<HexCell> Unflooded;
     public Queue<HexCell> Unflooded2;
 
@@ -39,7 +42,9 @@ public class Sea : NetworkBehaviour
     /// </summary>
     public void RaiseSea()
     {
-        this.SeaLevel += Time.deltaTime * this.RisingRate;
+        //crude formula for rising rate.
+        this.RisingRate = (this.temp * .125f) + (this.pollution * .05f);
+        this.SeaLevel += this.RisingRate;
 
         while (this.Unflooded.Count > 0)
         {
