@@ -21,6 +21,10 @@ EditorBuildSettings:
     path: Assets/Scenes/ColorChangeOnClick.unity
     guid: 0c81c1dead2d5ba4dbd0f122d7c6aff9
   - enabled: 1
+<<<<<<< HEAD
+    path: Assets/Scenes/Core_UI.unity
+    guid: e35121dbd57db6649b991cb4530912d2
+=======
     path: Assets/Scenes/GridStorage.unity
     guid: bab71d97c155af243acbf23f311ff5c6
   - enabled: 1
@@ -32,6 +36,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GridMeshImprovements.unity
     guid: b1677382cd2fd5b489b3123e60a1d3d0
+>>>>>>> core_global_sea_level_vars
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
