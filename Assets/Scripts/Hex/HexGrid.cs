@@ -163,8 +163,6 @@ namespace Hex
                 HexSize, position, HexOrientation);
             CubeCoordinates hc = HexMath.RoundCube(hcf);
 
-            // Debug.Log(hc);
-
             return GetCellFromCubeCoordinates(hc);
         }
 
@@ -203,9 +201,6 @@ namespace Hex
 
             LoadMapTilesData();
 
-            // Create the grid storage
-            // HexCells = new HexCell[GameMapData.Width * GameMapData.Height];
-
             padding = ((GameMapData.Width & 1) == 0
                 ? GameMapData.Width / 2
                 : (GameMapData.Width + 1) / 2) - 1;
@@ -220,9 +215,6 @@ namespace Hex
                 HexCells = new HexCell[
                     GameMapData.Height + padding, GameMapData.Width];
             }
-
-            // Debug.Log(padding);
-            // Debug.Log(HexCells);
 
             // Add HexCell prefabs according to mapdata
             foreach (var mapTileData in GameMapData.MapTilesData)
@@ -243,13 +235,6 @@ namespace Hex
                 string terrainUid = mapTileData.TileType;
                 hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
 
-                // Debug.Log(@$"
-                // {hexCell.CellPosition}, The real position
-                // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
-                // {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
-
-                // HexCells[i++] = hexCell;
-
                 if (HexOrientation == HexOrientation.pointyTop)
                 {
                     HexCells[
@@ -261,8 +246,6 @@ namespace Hex
                         hexCubeCoordinates.r + padding, hexCubeCoordinates.q] = hexCell;
                 }
             }
-
-            // Debug.Log(NewHexCells[2,3]);
 
             hexMesh.Triangulate(HexCells, HexSize, HexOrientation);
         }
@@ -303,10 +286,6 @@ namespace Hex
         {
             HexCell hc = GetCellFromPosition(playerClickPoint);
             hc.CellColor = playerColor;
-            // hc.CellPosition.y = desiredCellHeight;
-
-            // Debug.Log(hc.CellColor);
-            // Debug.Log(hc);
 
             hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
         }
@@ -316,19 +295,6 @@ namespace Hex
         public void HandlePlayerClickServerRpc(
             Vector3 playerClickPoint, Color playerColor, float desiredCellHeight)
         {
-            // Color nextColor;
-            // Color currentColor = this.meshColor.Value;
-
-            // if (currentColor == Color.red)
-            // {
-            //     nextColor = Color.blue;
-            // }
-            // else
-            // {
-            //     nextColor = Color.red;
-            // }
-
-            // The current logic changes the entire grid mesh color to the player's color.
 
             HexCell hc = GetCellFromPosition(playerClickPoint);
             hc.CellColor = playerColor;
