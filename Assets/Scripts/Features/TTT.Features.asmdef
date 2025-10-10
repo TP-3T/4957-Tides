@@ -1,10 +1,9 @@
 {
-    "name": "TTT.Hex",
+    "name": "TTT.Features",
     "rootNamespace": "",
     "references": [
         "GUID:91ba5b220a43d5443ae04d679286f57d",
-        "GUID:1491147abca9d7d4bb7105af628b223e",
-        "GUID:560ff959ba426d6449085b72011d1a21"
+        "GUID:efa44e919755e274aacf0c3113463f31"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

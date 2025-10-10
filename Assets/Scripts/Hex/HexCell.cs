@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Features;
 using Terrain;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace Hex
         public TerrainType TerrainType;
         [SerializeField] public bool flooded = false;
         public int CenterVertexIndex;
+        public FeatureType FeatureType;
 
         /// <summary>
         /// Flood this cell
