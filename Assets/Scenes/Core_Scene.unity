@@ -161,7 +161,7 @@ MonoBehaviour:
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
     Address: 127.0.0.1
-    Port: 8888
+    Port: 7777
     ServerListenAddress: 0.0.0.0
   DebugSimulator:
     PacketDelayMS: 0
@@ -238,6 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HexGridPrefab: {fileID: 2432164081653677672, guid: 8587b9b8bba1a2f42a61ce627622b416, type: 3}
+  SeaPrefab: {fileID: 5110416137415276475, guid: 629e11ffa84d69148b46cbf57a82b821, type: 3}
 --- !u!1 &699332248
 GameObject:
   m_ObjectHideFlags: 0

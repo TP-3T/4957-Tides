@@ -44,3 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab1fdbca002bab244810e2b1eb55afc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CellPosition: {x: 0, y: 0, z: 0}
+  CellColor: {r: 1, g: 1, b: 1, a: 0}
+  MapTileData:
+    TileType: 0
+    Height: 0
+    OffsetCoordinates:
+      x: 0
+      z: 0
+  TerrainType: {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
+  flooded: 0
