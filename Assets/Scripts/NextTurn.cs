@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Hex;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +10,14 @@ using UnityEngine.UI;
 /// </summary>
 public class NextTurn : MonoBehaviour
 {
+    private HexGrid hg;
+    private Sea s;
+
     void Start()
     {
         this.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
+
+        s = FindFirstObjectByType<Sea>();
     }
 
     /// <summary>
@@ -19,7 +25,6 @@ public class NextTurn : MonoBehaviour
     /// </summary>
     public void OnClick()
     {
-        Debug.Log("Next Turn Button Clicked");
-        // GameManager.Instance.NextTurn();
+        s.HandleNextTurnClickedServerRpc();
     }
 }

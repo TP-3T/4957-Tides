@@ -22,7 +22,7 @@ public class Sea : NetworkBehaviour
     /// </summary>
     void Start()
     {
-        this.RisingRate = 0.1f;
+        this.RisingRate = 1.0f;
         this.SeaLevel = 1.0f;
         this.transform.position = new Vector3(0, this.SeaLevel, 0);
         this.Unflooded = new();
@@ -39,7 +39,7 @@ public class Sea : NetworkBehaviour
     /// </summary>
     public void RaiseSea()
     {
-        this.SeaLevel += Time.deltaTime * this.RisingRate;
+        this.SeaLevel += this.RisingRate;
 
         while (this.Unflooded.Count > 0)
         {
@@ -88,7 +88,7 @@ public class Sea : NetworkBehaviour
                     continue;
 
                 if (neighbor.CellPosition.y <= this.SeaLevel)
-                        q.Enqueue(neighbor);
+                    q.Enqueue(neighbor);
                 else
                     this.Unflooded.Enqueue(neighbor);
             }
@@ -97,5 +97,17 @@ public class Sea : NetworkBehaviour
         // Retriangulate what has been flooded
         hexMesh.ReTriangulateCells(
             flooded.ToArray(), 3.0f, hexGrid.HexOrientation);
+    }
+
+    [ClientRpc]
+    public void HandleNextTurnClickedClientRpc()
+    {
+        RaiseSea();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void HandleNextTurnClickedServerRpc()
+    {
+        HandleNextTurnClickedClientRpc();
     }
 }
