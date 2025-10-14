@@ -1,4 +1,5 @@
 using System;
+using Hex;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -75,6 +76,7 @@ public class PlayerController : NetworkBehaviour
             }
         }
     }
+
     private void AssignUniquePlayerColor(ulong clientId)
     {
         Color uniqueColor;
@@ -100,6 +102,7 @@ public class PlayerController : NetworkBehaviour
         PlayerColor.Value = uniqueColor;
         Debug.Log($"Assigned color {PlayerColor.Value} to Player {clientId}");
     }
+
     private void FindHexGridAfterConnection(ulong clientId)
     {
         // The event fires for *all* clients connecting, but we only care about the local player's logic.
@@ -108,7 +111,7 @@ public class PlayerController : NetworkBehaviour
             // Unsubscribe immediately to prevent running again.
             NetworkManager.Singleton.OnClientConnectedCallback -= FindHexGridAfterConnection;
 
-            // Search the scene again now that the server's spawn message (for the HexGrid) 
+            // Search the scene again now that the server's spawn message (for the HexGrid)
             // has had time to process.
             hexGrid = GameObject.FindFirstObjectByType<HexGrid>();
         }
@@ -175,7 +178,10 @@ public class PlayerController : NetworkBehaviour
                 if (hexGrid != null)
                 {
                     hexGrid.HandlePlayerClickServerRpc(
-                        hit.point, PlayerColor.Value, DesiredCellHeight);
+                        hit.point,
+                        PlayerColor.Value,
+                        DesiredCellHeight
+                    );
                 }
             }
         }

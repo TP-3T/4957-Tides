@@ -1,6 +1,7 @@
-using UnityEngine;
-using UnityEditor;
 using System.Runtime.ExceptionServices;
+using Hex;
+using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(HexGrid))]
 public class HexGridEditor : Editor
@@ -34,7 +35,10 @@ public class HexGridEditor : Editor
             if (hexCell == null)
                 continue;
 
-            Handles.Label(t.transform.position + hexCell.CellPosition, $"{hexCell.CellCubeCoordinates}");
+            Handles.Label(
+                t.transform.position + hexCell.CellPosition,
+                $"{hexCell.CellCubeCoordinates}"
+            );
         }
     }
 }
