@@ -17,10 +17,13 @@ public class PlayerController : NetworkBehaviour
     public UnityEvent<Vector3> OnPlayerClick = new UnityEvent<Vector3>();
     private Camera playerCamera;
     private HexGrid hexGrid;
+    private Vector3 dragOrigin;
     const int LeftMouseIndex = 0;
     const float moveSpeed = 50f;
     const int RightMouseIndex = 1;
     const float rotationSpeed = 2f;
+    const float DRAG_SPEED = 50f;
+    const float DRAG_VECTOR_Y_POS = 0f;
     readonly Vector3 startingPosition = new Vector3(0, 10, -10);
     public NetworkVariable<Color> PlayerColor = new NetworkVariable<Color>(
         Color.white,
@@ -118,18 +121,10 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// Called once per frame to handle real-time input and camera controls.
-    /// It checks for local ownership before processing movement and rotation
-    /// input from the keyboard (WASD, QE) and mouse.
+    /// Handles camera panning using WASD keys.
     /// </summary>
-    void Update()
+    private void HandlePanning()
     {
-        // The camera controls should only run for the local player.
-        if (!IsOwner)
-        {
-            return;
-        }
-
         // WASD Movement
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
@@ -140,32 +135,35 @@ public class PlayerController : NetworkBehaviour
         right.y = 0;
 
         Vector3 movement = (forward * verticalInput) + (right * horizontalInput);
-        transform.position += movement * moveSpeed * Time.deltaTime;
+        transform.position += moveSpeed * Time.deltaTime * movement;
+    }
 
-        // Q and E Vertical Movement
-        float verticalMove = 0f;
-        if (Input.GetKey(KeyCode.E))
+    /// <summary>
+    /// Handles camera dragging when the left mouse button is held down.
+    /// </summary>
+    private void HandleDragging()
+    {
+        if (Input.GetMouseButtonDown(LeftMouseIndex))
         {
-            verticalMove = moveSpeed;
-        }
-        else if (Input.GetKey(KeyCode.Q))
-        {
-            verticalMove = -moveSpeed;
-        }
-
-        transform.position += Vector3.up * verticalMove * Time.deltaTime;
-
-        // Mouse-based Rotation
-        if (Input.GetMouseButton(RightMouseIndex)) // Right-click held down
-        {
-            float mouseX = Input.GetAxis("Mouse X");
-            float mouseY = Input.GetAxis("Mouse Y");
-
-            // Rotate based on mouse movement
-            transform.Rotate(Vector3.up, mouseX * rotationSpeed, Space.World);
-            transform.Rotate(Vector3.right, -mouseY * rotationSpeed, Space.Self);
+            dragOrigin = Input.mousePosition;
+            return;
         }
 
+        if (!Input.GetMouseButton(LeftMouseIndex))
+            return;
+
+        Vector3 pos = playerCamera.ScreenToViewportPoint(dragOrigin - Input.mousePosition);
+        Vector3 move = new(pos.x * DRAG_SPEED, DRAG_VECTOR_Y_POS, pos.y * DRAG_SPEED);
+        transform.Translate(move, Space.World);
+
+        dragOrigin = Input.mousePosition;
+    }
+
+    /// <summary>
+    /// Handles left mouse button clicks to interact with the hex grid.
+    /// </summary>
+    private void HandleLeftClick()
+    {
         // Left click
         if (Input.GetMouseButtonDown(LeftMouseIndex))
         {
@@ -185,5 +183,61 @@ public class PlayerController : NetworkBehaviour
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Handles camera rotation when the right mouse button is held down.
+    /// </summary>
+    private void HandleRotation()
+    {
+        // Mouse-based Rotation
+        if (Input.GetMouseButton(RightMouseIndex)) // Right-click held down
+        {
+            float mouseX = Input.GetAxis("Mouse X");
+            float mouseY = Input.GetAxis("Mouse Y");
+
+            // Rotate based on mouse movement
+            transform.Rotate(Vector3.up, mouseX * rotationSpeed, Space.World);
+            transform.Rotate(Vector3.right, -mouseY * rotationSpeed, Space.Self);
+        }
+    }
+
+    /// <summary>
+    /// Handles vertical movement of the camera using Q and E keys.
+    /// </summary>
+    private void HandleVerticalMovement()
+    {
+        // Q and E Vertical Movement
+        float verticalMove = 0f;
+        if (Input.GetKey(KeyCode.E))
+        {
+            verticalMove = moveSpeed;
+        }
+        else if (Input.GetKey(KeyCode.Q))
+        {
+            verticalMove = -moveSpeed;
+        }
+
+        transform.position += Vector3.up * verticalMove * Time.deltaTime;
+    }
+
+    /// <summary>
+    /// Called once per frame to handle real-time input and camera controls.
+    /// It checks for local ownership before processing movement and rotation
+    /// input from the keyboard (WASD, QE) and mouse.
+    /// </summary>
+    void Update()
+    {
+        // The camera controls should only run for the local player.
+        if (!IsOwner)
+        {
+            return;
+        }
+
+        HandlePanning();
+        HandleDragging();
+        HandleRotation();
+        HandleVerticalMovement();
+        HandleLeftClick();
     }
 }
