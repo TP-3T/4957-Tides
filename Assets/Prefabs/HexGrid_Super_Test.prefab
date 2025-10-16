@@ -1230,7 +1230,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   DrawGizmos: 0
   DrawDebugLabels: 0
-  HexSize: 3
+  HexSize: 1
   HexOrientation: 1
   HexCell: {fileID: 3329167254614905112, guid: 9952da0958d8e9a458f96ec90e71c63a, type: 3}
   MapSource: {fileID: 4900000, guid: c6a9af25535ba0f43b588e7289cf784a, type: 3}
