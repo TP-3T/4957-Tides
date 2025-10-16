@@ -96,7 +96,7 @@ public class Sea : NetworkBehaviour
 
         // Retriangulate what has been flooded
         hexMesh.ReTriangulateCells(
-            flooded.ToArray(), 3.0f, hexGrid.HexOrientation);
+            flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
     }
 
     [ClientRpc]
