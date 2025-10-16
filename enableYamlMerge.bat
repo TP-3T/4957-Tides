@@ -1,5 +1,7 @@
 @echo off
 
+cd %~dp0
+
 if not defined YAMLPath (
     :PathCheck
         set /p YAMLPath=Enter the path to UnityYamlMerge.exe (e.g. C:\Program Files\Unity\Hub\Editor\6000.0.33f1\Editor\Data\Tools\)  

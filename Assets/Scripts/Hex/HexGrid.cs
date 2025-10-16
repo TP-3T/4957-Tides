@@ -11,6 +11,15 @@ namespace Hex
 {       
     public class HexGrid : NetworkBehaviour
     {
+        
+        // Key: Player's Network Client ID Value: The HexCell the player has selected
+        private Dictionary<ulong, HexCell> playerSelections =
+        new Dictionary<ulong, HexCell>();
+
+        // Key: The HexCell object Value: The original Color of the cell (before ANY player selected it)
+        private Dictionary<HexCell, Color?> cellOriginalColors =
+        new Dictionary<HexCell, Color?>();
+
         public static readonly int GRID_LAYER_MASK = 1 << 10;
 
         private static readonly CubeCoordinates[] neighbourDirections = {
@@ -164,8 +173,6 @@ namespace Hex
                 HexSize, position, HexOrientation);
             CubeCoordinates hc = HexMath.RoundCube(hcf);
 
-            // Debug.Log(hc);
-
             return GetCellFromCubeCoordinates(hc);
         }
 
@@ -204,9 +211,6 @@ namespace Hex
 
             LoadMapTilesData();
 
-            // Create the grid storage
-            // HexCells = new HexCell[GameMapData.Width * GameMapData.Height];
-
             padding = ((GameMapData.Width & 1) == 0
                 ? GameMapData.Width / 2
                 : (GameMapData.Width + 1) / 2) - 1;
@@ -221,9 +225,6 @@ namespace Hex
                 HexCells = new HexCell[
                     GameMapData.Height + padding, GameMapData.Width];
             }
-
-            // Debug.Log(padding);
-            // Debug.Log(HexCells);
 
             // Add HexCell prefabs according to mapdata
             foreach (var mapTileData in GameMapData.MapTilesData)
@@ -244,13 +245,6 @@ namespace Hex
                 string terrainUid = mapTileData.TileType;
                 hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
 
-                // Debug.Log(@$"
-                // {hexCell.CellPosition}, The real position
-                // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
-                // {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
-
-                // HexCells[i++] = hexCell;
-
                 if (HexOrientation == HexOrientation.pointyTop)
                 {
                     HexCells[
@@ -262,8 +256,6 @@ namespace Hex
                         hexCubeCoordinates.r + padding, hexCubeCoordinates.q] = hexCell;
                 }
             }
-
-            // Debug.Log(NewHexCells[2,3]);
 
             hexMesh.Triangulate(HexCells, HexSize, HexOrientation);
         }
@@ -298,78 +290,66 @@ namespace Hex
             }
         }
 
+        // --- HexGrid.cs: Replace existing ApplyColorToMeshClientRpc with this ---
+
         [ClientRpc]
-        private void ApplyColorToMeshClientRpc(
-            Vector3 playerClickPoint, Color playerColor, float desiredCellHeight)
+        private void UpdateCellVisualsClientRpc(
+            Vector3 cellPosition, Color colorToApply)
         {
-            HexCell hc = GetCellFromPosition(playerClickPoint);
-            hc.CellColor = playerColor;
-            // hc.CellPosition.y = desiredCellHeight;
+            HexCell hc = GetCellFromPosition(cellPosition);
+            
+            // Apply the color dictated by the server.
+            hc.CellColor = colorToApply;
 
-            // Debug.Log(hc.CellColor);
-            // Debug.Log(hc);
-
-            hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
+            // Force a re-render of this specific cell's mesh on the client.
+            if (hexMesh != null)
+            {
+                hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
+            }
         }
 
-        //Now accepts the playerColor passed from the PlayerController.
         [ServerRpc(RequireOwnership = false)]
         public void HandlePlayerClickServerRpc(
-            Vector3 playerClickPoint, Color playerColor, float desiredCellHeight)
+            Vector3 playerClickPoint, Color playerColor, float desiredCellHeight, 
+            // This allows the server to automatically get the player's unique ID
+            ServerRpcParams rpcParams = default)
         {
-            // Color nextColor;
-            // Color currentColor = this.meshColor.Value;
-
-            // if (currentColor == Color.red)
-            // {
-            //     nextColor = Color.blue;
-            // }
-            // else
-            // {
-            //     nextColor = Color.red;
-            // }
-
-            // The current logic changes the entire grid mesh color to the player's color.
-
-            HexCell hc = GetCellFromPosition(playerClickPoint);
-            hc.CellColor = playerColor;
-
-            hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
-
-            ApplyColorToMeshClientRpc(
-                playerClickPoint, playerColor, desiredCellHeight);
-
-            ToggleFeature(hc); // ! Temporary test stuff (feel free to delete)
-        }
-
-        /// <summary>
-        /// ! Temporary test stuff (feel free to delete)
-        /// </summary>
-        [SerializeField]
-        private FeatureType placeholderFeatureType;
-        private GameObject placeholderFeature;
-
-        // <summary>
-        /// ! Temporary test stuff (feel free to delete)
-        /// </summary>
-        private void ToggleFeature(HexCell hexCell)
-        {
-            if (hexCell.FeatureType != null)
+            ulong clientId = rpcParams.Receive.SenderClientId;
+            HexCell newCell = GetCellFromPosition(playerClickPoint);
+            
+            // Get the currently selected cell for THIS player.
+            playerSelections.TryGetValue(clientId, out HexCell currentlySelectedCell);
+            
+            // --- STEP 1: DESELECTION LOGIC (Revert the old selection) ---
+            if (currentlySelectedCell != null && currentlySelectedCell != newCell)
             {
-                hexCell.FeatureType = null;
-                Destroy(placeholderFeature);
-                return;
+                // 1. Get the original color to revert to.
+                cellOriginalColors.TryGetValue(currentlySelectedCell, out Color? originalColor);
+                Color colorToRevert = originalColor ?? currentlySelectedCell.TerrainType.Color;
+                
+                // 2. Tell ALL clients to revert the old cell's color.
+                UpdateCellVisualsClientRpc(currentlySelectedCell.CellPosition, colorToRevert);
+
+                // 3. Remove the old selection state from the server's tracking.
+                playerSelections.Remove(clientId);
+                cellOriginalColors.Remove(currentlySelectedCell); 
             }
+            
+            // --- STEP 2: SELECTION LOGIC (Highlight the new selection) ---
 
-            Vector3 cellPos = hexCell.CellPosition;
-            Vector3 featurePos = new(cellPos.x, cellPos.y, cellPos.z);
-
-            hexCell.FeatureType = placeholderFeatureType;
-
-            Destroy(placeholderFeature);
-            placeholderFeature = Instantiate(hexCell.FeatureType.Prefab);
-            featurePos.y += 0.5f * placeholderFeature.transform.localScale.y;
-            placeholderFeature.transform.position = featurePos;
+            // Select the new cell only if it's different from the current selection.
+            if (currentlySelectedCell != newCell)
+            {
+                // 1. Store the new cell's ORIGINAL color before changing it.
+                Color originalColorToStore = newCell.CellColor ?? newCell.TerrainType.Color;
+                
+                // 2. Update the selection state on the server.
+                playerSelections[clientId] = newCell;
+                cellOriginalColors[newCell] = originalColorToStore;
+                
+                // 3. Tell ALL clients to update the new cell visually with the player's color.
+                UpdateCellVisualsClientRpc(newCell.CellPosition, playerColor);
+            }
         }
     }
 }
