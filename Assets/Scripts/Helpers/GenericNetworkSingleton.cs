@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Helpers
@@ -8,7 +9,7 @@ namespace Helpers
     /// eg. public class MyClass: GenericSingleton<MyClass>{...}
     /// </summary>
     /// <typeparam name="T"> The class to make into a singleton</typeparam>
-    public class GenericSingleton<T> : MonoBehaviour
+    public class GenericNetworkSingleton<T> : NetworkBehaviour
         where T : Component
     {
         // create a private reference to T instance
