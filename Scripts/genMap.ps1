@@ -28,7 +28,7 @@ GenerateMap
 }
 
 function GetRandomTile {
-  $max    = $number_tile_type.Count
+  $max    = $NumberTileType.Count
   $number = ( Get-Random -Minimum 0 -Maximum $max  )
 
   return $number
