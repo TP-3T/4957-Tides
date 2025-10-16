@@ -10,6 +10,15 @@ namespace Hex
 {       
     public class HexGrid : NetworkBehaviour
     {
+        
+        // Key: Player's Network Client ID Value: The HexCell the player has selected
+        private Dictionary<ulong, HexCell> playerSelections =
+        new Dictionary<ulong, HexCell>();
+
+        // Key: The HexCell object Value: The original Color of the cell (before ANY player selected it)
+        private Dictionary<HexCell, Color?> cellOriginalColors =
+        new Dictionary<HexCell, Color?>();
+
         public static readonly int GRID_LAYER_MASK = 1 << 10;
 
         private static readonly CubeCoordinates[] neighbourDirections = {
@@ -280,29 +289,66 @@ namespace Hex
             }
         }
 
-        [ClientRpc]
-        private void ApplyColorToMeshClientRpc(
-            Vector3 playerClickPoint, Color playerColor, float desiredCellHeight)
-        {
-            HexCell hc = GetCellFromPosition(playerClickPoint);
-            hc.CellColor = playerColor;
+        // --- HexGrid.cs: Replace existing ApplyColorToMeshClientRpc with this ---
 
-            hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
+        [ClientRpc]
+        private void UpdateCellVisualsClientRpc(
+            Vector3 cellPosition, Color colorToApply)
+        {
+            HexCell hc = GetCellFromPosition(cellPosition);
+            
+            // Apply the color dictated by the server.
+            hc.CellColor = colorToApply;
+
+            // Force a re-render of this specific cell's mesh on the client.
+            if (hexMesh != null)
+            {
+                hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
+            }
         }
 
-        //Now accepts the playerColor passed from the PlayerController.
         [ServerRpc(RequireOwnership = false)]
         public void HandlePlayerClickServerRpc(
-            Vector3 playerClickPoint, Color playerColor, float desiredCellHeight)
+            Vector3 playerClickPoint, Color playerColor, float desiredCellHeight, 
+            // This allows the server to automatically get the player's unique ID
+            ServerRpcParams rpcParams = default)
         {
+            ulong clientId = rpcParams.Receive.SenderClientId;
+            HexCell newCell = GetCellFromPosition(playerClickPoint);
+            
+            // Get the currently selected cell for THIS player.
+            playerSelections.TryGetValue(clientId, out HexCell currentlySelectedCell);
+            
+            // --- STEP 1: DESELECTION LOGIC (Revert the old selection) ---
+            if (currentlySelectedCell != null && currentlySelectedCell != newCell)
+            {
+                // 1. Get the original color to revert to.
+                cellOriginalColors.TryGetValue(currentlySelectedCell, out Color? originalColor);
+                Color colorToRevert = originalColor ?? currentlySelectedCell.TerrainType.Color;
+                
+                // 2. Tell ALL clients to revert the old cell's color.
+                UpdateCellVisualsClientRpc(currentlySelectedCell.CellPosition, colorToRevert);
 
-            // HexCell hc = GetCellFromPosition(playerClickPoint);
-            // hc.CellColor = playerColor;
+                // 3. Remove the old selection state from the server's tracking.
+                playerSelections.Remove(clientId);
+                cellOriginalColors.Remove(currentlySelectedCell); 
+            }
+            
+            // --- STEP 2: SELECTION LOGIC (Highlight the new selection) ---
 
-            // hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
-
-            ApplyColorToMeshClientRpc(
-                playerClickPoint, playerColor, desiredCellHeight);
+            // Select the new cell only if it's different from the current selection.
+            if (currentlySelectedCell != newCell)
+            {
+                // 1. Store the new cell's ORIGINAL color before changing it.
+                Color originalColorToStore = newCell.CellColor ?? newCell.TerrainType.Color;
+                
+                // 2. Update the selection state on the server.
+                playerSelections[clientId] = newCell;
+                cellOriginalColors[newCell] = originalColorToStore;
+                
+                // 3. Tell ALL clients to update the new cell visually with the player's color.
+                UpdateCellVisualsClientRpc(newCell.CellPosition, playerColor);
+            }
         }
     }
 }
