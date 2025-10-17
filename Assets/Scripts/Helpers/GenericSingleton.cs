@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Helpers
+namespace TTT.Helpers
 {
     /// <summary>
     /// Credit to awesomeTuts.com/blog/singletons-unity.
