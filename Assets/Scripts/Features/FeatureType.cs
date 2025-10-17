@@ -3,7 +3,7 @@ using PlayerResources;
 using Terrain;
 using UnityEngine;
 
-namespace Features
+namespace TTT.Features
 {
     /// <summary>
     /// Features are any structure that can be placed on top a hex cell.
