@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Hex;
+using TTT.Hex;
 using UnityEngine;
 using UnityEngine.UI;
 

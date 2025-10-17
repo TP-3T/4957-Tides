@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Terrain
+namespace TTT.Terrain
 {
     /// <summary>
     /// A lookup table for finding terrain types from their UIDs.

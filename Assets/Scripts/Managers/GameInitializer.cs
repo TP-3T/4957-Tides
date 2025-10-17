@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Managers
+namespace TTT.Managers
 {
     public class GameInitializer : MonoBehaviour
     {
@@ -9,7 +9,7 @@ namespace Managers
         public NetworkObject SeaPrefab;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        void Awake()
         {
             NetworkManager.Singleton.OnServerStarted += SpawnGrid;
         }

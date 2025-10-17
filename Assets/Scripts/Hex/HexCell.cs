@@ -1,9 +1,8 @@
-using System.Collections.Generic;
-using Features;
-using Terrain;
+using TTT.Features;
+using TTT.Terrain;
 using UnityEngine;
 
-namespace Hex
+namespace TTT.Hex
 {
     public class HexCell : MonoBehaviour
     {
@@ -12,7 +11,9 @@ namespace Hex
         public Color? CellColor = null;
         public MapTileData MapTileData;
         public TerrainType TerrainType;
-        [SerializeField] public bool flooded = false;
+
+        [SerializeField]
+        public bool flooded = false;
         public int CenterVertexIndex;
         public FeatureType FeatureType;
 
