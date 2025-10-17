@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Core_Buildings_Ro.unity
     guid: bd9196dc7bc193e44a4354d2c0a1f2a9
+  - enabled: 1
+    path: Assets/Scenes/Core_Buildmode_Ro.unity
+    guid: b85b9f7911c30a74389d2c2e5cd6165d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
