@@ -1,6 +1,6 @@
 {
-    "name": "TTT.ModularData",
-    "rootNamespace": "ModularData",
+    "name": "TTT.GameEvents",
+    "rootNamespace": "GameEvents",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
