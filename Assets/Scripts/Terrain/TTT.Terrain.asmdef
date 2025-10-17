@@ -1,6 +1,6 @@
 {
     "name": "TTT.Terrain",
-    "rootNamespace": "",
+    "rootNamespace": "\"TTT.Terrain\"",
     "references": [
         "GUID:80a120755bd37c14f8c7866f38551991"
     ],

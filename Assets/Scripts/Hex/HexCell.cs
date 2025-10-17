@@ -1,10 +1,6 @@
-using Terrain;
 using TTT.Features;
-using UnityEditor;
-using UnityEditor.SceneManagement;
+using TTT.Terrain;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 namespace TTT.Hex
 {

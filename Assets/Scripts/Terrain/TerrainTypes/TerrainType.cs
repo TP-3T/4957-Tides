@@ -1,7 +1,7 @@
 using ModularData;
 using UnityEngine;
 
-namespace Terrain
+namespace TTT.Terrain
 {
     /// <summary>
     /// The terrain type of a tile. Represents climates and helps define regions.
