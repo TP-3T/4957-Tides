@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameEvents
+namespace TTT.GameEvents
 {
     /// <summary>
     /// A GameEvent can have listeners subscribe to it so that they are called when it's raised.

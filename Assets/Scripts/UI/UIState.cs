@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-namespace UI
+namespace TTT.UI
 {
     /// <summary>
     /// A UI state contains a list of what UI components are enabled for that state.

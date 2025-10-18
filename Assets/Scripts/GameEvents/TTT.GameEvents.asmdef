@@ -1,6 +1,6 @@
 {
     "name": "TTT.GameEvents",
-    "rootNamespace": "GameEvents",
+    "rootNamespace": "TTT.GameEvents",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

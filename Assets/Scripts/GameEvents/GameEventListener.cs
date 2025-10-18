@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GameEvents
+namespace TTT.GameEvents
 {
     public class GameEventListener : MonoBehaviour
     {

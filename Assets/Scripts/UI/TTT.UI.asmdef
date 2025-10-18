@@ -1,6 +1,6 @@
 {
     "name": "TTT.UI",
-    "rootNamespace": "UI",
+    "rootNamespace": "TTT.UI",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

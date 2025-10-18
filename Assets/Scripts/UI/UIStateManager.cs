@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI
+namespace TTT.UI
 {
     /// <summary>
     /// Manages the UI's state, meaning it controls what UI components are enabled.

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI
+namespace TTT.UI
 {
     /// <summary>
     /// Holds the UI's state.
