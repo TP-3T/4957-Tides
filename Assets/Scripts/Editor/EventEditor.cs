@@ -1,4 +1,4 @@
-using GameEvents;
+using TTT.GameEvents;
 using UnityEditor;
 using UnityEngine;
 
