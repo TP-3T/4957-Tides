@@ -1,6 +1,6 @@
 {
     "name": "TTT.Hex",
-    "rootNamespace": "",
+    "rootNamespace": "TTT.Hex",
     "references": [
         "GUID:91ba5b220a43d5443ae04d679286f57d",
         "GUID:1491147abca9d7d4bb7105af628b223e",

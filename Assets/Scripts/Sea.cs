@@ -1,12 +1,14 @@
-using System;
 using System.Collections.Generic;
-using Hex;
+using TTT.Helpers;
+using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Sea : NetworkBehaviour
+public class Sea : GenericNetworkSingleton<Sea>
 {
-    [SerializeField] public float SeaLevel;
+    [SerializeField]
+    public float SeaLevel;
+
     //private float seaLevelOffset = 12.66f;
     [SerializeField]
     public float RisingRate;
@@ -31,7 +33,7 @@ public class Sea : NetworkBehaviour
         this.hexMesh = hexGrid.GetComponentInChildren<HexMesh>();
 
         // Start flooding from the first cell
-        FloodFill(hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0,0)));
+        FloodFill(hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
     }
 
     /// <summary>
@@ -95,8 +97,7 @@ public class Sea : NetworkBehaviour
         }
 
         // Retriangulate what has been flooded
-        hexMesh.ReTriangulateCells(
-            flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
+        hexMesh.ReTriangulateCells(flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
     }
 
     [ClientRpc]

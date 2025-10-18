@@ -1,7 +1,10 @@
 {
-    "name": "TTT.ModularData",
-    "rootNamespace": "\"TTT.ModularData\"",
-    "references": [],
+    "name": "TTT.Helpers",
+    "rootNamespace": "Helpers",
+    "references": [
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:4fc462806a32aa245a7b28367381bf24"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
