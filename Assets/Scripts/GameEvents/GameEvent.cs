@@ -14,29 +14,38 @@ namespace TTT.GameEvents
         /// </summary>
         private readonly List<GameEventListener> eventListeners = new();
 
-        public void Raise()
+        [Tooltip("The arguments to pass when raising from the inspector")]
+        [SerializeField]
+        private Object defaultEventArgs;
+
+        /// <summary>
+        /// Calls all registered listeners with the event arguments defined in the inspector.
+        /// </summary>
+        public void Raise() => NotifyListeners(defaultEventArgs);
+
+        /// <summary>
+        /// Calls all registered listeners with the provided event arguments.
+        /// </summary>
+        /// <param name="eventArgs">A UnityEngine object containing data for the listeners to use.</param>
+        public void Raise(Object eventArgs) => NotifyListeners(eventArgs);
+
+        private void NotifyListeners(Object eventArgs)
         {
-            // go through list backwards so that listeners can unregister themselves without causing an out of bounds error
+            // looping backwards lets listeners unregister themselves
             for (int i = eventListeners.Count - 1; i >= 0; i--)
-            {
-                eventListeners[i].OnEventRaised();
-            }
+                eventListeners[i].OnEventRaised(eventArgs);
         }
 
         public void RegisterListener(GameEventListener listener)
         {
             if (!eventListeners.Contains(listener))
-            {
                 eventListeners.Add(listener);
-            }
         }
 
         public void UnregisterListener(GameEventListener listener)
         {
             if (eventListeners.Contains(listener))
-            {
                 eventListeners.Remove(listener);
-            }
         }
     }
 }

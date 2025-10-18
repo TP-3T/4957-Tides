@@ -17,7 +17,11 @@ namespace TTT.UI
         {
             canvas = parentCanvas;
 
-            ChangeState(initialState);
+            bool allowedChange = ChangeState(initialState);
+            if (!allowedChange)
+            {
+                throw new IllegalStateChangeException();
+            }
         }
 
         /// <summary>
@@ -30,14 +34,6 @@ namespace TTT.UI
         /// </returns>
         public bool ChangeState(UIState newState)
         {
-            // only instantiate if necessary
-            int alreadyInstantiated = newState.ComponentsToEnable.Count;
-            int numPrefabs = newState.PrefabsToInstantiate.Count;
-            if (alreadyInstantiated != numPrefabs)
-            {
-                InstantiateComponents();
-            }
-
             if (state != null)
             {
                 DisableComponents();
@@ -46,6 +42,14 @@ namespace TTT.UI
             // add logic to block specific state transitions here if you want
             state = newState;
             const bool successful = true;
+
+            // only instantiate if necessary
+            int alreadyInstantiated = newState.ComponentsToEnable.Count;
+            int numPrefabs = newState.PrefabsToInstantiate.Count;
+            if (alreadyInstantiated != numPrefabs)
+            {
+                InstantiateComponents();
+            }
 
             EnableComponents();
 
@@ -91,4 +95,9 @@ namespace TTT.UI
             }
         }
     }
+
+    /// <summary>
+    /// Thrown when attempting a UI state transition that is not allowed.
+    /// </summary>
+    public class IllegalStateChangeException : System.Exception { }
 }

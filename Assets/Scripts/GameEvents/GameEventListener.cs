@@ -9,7 +9,7 @@ namespace TTT.GameEvents
         public GameEvent Event;
 
         [Tooltip("What to call when the GameEvent is raised.")]
-        public UnityEvent Response;
+        public UnityEvent<Object> Response;
 
         private void OnEnable()
         {
@@ -21,9 +21,9 @@ namespace TTT.GameEvents
             Event.UnregisterListener(this);
         }
 
-        public void OnEventRaised()
+        public void OnEventRaised(Object eventArgs)
         {
-            Response.Invoke();
+            Response.Invoke(eventArgs);
         }
     }
 }

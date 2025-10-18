@@ -19,10 +19,15 @@ namespace TTT.UI
         /// </summary>
         public List<GameObject> PrefabsToInstantiate => prefabsToInstantiate;
 
+        private List<GameObject> componentsToEnable = new();
+
         /// <summary>
         /// Instantiated UI GameObjects to enable for this state.
-        /// May be null.
         /// </summary>
-        public List<GameObject> ComponentsToEnable { get; set; } = new();
+        public List<GameObject> ComponentsToEnable
+        {
+            get => componentsToEnable;
+            set => componentsToEnable = value;
+        }
     }
 }

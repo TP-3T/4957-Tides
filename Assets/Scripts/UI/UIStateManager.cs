@@ -11,32 +11,35 @@ namespace TTT.UI
         [SerializeField]
         private Canvas canvas;
 
-        [Tooltip("The UI's default disabled state")]
-        [SerializeField]
-        private UIState disabledState;
-
         [Tooltip("The UI's initial state")]
         [SerializeField]
         private UIState initialState;
 
         /// <summary>
-        /// Holds the UI's current state and handles state changes
+        /// Holds the UI's current state and handles state changes.
         /// </summary>
         private UIContext context;
 
         private void Awake()
         {
-            context = new UIContext(canvas, disabledState);
+            context = new UIContext(canvas, initialState);
         }
 
-        public void Start()
+        /// <summary>
+        /// Event handler
+        /// </summary>
+        /// <param name="eventArgs">The UI State to change to.</param>
+        public void OnStateChanging(Object eventArgs)
         {
-            //context.ChangeState(initialState);
+            if (eventArgs is UIState newState)
+            {
+                ChangeState(newState);
+            }
         }
 
-        public void ChangeToInitialState()
+        private void ChangeState(UIState newState)
         {
-            context.ChangeState(initialState);
+            context.ChangeState(newState);
         }
     }
 }
