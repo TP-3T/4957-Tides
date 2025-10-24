@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Hex;
+using TTT.Hex;
 using NUnit.Framework.Interfaces;
 using Unity.Mathematics;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
+using TTT.Helpers;
 
 public class Sea : GenericNetworkSingleton<Sea>
 {
@@ -30,7 +31,7 @@ public class Sea : GenericNetworkSingleton<Sea>
     void Start()
     {
         this.RisingRate = 1.0f;
-        this.SeaLevel   = 0.0f;
+        this.SeaLevel = 0.0f;
         this.transform.position = new Vector3(0, this.SeaLevel, 0);
         this.ToFlood = new();
         this.FloodQueue = new();

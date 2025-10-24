@@ -4,7 +4,7 @@ using TTT.Terrain;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Hex
+namespace TTT.Hex
 {       
     [RequireComponent(typeof(NetworkObject))]
     public class HexGrid : NetworkBehaviour
