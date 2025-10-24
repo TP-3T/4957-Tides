@@ -9,6 +9,7 @@ using UnityEngine.Events;
 
 namespace Hex
 {       
+    [RequireComponent(typeof(NetworkObject))]
     public class HexGrid : NetworkBehaviour
     {
         
@@ -20,7 +21,9 @@ namespace Hex
         private Dictionary<HexCell, Color?> cellOriginalColors =
         new Dictionary<HexCell, Color?>();
 
+        // This so can detect collision with ray casts just to this object
         public static readonly int GRID_LAYER_MASK = 1 << 10;
+        public LayerMask layerMask = GRID_LAYER_MASK;
 
         private static readonly CubeCoordinates[] neighbourDirections = {
             new CubeCoordinates(1, 0, -1),
@@ -142,8 +145,8 @@ namespace Hex
             {
                 if (    (coords.q + padding) < 0
                     ||  (coords.r) < 0
-                    ||  (coords.q + padding) >= (GameMapData.Height + padding)
-                    ||  (coords.r) >= (GameMapData.Width))
+                    ||  (coords.q + padding) >= (GameMapData.Width + padding)
+                    ||  (coords.r) >= (GameMapData.Height))
                 {
                     return null;
                 }
@@ -229,6 +232,9 @@ namespace Hex
             // Add HexCell prefabs according to mapdata
             foreach (var mapTileData in GameMapData.MapTilesData)
             {
+                if (mapTileData.Height < 0)
+                    mapTileData.Height = 0;
+
                 Vector3 hexCenter = HexMath.GetHexCenter(
                     HexSize, mapTileData.Height + 1, mapTileData.OffsetCoordinates, HexOrientation);
 
