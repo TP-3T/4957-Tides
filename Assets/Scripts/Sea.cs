@@ -10,7 +10,7 @@ using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
 
-public class Sea : NetworkBehaviour
+public class Sea : GenericNetworkSingleton<Sea>
 {
     public float SeaLevel;
     //private float seaLevelOffset = 12.66f;

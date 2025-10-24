@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Hex
+namespace TTT.Hex
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
     public class HexMesh : NetworkBehaviour
@@ -27,14 +27,14 @@ namespace Hex
             mesh = new Mesh
             {
                 name = "The Hexagon Mesh",
-                indexFormat = IndexFormat.UInt32          // This is so that we can have > 65000 vertices in the mesh, platform dependant so idk, multiple meshes (please no)
+                indexFormat = IndexFormat.UInt32, // This is so that we can have > 65000 vertices in the mesh, platform dependant so idk, multiple meshes (please no)
             };
 
             vertices = new();
             triangles = new();
             colors = new();
         }
-        
+
         void Awake()
         {
             InitializeMesh();
@@ -147,8 +147,7 @@ namespace Hex
         /// <param name="hexCell"></param>
         /// <param name="hexSize"></param>
         /// <param name="hexOrientation"></param>
-        public void ReTriangulateCell(
-            HexCell hexCell, float hexSize, HexOrientation hexOrientation)
+        public void ReTriangulateCell(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
         {
             bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
             int count = hexCell.CenterVertexIndex; // c = counter, 😉
@@ -190,7 +189,10 @@ namespace Hex
         /// <param name="hexSize"></param>
         /// <param name="hexOrientation"></param>
         public void ReTriangulateCells(
-            HexCell[] hexCells, float hexSize, HexOrientation hexOrientation)
+            HexCell[] hexCells,
+            float hexSize,
+            HexOrientation hexOrientation
+        )
         {
             foreach (HexCell c in hexCells)
             {
@@ -235,5 +237,4 @@ namespace Hex
             mesh.Clear();
         }
     }
-
 }
