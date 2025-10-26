@@ -77,26 +77,15 @@ public class PlayerController : NetworkBehaviour
 
     private void AssignUniquePlayerColor(ulong clientId)
     {
-        Color uniqueColor;
-        // Simple color assignment logic based on client ID. You can make this more robust.
-        switch (clientId % 4) // Cycle through 4 basic colors
+        Color uniqueColor = (clientId % 4) switch
         {
-            case 0:
-                uniqueColor = Color.red;
-                break;
-            case 1:
-                uniqueColor = Color.blue;
-                break;
-            case 2:
-                uniqueColor = Color.green;
-                break;
-            case 3:
-                uniqueColor = Color.yellow;
-                break;
-            default:
-                uniqueColor = Color.white;
-                break;
-        }
+// Cycle through 4 basic colors
+        0 => Color.red,
+            1 => Color.blue,
+            2 => Color.green,
+            3 => Color.yellow,
+            _ => Color.white,
+        };
         PlayerColor.Value = uniqueColor;
         Debug.Log($"Assigned color {PlayerColor.Value} to Player {clientId}");
     }
