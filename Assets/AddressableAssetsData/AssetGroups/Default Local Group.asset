@@ -16,7 +16,17 @@ MonoBehaviour:
   m_GUID: e7e5ee7318adfcd448829a3590075345
   m_SerializeEntries:
   - m_GUID: 629e11ffa84d69148b46cbf57a82b821
-    m_Address: Assets/Prefabs/Sea.prefab
+    m_Address: P_Sea
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8587b9b8bba1a2f42a61ce627622b416
+    m_Address: P_HexGrid
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d93522c5347ca054986957a727d3e7dc
+    m_Address: HexGrid_Super_Test
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
