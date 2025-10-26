@@ -60,7 +60,7 @@ namespace TTT.Hex
         {
             base.OnNetworkSpawn();
 
-            BuildandCreateGrid();
+            BuildAndCreateGrid();
         }
 
         public override void OnNetworkDespawn()
@@ -87,7 +87,7 @@ namespace TTT.Hex
             ApplyColorToMesh(colorToApply);
         }
 
-        void BuildandCreateGrid()
+        void BuildAndCreateGrid()
         {
             InitializeGrid();
             ClearMap();
@@ -171,7 +171,7 @@ namespace TTT.Hex
         }
 
         /// <summary>
-        /// Gets a HexCell from the HexCells array (takes care of adding paddings to indicies).
+        /// Gets a HexCell from the HexCells array (takes care of adding paddings to indices).
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
