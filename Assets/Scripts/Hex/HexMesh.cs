@@ -11,11 +11,11 @@ namespace TTT.Hex
         private Mesh mesh;
         private MeshFilter meshFilter;
         private MeshCollider meshCollider;
-        private List<Vector3> vertices;
-        private List<int> triangles;
-        private List<Color> colors;
-        private Vector3[] cvertices;
-        private Color[] ccolors;
+        private List<Vector3> vertices = new();
+        private List<int> triangles = new();
+        private List<Color> colors = new();
+        private Vector3[] cvertices = new Vector3[0];
+        private Color[] ccolors = new Color[0];
 
         void InitializeMesh()
         {

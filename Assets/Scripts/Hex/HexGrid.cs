@@ -30,6 +30,8 @@ namespace TTT.Hex
         public bool DrawDebugLabels;
         public float HexSize;
         public HexOrientation HexOrientation;
+
+        //! [CB] Do we need a reference to a single cell?
         public HexCell HexCell;
         public TextAsset MapSource;
         public HexCell[,] HexCells;
@@ -40,6 +42,11 @@ namespace TTT.Hex
 
         [SerializeField]
         private TerrainDictionary AllowedTerrains;
+
+        // void Awake()
+        // {
+        //     BuildandCreateGrid();
+        // }
 
         void InitializeGrid()
         {
@@ -102,6 +109,10 @@ namespace TTT.Hex
 
             foreach (HexCell hexCell in HexCells)
             {
+                if (hexCell == null)
+                {
+                    continue;
+                }
                 Vector3[] hexCorners = HexMath.GetHexCorners(HexSize, HexOrientation);
                 for (int s = 0; s < hexCorners.Length; s++)
                 {
