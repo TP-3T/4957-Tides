@@ -2085,7 +2085,6 @@ MonoBehaviour:
         x: 19
         z: 19
   AllowedTerrains: {fileID: 11400000, guid: d58def7f9d21b0740bf047b7637efa9e, type: 2}
-  placeholderFeatureType: {fileID: 11400000, guid: 1bbdf26002f83de40973468ddd37bb8f, type: 2}
 --- !u!114 &6838071240244137242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2144,8 +2143,8 @@ GameObject:
   - component: {fileID: 639001731696381789}
   - component: {fileID: 2922883174947320797}
   - component: {fileID: 797566542952973587}
-  - component: {fileID: 2602280437805587072}
   - component: {fileID: 5403027071854868079}
+  - component: {fileID: 701858154963337644}
   m_Layer: 10
   m_Name: HexMesh
   m_TagString: Untagged
@@ -2243,19 +2242,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!114 &2602280437805587072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5302879740467127229}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab66731068b45f247804497278d9a542, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &5403027071854868079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2302,3 +2288,16 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &701858154963337644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5302879740467127229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab66731068b45f247804497278d9a542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1

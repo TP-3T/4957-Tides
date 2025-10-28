@@ -3,6 +3,7 @@ using TTT.Helpers;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEditor.PackageManager;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -12,7 +13,7 @@ namespace TTT.Managers
     public class NetworkingManager : GenericSingleton<NetworkingManager>
     {
         [SerializeField]
-        private NetworkManager networkManager;
+        private NetworkManager networkManager = NetworkManager.Singleton;
 
         [SerializeField]
         private UnityTransport unityTransport;
@@ -26,7 +27,8 @@ namespace TTT.Managers
             }
             if (unityTransport == null)
             {
-                unityTransport = networkManager.GetComponent<UnityTransport>();
+                unityTransport = new UnityTransport();
+                networkManager.NetworkConfig.NetworkTransport = unityTransport;
             }
             networkManager.OnClientConnectedCallback += this.OnClientConnected;
         }
@@ -36,14 +38,5 @@ namespace TTT.Managers
             NetworkClient client = networkManager.ConnectedClients[ClientId];
             Console.Write(client);
         }
-
-        // // Start is called once before the first execution of Update after the MonoBehaviour is created
-        // void Start()
-        // {
-        //     networkManager.StartHost();
-        // }
-
-        // Update is called once per frame
-        void Update() { }
     }
 }

@@ -29,6 +29,9 @@ public class Sea : GenericNetworkSingleton<Sea>
         this.transform.position = new Vector3(0, this.SeaLevel, 0);
         this.Unflooded = new();
         this.Unflooded2 = new();
+        //! CB: FirstFirstObjectByType is not a great way to get references.
+        //! We should be loading assets or creating
+        //! new gameobjects if we need them.
         this.hexGrid = FindFirstObjectByType<HexGrid>();
         this.hexMesh = hexGrid.GetComponentInChildren<HexMesh>();
 
@@ -68,7 +71,7 @@ public class Sea : GenericNetworkSingleton<Sea>
     /// </summary>
     public void FloodFill(HexCell startCell)
     {
-        Queue<HexCell> q = new Queue<HexCell>();
+        Queue<HexCell> q = new();
         List<HexCell> flooded = new();
 
         q.Enqueue(startCell);
@@ -96,7 +99,7 @@ public class Sea : GenericNetworkSingleton<Sea>
             }
         }
 
-        // Retriangulate what has been flooded
+        // Re-triangulate what has been flooded
         hexMesh.ReTriangulateCells(flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
     }
 

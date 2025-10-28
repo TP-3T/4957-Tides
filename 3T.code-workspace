@@ -41,12 +41,15 @@
       "scrollbar.shadow": "#00000000"
     },
     "cSpell.words": [
+      "Addressables",
       "Behaviour",
       "Despawn",
+      "Mathf",
       "neighbour",
       "neighbours",
       "Retriangulate",
-      "Unflooded"
+      "Unflooded",
+      "WASD"
     ]
   },
   "extensions": {
