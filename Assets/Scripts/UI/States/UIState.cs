@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TTT.GameEvents;
 using UnityEngine;
 
 namespace TTT.UI
@@ -34,9 +35,18 @@ namespace TTT.UI
                 }
                 return componentsToEnable;
             }
-            set => componentsToEnable = value;
+            protected set => componentsToEnable = value;
         }
 
-        public abstract void OnClick();
+        [Tooltip("Event to raise on a left click.")]
+        [SerializeField]
+        protected GameEvent LeftClickEvent;
+
+        public virtual void OnLeftClick(Vector3 mousePos)
+        {
+            ClickEventArgs args = CreateInstance<ClickEventArgs>();
+            args.mousePos = mousePos;
+            LeftClickEvent.Raise(args);
+        }
     }
 }

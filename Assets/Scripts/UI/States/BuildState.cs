@@ -8,11 +8,5 @@ namespace TTT.UI
         fileName = "BuildState",
         menuName = "Scriptable Objects/UI States/Build State"
     )]
-    public class BuildState : UIState
-    {
-        public override void OnClick()
-        {
-            throw new System.NotImplementedException();
-        }
-    }
+    public class BuildState : UIState { }
 }

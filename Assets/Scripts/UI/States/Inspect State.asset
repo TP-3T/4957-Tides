@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Inspect State
   m_EditorClassIdentifier: 
   prefabsToInstantiate: []
+  LeftClickEvent: {fileID: 11400000, guid: b48344c7b006d7b4bb9574509e5b04d6, type: 2}

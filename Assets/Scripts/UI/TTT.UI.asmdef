@@ -2,7 +2,8 @@
     "name": "TTT.UI",
     "rootNamespace": "TTT.UI",
     "references": [
-        "GUID:faaccf58d3509f8479e9a35ed1a867be"
+        "GUID:faaccf58d3509f8479e9a35ed1a867be",
+        "GUID:0584c7e699b26eb43bd6f8f5022c28bc"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

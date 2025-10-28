@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using TTT.GameEvents;
 using UnityEngine;
 
 namespace TTT.UI
@@ -13,9 +14,15 @@ namespace TTT.UI
     )]
     public class InspectState : UIState
     {
-        public override void OnClick()
+        [Tooltip("Event to raise on a right click.")]
+        [SerializeField]
+        private GameEvent RightClickEvent;
+
+        public void OnRightClick(Vector3 mousePos)
         {
-            throw new System.NotImplementedException();
+            ClickEventArgs args = CreateInstance<ClickEventArgs>();
+            args.mousePos = mousePos;
+            RightClickEvent.Raise(args);
         }
     }
 }
