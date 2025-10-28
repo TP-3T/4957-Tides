@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ModularData
+namespace TTT.ModularData
 {
     [Serializable]
     public class FloatReference

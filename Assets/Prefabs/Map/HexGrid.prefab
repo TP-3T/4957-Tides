@@ -2085,6 +2085,7 @@ MonoBehaviour:
         x: 19
         z: 19
   AllowedTerrains: {fileID: 11400000, guid: d58def7f9d21b0740bf047b7637efa9e, type: 2}
+  placeholderFeatureType: {fileID: 11400000, guid: 1bbdf26002f83de40973468ddd37bb8f, type: 2}
 --- !u!114 &6838071240244137242
 MonoBehaviour:
   m_ObjectHideFlags: 0

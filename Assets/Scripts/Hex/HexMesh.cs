@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Hex
+namespace TTT.Hex
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
     public class HexMesh : NetworkBehaviour
@@ -27,14 +27,14 @@ namespace Hex
             mesh = new Mesh
             {
                 name = "The Hexagon Mesh",
-                indexFormat = IndexFormat.UInt32          // This is so that we can have > 65000 vertices in the mesh, platform dependant so idk, multiple meshes (please no)
+                indexFormat = IndexFormat.UInt32, // This is so that we can have > 65000 vertices in the mesh, platform dependant so idk, multiple meshes (please no)
             };
 
             vertices = new();
             triangles = new();
             colors = new();
         }
-        
+
         void Awake()
         {
             InitializeMesh();
@@ -76,16 +76,14 @@ namespace Hex
             triangles.Add(triVertexStart + i + 1);
         }
 
-        void TriangulateHelper(
-            HexCell hexCell, float hexSize, HexOrientation hexOrientation)
+        void TriangulateHelper(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
         {
             bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
             int triVertexStart = vertices.Count;
             hexCell.CenterVertexIndex = triVertexStart;
 
             vertices.Add(hexCell.CellPosition);
-            colors.Add(hexCell.CellColor
-                ?? hexCell.TerrainType.Color);
+            colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
 
             Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -93,8 +91,7 @@ namespace Hex
             foreach (Vector3 corner in corners)
             {
                 vertices.Add(hexCell.CellPosition + corner);
-                colors.Add(hexCell.CellColor
-                    ?? hexCell.TerrainType.Color);
+                colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
             }
 
             int sideTriVertexStart = vertices.Count;
@@ -106,9 +103,9 @@ namespace Hex
                     continue;
 
                 vertices.Add(
-                    hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0));
-                colors.Add(hexCell.CellColor
-                    ?? hexCell.TerrainType.Color);
+                    hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0)
+                );
+                colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
             }
 
             // Populate triangle and color arrays
@@ -126,15 +123,13 @@ namespace Hex
         /// <summary>
         /// Does the re-triangulation (reassigning vertex and color values).
         /// </summary>
-        void ReTriangulateHelper(
-            HexCell hexCell, float hexSize, HexOrientation hexOrientation)
+        void ReTriangulateHelper(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
         {
             bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
             int c = hexCell.CenterVertexIndex; // c = counter, 😉
 
             cvertices[c] = hexCell.CellPosition;
-            ccolors[c++] = (hexCell.CellColor
-                ?? hexCell.TerrainType.Color);
+            ccolors[c++] = (hexCell.CellColor ?? hexCell.TerrainType.Color);
 
             Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -142,8 +137,7 @@ namespace Hex
             foreach (Vector3 corner in corners)
             {
                 cvertices[c] = hexCell.CellPosition + corner;
-                ccolors[c++] = hexCell.CellColor
-                    ?? hexCell.TerrainType.Color;
+                ccolors[c++] = hexCell.CellColor ?? hexCell.TerrainType.Color;
             }
 
             // Vertices that will be used to draw the side faces
@@ -152,15 +146,13 @@ namespace Hex
                 if (!aboveSeaLevel)
                     continue;
 
-                cvertices[c] = hexCell.CellPosition + corner
-                - new Vector3(0, hexCell.CellPosition.y, 0);
-                ccolors[c++] = hexCell.CellColor
-                    ?? hexCell.TerrainType.Color;
+                cvertices[c] =
+                    hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0);
+                ccolors[c++] = hexCell.CellColor ?? hexCell.TerrainType.Color;
             }
         }
 
-        public void Triangulate(
-            HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
+        public void Triangulate(HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
         {
             ClearMesh();
 
@@ -189,13 +181,12 @@ namespace Hex
         /// <param name="hexCell"></param>
         /// <param name="hexSize"></param>
         /// <param name="hexOrientation"></param>
-        public void ReTriangulateCell(
-            HexCell hexCell, float hexSize, HexOrientation hexOrientation)
+        public void ReTriangulateCell(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
         {
             ReTriangulateHelper(hexCell, hexSize, hexOrientation);
 
-            mesh.vertices   = cvertices;
-            mesh.colors     = ccolors;
+            mesh.vertices = cvertices;
+            mesh.colors = ccolors;
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
@@ -211,7 +202,10 @@ namespace Hex
         /// <param name="hexSize"></param>
         /// <param name="hexOrientation"></param>
         public void ReTriangulateCells(
-            HexCell[] hexCells, float hexSize, HexOrientation hexOrientation)
+            HexCell[] hexCells,
+            float hexSize,
+            HexOrientation hexOrientation
+        )
         {
             foreach (HexCell c in hexCells)
                 ReTriangulateHelper(c, hexSize, hexOrientation);
@@ -234,5 +228,4 @@ namespace Hex
             mesh.Clear();
         }
     }
-
 }
