@@ -68,7 +68,7 @@ public class WaterLevelControl : MonoBehaviour
     {
         bool changed = false;
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             _waterLevel.RiseWaterLevel(_testChangeAmount);
             changed = true;
