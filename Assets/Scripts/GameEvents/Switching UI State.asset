@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365eee90f5d7bf744a7cfb62c139b74d, type: 3}
   m_Name: Switching UI State
   m_EditorClassIdentifier: 
-  defaultEventArgs: {fileID: 11400000, guid: 7acba36dff674ad4b987e72c6ee6d0a6, type: 2}
+  defaultEventArgs: {fileID: 11400000, guid: c1cc5578f9cf87049b6e1ac4c768fe54, type: 2}

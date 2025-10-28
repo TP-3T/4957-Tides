@@ -708,8 +708,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 276128207}
-  disabledState: {fileID: 11400000, guid: 2fd4f3f5b24593143bc0def7662a8c53, type: 2}
-  initialState: {fileID: 11400000, guid: 7acba36dff674ad4b987e72c6ee6d0a6, type: 2}
+  initialState: {fileID: 11400000, guid: c1cc5578f9cf87049b6e1ac4c768fe54, type: 2}
 --- !u!4 &2041590145
 Transform:
   m_ObjectHideFlags: 0
@@ -743,7 +742,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2041590144}
         m_TargetAssemblyTypeName: TTT.UI.UIStateManager, TTT.UI
-        m_MethodName: ChangeState
+        m_MethodName: OnStateChanging
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

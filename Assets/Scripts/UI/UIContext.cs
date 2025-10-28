@@ -7,6 +7,7 @@ namespace TTT.UI
     /// Needs a Canvas to render the UI components in.
     /// When the UI state changes, the old state's UI components are disabled, and the new state's components are enabled.
     /// </summary>
+    [CreateAssetMenu(fileName = "InspectState", menuName = "Scriptable Objects/UI Context")]
     public class UIContext
     {
         private readonly Canvas canvas;

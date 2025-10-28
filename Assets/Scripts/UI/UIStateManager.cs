@@ -1,3 +1,4 @@
+using TTT.Helpers;
 using UnityEngine;
 
 namespace TTT.UI
@@ -5,7 +6,7 @@ namespace TTT.UI
     /// <summary>
     /// Manages the UI's state, meaning it controls what UI components are enabled.
     /// </summary>
-    public class UIStateManager : MonoBehaviour
+    public class UIStateManager : GenericSingleton<UIStateManager>
     {
         [Tooltip("The Canvas where the UI elements will be rendered.")]
         [SerializeField]
@@ -20,8 +21,9 @@ namespace TTT.UI
         /// </summary>
         private UIContext context;
 
-        private void Awake()
+        public override void Awake()
         {
+            base.Awake();
             context = new UIContext(canvas, initialState);
         }
 
