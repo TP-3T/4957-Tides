@@ -659,6 +659,7 @@ GameObject:
   - component: {fileID: -859445352680354751}
   - component: {fileID: 2540338663754247135}
   - component: {fileID: 5183240043876369613}
+  - component: {fileID: 7311044577611685944}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -873,6 +874,22 @@ MonoBehaviour:
   OnPlayerClick:
     m_PersistentCalls:
       m_Calls: []
+  PlayerColor:
+    m_InternalValue: {r: 1, g: 1, b: 1, a: 1}
+  DesiredCellHeight: 1
+--- !u!114 &7311044577611685944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3588933447207156260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fd79cf2935aed8419975be18bd1c721, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraTransform: {fileID: 5248143721908876236}
 --- !u!1 &3680144694594883984
 GameObject:
   m_ObjectHideFlags: 0
