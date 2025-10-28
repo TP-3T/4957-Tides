@@ -686,8 +686,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2041590145}
-  - component: {fileID: 2041590144}
-  - component: {fileID: 2041590146}
+  - component: {fileID: 2041590147}
+  - component: {fileID: 2041590148}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -695,20 +695,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2041590144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2041590143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2bd8029953f1274191a6f0b5897fd64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 276128207}
-  initialState: {fileID: 11400000, guid: c1cc5578f9cf87049b6e1ac4c768fe54, type: 2}
 --- !u!4 &2041590145
 Transform:
   m_ObjectHideFlags: 0
@@ -724,7 +710,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2041590146
+--- !u!114 &2041590147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041590143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ee731d130511e498996d833f98fb3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 276128207}
+  initialState: {fileID: 11400000, guid: c1cc5578f9cf87049b6e1ac4c768fe54, type: 2}
+--- !u!114 &2041590148
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -740,14 +740,14 @@ MonoBehaviour:
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2041590144}
-        m_TargetAssemblyTypeName: TTT.UI.UIStateManager, TTT.UI
-        m_MethodName: OnStateChanging
+      - m_Target: {fileID: 2041590147}
+        m_TargetAssemblyTypeName: TTT.UI.UIInputManager, TTT.UI
+        m_MethodName: ChangeState
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
