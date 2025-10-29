@@ -1,23 +1,29 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using TTT.Helpers;
+using System.Threading.Tasks;
 using TTT.Hex;
+using NUnit.Framework.Interfaces;
+using Unity.Mathematics;
 using Unity.Netcode;
+using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
+using TTT.Helpers;
 
 public class Sea : GenericNetworkSingleton<Sea>
 {
-    [SerializeField]
     public float SeaLevel;
-
     //private float seaLevelOffset = 12.66f;
-    [SerializeField]
     public float RisingRate;
-
-    public Queue<HexCell> Unflooded;
-    public Queue<HexCell> Unflooded2;
+    public Queue<HexCell> ToFlood;
+    public Queue<HexCell> FloodQueue;
+    public Queue<HexCell> FloodQueue2;
+    public List<HexCell> Flooded;
 
     private HexGrid hexGrid;
     private HexMesh hexMesh;
+    private const int CellsPerFrame = 100;
 
     /// <summary>
     /// Unity build in method, gets once at the beginning.
@@ -25,88 +31,103 @@ public class Sea : GenericNetworkSingleton<Sea>
     void Start()
     {
         this.RisingRate = 1.0f;
-        this.SeaLevel = 1.0f;
+        this.SeaLevel = 0.0f;
         this.transform.position = new Vector3(0, this.SeaLevel, 0);
-        this.Unflooded = new();
-        this.Unflooded2 = new();
-        //! CB: FirstFirstObjectByType is not a great way to get references.
-        //! We should be loading assets or creating
-        //! new gameobjects if we need them.
+        this.ToFlood = new();
+        this.FloodQueue = new();
+        this.FloodQueue2 = new();
+        this.Flooded = new();
         this.hexGrid = FindFirstObjectByType<HexGrid>();
         this.hexMesh = hexGrid.GetComponentInChildren<HexMesh>();
 
         // Start flooding from the first cell
-        FloodFill(hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
+        // FloodFill(hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
+        // StartRaiseSea();
+
+        ToFlood.Enqueue(this.hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
+    }
+
+    public void StartRaiseSea()
+    {
+        StopAllCoroutines();
+        StartCoroutine(RaiseSea());
     }
 
     /// <summary>
     /// Simulate rising on a per turn basis, not per frame.
     /// </summary>
-    public void RaiseSea()
+    public IEnumerator RaiseSea()
     {
         this.SeaLevel += this.RisingRate;
 
-        while (this.Unflooded.Count > 0)
+        while (true)
         {
-            HexCell hc = this.Unflooded.Dequeue();
-            if (hc.CellPosition.y <= this.SeaLevel)
+            // --- 1. Flood queue is empty, go through neighbours that were not eligable for flooding and see if they will be ---
+            if (ToFlood.Count == 0)
             {
-                FloodFill(hc);
+                Debug.Log("Flood fill cycle complete");
+
+                while (this.FloodQueue.Count > 0)
+                {
+                    HexCell test = this.FloodQueue.Dequeue();
+
+                    if (test.CellPosition.y <= (this.SeaLevel + this.RisingRate))
+                        ToFlood.Enqueue(test);
+                    else
+                        this.FloodQueue2.Enqueue(test);
+                }
+
+                while (this.FloodQueue2.Count > 0)
+                {
+                    this.FloodQueue.Enqueue(this.FloodQueue2.Dequeue());
+                }
+
+                yield break;
             }
-            else
+
+            // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
+            int i = 0;
+
+            Flooded.Clear();
+
+            while (ToFlood.Count > 0 && i < CellsPerFrame)
             {
-                Unflooded2.Enqueue(hc);
+                HexCell cell = ToFlood.Dequeue();
+
+                //if water level is higher and cell is a border cell.
+                cell.FloodCell();
+
+                Flooded.Add(cell);
+
+                // hexMesh.ReTriangulateCell(
+                //    cell, hexGrid.HexSize, hexGrid.HexOrientation);
+
+                foreach (HexCell neighbor in hexGrid.GetCellNeighbours(cell))
+                {
+                    if (neighbor.IsFlooded())
+                        continue;
+                    if (this.ToFlood.Contains(neighbor) || this.FloodQueue.Contains(neighbor))
+                        continue;
+                    if (neighbor.CellPosition.y <= this.SeaLevel)
+                        ToFlood.Enqueue(neighbor);
+                    else
+                        this.FloodQueue.Enqueue(neighbor);
+                }
+                i++;
             }
+
+            // --- 3. Retriangulate what has been flooded ---
+            hexMesh.ReTriangulateCells(
+                Flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
+
+            yield return null;
         }
-
-        while (this.Unflooded2.Count > 0)
-        {
-            Unflooded.Enqueue(Unflooded2.Dequeue());
-        }
-    }
-
-    /// <summary>
-    /// Flood-fill algorithm to flood all applicable cells.
-    /// <param name="startCell">The cell to start the flood-fill from.</param>
-    /// </summary>
-    public void FloodFill(HexCell startCell)
-    {
-        Queue<HexCell> q = new();
-        List<HexCell> flooded = new();
-
-        q.Enqueue(startCell);
-
-        while (q.Count > 0)
-        {
-            HexCell cell = q.Dequeue();
-
-            //if water level is higher and cell is a border cell.
-            cell.FloodCell();
-            flooded.Add(cell);
-
-            foreach (HexCell neighbor in hexGrid.GetCellNeighbours(cell))
-            {
-                if (neighbor.IsFlooded())
-                    continue;
-
-                if (q.Contains(neighbor) || this.Unflooded.Contains(neighbor))
-                    continue;
-
-                if (neighbor.CellPosition.y <= this.SeaLevel)
-                    q.Enqueue(neighbor);
-                else
-                    this.Unflooded.Enqueue(neighbor);
-            }
-        }
-
-        // Re-triangulate what has been flooded
-        hexMesh.ReTriangulateCells(flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
     }
 
     [ClientRpc]
     public void HandleNextTurnClickedClientRpc()
     {
-        RaiseSea();
+        StartRaiseSea();
     }
 
     [ServerRpc(RequireOwnership = false)]

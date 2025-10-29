@@ -5,7 +5,8 @@ using Unity.Netcode;
 using UnityEngine;
 
 namespace TTT.Hex
-{
+{       
+    [RequireComponent(typeof(NetworkObject))]
     public class HexGrid : NetworkBehaviour
     {
         // Key: Player's Network Client ID Value: The HexCell the player has selected
@@ -14,7 +15,9 @@ namespace TTT.Hex
         // Key: The HexCell object Value: The original Color of the cell (before ANY player selected it)
         private Dictionary<HexCell, Color?> cellOriginalColors = new Dictionary<HexCell, Color?>();
 
+        // This so can detect collision with ray casts just to this object
         public static readonly int GRID_LAYER_MASK = 1 << 10;
+        public LayerMask layerMask = GRID_LAYER_MASK;
 
         private static readonly CubeCoordinates[] neighbourDirections =
         {
@@ -144,12 +147,10 @@ namespace TTT.Hex
         {
             if (HexOrientation == HexOrientation.pointyTop)
             {
-                if (
-                    (coords.q + padding) < 0
-                    || (coords.r) < 0
-                    || (coords.q + padding) >= (GameMapData.Height + padding)
-                    || (coords.r) >= (GameMapData.Width)
-                )
+                if (    (coords.q + padding) < 0
+                    ||  (coords.r) < 0
+                    ||  (coords.q + padding) >= (GameMapData.Width + padding)
+                    ||  (coords.r) >= (GameMapData.Height))
                 {
                     return null;
                 }
@@ -234,6 +235,9 @@ namespace TTT.Hex
             // Add HexCell prefabs according to mapdata
             foreach (var mapTileData in GameMapData.MapTilesData)
             {
+                if (mapTileData.Height < 0)
+                    mapTileData.Height = 0;
+
                 Vector3 hexCenter = HexMath.GetHexCenter(
                     HexSize,
                     mapTileData.Height + 1,

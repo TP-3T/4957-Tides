@@ -76,83 +76,8 @@ namespace TTT.Hex
             triangles.Add(triVertexStart + i + 1);
         }
 
-        void TriangulateHelper(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
-        {
-            bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
-            int triVertexStart = vertices.Count;
-            hexCell.CenterVertexIndex = triVertexStart;
-
-            vertices.Add(hexCell.CellPosition);
-            colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
-
-            Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
-
-            // Regular triangle vertices
-            foreach (Vector3 corner in corners)
-            {
-                vertices.Add(hexCell.CellPosition + corner);
-                colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
-            }
-
-            int sideTriVertexStart = vertices.Count;
-
-            // Vertices that will be used to draw the side faces
-            foreach (Vector3 corner in corners)
-            {
-                if (!aboveSeaLevel)
-                    continue;
-
-                vertices.Add(
-                    hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0)
-                );
-                colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
-            }
-
-            // Populate triangle and color arrays
-            for (int i = 0; i < corners.Length; i++)
-            {
-                AddTopTriangles(triVertexStart, i);
-
-                if (!aboveSeaLevel)
-                    continue;
-
-                AddSideTriangles(triVertexStart, sideTriVertexStart, i);
-            }
-        }
-
-        /// <summary>
-        /// Does the re-triangulation (reassigning vertex and color values).
-        /// </summary>
-        void ReTriangulateHelper(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
-        {
-            bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
-            int c = hexCell.CenterVertexIndex; // c = counter, 😉
-
-            cvertices[c] = hexCell.CellPosition;
-            ccolors[c++] = (hexCell.CellColor ?? hexCell.TerrainType.Color);
-
-            Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
-
-            // Regular triangle vertices
-            foreach (Vector3 corner in corners)
-            {
-                cvertices[c] = hexCell.CellPosition + corner;
-                ccolors[c++] = hexCell.CellColor ?? hexCell.TerrainType.Color;
-            }
-
-            // Vertices that will be used to draw the side faces
-            foreach (Vector3 corner in corners)
-            {
-                if (!aboveSeaLevel)
-                    continue;
-
-                cvertices[c] =
-                    hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0);
-                ccolors[c++] = hexCell.CellColor ?? hexCell.TerrainType.Color;
-            }
-        }
-
-        public void Triangulate(HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
+        public void Triangulate(
+            HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
         {
             ClearMesh();
 
@@ -161,7 +86,48 @@ namespace TTT.Hex
                 if (hexCell is null)
                     continue;
 
-                TriangulateHelper(hexCell, hexSize, hexOrientation);
+                bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
+                int triVertexStart = vertices.Count;
+                hexCell.CenterVertexIndex = triVertexStart;
+
+                vertices.Add(hexCell.CellPosition);
+                colors.Add(hexCell.CellColor
+                    ?? hexCell.TerrainType.Color);
+
+                Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
+
+                // Regular triangle vertices
+                foreach (Vector3 corner in corners)
+                {
+                    vertices.Add(hexCell.CellPosition + corner);
+                    colors.Add(hexCell.CellColor
+                        ?? hexCell.TerrainType.Color);
+                }
+
+                int sideTriVertexStart = vertices.Count;
+
+                // Vertices that will be used to draw the side faces
+                foreach (Vector3 corner in corners)
+                {
+                    if (!aboveSeaLevel)
+                        continue;
+
+                    vertices.Add(
+                        hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0));
+                    colors.Add(hexCell.CellColor
+                        ?? hexCell.TerrainType.Color);
+                }
+
+                // Populate triangle and color arrays
+                for (int i = 0; i < corners.Length; i++)
+                {
+                    AddTopTriangles(triVertexStart, i);
+
+                    if (!aboveSeaLevel)
+                        continue;
+
+                    AddSideTriangles(triVertexStart, sideTriVertexStart, i);
+                }
             }
 
             mesh.vertices = cvertices = vertices.ToArray();
@@ -183,16 +149,37 @@ namespace TTT.Hex
         /// <param name="hexOrientation"></param>
         public void ReTriangulateCell(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
         {
-            ReTriangulateHelper(hexCell, hexSize, hexOrientation);
+            bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
+            int count = hexCell.CenterVertexIndex; // c = counter, 😉
 
-            mesh.vertices = cvertices;
-            mesh.colors = ccolors;
+            cvertices[count] = hexCell.CellPosition;
+            ccolors[count++] = (hexCell.CellColor
+                ?? hexCell.TerrainType.Color);
 
-            mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
+            Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
-            meshFilter.sharedMesh = mesh;
-            meshCollider.sharedMesh = mesh;
+            // Regular triangle vertices
+            foreach (Vector3 corner in corners)
+            {
+                cvertices[count] = hexCell.CellPosition + corner;
+                ccolors[count++] = hexCell.CellColor
+                    ?? hexCell.TerrainType.Color;
+            }
+
+            // Vertices that will be used to draw the side faces
+            foreach (Vector3 corner in corners)
+            {
+                if (!aboveSeaLevel)
+                    continue;
+
+                cvertices[count] = hexCell.CellPosition + corner
+                - new Vector3(0, hexCell.CellPosition.y, 0);
+                ccolors[count++] = hexCell.CellColor
+                    ?? hexCell.TerrainType.Color;
+            }
+
+            mesh.SetVertices(cvertices);
+            mesh.SetColors(ccolors);
         }
 
         /// <summary>
@@ -208,16 +195,38 @@ namespace TTT.Hex
         )
         {
             foreach (HexCell c in hexCells)
-                ReTriangulateHelper(c, hexSize, hexOrientation);
+            {
+                bool aboveSeaLevel = c.CellPosition.y > 0f;
+                int count = c.CenterVertexIndex; // c = counter, 😉
 
-            mesh.vertices = cvertices;
-            mesh.colors = ccolors;
+                cvertices[count] = c.CellPosition;
+                ccolors[count++] = (c.CellColor ?? c.TerrainType.Color);
 
-            mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
+                Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
-            meshFilter.sharedMesh = mesh;
-            meshCollider.sharedMesh = mesh;
+                // Regular triangle vertices
+                foreach (Vector3 corner in corners)
+                {
+                    cvertices[count] = c.CellPosition + corner;
+                    ccolors[count++] = c.CellColor
+                        ?? c.TerrainType.Color;
+                }
+
+                // Vertices that will be used to draw the side faces
+                foreach (Vector3 corner in corners)
+                {
+                    if (!aboveSeaLevel)
+                        continue;
+
+                    cvertices[count] = c.CellPosition + corner
+                    - new Vector3(0, c.CellPosition.y, 0);
+                    ccolors[count++] = c.CellColor
+                        ?? c.TerrainType.Color;
+                }
+            }
+
+            mesh.SetVertices(cvertices);
+            mesh.SetColors(ccolors);
         }
 
         public void ClearMesh()
