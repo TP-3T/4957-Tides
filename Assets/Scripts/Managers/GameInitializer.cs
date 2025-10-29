@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
+//TODO CB: We should delete this file. It's responsibilities will be handled by other managers.
 namespace TTT.Managers
 {
     public class GameInitializer : MonoBehaviour
