@@ -1,9 +1,22 @@
 using System;
+using TTT.Features;
 using TTT.Helpers;
+using TTT.Hex;
 using UnityEngine;
 
 namespace TTT.Events
 {
+    public class BuildEventArgs : EventArgs
+    {
+        public BuildingType Building { get; set; }
+        public HexCell HexCell { get; set; }
+    }
+
+    public class BuildCancelEventArgs : EventArgs
+    {
+        public HexCell HexCell { get; set; }
+    }
+
     public class FloodEventArgs : EventArgs
     {
         public float FloodIncrement { get; set; }
@@ -20,6 +33,9 @@ namespace TTT.Events
         /// Invoked when a tile is clicked.
         /// </summary>
         public static EventHandler TileClickEvent;
+
+        public static EventHandler BuildEvent;
+        public static EventHandler BuildCancelEvent;
 
         /// <summary>
         /// Event invoked when the next turn is requested.
