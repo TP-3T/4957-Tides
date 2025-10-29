@@ -1,6 +1,6 @@
 using TTT.Helpers;
 
-public class MapManager : GenericSingleton<MapManager>
+public class GridManager : GenericSingleton<GridManager>
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() { }

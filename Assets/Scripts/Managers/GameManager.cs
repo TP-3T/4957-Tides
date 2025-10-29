@@ -6,7 +6,6 @@ using UnityEngine.AddressableAssets;
 
 namespace TTT.Managers
 {
-    [RequireComponent(typeof(UIManager), typeof(NetworkingManager))]
     public class GameManager : GenericSingleton<GameManager>
     {
         [SerializeField]
@@ -27,7 +26,7 @@ namespace TTT.Managers
 
         private void ServerStartHandler()
         {
-            Coroutine loadRoutine = StartCoroutine(LoadAssets());
+            StartCoroutine(LoadAssets());
         }
 
         private IEnumerator LoadAssets()
