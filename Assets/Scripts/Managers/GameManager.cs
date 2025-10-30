@@ -1,4 +1,5 @@
 using System.Collections;
+using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,6 +11,9 @@ namespace TTT.Managers
     {
         [SerializeField]
         private TextAsset LevelFile;
+
+        [SerializeField]
+        private GameEvent newMapEvent;
 
         private AssetReference SeaPrefab = new("P_Sea");
 
@@ -45,6 +49,23 @@ namespace TTT.Managers
         {
             hexGrid = Instantiate(obj);
             hexGrid.GetComponent<NetworkObject>().Spawn();
+            newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
+        }
+
+        public void OnNewMapFinish(Object eventArgs)
+        {
+            NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
+
+            if (!args.WasSuccessful)
+            {
+                Debug.LogWarning(
+                    "MAP FAILED TO LOAD! WE SHOULD REVERT TO THE MAIN MENU FROM HERE!"
+                );
+            }
+            else
+            {
+                Debug.Log("Wow, map was loaded!");
+            }
         }
     }
 }

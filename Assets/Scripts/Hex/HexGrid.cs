@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using TTT.DataClasses.HexData;
@@ -37,11 +38,15 @@ namespace TTT.Hex
         public HexOrientation HexOrientation;
 
         //! [CB] Do we need a reference to a single cell?
-        public HexCell HexCell;
-        public TextAsset MapSource;
+        [SerializeField]
+        private HexCell HexCell;
+
+        [SerializeField]
+        private TextAsset MapSource;
         public HexCell[,] HexCells;
         public MapData GameMapData;
 
+        [SerializeField]
         private HexMesh hexMesh;
         private int padding;
 
@@ -59,17 +64,21 @@ namespace TTT.Hex
                 Debug.LogError("HexMesh failed to retrieve component  from children.");
         }
 
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
+        // public override void OnNetworkSpawn()
+        // {
+        //     try
+        //     {
+        //         base.OnNetworkSpawn();
 
-            BuildAndCreateGrid();
-        }
+        //         BuildAndCreateGrid();
+        //     }
+        //     catch { }
+        // }
 
-        public override void OnNetworkDespawn()
-        {
-            base.OnNetworkDespawn();
-        }
+        // public override void OnNetworkDespawn()
+        // {
+        //     base.OnNetworkDespawn();
+        // }
 
         /// <summary>
         /// Applies the specified color to the HexMesh material on the local client.
@@ -82,16 +91,18 @@ namespace TTT.Hex
             }
         }
 
-        public void OnNewMap(Object eventArgs)
+        public void OnNewMap(UnityEngine.Object eventArgs)
         {
             NewMapEventArgs args = eventArgs as NewMapEventArgs;
             try
             {
                 MapSource = args.DataFile;
                 LoadMapTilesData();
+                BuildAndCreateGrid();
             }
-            catch
+            catch (Exception e)
             {
+                Debug.LogException(e);
                 MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
             }
         }
@@ -231,11 +242,16 @@ namespace TTT.Hex
         {
             if (hexMesh == null)
             {
-                Debug.LogError("Hex mesh is null");
-                return;
+                throw new NullReferenceException("A hex mesh is required to create the hex grid!");
+            }
+            if (GameMapData == null)
+            {
+                throw new NullReferenceException(
+                    "No Game Map Data was loaded when the map attempted to be built."
+                );
             }
 
-            LoadMapTilesData();
+            // LoadMapTilesData();
 
             padding =
                 ((GameMapData.Width & 1) == 0 ? GameMapData.Width / 2 : (GameMapData.Width + 1) / 2)
@@ -309,22 +325,20 @@ namespace TTT.Hex
 
             if (HexCell == null || HexCells == null)
             {
-                Debug.Log("Hex cell array reference lost");
+                Debug.LogWarning("Hex cell array reference lost");
                 return;
             }
 
-            foreach (var row in HexCells) { }
+            foreach (var hexCell in HexCells)
+            {
+                if (hexCell == null)
+                    continue;
 
-            // foreach (var hexCell in HexCells)
-            // {
-            //     if (hexCell == null)
-            //         continue;
-
-            //     if (Application.isEditor && !Application.isPlaying)
-            //         DestroyImmediate(hexCell.gameObject);
-            //     else
-            //         Destroy(hexCell.gameObject);
-            // }
+                if (Application.isEditor && !Application.isPlaying)
+                    DestroyImmediate(hexCell.gameObject);
+                else
+                    Destroy(hexCell.gameObject);
+            }
         }
 
         // --- HexGrid.cs: Replace existing ApplyColorToMeshClientRpc with this ---

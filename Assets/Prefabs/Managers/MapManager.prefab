@@ -2088,8 +2088,9 @@ MonoBehaviour:
       OffsetCoordinates:
         x: 19
         z: 19
+  hexMesh: {fileID: 1666387808523527899}
   AllowedTerrains: {fileID: 11400000, guid: d58def7f9d21b0740bf047b7637efa9e, type: 2}
-  OnMapLoadFail: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
+  MapLoadFinishEvent: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
 --- !u!114 &6838071240244137242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2177,7 +2178,7 @@ GameObject:
   - component: {fileID: 2922883174947320797}
   - component: {fileID: 797566542952973587}
   - component: {fileID: 5403027071854868079}
-  - component: {fileID: 701858154963337644}
+  - component: {fileID: 1666387808523527899}
   m_Layer: 10
   m_Name: HexMesh
   m_TagString: Untagged
@@ -2321,7 +2322,7 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &701858154963337644
+--- !u!114 &1666387808523527899
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
