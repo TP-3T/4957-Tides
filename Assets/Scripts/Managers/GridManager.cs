@@ -1,4 +1,5 @@
 using TTT.Helpers;
+using TTT.Hex;
 
 public class GridManager : GenericSingleton<GridManager>
 {
@@ -6,5 +7,13 @@ public class GridManager : GenericSingleton<GridManager>
     void Start() { }
 
     // Update is called once per frame
-    void Update() { }
+    void Update() {
+        // new HexGrid()
+        // {
+        //     HexCells = ...
+        // }.BuildMap()
+     }
+
+
 }
+
