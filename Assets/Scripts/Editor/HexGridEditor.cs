@@ -1,4 +1,4 @@
-using TTT.DataTypes;
+using TTT.DataClasses.HexData;
 using TTT.Hex;
 using UnityEditor;
 using UnityEngine;

@@ -1,5 +1,4 @@
-using System;
-using TTT.DataTypes;
+using TTT.DataClasses.HexData;
 using UnityEngine;
 
 namespace TTT.Hex
@@ -8,6 +7,19 @@ namespace TTT.Hex
     {
         flatTop,
         pointyTop,
+    }
+
+    //! CB: We don't actually use this anywhere. Should we get rid of it?
+    public struct AxialCoordinates
+    {
+        public int q { get; private set; }
+        public int r { get; private set; }
+
+        public AxialCoordinates(int q, int r)
+        {
+            this.q = q;
+            this.r = r;
+        }
     }
 
     public static class HexMath

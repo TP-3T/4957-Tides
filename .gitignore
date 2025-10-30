@@ -36,3 +36,5 @@ sysinfo.txt
 LightmapSnapshot/
 *.stackdump
 
+.vs/
+

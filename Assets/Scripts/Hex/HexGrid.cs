@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using CodiceApp.EventTracking.Plastic;
-using TTT.DataTypes;
+using System.IO;
+using TTT.DataClasses.HexData;
 using TTT.Features;
 using TTT.GameEvents;
 using TTT.Terrain;
@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace TTT.Hex
 {
+    [RequireComponent(typeof(NetworkObject))]
     public class HexGrid : NetworkBehaviour
     {
         // Key: Player's Network Client ID Value: The HexCell the player has selected
@@ -17,7 +18,9 @@ namespace TTT.Hex
         // Key: The HexCell object Value: The original Color of the cell (before ANY player selected it)
         private Dictionary<HexCell, Color?> cellOriginalColors = new Dictionary<HexCell, Color?>();
 
+        // This so can detect collision with ray casts just to this object
         public static readonly int GRID_LAYER_MASK = 1 << 10;
+        public LayerMask layerMask = GRID_LAYER_MASK;
 
         private static readonly CubeCoordinates[] neighbourDirections =
         {
@@ -33,6 +36,8 @@ namespace TTT.Hex
         public bool DrawDebugLabels;
         public float HexSize;
         public HexOrientation HexOrientation;
+
+        //! [CB] Do we need a reference to a single cell?
         public HexCell HexCell;
         public TextAsset MapSource;
         public HexCell[,] HexCells;
@@ -43,6 +48,9 @@ namespace TTT.Hex
 
         [SerializeField]
         private TerrainDictionary AllowedTerrains;
+
+        [SerializeField]
+        private GameEvent MapLoadFinishEvent;
 
         void InitializeGrid()
         {
@@ -56,7 +64,7 @@ namespace TTT.Hex
         {
             base.OnNetworkSpawn();
 
-            BuildandCreateGrid();
+            BuildAndCreateGrid();
         }
 
         public override void OnNetworkDespawn()
@@ -75,6 +83,20 @@ namespace TTT.Hex
             }
         }
 
+        public void OnNewMap(Object eventArgs)
+        {
+            NewMapEventArgs args = eventArgs as NewMapEventArgs;
+            try
+            {
+                MapSource = args.DataFile;
+                LoadMapTilesData();
+            }
+            catch
+            {
+                MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
+            }
+        }
+
         // ClientRpc to tell all clients to apply the new color received from the server.
         [ClientRpc]
         private void ApplyColorToMeshClientRpc(Color colorToApply)
@@ -83,7 +105,7 @@ namespace TTT.Hex
             ApplyColorToMesh(colorToApply);
         }
 
-        void BuildandCreateGrid()
+        void BuildAndCreateGrid()
         {
             InitializeGrid();
             ClearMap();
@@ -105,6 +127,10 @@ namespace TTT.Hex
 
             foreach (HexCell hexCell in HexCells)
             {
+                if (hexCell == null)
+                {
+                    continue;
+                }
                 Vector3[] hexCorners = HexMath.GetHexCorners(HexSize, HexOrientation);
                 for (int s = 0; s < hexCorners.Length; s++)
                 {
@@ -124,7 +150,9 @@ namespace TTT.Hex
             GameMapData = JsonUtility.FromJson<MapData>(MapSource.text);
 
             if (GameMapData == null)
-                Debug.LogError("Game map JSON failed to decode.");
+            {
+                throw new InvalidDataException($"{MapSource.name} is not a valid TTT Map object.");
+            }
         }
 
         /// <summary>
@@ -139,8 +167,8 @@ namespace TTT.Hex
                 if (
                     (coords.q + padding) < 0
                     || (coords.r) < 0
-                    || (coords.q + padding) >= (GameMapData.Height + padding)
-                    || (coords.r) >= (GameMapData.Width)
+                    || (coords.q + padding) >= (GameMapData.Width + padding)
+                    || (coords.r) >= (GameMapData.Height)
                 )
                 {
                     return null;
@@ -163,7 +191,7 @@ namespace TTT.Hex
         }
 
         /// <summary>
-        /// Gets a HexCell from the HexCells array (takes care of adding paddings to indicies).
+        /// Gets a HexCell from the HexCells array (takes care of adding paddings to indices).
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
@@ -226,6 +254,9 @@ namespace TTT.Hex
             // Add HexCell prefabs according to mapdata
             foreach (var mapTileData in GameMapData.MapTilesData)
             {
+                if (mapTileData.Height < 0)
+                    mapTileData.Height = 0;
+
                 Vector3 hexCenter = HexMath.GetHexCenter(
                     HexSize,
                     mapTileData.Height + 1,
@@ -283,16 +314,18 @@ namespace TTT.Hex
                 return;
             }
 
-            foreach (var hexCell in HexCells)
-            {
-                if (hexCell == null)
-                    continue;
+            foreach (var row in HexCells) { }
 
-                if (Application.isEditor && !Application.isPlaying)
-                    DestroyImmediate(hexCell.gameObject);
-                else
-                    Destroy(hexCell.gameObject);
-            }
+            // foreach (var hexCell in HexCells)
+            // {
+            //     if (hexCell == null)
+            //         continue;
+
+            //     if (Application.isEditor && !Application.isPlaying)
+            //         DestroyImmediate(hexCell.gameObject);
+            //     else
+            //         Destroy(hexCell.gameObject);
+            // }
         }
 
         // --- HexGrid.cs: Replace existing ApplyColorToMeshClientRpc with this ---
