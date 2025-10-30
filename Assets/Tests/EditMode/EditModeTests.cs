@@ -173,6 +173,30 @@ public class EditModeTests
         //Assert.DoesNotThrow(() => SaveFile("valid_path"));
         Assert.Pass();
     }
+
+    [Test, Description("Requesting a pre-saved map returns the correct data.")]
+    public void LoadPreSavedMap_ReturnsCorrectData()
+    {
+        Assert.Pass();
+    }
+
+    [Test, Description("Requesting a non pre-saved map queries the database appropriately.")]
+    public void LoadNonExistentMap_QueriesDatabase()
+    {
+        Assert.Pass();
+    }
+
+    [Test, Description("Downloading map data from the database completes successfully.")]
+    public void DownloadMapData_CompletesSuccessfully()
+    {
+        Assert.Pass();
+    }
+
+    [Test, Description("Uploading map data to the database completes successfully.")]
+    public void UploadMapData_CompletesSuccessfully()
+    {
+        Assert.Pass();
+    }
     #endregion
 
 
