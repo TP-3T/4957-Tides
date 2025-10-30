@@ -8,10 +8,10 @@ public class GridManager : GenericSingleton<GridManager>
 
     // Update is called once per frame
     void Update() {
-        new HexGrid()
-        {
-            HexCells = ...
-        }.BuildMap()
+        // new HexGrid()
+        // {
+        //     HexCells = ...
+        // }.BuildMap()
      }
 
 

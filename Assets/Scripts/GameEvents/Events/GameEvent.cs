@@ -6,10 +6,7 @@ namespace TTT.GameEvents
     /// <summary>
     /// A GameEvent can have listeners subscribe to it so that they are called when it's raised.
     /// </summary>
-    [CreateAssetMenu(
-        fileName = "Game Event",
-        menuName = "Scriptable Objects/GameEvents/Game Event"
-    )]
+    [CreateAssetMenu(fileName = "Game Event", menuName = "TTT/Events/Game Event")]
     public class GameEvent : ScriptableObject
     {
         /// <summary>

@@ -1,19 +1,15 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using TTT.Hex;
-using NUnit.Framework.Interfaces;
-using Unity.Mathematics;
-using Unity.Netcode;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
-using UnityEngine;
+using TTT.DataClasses.HexData;
 using TTT.Helpers;
+using TTT.Hex;
+using Unity.Netcode;
+using UnityEngine;
 
 public class Sea : GenericNetworkSingleton<Sea>
 {
     public float SeaLevel;
+
     //private float seaLevelOffset = 12.66f;
     public float RisingRate;
     public Queue<HexCell> ToFlood;
@@ -117,8 +113,7 @@ public class Sea : GenericNetworkSingleton<Sea>
             }
 
             // --- 3. Retriangulate what has been flooded ---
-            hexMesh.ReTriangulateCells(
-                Flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
+            hexMesh.ReTriangulateCells(Flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
 
             yield return null;
         }

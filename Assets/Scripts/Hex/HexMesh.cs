@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TTT.DataClasses.HexData;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -76,8 +77,7 @@ namespace TTT.Hex
             triangles.Add(triVertexStart + i + 1);
         }
 
-        public void Triangulate(
-            HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
+        public void Triangulate(HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
         {
             ClearMesh();
 
@@ -91,8 +91,7 @@ namespace TTT.Hex
                 hexCell.CenterVertexIndex = triVertexStart;
 
                 vertices.Add(hexCell.CellPosition);
-                colors.Add(hexCell.CellColor
-                    ?? hexCell.TerrainType.Color);
+                colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
 
                 Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -100,8 +99,7 @@ namespace TTT.Hex
                 foreach (Vector3 corner in corners)
                 {
                     vertices.Add(hexCell.CellPosition + corner);
-                    colors.Add(hexCell.CellColor
-                        ?? hexCell.TerrainType.Color);
+                    colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
                 }
 
                 int sideTriVertexStart = vertices.Count;
@@ -113,9 +111,9 @@ namespace TTT.Hex
                         continue;
 
                     vertices.Add(
-                        hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0));
-                    colors.Add(hexCell.CellColor
-                        ?? hexCell.TerrainType.Color);
+                        hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0)
+                    );
+                    colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
                 }
 
                 // Populate triangle and color arrays
@@ -153,8 +151,7 @@ namespace TTT.Hex
             int count = hexCell.CenterVertexIndex; // c = counter, 😉
 
             cvertices[count] = hexCell.CellPosition;
-            ccolors[count++] = (hexCell.CellColor
-                ?? hexCell.TerrainType.Color);
+            ccolors[count++] = (hexCell.CellColor ?? hexCell.TerrainType.Color);
 
             Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -162,8 +159,7 @@ namespace TTT.Hex
             foreach (Vector3 corner in corners)
             {
                 cvertices[count] = hexCell.CellPosition + corner;
-                ccolors[count++] = hexCell.CellColor
-                    ?? hexCell.TerrainType.Color;
+                ccolors[count++] = hexCell.CellColor ?? hexCell.TerrainType.Color;
             }
 
             // Vertices that will be used to draw the side faces
@@ -172,10 +168,9 @@ namespace TTT.Hex
                 if (!aboveSeaLevel)
                     continue;
 
-                cvertices[count] = hexCell.CellPosition + corner
-                - new Vector3(0, hexCell.CellPosition.y, 0);
-                ccolors[count++] = hexCell.CellColor
-                    ?? hexCell.TerrainType.Color;
+                cvertices[count] =
+                    hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0);
+                ccolors[count++] = hexCell.CellColor ?? hexCell.TerrainType.Color;
             }
 
             mesh.SetVertices(cvertices);
@@ -208,8 +203,7 @@ namespace TTT.Hex
                 foreach (Vector3 corner in corners)
                 {
                     cvertices[count] = c.CellPosition + corner;
-                    ccolors[count++] = c.CellColor
-                        ?? c.TerrainType.Color;
+                    ccolors[count++] = c.CellColor ?? c.TerrainType.Color;
                 }
 
                 // Vertices that will be used to draw the side faces
@@ -218,10 +212,9 @@ namespace TTT.Hex
                     if (!aboveSeaLevel)
                         continue;
 
-                    cvertices[count] = c.CellPosition + corner
-                    - new Vector3(0, c.CellPosition.y, 0);
-                    ccolors[count++] = c.CellColor
-                        ?? c.TerrainType.Color;
+                    cvertices[count] =
+                        c.CellPosition + corner - new Vector3(0, c.CellPosition.y, 0);
+                    ccolors[count++] = c.CellColor ?? c.TerrainType.Color;
                 }
             }
 
