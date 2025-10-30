@@ -1,4 +1,4 @@
-namespace TTT.States
+namespace TTT.DataClasses.States
 {
     /// <summary>
     /// The over-all state of the game.

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365eee90f5d7bf744a7cfb62c139b74d, type: 3}
   m_Name: BuildCancelEvent
   m_EditorClassIdentifier: 
-  defaultEventArgs: {fileID: 0}
+  defaultEventArgs: {fileID: 11400000, guid: 478d01288eb182746b1c92a32c7e4891, type: 2}

@@ -1,7 +1,7 @@
 using System;
+using TTT.DataClasses.HexData;
 using TTT.Features;
 using TTT.Helpers;
-using TTT.HexData;
 using UnityEngine;
 
 namespace TTT.Events

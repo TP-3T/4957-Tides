@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TTT.DataClasses.HexData;
 using TTT.Helpers;
 using TTT.Hex;
-using TTT.HexData;
 using Unity.Netcode;
 using UnityEngine;
 

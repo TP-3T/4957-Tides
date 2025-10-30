@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using TTT.HexData;
+using TTT.DataClasses.HexData;
 
 namespace TTT.Hex
 {

@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 365eee90f5d7bf744a7cfb62c139b74d, type: 3}
-  m_Name: BuildEvent
+  m_Name: NewMapFinishEvent
   m_EditorClassIdentifier: 
-  defaultEventArgs: {fileID: 11500000, guid: f4cac47a870fb65449efa891af920da2, type: 3}
+  defaultEventArgs: {fileID: 0}

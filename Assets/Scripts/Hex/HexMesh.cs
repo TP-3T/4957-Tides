@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using TTT.HexData;
+using TTT.DataClasses.HexData;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;

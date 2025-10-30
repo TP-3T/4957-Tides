@@ -1,6 +1,6 @@
 {
-    "name": "TTT.HexData",
-    "rootNamespace": "TTT.HexData",
+    "name": "TTT.DataClasses.HexData",
+    "rootNamespace": "TTT.DataClasses.HexData",
     "references": [
         "GUID:91ba5b220a43d5443ae04d679286f57d",
         "GUID:560ff959ba426d6449085b72011d1a21"

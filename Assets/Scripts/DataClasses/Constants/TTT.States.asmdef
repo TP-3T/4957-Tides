@@ -1,11 +1,7 @@
 {
-    "name": "TTT.GameEvents",
-    "rootNamespace": "TTT.GameEvents",
-    "references": [
-        "GUID:840341cf92912f048a97909ccc73bc49",
-        "GUID:560ff959ba426d6449085b72011d1a21",
-        "GUID:233acbc21e357d94eb4bdce0e889e723"
-    ],
+    "name": "TTT.States",
+    "rootNamespace": "TTT.DataClasses.States",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

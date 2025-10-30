@@ -1,6 +1,6 @@
 using System;
 
-namespace TTT.HexData
+namespace TTT.DataClasses.HexData
 {
     [Serializable]
     public struct OffsetCoordinates

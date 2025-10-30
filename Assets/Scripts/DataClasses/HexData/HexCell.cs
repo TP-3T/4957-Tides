@@ -1,9 +1,8 @@
-using System;
 using TTT.Features;
 using TTT.Terrain;
 using UnityEngine;
 
-namespace TTT.HexData
+namespace TTT.DataClasses.HexData
 {
     public class HexCell : MonoBehaviour
     {

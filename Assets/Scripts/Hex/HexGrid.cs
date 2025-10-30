@@ -1,5 +1,7 @@
 using System.Collections.Generic;
-using TTT.HexData;
+using System.IO;
+using TTT.DataClasses.HexData;
+using TTT.GameEvents;
 using TTT.Terrain;
 using Unity.Netcode;
 using UnityEngine;
@@ -46,10 +48,8 @@ namespace TTT.Hex
         [SerializeField]
         private TerrainDictionary AllowedTerrains;
 
-        // void Awake()
-        // {
-        //     BuildandCreateGrid();
-        // }
+        [SerializeField]
+        private GameEvent MapLoadFinishEvent;
 
         void InitializeGrid()
         {
@@ -79,6 +79,20 @@ namespace TTT.Hex
             if (hexMesh != null && hexMesh.GetComponent<MeshRenderer>() != null)
             {
                 hexMesh.GetComponent<MeshRenderer>().material.color = colorToApply;
+            }
+        }
+
+        public void OnNewMap(Object eventArgs)
+        {
+            NewMapEventArgs args = eventArgs as NewMapEventArgs;
+            try
+            {
+                MapSource = args.DataFile;
+                LoadMapTilesData();
+            }
+            catch
+            {
+                MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
             }
         }
 
@@ -135,7 +149,9 @@ namespace TTT.Hex
             GameMapData = JsonUtility.FromJson<MapData>(MapSource.text);
 
             if (GameMapData == null)
-                Debug.LogError("Game map JSON failed to decode.");
+            {
+                throw new InvalidDataException($"{MapSource.name} is not a valid TTT Map object.");
+            }
         }
 
         /// <summary>

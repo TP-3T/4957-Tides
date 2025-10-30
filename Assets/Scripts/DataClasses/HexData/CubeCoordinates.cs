@@ -1,4 +1,4 @@
-namespace TTT.HexData
+namespace TTT.DataClasses.HexData
 {
     public struct CubeCoordinates
     {
