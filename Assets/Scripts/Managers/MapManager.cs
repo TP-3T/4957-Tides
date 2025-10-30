@@ -2,6 +2,7 @@ using System;
 using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
+using Unity.Netcode;
 using UnityEngine;
 
 public class MapManager : GenericSingleton<MapManager>
@@ -27,6 +28,8 @@ public class MapManager : GenericSingleton<MapManager>
             Debug.LogException(e);
             MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
         }
+        sea.GetComponent<NetworkObject>().Spawn();
+        hexGrid.GetComponent<NetworkObject>().Spawn();
         MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
     }
 }
