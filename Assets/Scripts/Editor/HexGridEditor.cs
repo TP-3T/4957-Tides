@@ -1,4 +1,5 @@
 using TTT.Hex;
+using TTT.HexData;
 using UnityEditor;
 using UnityEngine;
 

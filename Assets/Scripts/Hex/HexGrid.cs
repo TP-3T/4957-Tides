@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using TTT.Features;
+using TTT.HexData;
 using TTT.Terrain;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace TTT.Hex
-{       
+{
     [RequireComponent(typeof(NetworkObject))]
     public class HexGrid : NetworkBehaviour
     {
@@ -147,10 +147,12 @@ namespace TTT.Hex
         {
             if (HexOrientation == HexOrientation.pointyTop)
             {
-                if (    (coords.q + padding) < 0
-                    ||  (coords.r) < 0
-                    ||  (coords.q + padding) >= (GameMapData.Width + padding)
-                    ||  (coords.r) >= (GameMapData.Height))
+                if (
+                    (coords.q + padding) < 0
+                    || (coords.r) < 0
+                    || (coords.q + padding) >= (GameMapData.Width + padding)
+                    || (coords.r) >= (GameMapData.Height)
+                )
                 {
                     return null;
                 }
@@ -295,16 +297,18 @@ namespace TTT.Hex
                 return;
             }
 
-            foreach (var hexCell in HexCells)
-            {
-                if (hexCell == null)
-                    continue;
+            foreach (var row in HexCells) { }
 
-                if (Application.isEditor && !Application.isPlaying)
-                    DestroyImmediate(hexCell.gameObject);
-                else
-                    Destroy(hexCell.gameObject);
-            }
+            // foreach (var hexCell in HexCells)
+            // {
+            //     if (hexCell == null)
+            //         continue;
+
+            //     if (Application.isEditor && !Application.isPlaying)
+            //         DestroyImmediate(hexCell.gameObject);
+            //     else
+            //         Destroy(hexCell.gameObject);
+            // }
         }
 
         // --- HexGrid.cs: Replace existing ApplyColorToMeshClientRpc with this ---

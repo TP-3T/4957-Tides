@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 365eee90f5d7bf744a7cfb62c139b74d, type: 3}
-  m_Name: Building Feature
+  m_Name: BuildEvent
   m_EditorClassIdentifier: 
-  defaultEventArgs: {fileID: 11400000, guid: 24244140e97c4344ea24aa77c63c1a05, type: 2}
+  defaultEventArgs: {fileID: 11400000, guid: b7808f78ebe09cb4c80d0c4b559ed3fc, type: 2}
