@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TTT.Hex
+namespace TTT.DataTypes
 {
     [Serializable]
     public class MapTileData

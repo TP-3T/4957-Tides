@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using CodiceApp.EventTracking.Plastic;
+using TTT.DataTypes;
 using TTT.Features;
+using TTT.GameEvents;
 using TTT.Terrain;
 using Unity.Netcode;
 using UnityEngine;
@@ -356,46 +359,39 @@ namespace TTT.Hex
             }
         }
 
-        private void OnBuilding(Object eventArgs)
+        public HexCell GetSelectedCell()
         {
-            
-        }
-        
-        private void OnDestroyingFeature(Object eventArgs)
-        {
-            
+            ulong ownClientId = NetworkManager.Singleton.LocalClientId;
+            return playerSelections[ownClientId];
         }
 
-        private void BuildFeature(HexCell hexCell, FeatureType featureType)
+        public void OnBuilding(Object eventArgs)
         {
-            if (hexCell.FeatureType != null)
+            if (eventArgs is not FeatureType featureType)
             {
-                // then there's already something on this cell
                 return;
             }
 
-            Vector3 cellPos = hexCell.CellPosition;
-            Vector3 featurePos = new(cellPos.x, cellPos.y, cellPos.z);
-
-            hexCell.FeatureType = featureType;
-            GameObject feature = Instantiate(featureType.Prefab);
-            hexCell.InstantiatedFeature = feature;
-
-            featurePos.y += 0.5f * feature.transform.localScale.y;
-            feature.transform.position = featurePos;
-        }
-
-        private void DestroyFeature(HexCell hexCell)
-        {
-            if (hexCell.FeatureType == null)
+            HexCell cell = GetSelectedCell();
+            if (cell == null)
             {
-                // then there's nothing on this cell
+                Debug.LogWarning("Tried to build without a cell selected.");
                 return;
             }
 
-            hexCell.FeatureType = null;
-            Destroy(hexCell.InstantiatedFeature);
-            hexCell.InstantiatedFeature = null;
+            cell.BuildFeature(featureType);
+        }
+
+        public void OnDestroyingFeature(Object eventArgs)
+        {
+            HexCell cell = GetSelectedCell();
+            if (cell == null)
+            {
+                Debug.LogWarning("Tried to destroy without a cell selected.");
+                return;
+            }
+
+            cell.DestroyFeature();
         }
     }
 }

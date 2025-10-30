@@ -2,7 +2,8 @@
     "name": "TTT.GameEvents",
     "rootNamespace": "TTT.GameEvents",
     "references": [
-        "GUID:4c861275823ef884d91df8647f4caa34"
+        "GUID:560ff959ba426d6449085b72011d1a21",
+        "GUID:25243d50b39e9dd4888f0d112c2a5969"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

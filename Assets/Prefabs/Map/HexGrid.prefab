@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2432164081653677672}
   - component: {fileID: 2147203830767427816}
   - component: {fileID: 6838071240244137242}
+  - component: {fileID: 1202288292285565136}
+  - component: {fileID: 6703474163667617576}
   m_Layer: 10
   m_Name: HexGrid
   m_TagString: Untagged
@@ -2085,7 +2087,6 @@ MonoBehaviour:
         x: 19
         z: 19
   AllowedTerrains: {fileID: 11400000, guid: d58def7f9d21b0740bf047b7637efa9e, type: 2}
-  placeholderFeatureType: {fileID: 11400000, guid: 1bbdf26002f83de40973468ddd37bb8f, type: 2}
 --- !u!114 &6838071240244137242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2132,6 +2133,62 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &1202288292285565136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3480564221591740335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2147203830767427816}
+        m_TargetAssemblyTypeName: TTT.Hex.HexGrid, TTT.Hex
+        m_MethodName: OnBuilding
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6703474163667617576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3480564221591740335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: be77d2d33c12b1b43b2c40d9edbddf12, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2147203830767427816}
+        m_TargetAssemblyTypeName: TTT.Hex.HexGrid, TTT.Hex
+        m_MethodName: OnDestroyingFeature
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5302879740467127229
 GameObject:
   m_ObjectHideFlags: 0
