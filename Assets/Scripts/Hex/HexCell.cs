@@ -15,7 +15,16 @@ namespace TTT.Hex
         [SerializeField]
         public bool flooded = false;
         public int CenterVertexIndex;
-        public FeatureType FeatureType;
+
+        /// <summary>
+        /// The type of feature currently instantiated on this cell.
+        /// </summary>
+        public FeatureType FeatureType { get; set; }
+
+        /// <summary>
+        /// The model of the feature currently instantiated on this cell.
+        /// </summary>
+        public GameObject InstantiatedFeature { get; set; }
 
         /// <summary>
         /// Flood this cell

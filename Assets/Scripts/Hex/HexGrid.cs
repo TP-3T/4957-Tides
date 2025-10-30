@@ -355,5 +355,47 @@ namespace TTT.Hex
                 UpdateCellVisualsClientRpc(newCell.CellPosition, playerColor);
             }
         }
+
+        private void OnBuilding(Object eventArgs)
+        {
+            
+        }
+        
+        private void OnDestroyingFeature(Object eventArgs)
+        {
+            
+        }
+
+        private void BuildFeature(HexCell hexCell, FeatureType featureType)
+        {
+            if (hexCell.FeatureType != null)
+            {
+                // then there's already something on this cell
+                return;
+            }
+
+            Vector3 cellPos = hexCell.CellPosition;
+            Vector3 featurePos = new(cellPos.x, cellPos.y, cellPos.z);
+
+            hexCell.FeatureType = featureType;
+            GameObject feature = Instantiate(featureType.Prefab);
+            hexCell.InstantiatedFeature = feature;
+
+            featurePos.y += 0.5f * feature.transform.localScale.y;
+            feature.transform.position = featurePos;
+        }
+
+        private void DestroyFeature(HexCell hexCell)
+        {
+            if (hexCell.FeatureType == null)
+            {
+                // then there's nothing on this cell
+                return;
+            }
+
+            hexCell.FeatureType = null;
+            Destroy(hexCell.InstantiatedFeature);
+            hexCell.InstantiatedFeature = null;
+        }
     }
 }
