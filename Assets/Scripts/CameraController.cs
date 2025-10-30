@@ -16,11 +16,10 @@ public class CameraController : MonoBehaviour
     const float STEP_SIZE = 2f;
     const float DAMPING = 15f;
     const float ZOOM_DAMPING = 7.5f;
-    const float ZOOM_SPEED = 2f;
-    const float ZOOM_INPUT_MODIFIER = 100f;
+    const float ZOOM_SPEED = 5f;
     const float ZOOM_DELTA_THRESHOLD = 0.1f;
     const float MIN_HEIGHT = 10f;
-    const float MAX_HEIGHT = 50f;
+    const float MAX_HEIGHT = 20f;
     const float MAX_ROTATION_SPEED = 0.25f;
     const float ROTATION_X = 0f;
     const float ROTATION_Z = 0f;
@@ -28,7 +27,6 @@ public class CameraController : MonoBehaviour
     const float MAGNITUDE_THRESHOLD = 0.001f;
     const float NO_VERTICAL_VELOCITY = 0f;
 
-    [SerializeField]
     private Transform cameraTransform;
     private CameraControlActions cameraActions;
     private InputAction movement;
@@ -48,7 +46,7 @@ public class CameraController : MonoBehaviour
 
         if (cameraTransform == null)
         {
-            cameraTransform = this.gameObject.transform;
+            cameraTransform = this.GetComponentInChildren<Camera>().transform;
         }
     }
 
@@ -226,15 +224,11 @@ public class CameraController : MonoBehaviour
     {
         float zoomDelta;
 
-        zoomDelta = inputVal.ReadValue<Vector2>().y / ZOOM_INPUT_MODIFIER;
-        // zoomDelta = inputVal.ReadValue<Vector2>().y;
-
-        Debug.Log("Zoom Delta: " + zoomDelta);
+        zoomDelta = inputVal.ReadValue<Vector2>().y;
 
         if (Mathf.Abs(zoomDelta) > ZOOM_DELTA_THRESHOLD)
         {
-            Debug.Log("INSIDE ZOOM");
-            zoomHeight = cameraTransform.localPosition.y + zoomDelta * STEP_SIZE;
+            zoomHeight = cameraTransform.localPosition.y - zoomDelta * STEP_SIZE;
 
             if (zoomHeight < MIN_HEIGHT)
             {

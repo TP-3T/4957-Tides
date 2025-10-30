@@ -35,7 +35,7 @@ public class PlayerController : NetworkBehaviour
     void Awake()
     {
         //Get a reference to the camera component on this object itself
-        playerCamera = GetComponent<Camera>();
+        playerCamera = GetComponentInChildren<Camera>();
 
         //Disable camera by default so it wont activate on other clients.
         if (playerCamera != null)
@@ -127,42 +127,6 @@ public class PlayerController : NetworkBehaviour
         {
             return;
         }
-
-        // WASD Movement
-        // float horizontalInput = Input.GetAxis("Horizontal");
-        // float verticalInput = Input.GetAxis("Vertical");
-
-        // Vector3 forward = transform.forward;
-        // Vector3 right = transform.right;
-        // forward.y = 0;
-        // right.y = 0;
-
-        // Vector3 movement = (forward * verticalInput) + (right * horizontalInput);
-        // transform.position += movement * moveSpeed * Time.deltaTime;
-
-        // Q and E Vertical Movement
-        // float verticalMove = 0f;
-        // if (Input.GetKey(KeyCode.E))
-        // {
-        //     verticalMove = moveSpeed;
-        // }
-        // else if (Input.GetKey(KeyCode.Q))
-        // {
-        //     verticalMove = -moveSpeed;
-        // }
-
-        // transform.position += Vector3.up * verticalMove * Time.deltaTime;
-
-        // Mouse-based Rotation
-        // if (Input.GetMouseButton(RightMouseIndex)) // Right-click held down
-        // {
-        //     float mouseX = Input.GetAxis("Mouse X");
-        //     float mouseY = Input.GetAxis("Mouse Y");
-
-        //     // Rotate based on mouse movement
-        //     transform.Rotate(Vector3.up, mouseX * rotationSpeed, Space.World);
-        //     transform.Rotate(Vector3.right, -mouseY * rotationSpeed, Space.Self);
-        // }
 
         // Left click
         if (Input.GetMouseButtonDown(LeftMouseIndex))
