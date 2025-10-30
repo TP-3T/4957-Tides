@@ -412,7 +412,7 @@ namespace TTT.Hex
             return playerSelections[ownClientId];
         }
 
-        public void OnBuilding(Object eventArgs)
+        public void OnBuilding(UnityEngine.Object eventArgs)
         {
             if (eventArgs is not FeatureType featureType)
             {
@@ -429,7 +429,7 @@ namespace TTT.Hex
             cell.BuildFeature(featureType);
         }
 
-        public void OnDestroyingFeature(Object eventArgs)
+        public void OnDestroyingFeature(UnityEngine.Object eventArgs)
         {
             HexCell cell = GetSelectedCell();
             if (cell == null)
