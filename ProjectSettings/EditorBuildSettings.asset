@@ -5,27 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/Core_Scene.unity
+  - enabled: 0
+    path: Assets/Scenes/Testing/Core_Scene.unity
     guid: 68882d1099c0b234fb5f6f2b8e4ad7b6
   - enabled: 1
-    path: Assets/Scenes/ColorChangeOnClick.unity
-    guid: 0c81c1dead2d5ba4dbd0f122d7c6aff9
+    path: Assets/Scenes/GameScene.unity
+    guid: 0d7eba9258e9edf44835c6ad064f6dff
   - enabled: 1
-    path: Assets/Scenes/GridStorage.unity
-    guid: bab71d97c155af243acbf23f311ff5c6
+    path: Assets/Scenes/Core_Scene.unity
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Core_Sea_Level_Flooding.unity
-    guid: ae792a478a7693f468536672294b2196
-  - enabled: 1
-    path: Assets/Scenes/Core_Resources.unity
-    guid: 7279f90e579272242933e727765cc4a2
-  - enabled: 1
-    path: Assets/Scenes/GridMeshImprovements.unity
-    guid: b1677382cd2fd5b489b3123e60a1d3d0
-  - enabled: 1
-    path: Assets/Scenes/Core_Buildings_Ro.unity
-    guid: bd9196dc7bc193e44a4354d2c0a1f2a9
+    path: Assets/Scenes/Testing/Core_Buildmode_Ro.unity
+    guid: b85b9f7911c30a74389d2c2e5cd6165d
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.addressableassets: {fileID: 11400000, guid: 2cc4e184f0d14234791219624c7af01c, type: 2}
   m_UseUCBPForAssetBundles: 0

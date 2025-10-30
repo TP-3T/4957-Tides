@@ -16,13 +16,9 @@ namespace TTT.Features
         [SerializeField]
         private string Uid;
 
-        [Tooltip("Radius of this feature's zone of control (1 = adjacent only).")]
-        [SerializeField]
-        private int zoneOfControlRadius;
-
         [Tooltip("The amount of polution emited per turn.")]
         [SerializeField]
-        private int polutionEmission;
+        private int pollutionEmission;
 
         [Tooltip("List of resource producers for this feature.")]
         [SerializeField]
@@ -42,15 +38,9 @@ namespace TTT.Features
         public string UniqueID => Uid;
 
         /// <summary>
-        /// Defines the max distance that you can place another feature relative to this one.
-        /// A radius of 1 means you can only place other features adjacent to it.
+        /// The amount of pollution emitted per turn.
         /// </summary>
-        public int ZoneOfControlRadius => zoneOfControlRadius;
-
-        /// <summary>
-        /// The amount of polution emited per turn.
-        /// </summary>
-        public int PolutionEmission => polutionEmission;
+        public int PollutionEmission => pollutionEmission;
 
         /// <summary>
         /// List of resource producers for this feature.

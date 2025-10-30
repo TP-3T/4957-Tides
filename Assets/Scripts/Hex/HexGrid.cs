@@ -1,11 +1,16 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using TTT.DataClasses.HexData;
 using TTT.Features;
+using TTT.GameEvents;
 using TTT.Terrain;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace TTT.Hex
 {
+    [RequireComponent(typeof(NetworkObject))]
     public class HexGrid : NetworkBehaviour
     {
         // Key: Player's Network Client ID Value: The HexCell the player has selected
@@ -14,7 +19,9 @@ namespace TTT.Hex
         // Key: The HexCell object Value: The original Color of the cell (before ANY player selected it)
         private Dictionary<HexCell, Color?> cellOriginalColors = new Dictionary<HexCell, Color?>();
 
+        // This so can detect collision with ray casts just to this object
         public static readonly int GRID_LAYER_MASK = 1 << 10;
+        public LayerMask layerMask = GRID_LAYER_MASK;
 
         private static readonly CubeCoordinates[] neighbourDirections =
         {
@@ -30,11 +37,17 @@ namespace TTT.Hex
         public bool DrawDebugLabels;
         public float HexSize;
         public HexOrientation HexOrientation;
-        public HexCell HexCell;
-        public TextAsset MapSource;
+
+        //! [CB] Do we need a reference to a single cell?
+        [SerializeField]
+        private HexCell HexCell;
+
+        [SerializeField]
+        private TextAsset MapSource;
         public HexCell[,] HexCells;
         public MapData GameMapData;
 
+        [SerializeField]
         private HexMesh hexMesh;
         private int padding;
 
@@ -49,17 +62,21 @@ namespace TTT.Hex
                 Debug.LogError("HexMesh failed to retrieve component  from children.");
         }
 
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
+        // public override void OnNetworkSpawn()
+        // {
+        //     try
+        //     {
+        //         base.OnNetworkSpawn();
 
-            BuildandCreateGrid();
-        }
+        //         BuildAndCreateGrid();
+        //     }
+        //     catch { }
+        // }
 
-        public override void OnNetworkDespawn()
-        {
-            base.OnNetworkDespawn();
-        }
+        // public override void OnNetworkDespawn()
+        // {
+        //     base.OnNetworkDespawn();
+        // }
 
         /// <summary>
         /// Applies the specified color to the HexMesh material on the local client.
@@ -80,7 +97,14 @@ namespace TTT.Hex
             ApplyColorToMesh(colorToApply);
         }
 
-        void BuildandCreateGrid()
+        public void BuildNewMap(TextAsset mapData)
+        {
+            MapSource = mapData;
+            LoadMapTilesData();
+            BuildAndCreateGrid();
+        }
+
+        void BuildAndCreateGrid()
         {
             InitializeGrid();
             ClearMap();
@@ -102,6 +126,10 @@ namespace TTT.Hex
 
             foreach (HexCell hexCell in HexCells)
             {
+                if (hexCell == null)
+                {
+                    continue;
+                }
                 Vector3[] hexCorners = HexMath.GetHexCorners(HexSize, HexOrientation);
                 for (int s = 0; s < hexCorners.Length; s++)
                 {
@@ -121,7 +149,9 @@ namespace TTT.Hex
             GameMapData = JsonUtility.FromJson<MapData>(MapSource.text);
 
             if (GameMapData == null)
-                Debug.LogError("Game map JSON failed to decode.");
+            {
+                throw new InvalidDataException($"{MapSource.name} is not a valid TTT Map object.");
+            }
         }
 
         /// <summary>
@@ -136,8 +166,8 @@ namespace TTT.Hex
                 if (
                     (coords.q + padding) < 0
                     || (coords.r) < 0
-                    || (coords.q + padding) >= (GameMapData.Height + padding)
-                    || (coords.r) >= (GameMapData.Width)
+                    || (coords.q + padding) >= (GameMapData.Width + padding)
+                    || (coords.r) >= (GameMapData.Height)
                 )
                 {
                     return null;
@@ -160,7 +190,7 @@ namespace TTT.Hex
         }
 
         /// <summary>
-        /// Gets a HexCell from the HexCells array (takes care of adding paddings to indicies).
+        /// Gets a HexCell from the HexCells array (takes care of adding paddings to indices).
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
@@ -201,11 +231,16 @@ namespace TTT.Hex
         {
             if (hexMesh == null)
             {
-                Debug.LogError("Hex mesh is null");
-                return;
+                throw new NullReferenceException("A hex mesh is required to create the hex grid!");
+            }
+            if (GameMapData == null)
+            {
+                throw new NullReferenceException(
+                    "No Game Map Data was loaded when the map attempted to be built."
+                );
             }
 
-            LoadMapTilesData();
+            // LoadMapTilesData();
 
             padding =
                 ((GameMapData.Width & 1) == 0 ? GameMapData.Width / 2 : (GameMapData.Width + 1) / 2)
@@ -223,6 +258,9 @@ namespace TTT.Hex
             // Add HexCell prefabs according to mapdata
             foreach (var mapTileData in GameMapData.MapTilesData)
             {
+                if (mapTileData.Height < 0)
+                    mapTileData.Height = 0;
+
                 Vector3 hexCenter = HexMath.GetHexCenter(
                     HexSize,
                     mapTileData.Height + 1,
@@ -276,7 +314,7 @@ namespace TTT.Hex
 
             if (HexCell == null || HexCells == null)
             {
-                Debug.Log("Hex cell array reference lost");
+                Debug.LogWarning("Hex cell array reference lost");
                 return;
             }
 
@@ -354,6 +392,41 @@ namespace TTT.Hex
                 // 3. Tell ALL clients to update the new cell visually with the player's color.
                 UpdateCellVisualsClientRpc(newCell.CellPosition, playerColor);
             }
+        }
+
+        public HexCell GetSelectedCell()
+        {
+            ulong ownClientId = NetworkManager.Singleton.LocalClientId;
+            return playerSelections[ownClientId];
+        }
+
+        public void OnBuilding(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not FeatureType featureType)
+            {
+                return;
+            }
+
+            HexCell cell = GetSelectedCell();
+            if (cell == null)
+            {
+                Debug.LogWarning("Tried to build without a cell selected.");
+                return;
+            }
+
+            cell.BuildFeature(featureType);
+        }
+
+        public void OnDestroyingFeature(UnityEngine.Object eventArgs)
+        {
+            HexCell cell = GetSelectedCell();
+            if (cell == null)
+            {
+                Debug.LogWarning("Tried to destroy without a cell selected.");
+                return;
+            }
+
+            cell.DestroyFeature();
         }
     }
 }
