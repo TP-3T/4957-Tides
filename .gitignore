@@ -9,7 +9,11 @@
 UserSettings/
 
 # IDE stuff
+<<<<<<< HEAD
 .vs
+=======
+.vs/
+>>>>>>> core_flooding_optimizations
 .vscode/
 .idea/
 *.csproj

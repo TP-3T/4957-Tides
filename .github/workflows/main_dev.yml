@@ -1,0 +1,17 @@
+name: Validate Main & Dev
+
+on:
+  pull_request:
+    branches: [ main, dev, ]
+    paths: [ "**/*.cs" ] 
+jobs:
+  check_formatting:
+    runs-on: ubuntu-latest
+    name: Check Formatting
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with: 
+          dotnet-version: "9.0.x"
+      - run: dotnet tool restore 
+      - run: dotnet csharpier format .
