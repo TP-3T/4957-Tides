@@ -23,7 +23,9 @@ public class CameraController : MonoBehaviour
     const float MAX_ROTATION_SPEED = 0.25f;
     const float ROTATION_X = 0f;
     const float ROTATION_Z = 0f;
-    const float SCREEN_EDGE_TOLERANCE = 0.05f;
+    const float SCREEN_EDGE_TOLERANCE = 0.01f;
+    const float SCREEN_EDGE_MAX = 1f;
+    const float SCREEN_MIDPOINT_DIVISOR = 2f;
     const float MAGNITUDE_THRESHOLD = 0.001f;
     const float NO_VERTICAL_VELOCITY = 0f;
 
@@ -88,6 +90,8 @@ public class CameraController : MonoBehaviour
     private void Update()
     {
         GetKeyboardMovement();
+
+        CheckMouseAtScreenEdge();
 
         UpdateVelocity();
 
@@ -263,5 +267,43 @@ public class CameraController : MonoBehaviour
         );
 
         cameraTransform.LookAt(this.transform);
+    }
+
+    /// <summary>
+    /// Checks if the mouse is at the edge of the screen to pan the camera.
+    /// </summary>
+    private void CheckMouseAtScreenEdge()
+    {
+        if (useScreenEdge)
+        {
+            Vector2 mousePos;
+            Vector2 screenCenter;
+            Vector2 screenDelta;
+            Vector3 moveDirection;
+
+            mousePos = Mouse.current.position.ReadValue();
+
+            screenCenter = new Vector2(
+                Screen.width / SCREEN_MIDPOINT_DIVISOR,
+                Screen.height / SCREEN_MIDPOINT_DIVISOR
+            );
+
+            screenDelta = (mousePos - screenCenter) / screenCenter;
+
+            moveDirection = Vector3.zero;
+
+            if (
+                Mathf.Abs(screenDelta.x) > SCREEN_EDGE_MAX - SCREEN_EDGE_TOLERANCE
+                || Mathf.Abs(screenDelta.y) > SCREEN_EDGE_MAX - SCREEN_EDGE_TOLERANCE
+            )
+            {
+                moveDirection =
+                    GetCameraRight() * screenDelta.x + GetCameraForward() * screenDelta.y;
+
+                moveDirection.y = NO_VERTICAL_VELOCITY;
+
+                targetPosition += moveDirection.normalized;
+            }
+        }
     }
 }
