@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfe355f656467054a8ff105106e9592b, type: 3}
-  m_Name: SecondaryResource
+  m_Script: {fileID: 11500000, guid: a59c3713a35a7c94599e067a4a1e46eb, type: 3}
+  m_Name: Factory Production
   m_EditorClassIdentifier: 
-  resourceName: Population
-  amount: 20
+  resource: {fileID: 11400000, guid: 42591fb815568e648a61414ac28a6a77, type: 2}
+  resourceAmount: 100
