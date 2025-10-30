@@ -1,0 +1,2271 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &453654464728596225
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7851992429874535436}
+  - component: {fileID: 4211007542871296059}
+  - component: {fileID: 3605312312875501509}
+  - component: {fileID: 7507137789260644753}
+  - component: {fileID: 7696786427614617890}
+  m_Layer: 10
+  m_Name: HexGrid_FINAL_Super_Test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7851992429874535436
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453654464728596225}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 9105196101178237181}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4211007542871296059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453654464728596225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3395429091
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &3605312312875501509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453654464728596225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c92efbddcc54ab4681375c1de61a92a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  DrawGizmos: 0
+  DrawDebugLabels: 0
+  HexSize: 3
+  HexOrientation: 1
+  HexCell: {fileID: 3329167254614905112, guid: 9952da0958d8e9a458f96ec90e71c63a, type: 3}
+  MapSource: {fileID: 4900000, guid: c6a9af25535ba0f43b588e7289cf784a, type: 3}
+  GameMapData:
+    Name: Will Test
+    Width: 20
+    Height: 20
+    MapTilesData:
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 0
+        z: 0
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 1
+        z: 0
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 2
+        z: 0
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 3
+        z: 0
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 4
+        z: 0
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 5
+        z: 0
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 0
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 7
+        z: 0
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 8
+        z: 0
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 9
+        z: 0
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 10
+        z: 0
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 11
+        z: 0
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 12
+        z: 0
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 13
+        z: 0
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 14
+        z: 0
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 15
+        z: 0
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 16
+        z: 0
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 17
+        z: 0
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 18
+        z: 0
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 19
+        z: 0
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 0
+        z: 1
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 1
+        z: 1
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 2
+        z: 1
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 3
+        z: 1
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 4
+        z: 1
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 5
+        z: 1
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 6
+        z: 1
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 7
+        z: 1
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 8
+        z: 1
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 9
+        z: 1
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 10
+        z: 1
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 11
+        z: 1
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 12
+        z: 1
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 13
+        z: 1
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 14
+        z: 1
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 15
+        z: 1
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 16
+        z: 1
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 1
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 18
+        z: 1
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 19
+        z: 1
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 0
+        z: 2
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 1
+        z: 2
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 2
+        z: 2
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 3
+        z: 2
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 4
+        z: 2
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 5
+        z: 2
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 2
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 7
+        z: 2
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 8
+        z: 2
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 9
+        z: 2
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 10
+        z: 2
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 11
+        z: 2
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 12
+        z: 2
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 13
+        z: 2
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 14
+        z: 2
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 15
+        z: 2
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 16
+        z: 2
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 2
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 18
+        z: 2
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 19
+        z: 2
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 0
+        z: 3
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 1
+        z: 3
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 2
+        z: 3
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 3
+        z: 3
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 4
+        z: 3
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 3
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 6
+        z: 3
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 7
+        z: 3
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 8
+        z: 3
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 9
+        z: 3
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 10
+        z: 3
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 11
+        z: 3
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 12
+        z: 3
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 13
+        z: 3
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 14
+        z: 3
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 15
+        z: 3
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 16
+        z: 3
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 3
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 18
+        z: 3
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 19
+        z: 3
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 0
+        z: 4
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 1
+        z: 4
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 2
+        z: 4
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 3
+        z: 4
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 4
+        z: 4
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 5
+        z: 4
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 6
+        z: 4
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 7
+        z: 4
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 8
+        z: 4
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 9
+        z: 4
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 10
+        z: 4
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 11
+        z: 4
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 12
+        z: 4
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 13
+        z: 4
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 14
+        z: 4
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 15
+        z: 4
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 16
+        z: 4
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 4
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 18
+        z: 4
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 19
+        z: 4
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 0
+        z: 5
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 1
+        z: 5
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 2
+        z: 5
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 3
+        z: 5
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 4
+        z: 5
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 5
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 5
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 7
+        z: 5
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 8
+        z: 5
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 9
+        z: 5
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 10
+        z: 5
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 11
+        z: 5
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 12
+        z: 5
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 13
+        z: 5
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 14
+        z: 5
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 15
+        z: 5
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 16
+        z: 5
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 17
+        z: 5
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 18
+        z: 5
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 19
+        z: 5
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 0
+        z: 6
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 1
+        z: 6
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 2
+        z: 6
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 3
+        z: 6
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 4
+        z: 6
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 6
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 6
+        z: 6
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 7
+        z: 6
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 8
+        z: 6
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 9
+        z: 6
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 10
+        z: 6
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 11
+        z: 6
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 12
+        z: 6
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 13
+        z: 6
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 14
+        z: 6
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 15
+        z: 6
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 16
+        z: 6
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 6
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 18
+        z: 6
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 19
+        z: 6
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 0
+        z: 7
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 1
+        z: 7
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 2
+        z: 7
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 3
+        z: 7
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 4
+        z: 7
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 7
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 7
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 7
+        z: 7
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 8
+        z: 7
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 9
+        z: 7
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 10
+        z: 7
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 11
+        z: 7
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 12
+        z: 7
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 13
+        z: 7
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 14
+        z: 7
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 15
+        z: 7
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 16
+        z: 7
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 17
+        z: 7
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 18
+        z: 7
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 19
+        z: 7
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 0
+        z: 8
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 1
+        z: 8
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 2
+        z: 8
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 3
+        z: 8
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 4
+        z: 8
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 5
+        z: 8
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 6
+        z: 8
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 7
+        z: 8
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 8
+        z: 8
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 9
+        z: 8
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 10
+        z: 8
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 11
+        z: 8
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 12
+        z: 8
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 13
+        z: 8
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 14
+        z: 8
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 15
+        z: 8
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 16
+        z: 8
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 17
+        z: 8
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 18
+        z: 8
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 19
+        z: 8
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 0
+        z: 9
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 1
+        z: 9
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 2
+        z: 9
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 3
+        z: 9
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 4
+        z: 9
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 9
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 9
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 7
+        z: 9
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 8
+        z: 9
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 9
+        z: 9
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 10
+        z: 9
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 11
+        z: 9
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 12
+        z: 9
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 13
+        z: 9
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 14
+        z: 9
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 15
+        z: 9
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 16
+        z: 9
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 9
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 18
+        z: 9
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 19
+        z: 9
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 0
+        z: 10
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 1
+        z: 10
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 2
+        z: 10
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 3
+        z: 10
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 4
+        z: 10
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 10
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 10
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 7
+        z: 10
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 8
+        z: 10
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 9
+        z: 10
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 10
+        z: 10
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 11
+        z: 10
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 12
+        z: 10
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 13
+        z: 10
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 14
+        z: 10
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 15
+        z: 10
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 16
+        z: 10
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 10
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 18
+        z: 10
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 19
+        z: 10
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 0
+        z: 11
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 1
+        z: 11
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 2
+        z: 11
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 3
+        z: 11
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 4
+        z: 11
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 11
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 11
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 7
+        z: 11
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 8
+        z: 11
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 9
+        z: 11
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 10
+        z: 11
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 11
+        z: 11
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 12
+        z: 11
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 13
+        z: 11
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 14
+        z: 11
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 15
+        z: 11
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 16
+        z: 11
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 17
+        z: 11
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 18
+        z: 11
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 19
+        z: 11
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 0
+        z: 12
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 1
+        z: 12
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 2
+        z: 12
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 3
+        z: 12
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 4
+        z: 12
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 5
+        z: 12
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 6
+        z: 12
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 7
+        z: 12
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 8
+        z: 12
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 9
+        z: 12
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 10
+        z: 12
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 11
+        z: 12
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 12
+        z: 12
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 13
+        z: 12
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 14
+        z: 12
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 15
+        z: 12
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 16
+        z: 12
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 17
+        z: 12
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 18
+        z: 12
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 19
+        z: 12
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 0
+        z: 13
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 1
+        z: 13
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 2
+        z: 13
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 3
+        z: 13
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 4
+        z: 13
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 5
+        z: 13
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 6
+        z: 13
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 7
+        z: 13
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 8
+        z: 13
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 9
+        z: 13
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 10
+        z: 13
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 11
+        z: 13
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 12
+        z: 13
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 13
+        z: 13
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 14
+        z: 13
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 15
+        z: 13
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 16
+        z: 13
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 13
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 18
+        z: 13
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 19
+        z: 13
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 0
+        z: 14
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 1
+        z: 14
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 2
+        z: 14
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 3
+        z: 14
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 4
+        z: 14
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 5
+        z: 14
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 6
+        z: 14
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 7
+        z: 14
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 8
+        z: 14
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 9
+        z: 14
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 10
+        z: 14
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 11
+        z: 14
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 12
+        z: 14
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 13
+        z: 14
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 14
+        z: 14
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 15
+        z: 14
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 16
+        z: 14
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 14
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 18
+        z: 14
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 19
+        z: 14
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 0
+        z: 15
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 1
+        z: 15
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 2
+        z: 15
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 3
+        z: 15
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 4
+        z: 15
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 15
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 15
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 7
+        z: 15
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 8
+        z: 15
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 9
+        z: 15
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 10
+        z: 15
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 11
+        z: 15
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 12
+        z: 15
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 13
+        z: 15
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 14
+        z: 15
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 15
+        z: 15
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 16
+        z: 15
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 15
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 18
+        z: 15
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 19
+        z: 15
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 0
+        z: 16
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 1
+        z: 16
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 2
+        z: 16
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 3
+        z: 16
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 4
+        z: 16
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 16
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 16
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 7
+        z: 16
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 8
+        z: 16
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 9
+        z: 16
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 10
+        z: 16
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 11
+        z: 16
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 12
+        z: 16
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 13
+        z: 16
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 14
+        z: 16
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 15
+        z: 16
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 16
+        z: 16
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 17
+        z: 16
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 18
+        z: 16
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 19
+        z: 16
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 0
+        z: 17
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 1
+        z: 17
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 2
+        z: 17
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 3
+        z: 17
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 4
+        z: 17
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 17
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 17
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 7
+        z: 17
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 8
+        z: 17
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 9
+        z: 17
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 10
+        z: 17
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 11
+        z: 17
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 12
+        z: 17
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 13
+        z: 17
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 14
+        z: 17
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 15
+        z: 17
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 16
+        z: 17
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 17
+        z: 17
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 18
+        z: 17
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 19
+        z: 17
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 0
+        z: 18
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 1
+        z: 18
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 2
+        z: 18
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 3
+        z: 18
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 4
+        z: 18
+    - TileType: desert
+      Height: 1
+      OffsetCoordinates:
+        x: 5
+        z: 18
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 6
+        z: 18
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 7
+        z: 18
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 8
+        z: 18
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 9
+        z: 18
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 10
+        z: 18
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 11
+        z: 18
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 12
+        z: 18
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 13
+        z: 18
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 14
+        z: 18
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 15
+        z: 18
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 16
+        z: 18
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 17
+        z: 18
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 18
+        z: 18
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 19
+        z: 18
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 0
+        z: 19
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 1
+        z: 19
+    - TileType: coastal
+      Height: 2
+      OffsetCoordinates:
+        x: 2
+        z: 19
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 3
+        z: 19
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 4
+        z: 19
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 5
+        z: 19
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 6
+        z: 19
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 7
+        z: 19
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 8
+        z: 19
+    - TileType: coastal
+      Height: 1
+      OffsetCoordinates:
+        x: 9
+        z: 19
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 10
+        z: 19
+    - TileType: plains
+      Height: 1
+      OffsetCoordinates:
+        x: 11
+        z: 19
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 12
+        z: 19
+    - TileType: plains
+      Height: 2
+      OffsetCoordinates:
+        x: 13
+        z: 19
+    - TileType: plains
+      Height: 0
+      OffsetCoordinates:
+        x: 14
+        z: 19
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 15
+        z: 19
+    - TileType: desert
+      Height: 2
+      OffsetCoordinates:
+        x: 16
+        z: 19
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 17
+        z: 19
+    - TileType: coastal
+      Height: 0
+      OffsetCoordinates:
+        x: 18
+        z: 19
+    - TileType: desert
+      Height: 0
+      OffsetCoordinates:
+        x: 19
+        z: 19
+  AllowedTerrains: {fileID: 11400000, guid: d58def7f9d21b0740bf047b7637efa9e, type: 2}
+  MapLoadFinishEvent: {fileID: 0}
+--- !u!114 &7507137789260644753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453654464728596225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3605312312875501509}
+        m_TargetAssemblyTypeName: TTT.Hex.HexGrid, TTT.Hex
+        m_MethodName: OnBuilding
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7696786427614617890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453654464728596225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: be77d2d33c12b1b43b2c40d9edbddf12, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3605312312875501509}
+        m_TargetAssemblyTypeName: TTT.Hex.HexGrid, TTT.Hex
+        m_MethodName: OnDestroyingFeature
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1 &3666292482548705786
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9105196101178237181}
+  - component: {fileID: 7896338684391376259}
+  - component: {fileID: 8803814285420441090}
+  - component: {fileID: 7520062572655091524}
+  - component: {fileID: 6634640408878704053}
+  m_Layer: 10
+  m_Name: HexMesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9105196101178237181
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3666292482548705786}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7851992429874535436}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &7896338684391376259
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3666292482548705786}
+  m_Mesh: {fileID: 0}
+--- !u!23 &8803814285420441090
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3666292482548705786}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: -876546973899608171, guid: cb8704bda7dab4e428ab8aeb0b76f7cf, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7520062572655091524
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3666292482548705786}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!114 &6634640408878704053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3666292482548705786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab66731068b45f247804497278d9a542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1

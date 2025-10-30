@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32139e9fbaeab4542a4db02608190c21, type: 3}
-  m_Name: Click Event Args
+  m_Script: {fileID: 11500000, guid: 365eee90f5d7bf744a7cfb62c139b74d, type: 3}
+  m_Name: Destroying Feature
   m_EditorClassIdentifier: 
-  mousePos: {x: 0, y: 0, z: 0}
+  defaultEventArgs: {fileID: 0}
