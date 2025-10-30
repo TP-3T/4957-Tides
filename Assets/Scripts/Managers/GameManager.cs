@@ -28,6 +28,19 @@ namespace TTT.Managers
             NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
+        public void OnStartNetworkEvent(Object eventArgs)
+        {
+            StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
+            if (args.IsHost)
+            {
+                NetworkManager.Singleton.StartHost();
+            }
+            else
+            {
+                NetworkManager.Singleton.StartClient();
+            }
+        }
+
         private void ServerStartHandler()
         {
             StartCoroutine(LoadAssets());

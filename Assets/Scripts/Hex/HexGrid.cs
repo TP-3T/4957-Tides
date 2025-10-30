@@ -106,6 +106,7 @@ namespace TTT.Hex
                 Debug.LogException(e);
                 MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
             }
+            MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
         }
 
         // ClientRpc to tell all clients to apply the new color received from the server.
