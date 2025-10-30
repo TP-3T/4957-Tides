@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3591272192343325226}
   - component: {fileID: 5110416137415276475}
   - component: {fileID: 8144117092423426932}
+  - component: {fileID: 3017378431017416689}
   m_Layer: 0
   m_Name: Sea
   m_TagString: Untagged
@@ -123,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3824709295
+  GlobalObjectIdHash: 1106397320
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -148,7 +149,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ec5c36abba3e164b8630d15f39e7f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
   SeaLevel: 10
   RisingRate: 0
-  grid: {fileID: 2147203830767427816, guid: 8587b9b8bba1a2f42a61ce627622b416, type: 3}
+  Flooded: []
+  hexGrid: {fileID: 0}
+  hexMesh: {fileID: 0}
+--- !u!114 &3017378431017416689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 616871772464927452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8144117092423426932}
+        m_TargetAssemblyTypeName: Sea, TTT.Managers
+        m_MethodName: OnNewMapFinish
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

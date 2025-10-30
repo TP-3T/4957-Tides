@@ -54,9 +54,6 @@ namespace TTT.Hex
         [SerializeField]
         private TerrainDictionary AllowedTerrains;
 
-        [SerializeField]
-        private GameEvent MapLoadFinishEvent;
-
         void InitializeGrid()
         {
             if (hexMesh == null)
@@ -92,29 +89,19 @@ namespace TTT.Hex
             }
         }
 
-        public void OnNewMap(UnityEngine.Object eventArgs)
-        {
-            NewMapEventArgs args = eventArgs as NewMapEventArgs;
-            try
-            {
-                MapSource = args.DataFile;
-                LoadMapTilesData();
-                BuildAndCreateGrid();
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
-            }
-            MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
-        }
-
         // ClientRpc to tell all clients to apply the new color received from the server.
         [ClientRpc]
         private void ApplyColorToMeshClientRpc(Color colorToApply)
         {
             Debug.Log($"Applying new mesh color: {colorToApply}");
             ApplyColorToMesh(colorToApply);
+        }
+
+        public void BuildNewMap(TextAsset mapData)
+        {
+            MapSource = mapData;
+            LoadMapTilesData();
+            BuildAndCreateGrid();
         }
 
         void BuildAndCreateGrid()

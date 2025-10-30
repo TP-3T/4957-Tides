@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using TTT.DataClasses.HexData;
+using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Sea : GenericNetworkSingleton<Sea>
+public class Sea : MonoBehaviour
 {
     public float SeaLevel;
 
@@ -17,14 +18,15 @@ public class Sea : GenericNetworkSingleton<Sea>
     public Queue<HexCell> FloodQueue2;
     public List<HexCell> Flooded;
 
+    //? CB: Should the Sea be modifying the Map directly?
+    [SerializeField]
     private HexGrid hexGrid;
+
+    [SerializeField]
     private HexMesh hexMesh;
     private const int CellsPerFrame = 100;
 
-    /// <summary>
-    /// Unity build in method, gets once at the beginning.
-    /// </summary>
-    void Start()
+    void Awake()
     {
         this.RisingRate = 1.0f;
         this.SeaLevel = 0.0f;
@@ -33,14 +35,23 @@ public class Sea : GenericNetworkSingleton<Sea>
         this.FloodQueue = new();
         this.FloodQueue2 = new();
         this.Flooded = new();
-        this.hexGrid = FindFirstObjectByType<HexGrid>();
-        this.hexMesh = hexGrid.GetComponentInChildren<HexMesh>();
+    }
 
-        // Start flooding from the first cell
-        // FloodFill(hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
-        // StartRaiseSea();
+    /// <summary>
+    /// Unity build in method, gets once at the beginning.
+    /// </summary>
+    // void Start()
+    // {
+    //     ToFlood.Enqueue(this.hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
+    // }
 
-        ToFlood.Enqueue(this.hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
+    public void OnNewMapFinish(Object eventArgs)
+    {
+        NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
+        if (args.WasSuccessful)
+        {
+            ToFlood.Enqueue(this.hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
+        }
     }
 
     public void StartRaiseSea()
