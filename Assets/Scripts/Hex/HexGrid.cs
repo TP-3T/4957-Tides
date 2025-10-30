@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using TTT.DataClasses.HexData;
+using TTT.Features;
 using TTT.GameEvents;
 using TTT.Terrain;
 using Unity.Netcode;
@@ -389,6 +390,41 @@ namespace TTT.Hex
                 // 3. Tell ALL clients to update the new cell visually with the player's color.
                 UpdateCellVisualsClientRpc(newCell.CellPosition, playerColor);
             }
+        }
+
+        public HexCell GetSelectedCell()
+        {
+            ulong ownClientId = NetworkManager.Singleton.LocalClientId;
+            return playerSelections[ownClientId];
+        }
+
+        public void OnBuilding(Object eventArgs)
+        {
+            if (eventArgs is not FeatureType featureType)
+            {
+                return;
+            }
+
+            HexCell cell = GetSelectedCell();
+            if (cell == null)
+            {
+                Debug.LogWarning("Tried to build without a cell selected.");
+                return;
+            }
+
+            cell.BuildFeature(featureType);
+        }
+
+        public void OnDestroyingFeature(Object eventArgs)
+        {
+            HexCell cell = GetSelectedCell();
+            if (cell == null)
+            {
+                Debug.LogWarning("Tried to destroy without a cell selected.");
+                return;
+            }
+
+            cell.DestroyFeature();
         }
     }
 }

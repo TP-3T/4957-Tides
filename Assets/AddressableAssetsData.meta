@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/DataTypes.meta
+guid: 92eb9a3912595a74286d560b771af143
+========
 guid: e4d9a5d02f9109743b4f4e1d67d0be39
+>>>>>>>> core_integration_new_new:Assets/AddressableAssetsData.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
