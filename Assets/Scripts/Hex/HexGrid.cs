@@ -37,7 +37,7 @@ namespace TTT.Hex
         //! [CB] Do we need a reference to a single cell?
         public HexCell HexCell;
         public TextAsset MapSource;
-        public HexCell[,] HexCells;
+        public HexCell[,] HexCells{ get; set; };
         public MapData GameMapData;
 
         private HexMesh hexMesh;
