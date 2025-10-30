@@ -2,7 +2,7 @@ name: Validate Core
 
 on: 
   push:
-    branches: [ core, ]
+    branches: [ core, devops ]
     paths: [ "**/*.cs" ] 
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
         with:
           dotnet-version: "9.0.x"
       - run: dotnet tool restore
-      - run: dotnet csharpier format .
+      - run: dotnet csharpier format -h
 
   unity_runner:
     runs-on: ubuntu-latest

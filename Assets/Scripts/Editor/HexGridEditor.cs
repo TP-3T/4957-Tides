@@ -1,5 +1,5 @@
-using System.Runtime.ExceptionServices;
-using Hex;
+using TTT.DataClasses.HexData;
+using TTT.Hex;
 using UnityEditor;
 using UnityEngine;
 

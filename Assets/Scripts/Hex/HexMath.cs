@@ -1,33 +1,15 @@
-using System;
-using UnityEditor.ShaderGraph.Internal;
+using TTT.DataClasses.HexData;
 using UnityEngine;
 
-namespace Hex
+namespace TTT.Hex
 {
     public enum HexOrientation
     {
         flatTop,
-        pointyTop
+        pointyTop,
     }
 
-    [Serializable]
-    public struct OffsetCoordinates
-    {
-        public int x;
-        public int z;
-
-        public OffsetCoordinates(int x, int z)
-        {
-            this.x = x;
-            this.z = z;
-        }
-
-        public override string ToString()
-        {
-            return $"({x}, {z})";
-        }
-    }
-
+    //! CB: We don't actually use this anywhere. Should we get rid of it?
     public struct AxialCoordinates
     {
         public int q { get; private set; }
@@ -37,68 +19,6 @@ namespace Hex
         {
             this.q = q;
             this.r = r;
-        }
-    }
-
-    public struct CubeCoordinates
-    {
-        public int q { get; private set; }
-        public int r { get; private set; }
-        public int s { get; private set; }
-
-        public CubeCoordinates(int q, int r, int s)
-        {
-            this.q = q;
-            this.r = r;
-            this.s = s;
-        }
-
-        public CubeCoordinates(int q, int r)
-        {
-            this.q = q;
-            this.r = r;
-            this.s = (-q - r);
-        }
-
-        public override string ToString()
-        {
-            return $"({q}, {r}, {s})";
-        }
-
-        public static CubeCoordinates operator +(
-            CubeCoordinates one, CubeCoordinates two)
-        {
-            return new CubeCoordinates(
-                one.q + two.q,
-                one.r + two.r,
-                one.s + two.s
-            );
-        }
-    }
-
-    public struct CubeCoordinatesF
-    {
-        public float q { get; set; }
-        public float r { get; set; }
-        public float s { get; set; }
-
-        public CubeCoordinatesF(float q, float r, float s)
-        {
-            this.q = q;
-            this.r = r;
-            this.s = s;
-        }
-
-        public CubeCoordinatesF(float q, float r)
-        {
-            this.q = q;
-            this.r = r;
-            this.s = -q - r;
-        }
-
-        public override string ToString()
-        {
-            return $"({q}, {r}, {s})";
         }
     }
 
@@ -114,7 +34,11 @@ namespace Hex
             return hexSize * 0.866025404f;
         }
 
-        public static Vector3 GetHexCorner(float hexSize, int cornerIndex, HexOrientation orientation)
+        public static Vector3 GetHexCorner(
+            float hexSize,
+            int cornerIndex,
+            HexOrientation orientation
+        )
         {
             Vector3 corner;
             float angle = cornerIndex * 60f;
@@ -144,7 +68,7 @@ namespace Hex
         /// <summary>
         /// In the flat top orientation, the horizontal distance between adjacent hexagons centers is horiz = 3/4 * width = 3/2 * size. The vertical distance is vert = height = sqrt(3) * size = 2 * inradius.
         /// In the pointy top orientation, the horizontal distance between adjacent hexagon centers is horiz = width == sqrt(3) * size == 2 * inradius. The vertical distance is vert = 3/4 * height == 3/2 * size.
-        /// 
+        ///
         /// https://www.redblobgames.com/grids/hexagons/#basics
         /// </summary>
         /// <param name="hexSize"></param>
@@ -152,12 +76,18 @@ namespace Hex
         /// <param name="z"></param>
         /// <param name="orientation"></param>
         /// <returns></returns>
-        public static Vector3 GetHexCenter(float hexSize, int x, int y, int z, HexOrientation orientation)
+        public static Vector3 GetHexCenter(
+            float hexSize,
+            int x,
+            int y,
+            int z,
+            HexOrientation orientation
+        )
         {
             Vector3 point;
             if (orientation == HexOrientation.pointyTop)
             {
-                point.x = (x + z * 0.5f - z / 2) * (InnerRadius(hexSize) * 2f);     // Determine offset by even or odd row
+                point.x = (x + z * 0.5f - z / 2) * (InnerRadius(hexSize) * 2f); // Determine offset by even or odd row
                 point.y = y;
                 point.z = z * (OuterRadius(hexSize) * 1.5f);
             }
@@ -165,7 +95,7 @@ namespace Hex
             {
                 point.x = x * (OuterRadius(hexSize) * 1.5f);
                 point.y = y;
-                point.z = (z + x * 0.5f - x / 2) * (InnerRadius(hexSize) * 2f);     // Determine offset by even or odd row
+                point.z = (z + x * 0.5f - x / 2) * (InnerRadius(hexSize) * 2f); // Determine offset by even or odd row
             }
             return point;
         }
@@ -190,7 +120,12 @@ namespace Hex
         /// <param name="position"></param>
         /// <param name="hexOrientation"></param>
         /// <returns></returns>
-        public static Vector3 GetHexCenter(float hexSize, int height, OffsetCoordinates position, HexOrientation hexOrientation)
+        public static Vector3 GetHexCenter(
+            float hexSize,
+            int height,
+            OffsetCoordinates position,
+            HexOrientation hexOrientation
+        )
         {
             return GetHexCenter(hexSize, position.x, height, position.z, hexOrientation);
         }
@@ -234,9 +169,13 @@ namespace Hex
         /// <param name="position"></param>
         /// <param name="hexOrientation"></param>
         /// <returns></returns>
-        public static CubeCoordinates OddOffsetToCube(OffsetCoordinates position, HexOrientation hexOrientation)
+        public static CubeCoordinates OddOffsetToCube(
+            OffsetCoordinates position,
+            HexOrientation hexOrientation
+        )
         {
-            int q, r;
+            int q,
+                r;
 
             if (hexOrientation == HexOrientation.pointyTop)
             {
@@ -258,9 +197,13 @@ namespace Hex
         /// <param name="cubeCoordinates"></param>
         /// <param name=""></param>
         /// <returns></returns>
-        public static OffsetCoordinates CubeToOddOffset(CubeCoordinates cubeCoordinates, HexOrientation hexOrientation)
+        public static OffsetCoordinates CubeToOddOffset(
+            CubeCoordinates cubeCoordinates,
+            HexOrientation hexOrientation
+        )
         {
-            int x, z;
+            int x,
+                z;
 
             if (hexOrientation == HexOrientation.pointyTop)
             {
@@ -283,7 +226,11 @@ namespace Hex
         /// <param name="position"></param>
         /// <param name="hexOrientation"></param>
         /// <returns></returns>
-        public static CubeCoordinatesF PositionToCubeF(float hexSize, Vector3 position, HexOrientation hexOrientation)
+        public static CubeCoordinatesF PositionToCubeF(
+            float hexSize,
+            Vector3 position,
+            HexOrientation hexOrientation
+        )
         {
             if (hexOrientation == HexOrientation.pointyTop)
             {

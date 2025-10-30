@@ -1,7 +1,8 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Managers
+//TODO CB: We should delete this file. It's responsibilities will be handled by other managers.
+namespace TTT.Managers
 {
     public class GameInitializer : MonoBehaviour
     {
@@ -9,7 +10,7 @@ namespace Managers
         public NetworkObject SeaPrefab;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        void Awake()
         {
             NetworkManager.Singleton.OnServerStarted += SpawnGrid;
         }

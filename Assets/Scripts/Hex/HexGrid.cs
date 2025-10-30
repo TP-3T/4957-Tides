@@ -1,41 +1,61 @@
 using System;
 using System.Collections.Generic;
-using Terrain;
+using System.IO;
+using TTT.DataClasses.HexData;
+using TTT.Features;
+using TTT.GameEvents;
+using TTT.Terrain;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace Hex
-{       
+namespace TTT.Hex
+{
+    [RequireComponent(typeof(NetworkObject))]
     public class HexGrid : NetworkBehaviour
     {
-        public static readonly int GRID_LAYER_MASK = 1 << 10;
+        // Key: Player's Network Client ID Value: The HexCell the player has selected
+        private Dictionary<ulong, HexCell> playerSelections = new Dictionary<ulong, HexCell>();
 
-        private static readonly CubeCoordinates[] neighbourDirections = {
+        // Key: The HexCell object Value: The original Color of the cell (before ANY player selected it)
+        private Dictionary<HexCell, Color?> cellOriginalColors = new Dictionary<HexCell, Color?>();
+
+        // This so can detect collision with ray casts just to this object
+        public static readonly int GRID_LAYER_MASK = 1 << 10;
+        public LayerMask layerMask = GRID_LAYER_MASK;
+
+        private static readonly CubeCoordinates[] neighbourDirections =
+        {
             new CubeCoordinates(1, 0, -1),
             new CubeCoordinates(-1, 0, 1),
             new CubeCoordinates(0, 1, -1),
             new CubeCoordinates(0, -1, 1),
             new CubeCoordinates(1, -1, 0),
-            new CubeCoordinates(-1, 1, 0)
+            new CubeCoordinates(-1, 1, 0),
         };
 
         public bool DrawGizmos;
         public bool DrawDebugLabels;
         public float HexSize;
         public HexOrientation HexOrientation;
-        public HexCell HexCell;
-        public TextAsset MapSource;
+
+        //! [CB] Do we need a reference to a single cell?
+        [SerializeField]
+        private HexCell HexCell;
+
+        [SerializeField]
+        private TextAsset MapSource;
         public HexCell[,] HexCells;
         public MapData GameMapData;
 
+        [SerializeField]
         private HexMesh hexMesh;
         private int padding;
 
-
         [SerializeField]
         private TerrainDictionary AllowedTerrains;
+
+        [SerializeField]
+        private GameEvent MapLoadFinishEvent;
 
         void InitializeGrid()
         {
@@ -45,17 +65,21 @@ namespace Hex
                 Debug.LogError("HexMesh failed to retrieve component  from children.");
         }
 
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
+        // public override void OnNetworkSpawn()
+        // {
+        //     try
+        //     {
+        //         base.OnNetworkSpawn();
 
-            BuildandCreateGrid();
-        }
-        
-        public override void OnNetworkDespawn()
-        {
-            base.OnNetworkDespawn();
-        }
+        //         BuildAndCreateGrid();
+        //     }
+        //     catch { }
+        // }
+
+        // public override void OnNetworkDespawn()
+        // {
+        //     base.OnNetworkDespawn();
+        // }
 
         /// <summary>
         /// Applies the specified color to the HexMesh material on the local client.
@@ -68,6 +92,23 @@ namespace Hex
             }
         }
 
+        public void OnNewMap(UnityEngine.Object eventArgs)
+        {
+            NewMapEventArgs args = eventArgs as NewMapEventArgs;
+            try
+            {
+                MapSource = args.DataFile;
+                LoadMapTilesData();
+                BuildAndCreateGrid();
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
+            }
+            MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
+        }
+
         // ClientRpc to tell all clients to apply the new color received from the server.
         [ClientRpc]
         private void ApplyColorToMeshClientRpc(Color colorToApply)
@@ -76,8 +117,7 @@ namespace Hex
             ApplyColorToMesh(colorToApply);
         }
 
-
-        void BuildandCreateGrid()
+        void BuildAndCreateGrid()
         {
             InitializeGrid();
             ClearMap();
@@ -99,6 +139,10 @@ namespace Hex
 
             foreach (HexCell hexCell in HexCells)
             {
+                if (hexCell == null)
+                {
+                    continue;
+                }
                 Vector3[] hexCorners = HexMath.GetHexCorners(HexSize, HexOrientation);
                 for (int s = 0; s < hexCorners.Length; s++)
                 {
@@ -118,7 +162,9 @@ namespace Hex
             GameMapData = JsonUtility.FromJson<MapData>(MapSource.text);
 
             if (GameMapData == null)
-                Debug.LogError("Game map JSON failed to decode.");
+            {
+                throw new InvalidDataException($"{MapSource.name} is not a valid TTT Map object.");
+            }
         }
 
         /// <summary>
@@ -130,10 +176,12 @@ namespace Hex
         {
             if (HexOrientation == HexOrientation.pointyTop)
             {
-                if (    (coords.q + padding) < 0
-                    ||  (coords.r) < 0
-                    ||  (coords.q + padding) >= (GameMapData.Height + padding)
-                    ||  (coords.r) >= (GameMapData.Width))
+                if (
+                    (coords.q + padding) < 0
+                    || (coords.r) < 0
+                    || (coords.q + padding) >= (GameMapData.Width + padding)
+                    || (coords.r) >= (GameMapData.Height)
+                )
                 {
                     return null;
                 }
@@ -141,10 +189,12 @@ namespace Hex
             }
             else
             {
-                if (    (coords.r + padding) < 0
-                    ||  (coords.q) < 0
-                    ||  (coords.r + padding) >= (GameMapData.Height + padding)
-                    ||  (coords.q) >= (GameMapData.Width))
+                if (
+                    (coords.r + padding) < 0
+                    || (coords.q) < 0
+                    || (coords.r + padding) >= (GameMapData.Height + padding)
+                    || (coords.q) >= (GameMapData.Width)
+                )
                 {
                     return null;
                 }
@@ -153,17 +203,14 @@ namespace Hex
         }
 
         /// <summary>
-        /// Gets a HexCell from the HexCells array (takes care of adding paddings to indicies).
+        /// Gets a HexCell from the HexCells array (takes care of adding paddings to indices).
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
         public HexCell GetCellFromPosition(Vector3 position)
         {
-            CubeCoordinatesF hcf = HexMath.PositionToCubeF(
-                HexSize, position, HexOrientation);
+            CubeCoordinatesF hcf = HexMath.PositionToCubeF(HexSize, position, HexOrientation);
             CubeCoordinates hc = HexMath.RoundCube(hcf);
-
-            // Debug.Log(hc);
 
             return GetCellFromCubeCoordinates(hc);
         }
@@ -197,44 +244,54 @@ namespace Hex
         {
             if (hexMesh == null)
             {
-                Debug.LogError("Hex mesh is null");
-                return;
+                throw new NullReferenceException("A hex mesh is required to create the hex grid!");
+            }
+            if (GameMapData == null)
+            {
+                throw new NullReferenceException(
+                    "No Game Map Data was loaded when the map attempted to be built."
+                );
             }
 
-            LoadMapTilesData();
+            // LoadMapTilesData();
 
-            // Create the grid storage
-            // HexCells = new HexCell[GameMapData.Width * GameMapData.Height];
-
-            padding = ((GameMapData.Width & 1) == 0
-                ? GameMapData.Width / 2
-                : (GameMapData.Width + 1) / 2) - 1;
+            padding =
+                ((GameMapData.Width & 1) == 0 ? GameMapData.Width / 2 : (GameMapData.Width + 1) / 2)
+                - 1;
 
             if (HexOrientation == HexOrientation.pointyTop)
             {
-                HexCells = new HexCell[
-                    GameMapData.Height, GameMapData.Width + padding];
+                HexCells = new HexCell[GameMapData.Height, GameMapData.Width + padding];
             }
             else
             {
-                HexCells = new HexCell[
-                    GameMapData.Height + padding, GameMapData.Width];
+                HexCells = new HexCell[GameMapData.Height + padding, GameMapData.Width];
             }
-
-            // Debug.Log(padding);
-            // Debug.Log(HexCells);
 
             // Add HexCell prefabs according to mapdata
             foreach (var mapTileData in GameMapData.MapTilesData)
             {
+                if (mapTileData.Height < 0)
+                    mapTileData.Height = 0;
+
                 Vector3 hexCenter = HexMath.GetHexCenter(
-                    HexSize, mapTileData.Height + 1, mapTileData.OffsetCoordinates, HexOrientation);
+                    HexSize,
+                    mapTileData.Height + 1,
+                    mapTileData.OffsetCoordinates,
+                    HexOrientation
+                );
 
                 CubeCoordinates hexCubeCoordinates = HexMath.OddOffsetToCube(
-                    mapTileData.OffsetCoordinates, HexOrientation);
+                    mapTileData.OffsetCoordinates,
+                    HexOrientation
+                );
 
                 HexCell hexCell = Instantiate(
-                    HexCell, hexCenter, Quaternion.identity, this.transform);
+                    HexCell,
+                    hexCenter,
+                    Quaternion.identity,
+                    this.transform
+                );
 
                 hexCell.CellPosition = hexCenter;
                 hexCell.CellCubeCoordinates = hexCubeCoordinates;
@@ -243,33 +300,22 @@ namespace Hex
                 string terrainUid = mapTileData.TileType;
                 hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
 
-                // Debug.Log(@$"
-                // {hexCell.CellPosition}, The real position
-                // {hexCell.CellCubeCoordinates}, The cube position: q,r,s
-                // {hexCell.MapTileData.OffsetCoordinates}, Logical map position (col, row): x,z 
-
-                // HexCells[i++] = hexCell;
-
                 if (HexOrientation == HexOrientation.pointyTop)
                 {
-                    HexCells[
-                        hexCubeCoordinates.r, hexCubeCoordinates.q + padding] = hexCell;
+                    HexCells[hexCubeCoordinates.r, hexCubeCoordinates.q + padding] = hexCell;
                 }
                 else
                 {
-                    HexCells[
-                        hexCubeCoordinates.r + padding, hexCubeCoordinates.q] = hexCell;
+                    HexCells[hexCubeCoordinates.r + padding, hexCubeCoordinates.q] = hexCell;
                 }
             }
-
-            // Debug.Log(NewHexCells[2,3]);
 
             hexMesh.Triangulate(HexCells, HexSize, HexOrientation);
         }
 
         /// <summary>
         /// Destroys the hex cells and clears the mesh.
-        /// 
+        ///
         /// For development.
         /// </summary>
         public void ClearMap()
@@ -281,7 +327,7 @@ namespace Hex
 
             if (HexCell == null || HexCells == null)
             {
-                Debug.Log("Hex cell array reference lost");
+                Debug.LogWarning("Hex cell array reference lost");
                 return;
             }
 
@@ -297,46 +343,103 @@ namespace Hex
             }
         }
 
+        // --- HexGrid.cs: Replace existing ApplyColorToMeshClientRpc with this ---
+
         [ClientRpc]
-        private void ApplyColorToMeshClientRpc(
-            Vector3 playerClickPoint, Color playerColor, float desiredCellHeight)
+        private void UpdateCellVisualsClientRpc(Vector3 cellPosition, Color colorToApply)
         {
-            HexCell hc = GetCellFromPosition(playerClickPoint);
-            hc.CellColor = playerColor;
-            // hc.CellPosition.y = desiredCellHeight;
+            HexCell hc = GetCellFromPosition(cellPosition);
 
-            // Debug.Log(hc.CellColor);
-            // Debug.Log(hc);
+            // Apply the color dictated by the server.
+            hc.CellColor = colorToApply;
 
-            hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
+            // Force a re-render of this specific cell's mesh on the client.
+            if (hexMesh != null)
+            {
+                hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
+            }
         }
 
-        //Now accepts the playerColor passed from the PlayerController.
         [ServerRpc(RequireOwnership = false)]
         public void HandlePlayerClickServerRpc(
-            Vector3 playerClickPoint, Color playerColor, float desiredCellHeight)
+            Vector3 playerClickPoint,
+            Color playerColor,
+            float desiredCellHeight,
+            // This allows the server to automatically get the player's unique ID
+            ServerRpcParams rpcParams = default
+        )
         {
-            // Color nextColor;
-            // Color currentColor = this.meshColor.Value;
+            ulong clientId = rpcParams.Receive.SenderClientId;
+            HexCell newCell = GetCellFromPosition(playerClickPoint);
 
-            // if (currentColor == Color.red)
-            // {
-            //     nextColor = Color.blue;
-            // }
-            // else
-            // {
-            //     nextColor = Color.red;
-            // }
+            // Get the currently selected cell for THIS player.
+            playerSelections.TryGetValue(clientId, out HexCell currentlySelectedCell);
 
-            // The current logic changes the entire grid mesh color to the player's color.
+            // --- STEP 1: DESELECTION LOGIC (Revert the old selection) ---
+            if (currentlySelectedCell != null && currentlySelectedCell != newCell)
+            {
+                // 1. Get the original color to revert to.
+                cellOriginalColors.TryGetValue(currentlySelectedCell, out Color? originalColor);
+                Color colorToRevert = originalColor ?? currentlySelectedCell.TerrainType.Color;
 
-            HexCell hc = GetCellFromPosition(playerClickPoint);
-            hc.CellColor = playerColor;
+                // 2. Tell ALL clients to revert the old cell's color.
+                UpdateCellVisualsClientRpc(currentlySelectedCell.CellPosition, colorToRevert);
 
-            hexMesh.ReTriangulateCell(hc, HexSize, HexOrientation);
+                // 3. Remove the old selection state from the server's tracking.
+                playerSelections.Remove(clientId);
+                cellOriginalColors.Remove(currentlySelectedCell);
+            }
 
-            ApplyColorToMeshClientRpc(
-                playerClickPoint, playerColor, desiredCellHeight);
+            // --- STEP 2: SELECTION LOGIC (Highlight the new selection) ---
+
+            // Select the new cell only if it's different from the current selection.
+            if (currentlySelectedCell != newCell)
+            {
+                // 1. Store the new cell's ORIGINAL color before changing it.
+                Color originalColorToStore = newCell.CellColor ?? newCell.TerrainType.Color;
+
+                // 2. Update the selection state on the server.
+                playerSelections[clientId] = newCell;
+                cellOriginalColors[newCell] = originalColorToStore;
+
+                // 3. Tell ALL clients to update the new cell visually with the player's color.
+                UpdateCellVisualsClientRpc(newCell.CellPosition, playerColor);
+            }
+        }
+
+        public HexCell GetSelectedCell()
+        {
+            ulong ownClientId = NetworkManager.Singleton.LocalClientId;
+            return playerSelections[ownClientId];
+        }
+
+        public void OnBuilding(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not FeatureType featureType)
+            {
+                return;
+            }
+
+            HexCell cell = GetSelectedCell();
+            if (cell == null)
+            {
+                Debug.LogWarning("Tried to build without a cell selected.");
+                return;
+            }
+
+            cell.BuildFeature(featureType);
+        }
+
+        public void OnDestroyingFeature(UnityEngine.Object eventArgs)
+        {
+            HexCell cell = GetSelectedCell();
+            if (cell == null)
+            {
+                Debug.LogWarning("Tried to destroy without a cell selected.");
+                return;
+            }
+
+            cell.DestroyFeature();
         }
     }
 }

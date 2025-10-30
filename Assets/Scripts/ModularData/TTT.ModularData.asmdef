@@ -1,3 +1,14 @@
 {
-	"name": "TTT.ModularData"
+    "name": "TTT.ModularData",
+    "rootNamespace": "\"TTT.ModularData\"",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
