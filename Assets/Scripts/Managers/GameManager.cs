@@ -15,12 +15,12 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent newMapEvent;
 
-        private AssetReference SeaPrefab = new("P_Sea");
+        // private AssetReference SeaPrefab = new("P_Sea");
 
-        private AssetReference HexGrid = new("P_HexGrid");
+        // private AssetReference HexGrid = new("P_HexGrid");
 
-        private GameObject sea;
-        private GameObject hexGrid;
+        // private GameObject sea;
+        // private GameObject hexGrid;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
