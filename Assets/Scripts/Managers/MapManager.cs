@@ -16,6 +16,12 @@ public class MapManager : GenericSingleton<MapManager>
     [SerializeField]
     private GameEvent MapLoadFinishEvent;
 
+    void Start()
+    {
+        hexGrid = GetComponentInChildren<HexGrid>();
+        sea = GetComponentInChildren<Sea>();
+    }
+
     public void OnNewMap(UnityEngine.Object eventArgs)
     {
         Debug.Log("I am being raised.");
