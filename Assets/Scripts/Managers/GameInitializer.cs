@@ -17,10 +17,10 @@ namespace TTT.Managers
 
         private void SpawnGrid()
         {
-            NetworkObject gridInstance = Instantiate(HexGridPrefab);
-            NetworkObject seaInstance = Instantiate(SeaPrefab);
-            gridInstance.Spawn();
-            seaInstance.Spawn();
+            // NetworkObject gridInstance = Instantiate(HexGridPrefab);
+            // NetworkObject seaInstance = Instantiate(SeaPrefab);
+            // gridInstance.Spawn();
+            // seaInstance.Spawn();
         }
     }
 }

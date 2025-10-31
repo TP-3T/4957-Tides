@@ -39,31 +39,33 @@ namespace TTT.Managers
             {
                 NetworkManager.Singleton.StartClient();
             }
-        }
 
-        private void ServerStartHandler()
-        {
-            StartCoroutine(LoadAssets());
-        }
-
-        private IEnumerator LoadAssets()
-        {
-            yield return AssetLoader<GameObject>.Load(HexGrid, SpawnGrid);
-            yield return AssetLoader<GameObject>.Load(SeaPrefab, SpawnSea);
-        }
-
-        private void SpawnSea(GameObject obj)
-        {
-            sea = Instantiate(obj);
-            sea.GetComponent<NetworkObject>().Spawn();
-        }
-
-        private void SpawnGrid(GameObject obj)
-        {
-            hexGrid = Instantiate(obj);
-            hexGrid.GetComponent<NetworkObject>().Spawn();
             newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
         }
+
+        // private void ServerStartHandler()
+        // {
+        //     StartCoroutine(LoadAssets());
+        // }
+
+        // private IEnumerator LoadAssets()
+        // {
+        //     yield return AssetLoader<GameObject>.Load(HexGrid, SpawnGrid);
+        //     yield return AssetLoader<GameObject>.Load(SeaPrefab, SpawnSea);
+        // }
+
+        // private void SpawnSea(GameObject obj)
+        // {
+        //     sea = Instantiate(obj);
+        //     sea.GetComponent<NetworkObject>().Spawn();
+        // }
+
+        // private void SpawnGrid(GameObject obj)
+        // {
+        //     hexGrid = Instantiate(obj);
+        //     hexGrid.GetComponent<NetworkObject>().Spawn();
+        //     newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
+        // }
 
         public void OnNewMapFinish(Object eventArgs)
         {
