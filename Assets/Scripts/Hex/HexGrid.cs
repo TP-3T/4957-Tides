@@ -133,24 +133,24 @@ namespace TTT.Hex
             return neighbours;
         }
 
-        public void BuildMap(MapData md, HexCell[,] cells)
+        public void BuildMap(MapData md, out HexCell[,] cells)
         {
 
             Padding =
-                ((GameMapData.Width & 1) == 0 ? GameMapData.Width / 2 : (GameMapData.Width + 1) / 2)
+                ((md.Width & 1) == 0 ? md.Width / 2 : (md.Width + 1) / 2)
                 - 1;
 
             if (HexOrientation == HexOrientation.pointyTop)
             {
-                cells = new HexCell[GameMapData.Height, GameMapData.Width + Padding];
+                cells = new HexCell[md.Height, md.Width + Padding];
             }
             else
             {
-                cells = new HexCell[GameMapData.Height + Padding, GameMapData.Width];
+                cells = new HexCell[md.Height + Padding, md.Width];
             }
 
             // Add HexCell prefabs according to mapdata
-            foreach (MapTileData mapTileData in GameMapData.MapTilesData)
+            foreach (MapTileData mapTileData in md.MapTilesData)
             {
                 if (mapTileData.Height < 0)
                     mapTileData.Height = 0;

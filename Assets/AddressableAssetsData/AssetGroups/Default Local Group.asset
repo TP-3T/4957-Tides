@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a574734cbcc1411429593620b463cc3a
+    m_Address: P_HexMesh
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d93522c5347ca054986957a727d3e7dc
     m_Address: HexGrid_Super_Test
     m_ReadOnly: 0

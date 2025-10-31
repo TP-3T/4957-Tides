@@ -471,6 +471,26 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 2967250625
       objectReference: {fileID: 0}
+    - target: {fileID: 2768043981971016034, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1261579277
+      objectReference: {fileID: 0}
+    - target: {fileID: 2768043981971016034, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2768043981971016034, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 2967250625
+      objectReference: {fileID: 0}
+    - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      propertyPath: _jsonMap
+      value: 
+      objectReference: {fileID: 4900000, guid: 00efaab874b0b054089135eee112af66, type: 3}
+    - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      propertyPath: _jsonRef
+      value: 
+      objectReference: {fileID: 4900000, guid: 00efaab874b0b054089135eee112af66, type: 3}
     - target: {fileID: 7330801835676113482, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
       propertyPath: m_LocalPosition.x
       value: 509.78238
