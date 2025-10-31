@@ -91,7 +91,7 @@ namespace TTT.Hex
                 hexCell.CenterVertexIndex = triVertexStart;
 
                 vertices.Add(hexCell.CellPosition);
-                colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
+                colors.Add(hexCell.CellColor);
 
                 Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -99,7 +99,7 @@ namespace TTT.Hex
                 foreach (Vector3 corner in corners)
                 {
                     vertices.Add(hexCell.CellPosition + corner);
-                    colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
+                    colors.Add(hexCell.CellColor);
                 }
 
                 int sideTriVertexStart = vertices.Count;
@@ -113,7 +113,7 @@ namespace TTT.Hex
                     vertices.Add(
                         hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0)
                     );
-                    colors.Add(hexCell.CellColor ?? hexCell.TerrainType.Color);
+                    colors.Add(hexCell.CellColor);
                 }
 
                 // Populate triangle and color arrays
@@ -151,7 +151,7 @@ namespace TTT.Hex
             int count = hexCell.CenterVertexIndex; // c = counter, 😉
 
             cvertices[count] = hexCell.CellPosition;
-            ccolors[count++] = (hexCell.CellColor ?? hexCell.TerrainType.Color);
+            ccolors[count++] = (hexCell.CellColor);
 
             Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -159,7 +159,7 @@ namespace TTT.Hex
             foreach (Vector3 corner in corners)
             {
                 cvertices[count] = hexCell.CellPosition + corner;
-                ccolors[count++] = hexCell.CellColor ?? hexCell.TerrainType.Color;
+                ccolors[count++] = hexCell.CellColor;
             }
 
             // Vertices that will be used to draw the side faces
@@ -170,7 +170,7 @@ namespace TTT.Hex
 
                 cvertices[count] =
                     hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0);
-                ccolors[count++] = hexCell.CellColor ?? hexCell.TerrainType.Color;
+                ccolors[count++] = hexCell.CellColor;
             }
 
             mesh.SetVertices(cvertices);
@@ -195,7 +195,7 @@ namespace TTT.Hex
                 int count = c.CenterVertexIndex; // c = counter, 😉
 
                 cvertices[count] = c.CellPosition;
-                ccolors[count++] = (c.CellColor ?? c.TerrainType.Color);
+                ccolors[count++] = (c.CellColor);
 
                 Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
@@ -203,7 +203,7 @@ namespace TTT.Hex
                 foreach (Vector3 corner in corners)
                 {
                     cvertices[count] = c.CellPosition + corner;
-                    ccolors[count++] = c.CellColor ?? c.TerrainType.Color;
+                    ccolors[count++] = c.CellColor;
                 }
 
                 // Vertices that will be used to draw the side faces
@@ -214,7 +214,7 @@ namespace TTT.Hex
 
                     cvertices[count] =
                         c.CellPosition + corner - new Vector3(0, c.CellPosition.y, 0);
-                    ccolors[count++] = c.CellColor ?? c.TerrainType.Color;
+                    ccolors[count++] = c.CellColor;
                 }
             }
 

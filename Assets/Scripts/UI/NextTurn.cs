@@ -1,4 +1,5 @@
 using TTT.Hex;
+using TTT.GameEvents;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,9 @@ using UnityEngine.UI;
 /// </summary>
 public class NextTurn : MonoBehaviour
 {
+    [SerializeField]
+    private GameEvent _nextTurnEvent;
+
     private HexGrid hg;
     private Sea s;
 
@@ -23,6 +27,6 @@ public class NextTurn : MonoBehaviour
     /// </summary>
     public void OnClick()
     {
-        s.HandleNextTurnClickedServerRpc();
+        _nextTurnEvent.Raise();
     }
 }

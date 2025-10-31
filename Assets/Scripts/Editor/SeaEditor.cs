@@ -11,11 +11,11 @@ public class SeaEditor : Editor
     {
         DrawDefaultInspector();
 
-        Sea s = (Sea)target;
+        // Sea s = (Sea)target;
 
-        if (GUILayout.Button("Sea level rise"))
-        {
-            s.RaiseSea();
-        }
-    }
+        // if (GUILayout.Button("Sea level rise"))
+        // {
+        //     s.RaiseSea();
+        // }
+    } // THIS WILL BE FOR THE SEA MESH INSTANCE
 }

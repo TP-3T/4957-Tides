@@ -12,33 +12,33 @@ public class HexGridEditor : Editor
 
         HexGrid t = (HexGrid)target;
 
-        if (GUILayout.Button("Clear Map"))
-        {
-            t.ClearMap();
-        }
+        // if (GUILayout.Button("Clear Map"))
+        // {
+        //     t.ClearMap();
+        // }
 
-        if (GUILayout.Button("Build Map"))
-        {
-            t.BuildMap();
-        }
-    }
+        // if (GUILayout.Button("Build Map"))
+        // {
+        //     t.BuildMap();
+        // }
+    } // THIS WILL BE FOR THE MESH INSTANCE, CHANGGE
 
     void OnSceneGUI()
     {
         HexGrid t = (HexGrid)target;
 
-        if (!t.DrawDebugLabels)
-            return;
+        // if (!t.DrawDebugLabels)
+        //     return;
 
-        foreach (HexCell hexCell in t.HexCells)
-        {
-            if (hexCell == null)
-                continue;
+        // foreach (HexCell hexCell in t.HexCells)
+        // {
+        //     if (hexCell == null)
+        //         continue;
 
-            Handles.Label(
-                t.transform.position + hexCell.CellPosition,
-                $"{hexCell.CellCubeCoordinates}"
-            );
-        }
-    }
+        //     Handles.Label(
+        //         t.transform.position + hexCell.CellPosition,
+        //         $"{hexCell.CellCubeCoordinates}"
+        //     );
+        // }
+    } // THIS WILL BE FOR THE MESH INSTANCE, CHANGE
 }

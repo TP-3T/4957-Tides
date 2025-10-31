@@ -171,12 +171,11 @@ public class PlayerController : NetworkBehaviour
                 && Physics.Raycast(
                     mousePositionRay,
                     out RaycastHit hit,
-                    Mathf.Infinity,
-                    HexGrid.GRID_LAYER_MASK
-                )
+                    Mathf.Infinity
+                ) // Layer mask will actually be defined on the mesh class
             )
             {
-                hexGrid.HandlePlayerClickServerRpc(hit.point, PlayerColor.Value, DesiredCellHeight);
+                // Raise some event will deal with this later
             }
         }
     }

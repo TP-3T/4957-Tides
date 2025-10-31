@@ -7,7 +7,7 @@ using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Sea : MonoBehaviour
+public class Sea : NetworkBehaviour
 {
     public float SeaLevel;
 
@@ -24,13 +24,14 @@ public class Sea : MonoBehaviour
 
     [SerializeField]
     private HexMesh hexMesh;
+
     private const int CellsPerFrame = 100;
 
     void Awake()
     {
         this.RisingRate = 1.0f;
         this.SeaLevel = 0.0f;
-        this.transform.position = new Vector3(0, this.SeaLevel, 0);
+        // this.transform.position = new Vector3(0, this.SeaLevel, 0);
         this.ToFlood = new();
         this.FloodQueue = new();
         this.FloodQueue2 = new();
@@ -45,25 +46,30 @@ public class Sea : MonoBehaviour
     //     ToFlood.Enqueue(this.hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
     // }
 
-    public void OnNewMapFinish(Object eventArgs)
+    // public void OnNewMapFinish(Object eventArgs)
+    // {
+    //     NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
+    //     if (args.WasSuccessful)
+    //     {
+    //     }
+    // }
+
+    public void SeedSea(HexCell[,] cells, HexGrid hg)
     {
-        NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
-        if (args.WasSuccessful)
-        {
-            ToFlood.Enqueue(this.hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
-        }
+        // ToFlood.Enqueue(
+        //     this.hexGrid.GetCellFromCubeCoordinates(new CubeCoordinates(0, 0)));
     }
 
-    public void StartRaiseSea()
+    public void StartRaiseSea(HexCell[,] cells, HexGrid hg)
     {
         StopAllCoroutines();
-        StartCoroutine(RaiseSea());
+        StartCoroutine(RaiseSea(cells, hg));
     }
 
     /// <summary>
     /// Simulate rising on a per turn basis, not per frame.
     /// </summary>
-    public IEnumerator RaiseSea()
+    public IEnumerator RaiseSea(HexCell[,] cells, HexGrid hg)
     {
         this.SeaLevel += this.RisingRate;
 
@@ -109,7 +115,7 @@ public class Sea : MonoBehaviour
                 // hexMesh.ReTriangulateCell(
                 //    cell, hexGrid.HexSize, hexGrid.HexOrientation);
 
-                foreach (HexCell neighbor in hexGrid.GetCellNeighbours(cell))
+                foreach (HexCell neighbor in hg.GetCellNeighbours(cells, cell))
                 {
                     if (neighbor.IsFlooded())
                         continue;
@@ -124,21 +130,9 @@ public class Sea : MonoBehaviour
             }
 
             // --- 3. Retriangulate what has been flooded ---
-            hexMesh.ReTriangulateCells(Flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
+            // hexMesh.ReTriangulateCells(Flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
 
             yield return null;
         }
-    }
-
-    [ClientRpc]
-    public void HandleNextTurnClickedClientRpc()
-    {
-        StartRaiseSea();
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void HandleNextTurnClickedServerRpc()
-    {
-        HandleNextTurnClickedClientRpc();
     }
 }

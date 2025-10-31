@@ -29,5 +29,7 @@ namespace TTT.DataClasses.HexData
         {
             return new CubeCoordinates(one.q + two.q, one.r + two.r, one.s + two.s);
         }
+
+
     }
 }
