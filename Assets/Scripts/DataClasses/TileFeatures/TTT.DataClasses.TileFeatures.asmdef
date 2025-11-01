@@ -1,9 +1,9 @@
 {
-    "name": "TTT.DataClasses.HexData",
-    "rootNamespace": "TTT.DataClasses.HexData",
+    "name": "TTT.DataClasses.TileFeatures",
+    "rootNamespace": "TTT.DataClasses.TileFeatures",
     "references": [
-        "GUID:560ff959ba426d6449085b72011d1a21",
-        "GUID:b197b3fd4e861734c9d7ecd4e907be6d"
+        "GUID:b197b3fd4e861734c9d7ecd4e907be6d",
+        "GUID:de2ca83ec28bad84ea08b6c94aaa6e23"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

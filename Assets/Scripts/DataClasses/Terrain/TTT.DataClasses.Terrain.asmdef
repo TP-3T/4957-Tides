@@ -1,9 +1,8 @@
 {
-    "name": "TTT.DataClasses.HexData",
-    "rootNamespace": "TTT.DataClasses.HexData",
+    "name": "TTT.DataClasses.Terrain",
+    "rootNamespace": "TTT.DataClasses.Terrain",
     "references": [
-        "GUID:560ff959ba426d6449085b72011d1a21",
-        "GUID:b197b3fd4e861734c9d7ecd4e907be6d"
+        "GUID:80a120755bd37c14f8c7866f38551991"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using TTT.DataClasses.HexData;
-using TTT.Features;
+using TTT.DataClasses.TileFeatures;
+using TTT.DataClasses.Terrain;
 using TTT.GameEvents;
-using TTT.Terrain;
 using Unity.Netcode;
 using UnityEngine;
 

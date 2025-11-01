@@ -1,7 +1,7 @@
 using TTT.DataClasses.HexData;
-using TTT.Features;
-using TTT.Terrain;
 using UnityEngine;
+using TTT.DataClasses.TileFeatures;
+using TTT.DataClasses.Terrain;
 
 namespace TTT.DataClasses.HexData
 {
