@@ -22,7 +22,7 @@ namespace TTT.Features
 
         [Tooltip("List of resource producers for this feature.")]
         [SerializeField]
-        private List<BaseProducer> resourceProducers;
+        private List<ProducerBase> resourceProducers;
 
         [Tooltip("Terrains that this feature can be placed on.")]
         [SerializeField]
@@ -45,7 +45,7 @@ namespace TTT.Features
         /// <summary>
         /// List of resource producers for this feature.
         /// </summary>
-        public List<BaseProducer> ResourceProducers => resourceProducers;
+        public List<ProducerBase> ResourceProducers => resourceProducers;
 
         /// <summary>
         /// Terrains that this feature can be placed on.

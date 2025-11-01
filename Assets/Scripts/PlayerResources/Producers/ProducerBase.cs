@@ -5,7 +5,7 @@ namespace PlayerResources
     /// <summary>
     /// Base Resource Producer class to get boilerplate code out of the way.
     /// </summary>
-    public abstract class BaseProducer : ScriptableObject, IResourceProducer
+    public abstract class ProducerBase : ScriptableObject, IResourceProducer
     {
         [Tooltip("The resource being produced.")]
         [SerializeField]

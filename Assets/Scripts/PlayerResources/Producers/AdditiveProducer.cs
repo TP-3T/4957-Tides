@@ -9,7 +9,7 @@ namespace PlayerResources
         fileName = "AdditiveProducer",
         menuName = "Scriptable Objects/Player Resources/AdditiveProducer"
     )]
-    public class AdditiveProducer : BaseProducer
+    public class AdditiveProducer : ProducerBase
     {
         public override void OnTurnEnding()
         {

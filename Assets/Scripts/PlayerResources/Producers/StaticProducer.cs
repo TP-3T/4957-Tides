@@ -9,7 +9,7 @@ namespace PlayerResources
         fileName = "StaticProducer",
         menuName = "Scriptable Objects/Player Resources/StaticProducer"
     )]
-    public class StaticProducer : BaseProducer
+    public class StaticProducer : ProducerBase
     {
         public override void OnCreated()
         {
