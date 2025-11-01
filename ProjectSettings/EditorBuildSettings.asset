@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Testing/Core_Buildmode_Ro.unity
     guid: b85b9f7911c30a74389d2c2e5cd6165d
+  - enabled: 1
+    path: Assets/Scenes/Testing/Core Buildings Ro.unity
+    guid: a90c87e4ce573414189401739e11be32
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 2cc4e184f0d14234791219624c7af01c, type: 2}
   m_UseUCBPForAssetBundles: 0
