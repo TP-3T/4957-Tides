@@ -13,16 +13,18 @@ MonoBehaviour:
   m_Name: House
   m_EditorClassIdentifier: 
   Uid: house
-  pollutionEmission: 0
+  pollutionEmission: 10
   resourceProducers:
-  - productionSchedule: {fileID: 0}
+  - productionSchedule: {fileID: 11400000, guid: edef3b431516b8048a30517cd2383a7b, type: 2}
     resourceAmounts:
-    - resource: {fileID: 0}
-      amount: 0
-    - resource: {fileID: 0}
-      amount: 0
-  - productionSchedule: {fileID: 0}
-    resourceAmounts: []
+    - resource: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
+      amount: 4
+    - resource: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
+      amount: -2
+  - productionSchedule: {fileID: 11400000, guid: 17a0647e21e0cef458dc0b557a3a7cbe, type: 2}
+    resourceAmounts:
+    - resource: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
+      amount: -1
   allowedTerrains:
   - {fileID: 11400000, guid: a0bfe455dcde2f348b2a9a88f8d0cb0c, type: 2}
   - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}

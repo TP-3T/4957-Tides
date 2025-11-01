@@ -1,12 +1,12 @@
 ﻿<Solution>
   <Project Path="TTT.DataClasses.HexData.csproj" />
+  <Project Path="TTT.Managers.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="TTT.Hex.csproj" />
   <Project Path="TTT.GameEvents.csproj" />
   <Project Path="TTT.DataClasses.TileFeatures.csproj" />
   <Project Path="TTT.DataClasses.PlayerResources.csproj" />
-  <Project Path="TTT.Managers.csproj" />
   <Project Path="TTT.ModularData.csproj" />
   <Project Path="TTT.DataClasses.Terrain.csproj" />
   <Project Path="TTT.States.csproj" />

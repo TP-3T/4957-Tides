@@ -27,5 +27,34 @@ namespace TTT.DataClasses.PlayerResources
         /// The resources being produced and their amounts.
         /// </summary>
         public List<ResourceAmount> ResourceAmounts => resourceAmounts;
+
+        private void Produce(int multiplier)
+        {
+            foreach (var data in ResourceAmounts)
+            {
+                data.Resource.ApplyChange(data.Amount * multiplier);
+            }
+        }
+
+        /// <summary>
+        /// This should only be called once per producer.
+        /// </summary>
+        public void OnCreated() => Produce(productionSchedule.OnCreated);
+
+        public void OnTurnEnding() => Produce(productionSchedule.OnTurnEnding);
+
+        public void OnSeasonEnding() => Produce(productionSchedule.OnSeasonEnding);
+
+        public void OnYearEnding() => Produce(productionSchedule.OnYearEnding);
+
+        /// <summary>
+        /// This should only be called once per producer.
+        /// </summary>
+        public void OnSold() => Produce(productionSchedule.OnSold);
+
+        /// <summary>
+        /// This should only be called once per producer.
+        /// </summary>
+        public void OnDestroyed() => Produce(productionSchedule.OnDestroyed);
     }
 }

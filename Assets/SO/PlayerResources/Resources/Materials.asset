@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe355f656467054a8ff105106e9592b, type: 3}
   m_Name: Materials
   m_EditorClassIdentifier: 
-  resourceName: power
+  resourceName: materials
   amountOwned: 0
