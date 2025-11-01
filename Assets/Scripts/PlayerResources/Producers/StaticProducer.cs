@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PlayerResources
+namespace TTT.PlayerResources
 {
     /// <summary>
     /// Produces a resource once, on creation.

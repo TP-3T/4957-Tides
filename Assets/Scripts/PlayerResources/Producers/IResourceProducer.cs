@@ -1,4 +1,4 @@
-namespace PlayerResources
+namespace TTT.PlayerResources
 {
     /// <summary>
     /// Interface that defines methods for resource producers.

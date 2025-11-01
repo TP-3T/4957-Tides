@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PlayerResources
+namespace TTT.PlayerResources
 {
     /// <summary>
     /// Base Resource Producer class to get boilerplate code out of the way.

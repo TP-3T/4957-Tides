@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PlayerResources
+namespace TTT.PlayerResources
 {
     /// <summary>
     /// Represents a player resource, such as a material or population count.

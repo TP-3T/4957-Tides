@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using PlayerResources;
+using TTT.PlayerResources;
 using TTT.Terrain;
 using UnityEngine;
 
