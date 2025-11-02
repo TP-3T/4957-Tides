@@ -1,7 +1,6 @@
-using TTT.DataClasses.HexData;
-using UnityEngine;
-using TTT.DataClasses.TileFeatures;
 using TTT.DataClasses.Terrain;
+using TTT.DataClasses.TileFeatures;
+using UnityEngine;
 
 namespace TTT.DataClasses.HexData
 {
@@ -65,21 +64,20 @@ namespace TTT.DataClasses.HexData
                 return;
             }
 
-            Vector3 cellPos = CellPosition;
-            Vector3 featurePos = new(cellPos.x, cellPos.y, cellPos.z);
-
             FeatureType = featureType;
-            GameObject feature = Instantiate(featureType.Prefab);
-            InstantiatedFeature = feature;
+            InstantiateFeaturePrefab(featureType);
 
-            featurePos.y += 0.5f * feature.transform.localScale.y;
-            feature.transform.position = featurePos;
+            foreach (var producer in featureType.ResourceProducers)
+            {
+                producer.OnCreated();
+            }
         }
 
         /// <summary>
         /// Destroys the feature on this cell, if one exists.
         /// </summary>
-        public void DestroyFeature()
+        /// <param name="wasSold">If this feature is being destroyed due to being sold.</param>
+        public void DestroyFeature(bool wasSold)
         {
             if (FeatureType == null)
             {
@@ -88,6 +86,45 @@ namespace TTT.DataClasses.HexData
             }
 
             FeatureType = null;
+            RemoveFeaturePrefab();
+
+            if (wasSold)
+            {
+                foreach (var producer in FeatureType.ResourceProducers)
+                {
+                    producer.OnSold();
+                }
+            }
+            else
+            {
+                foreach (var producer in FeatureType.ResourceProducers)
+                {
+                    producer.OnSold();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Spawns the model prefab of the given feature type on this cell.
+        /// </summary>
+        /// <param name="featureType">The type of feature to instantiate from.</param>
+        private void InstantiateFeaturePrefab(FeatureType featureType)
+        {
+            Vector3 cellPos = CellPosition;
+            Vector3 featurePos = new(cellPos.x, cellPos.y, cellPos.z);
+
+            GameObject feature = Instantiate(featureType.Prefab);
+            InstantiatedFeature = feature;
+
+            featurePos.y += 0.5f * feature.transform.localScale.y;
+            feature.transform.position = featurePos;
+        }
+
+        /// <summary>
+        /// Removes the current model prefab from this cell.
+        /// </summary>
+        private void RemoveFeaturePrefab()
+        {
             Destroy(InstantiatedFeature);
             InstantiatedFeature = null;
         }

@@ -426,7 +426,7 @@ namespace TTT.Hex
                 return;
             }
 
-            cell.DestroyFeature();
+            cell.DestroyFeature(wasSold: false);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace TTT.DataClasses.PlayerResources
 
         [Tooltip("The resources to produce.")]
         [SerializeField]
-        private List<ResourceAmount> resourceAmounts;
+        private List<Amount<PlayerResource>> resourceAmounts;
 
         /// <summary>
         /// When and how the resources will be produced/spent.
@@ -26,13 +26,13 @@ namespace TTT.DataClasses.PlayerResources
         /// <summary>
         /// The resources being produced and their amounts.
         /// </summary>
-        public List<ResourceAmount> ResourceAmounts => resourceAmounts;
+        public List<Amount<PlayerResource>> ResourceAmounts => resourceAmounts;
 
         private void Produce(int multiplier)
         {
-            foreach (var data in ResourceAmounts)
+            foreach (var resource in ResourceAmounts)
             {
-                data.Resource.ApplyChange(data.Amount * multiplier);
+                resource.Thing.ApplyChange(resource.Count * multiplier);
             }
         }
 
