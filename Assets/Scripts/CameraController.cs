@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 /// - Rotation
 /// - Zoom
 /// - Panning
+/// - Dragging
 /// </summary>
 public class CameraController : MonoBehaviour
 {
@@ -33,11 +34,12 @@ public class CameraController : MonoBehaviour
     private CameraControlActions cameraActions;
     private InputAction movement;
     private float speed;
-    private bool useScreenEdge = true; // Toggle on and off
+    private readonly bool useScreenEdge = true; // Toggle on and off
     private float zoomHeight;
     private Vector3 horizontalVelocity;
     private Vector3 lastPosition;
     private Vector3 targetPosition;
+    private Vector3 startDrag;
 
     /// <summary>
     /// Initializes the camera controller.
@@ -92,6 +94,8 @@ public class CameraController : MonoBehaviour
         GetKeyboardMovement();
 
         CheckMouseAtScreenEdge();
+
+        DragCamera();
 
         UpdateVelocity();
 
@@ -203,7 +207,7 @@ public class CameraController : MonoBehaviour
     /// <param name="inputVal"></param>
     private void RotateCamera(InputAction.CallbackContext inputVal)
     {
-        if (!Mouse.current.middleButton.isPressed)
+        if (!Mouse.current.rightButton.isPressed)
         {
             return;
         }
@@ -303,6 +307,48 @@ public class CameraController : MonoBehaviour
                 moveDirection.y = NO_VERTICAL_VELOCITY;
 
                 targetPosition += moveDirection.normalized;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Drags the camera based on mouse input.
+    ///
+    /// The drag operation consists of three main steps:
+    /// 1. Start Drag: When the left mouse button is initially pressed,
+    ///   the world point under the mouse cursor is recorded as the starting point of the drag.
+    /// 2. Continuous Drag: While the left mouse button is held down, the current world point under the mouse cursor is calculated.
+    ///   The displacement vector from the starting point to the current point is computed.
+    ///   This displacement is then applied to the camera's position, moving the camera in the opposite direction of the mouse movement.
+    /// 3. End Drag: When the left mouse button is released, the drag operation ends, and the starting point is reset.
+    /// </summary>
+    private void DragCamera()
+    {
+        Ray ray;
+        Plane plane;
+
+        ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        plane = new Plane(Vector3.up, Vector3.zero);
+
+        if (plane.Raycast(ray, out float distance))
+        {
+            Vector3 hitPoint;
+
+            hitPoint = ray.GetPoint(distance);
+
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                startDrag = hitPoint;
+            }
+            else if (Mouse.current.leftButton.isPressed)
+            {
+                Vector3 dragDisplacement = startDrag - hitPoint;
+
+                transform.position += dragDisplacement;
+            }
+            else if (Mouse.current.leftButton.wasReleasedThisFrame)
+            {
+                startDrag = Vector3.zero;
             }
         }
     }
