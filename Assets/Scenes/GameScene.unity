@@ -539,6 +539,10 @@ PrefabInstance:
       propertyPath: _jsonRef
       value: 
       objectReference: {fileID: 4900000, guid: 00efaab874b0b054089135eee112af66, type: 3}
+    - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      propertyPath: _mapLoadFinishEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
     - target: {fileID: 7330801835676113482, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -30,7 +30,7 @@ public class MapManager : GenericSingleton<MapManager>
     private TextAsset _jsonMap;
 
     [SerializeField]
-    private GameEvent MapLoadFinishEvent;
+    private GameEvent _mapLoadFinishEvent;
 
     private HexGrid _hexGrid;
 
@@ -112,6 +112,7 @@ public class MapManager : GenericSingleton<MapManager>
                 {
                     CellCubeCoordinates = hexCubeCoordinates,
                     CellPosition = hexCenter,
+                    CellColor = Color.white
                 };
 
                 _hexCellNetwork.Add(hexCell);
@@ -125,15 +126,13 @@ public class MapManager : GenericSingleton<MapManager>
         catch (Exception e)
         {
             Debug.LogException(e);
-            MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
+            _mapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
         }
     }
 
     private IEnumerator SpawnMapObjects()
     {
         yield return AssetLoader<GameObject>.Load(_hexGridMeshAsset, SpawnGridMesh);
-
-        MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
     }
 
     private void SpawnGridMesh(GameObject hm)
@@ -146,8 +145,7 @@ public class MapManager : GenericSingleton<MapManager>
         hexMeshInstance.GetComponent<NetworkObject>().Spawn();
         _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
 
-        // Triangulate that bad boy
-        hexMeshInstance.Triangulate(_hexCellNetwork, HexGrid.HexSize, HexGrid.HexOrientation);
+        TriangulateMeshInstance();
     }
 
     // private void SpawnSea(SeaMesh sm)
@@ -159,19 +157,24 @@ public class MapManager : GenericSingleton<MapManager>
     //     inst.GetComponent<NetworkObject>().Spawn();
     // }
 
+    private void TriangulateMeshInstance()
+    {
+        NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
+        HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();       // Get the hex mesh in the scene
+
+        // How do I trangulate from this location?
+        hexMeshInstance.Triangulate(_hexCellNetwork, HexGrid.HexSize, HexGrid.HexOrientation);
+
+        _mapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
+    }
+
     public void OnClientConnect(ulong clientId)
     {
         Debug.Log($"Hello mr {clientId}");
 
         if (IsClient)
         {
-            // Need to get client instance of the mesh 
-
-            NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
-            HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();       // Get the hex mesh in the scene
-
-            // How do I trangulate from this location?
-            hexMeshInstance.Triangulate(_hexCellNetwork, HexGrid.HexSize, HexGrid.HexOrientation);
+            TriangulateMeshInstance();
         }
     }
 
