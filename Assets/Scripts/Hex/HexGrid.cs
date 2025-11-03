@@ -10,8 +10,12 @@ using UnityEngine;
 
 namespace TTT.Hex
 {
+<<<<<<< HEAD
     [RequireComponent(typeof(NetworkObject))]
     public class HexGrid : NetworkBehaviour
+=======
+    public class HexGrid
+>>>>>>> parent of c770534 (WO: Working for multiple players connecting to the same map!)
     {
         // Key: Player's Network Client ID Value: The HexCell the player has selected
         // private Dictionary<ulong, HexCell> playerSelections = new Dictionary<ulong, HexCell>();
@@ -50,8 +54,13 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="coords"></param>
         /// <returns></returns>
+<<<<<<< HEAD
         public HexCell? GetCellFromCubeCoordinates(
             CubeCoordinates coords)
+=======
+        public HexCell GetCellFromCubeCoordinates(
+            HexCell[,] cells, CubeCoordinates coords)
+>>>>>>> parent of c770534 (WO: Working for multiple players connecting to the same map!)
         {
             if (HexGrid.HexOrientation == HexOrientation.pointyTop)
             {
@@ -86,7 +95,12 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
+<<<<<<< HEAD
         public HexCell? GetCellFromPosition(Vector3 position)
+=======
+        public HexCell GetCellFromPosition(
+            HexCell[,] cells, Vector3 position)
+>>>>>>> parent of c770534 (WO: Working for multiple players connecting to the same map!)
         {
             CubeCoordinatesF hcf = HexMath.PositionToCubeF(HexSize, position, HexOrientation);
             CubeCoordinates hc = HexMath.RoundCube(hcf);
@@ -107,10 +121,14 @@ namespace TTT.Hex
             {
                 CubeCoordinates neighborPos = c.CellCubeCoordinates + dir;
 
+<<<<<<< HEAD
                 HexCell? n = GetCellFromCubeCoordinates(neighborPos);
+=======
+                HexCell n = GetCellFromCubeCoordinates(cells, neighborPos);
+>>>>>>> parent of c770534 (WO: Working for multiple players connecting to the same map!)
 
                 if (n != null)
-                    neighbours.Add((HexCell)n);
+                    neighbours.Add(n);
             }
 
             return neighbours;
@@ -124,7 +142,11 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="md"></param>
         /// <param name="cells"></param>
+<<<<<<< HEAD
         public void BuildMap(MapData md)
+=======
+        public void BuildMap(MapData md, out HexCell[,] cells)
+>>>>>>> parent of c770534 (WO: Working for multiple players connecting to the same map!)
         {
 
             Padding =

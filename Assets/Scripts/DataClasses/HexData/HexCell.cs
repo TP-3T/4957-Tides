@@ -1,37 +1,23 @@
-using System;
 using TTT.DataClasses.HexData;
 using TTT.Features;
 using TTT.Terrain;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace TTT.DataClasses.HexData
 {
-    public struct HexCell : INetworkSerializable, IEquatable<HexCell>
+    public class HexCell
     {
-        public CubeCoordinates CellCubeCoordinates;
-        public Vector3 CellPosition;
-        public Color CellColor;
-        public bool Flooded;
+        public CubeCoordinates CellCubeCoordinates { get; set; }
+        public Vector3 CellPosition { get; set; }
+        public MapTileData CellMapTileData { get; set; }
+        public Color CellColor { get; set; } = Color.white;
+        public bool flooded = false;
         public int CenterVertexIndex;
-
-        public HexCell(
-            CubeCoordinates cellCubeCoordinates,
-            Vector3 cellPosition,
-            Color? cellColor)
-        {
-            CellCubeCoordinates = cellCubeCoordinates;
-            CellPosition = cellPosition;
-            CellColor = cellColor ?? Color.white;
-
-            Flooded = false;
-            CenterVertexIndex = 0;
-        }
 
         /// <summary>
         /// The type of feature currently instantiated on this cell.
         /// </summary>
-        // public FeatureType FeatureType { get; set; }
+        public FeatureType FeatureType { get; set; }
 
         /// <summary>
         /// The model of the feature currently instantiated on this cell.
@@ -43,8 +29,8 @@ namespace TTT.DataClasses.HexData
         /// </summary>
         public void FloodCell()
         {
-            Flooded = true;
-            CellColor = Color.blue;
+            this.flooded = true;
+            this.CellColor = Color.blue;
         }
 
         /// <summary>
@@ -52,39 +38,16 @@ namespace TTT.DataClasses.HexData
         /// </summary>
         public bool IsFlooded()
         {
-            return Flooded;
+            return this.flooded;
         }
 
-        public void SetCenterVertex(int centerVertexIndex)
+        /// <summary>
+        /// Mainly for debugging.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
         {
-            CenterVertexIndex = centerVertexIndex;
-        }
-
-        // /// <summary>
-        // /// Mainly for debugging.
-        // /// </summary>
-        // /// <returns></returns>
-        // public override string ToString()
-        // {
-        //     return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor} }}";
-        // }
-
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            CellCubeCoordinates.NetworkSerialize(serializer);
-
-            serializer.SerializeValue(ref CellPosition);
-            serializer.SerializeValue(ref CellColor);
-            serializer.SerializeValue(ref Flooded);
-            serializer.SerializeValue(ref CenterVertexIndex);
-        }
-
-        public bool Equals(HexCell other)
-        {
-            return (other.CellColor == CellColor
-                && other.CellPosition == CellPosition
-                && other.CellCubeCoordinates == CellCubeCoordinates
-                && other.Flooded == Flooded);
+            return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor} }}";
         }
 
         // /// <summary>

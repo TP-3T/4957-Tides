@@ -1,15 +1,10 @@
-using UnityEngine;
-using Unity.Netcode;
-using System;
-
 namespace TTT.DataClasses.HexData
 {
-    public struct CubeCoordinates : INetworkSerializable
+    public struct CubeCoordinates
     {
-        public static CubeCoordinates zero = new CubeCoordinates(0,0,0);
-        public int q;
-        public int r;
-        public int s;
+        public int q { get; private set; }
+        public int r { get; private set; }
+        public int s { get; private set; }
 
         public CubeCoordinates(int q, int r, int s)
         {
@@ -35,25 +30,6 @@ namespace TTT.DataClasses.HexData
             return new CubeCoordinates(one.q + two.q, one.r + two.r, one.s + two.s);
         }
 
-        public static bool operator ==(CubeCoordinates one, CubeCoordinates two)
-        {
-            return (one.q == two.q
-                && one.r == two.r
-                && one.s == two.s);
-        }
-        
-        public static bool operator !=(CubeCoordinates one, CubeCoordinates two)
-        {
-            return (one.q != two.q
-                || one.r != two.r
-                || one.s != two.s);
-        }
 
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref q);
-            serializer.SerializeValue(ref r);
-            serializer.SerializeValue(ref s);
-        }
     }
 }
