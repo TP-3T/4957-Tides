@@ -32,6 +32,8 @@ namespace TTT.Hex
             new CubeCoordinates(-1, 1, 0),
         };
 
+        private static HexCell badCell;
+
         public static readonly float HexSize = 3.0f;
 
         public static readonly HexOrientation HexOrientation = HexOrientation.pointyTop;
@@ -40,39 +42,40 @@ namespace TTT.Hex
 
         public MapData GameMapData { get; set; }
 
-        /// <summary>
-        /// Retrieves a HexCell from the HexCells array given its cube coordinates.
-        /// </summary>
-        /// <param name="coords"></param>
-        /// <returns></returns>
-        public HexCell GetCellFromCubeCoordinates(
-            HexCell[,] cells, CubeCoordinates coords)
+        private HexCell[,] _hexCells;
+
+        public ref HexCell GetCellFromCubeCoordinates(
+            HexCell[,] cells, CubeCoordinates hc, out bool success)
         {
             if (HexGrid.HexOrientation == HexOrientation.pointyTop)
             {
                 if (
-                    (coords.q + Padding) < 0
-                    || (coords.r) < 0
-                    || (coords.q + Padding) >= (GameMapData.Width + Padding)
-                    || (coords.r) >= (GameMapData.Height)
+                    (hc.q + Padding) < 0
+                    || (hc.r) < 0
+                    || (hc.q + Padding) >= (GameMapData.Width + Padding)
+                    || (hc.r) >= (GameMapData.Height)
                 )
                 {
-                    return null;
+                    success = false;
+                    return ref HexGrid.badCell;
                 }
-                return cells[coords.r, coords.q + Padding];
+                success = true;
+                return ref cells[hc.r, hc.q + Padding];
             }
             else
             {
                 if (
-                    (coords.r + Padding) < 0
-                    || (coords.q) < 0
-                    || (coords.r + Padding) >= (GameMapData.Height + Padding)
-                    || (coords.q) >= (GameMapData.Width)
+                    (hc.r + Padding) < 0
+                    || (hc.q) < 0
+                    || (hc.r + Padding) >= (GameMapData.Height + Padding)
+                    || (hc.q) >= (GameMapData.Width)
                 )
                 {
-                    return null;
+                    success = false;
+                    return ref HexGrid.badCell;
                 }
-                return cells[coords.r + Padding, coords.q];
+                success = true;
+                return ref cells[hc.r + Padding, hc.q];
             }
         }
 
@@ -81,13 +84,13 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        public HexCell GetCellFromPosition(
-            HexCell[,] cells, Vector3 position)
+        public ref HexCell GetCellFromPosition(
+            HexCell[,] cells, Vector3 position, out bool success)
         {
             CubeCoordinatesF hcf = HexMath.PositionToCubeF(HexSize, position, HexOrientation);
             CubeCoordinates hc = HexMath.RoundCube(hcf);
 
-            return GetCellFromCubeCoordinates(cells, hc);
+            return ref GetCellFromCubeCoordinates(cells, hc, out success);
         }
 
         /// <summary>
@@ -102,11 +105,11 @@ namespace TTT.Hex
 
             foreach (CubeCoordinates dir in neighbourDirections)
             {
+                bool success;
                 CubeCoordinates neighborPos = c.CellCubeCoordinates + dir;
+                HexCell n = GetCellFromCubeCoordinates(cells, neighborPos, out success);
 
-                HexCell n = GetCellFromCubeCoordinates(cells, neighborPos);
-
-                if (n != null)
+                if (success)
                     neighbours.Add(n);
             }
 
@@ -121,65 +124,42 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="md"></param>
         /// <param name="cells"></param>
-        public void BuildMap(MapData md, out HexCell[,] cells)
+        public void BuildMap(NetworkList<HexCell> cells, int width, int height)
         {
+            // Padding =
+            //     ((width & 1) == 0 ? width / 2 : (height + 1) / 2)
+            //     - 1;
 
-            Padding =
-                ((md.Width & 1) == 0 ? md.Width / 2 : (md.Width + 1) / 2)
-                - 1;
+            // if (HexOrientation == HexOrientation.pointyTop)
+            // {
+            //     _hexCells = new HexCell[md.Height, md.Width + Padding];
+            // }
+            // else
+            // {
+            //     _hexCells = new HexCell[md.Height + Padding, md.Width];
+            // }
 
-            if (HexOrientation == HexOrientation.pointyTop)
-            {
-                cells = new HexCell[md.Height, md.Width + Padding];
-            }
-            else
-            {
-                cells = new HexCell[md.Height + Padding, md.Width];
-            }
+            // // Add HexCell prefabs according to mapdata
+            // foreach (MapTileData mapTileData in md.MapTilesData)
+            // {
+                
 
-            // Add HexCell prefabs according to mapdata
-            foreach (MapTileData mapTileData in md.MapTilesData)
-            {
-                if (mapTileData.Height < 0)
-                    mapTileData.Height = 0;
+            //     // string terrainUid = mapTileData.TileType;
+            //     // hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
 
-                Vector3 hexCenter = HexMath.GetHexCenter(
-                    HexSize,
-                    mapTileData.Height + 1,
-                    mapTileData.OffsetCoordinates,
-                    HexOrientation
-                ) + Vector3.zero;
+            //     if (HexOrientation == HexOrientation.pointyTop)
+            //     {
+            //         _hexCells[hexCubeCoordinates.r, hexCubeCoordinates.q + Padding] = hexCell;
+            //     }
+            //     else
+            //     {
+            //         _hexCells[hexCubeCoordinates.r + Padding, hexCubeCoordinates.q] = hexCell;
+            //     }
+            // }
 
-                CubeCoordinates hexCubeCoordinates = HexMath.OddOffsetToCube(
-                    mapTileData.OffsetCoordinates,
-                    HexOrientation
-                );
-
-                // HexCell hexCell = Instantiate(
-                //     HexCell,
-                //     hexCenter,
-                //     Quaternion.identity,
-                //     this.transform
-                // );
-
-                HexCell hexCell = new()
-                {
-                    CellCubeCoordinates = hexCubeCoordinates,
-                    CellPosition = hexCenter,
-                };
-
-                // string terrainUid = mapTileData.TileType;
-                // hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
-
-                if (HexOrientation == HexOrientation.pointyTop)
-                {
-                    cells[hexCubeCoordinates.r, hexCubeCoordinates.q + Padding] = hexCell;
-                }
-                else
-                {
-                    cells[hexCubeCoordinates.r + Padding, hexCubeCoordinates.q] = hexCell;
-                }
-            }
+            // This may prove useful at some point, I need to turn this pattern into something that applies
+            // to a flattened 1D array instead of a 2D array.
+            // I will think about this (WO)
         }
 
         // /// <summary>

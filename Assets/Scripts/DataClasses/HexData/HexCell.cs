@@ -1,23 +1,41 @@
+using System;
 using TTT.DataClasses.HexData;
 using TTT.Features;
 using TTT.Terrain;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace TTT.DataClasses.HexData
 {
-    public class HexCell
+    public struct HexCell : INetworkSerializable, IEquatable<HexCell>
     {
-        public CubeCoordinates CellCubeCoordinates { get; set; }
-        public Vector3 CellPosition { get; set; }
-        public MapTileData CellMapTileData { get; set; }
-        public Color CellColor { get; set; } = Color.white;
-        public bool flooded = false;
+        public CubeCoordinates CellCubeCoordinates;
+
+        public Vector3 CellPosition;
+
+        public Color CellColor;
+
         public int CenterVertexIndex;
+
+        public bool Flooded;
+
+        public HexCell(
+            CubeCoordinates cellCubeCoordinates,
+            Vector3 cellPosition,
+            Color cellColor)
+        {
+            CellCubeCoordinates = cellCubeCoordinates;
+            CellPosition        = cellPosition;
+            CellColor           = cellColor;
+
+            CenterVertexIndex = -1;     // To let everyone know that this is not set
+            Flooded = false;
+        }
 
         /// <summary>
         /// The type of feature currently instantiated on this cell.
         /// </summary>
-        public FeatureType FeatureType { get; set; }
+        // public FeatureType FeatureType { get; set; }
 
         /// <summary>
         /// The model of the feature currently instantiated on this cell.
@@ -29,8 +47,8 @@ namespace TTT.DataClasses.HexData
         /// </summary>
         public void FloodCell()
         {
-            this.flooded = true;
-            this.CellColor = Color.blue;
+            Flooded = true;
+            CellColor = Color.blue;
         }
 
         /// <summary>
@@ -38,7 +56,12 @@ namespace TTT.DataClasses.HexData
         /// </summary>
         public bool IsFlooded()
         {
-            return this.flooded;
+            return Flooded;
+        }
+
+        public void SetCenterVertex(int centerVertexIndex)
+        {
+            CenterVertexIndex = centerVertexIndex;
         }
 
         /// <summary>
@@ -48,6 +71,25 @@ namespace TTT.DataClasses.HexData
         public override string ToString()
         {
             return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor} }}";
+        }
+
+        public bool Equals(HexCell other)
+        {
+            return CellCubeCoordinates == other.CellCubeCoordinates
+                && CellPosition == other.CellPosition
+                && CellColor == other.CellColor
+                && CenterVertexIndex == other.CenterVertexIndex
+                && Flooded == other.Flooded;
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            CellCubeCoordinates.NetworkSerialize(serializer);
+
+            serializer.SerializeValue(ref CellPosition);
+            serializer.SerializeValue(ref CellColor);
+            serializer.SerializeValue(ref Flooded);
+            serializer.SerializeValue(ref CenterVertexIndex);
         }
 
         // /// <summary>

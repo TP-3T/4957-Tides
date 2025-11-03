@@ -40,6 +40,14 @@ public class MapManager : GenericSingleton<MapManager>
 
     private HexCell[,] _hexCells;
 
+    private NetworkList<HexCell> _hexCellNetwork = new();
+
+    private NetworkVariable<int> _hexGridWidth = new();
+
+    private NetworkVariable<int> _hexGridHeight = new();
+
+    private NetworkVariable<ulong> _hexMeshId = new();
+
     private const int CellsPerFrame = 100;
 
     public float SeaLevel;
@@ -82,7 +90,35 @@ public class MapManager : GenericSingleton<MapManager>
                 throw new Exception($"{args.DataFile.name} is not a valid TTT Map object.");
             }
 
-            _hexGrid.BuildMap(_gameMapData, out _hexCells);
+            // Initialize map tile state data (based)
+            foreach (MapTileData mapTileData in _gameMapData.MapTilesData)
+            {
+                if (mapTileData.Height < 0)
+                    mapTileData.Height = 0;
+
+                Vector3 hexCenter = HexMath.GetHexCenter(
+                    HexGrid.HexSize,
+                    mapTileData.Height + 1,
+                    mapTileData.OffsetCoordinates,
+                    HexGrid.HexOrientation
+                ) + Vector3.zero;
+
+                CubeCoordinates hexCubeCoordinates = HexMath.OddOffsetToCube(
+                    mapTileData.OffsetCoordinates,
+                    HexGrid.HexOrientation
+                );
+
+                HexCell hexCell = new()
+                {
+                    CellCubeCoordinates = hexCubeCoordinates,
+                    CellPosition = hexCenter,
+                };
+
+                _hexCellNetwork.Add(hexCell);
+            }
+
+            _hexGridWidth.Value     = _gameMapData.Width;
+            _hexGridHeight.Value    = _gameMapData.Height;
 
             StartCoroutine(SpawnMapObjects());
         }
@@ -91,17 +127,16 @@ public class MapManager : GenericSingleton<MapManager>
             Debug.LogException(e);
             MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
         }
-
     }
 
     private IEnumerator SpawnMapObjects()
     {
-        yield return AssetLoader<GameObject>.Load(_hexGridMeshAsset, SpawnGrid);
+        yield return AssetLoader<GameObject>.Load(_hexGridMeshAsset, SpawnGridMesh);
 
         MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
     }
 
-    private void SpawnGrid(GameObject hm)
+    private void SpawnGridMesh(GameObject hm)
     {
         // Get reference to HexMesh prefab
         GameObject hexMeshGameObject = Instantiate(hm);
@@ -109,9 +144,10 @@ public class MapManager : GenericSingleton<MapManager>
 
         // Instance HexMesh prefab based off of the build data
         hexMeshInstance.GetComponent<NetworkObject>().Spawn();
+        _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
 
         // Triangulate that bad boy
-        hexMeshInstance.Triangulate(_hexCells, HexGrid.HexSize, HexGrid.HexOrientation);
+        hexMeshInstance.Triangulate(_hexCellNetwork, HexGrid.HexSize, HexGrid.HexOrientation);
     }
 
     // private void SpawnSea(SeaMesh sm)
@@ -127,33 +163,16 @@ public class MapManager : GenericSingleton<MapManager>
     {
         Debug.Log($"Hello mr {clientId}");
 
-        // Need to get client instance of the mesh 
+        if (IsClient)
+        {
+            // Need to get client instance of the mesh 
 
-        HexMesh c_hexMesh = FindFirstObjectByType<HexMesh>();       // Get the hex mesh in the scene
+            NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
+            HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();       // Get the hex mesh in the scene
 
-        Debug.Log(c_hexMesh);
-
-        // How do I trangulate from this location?
-        c_hexMesh.Triangulate(_hexCells, HexGrid.HexSize, HexGrid.HexOrientation);
-    }
-
-    public void OnNextTurn(UnityEngine.Object eventArgs)
-    {
-        Debug.Log("The next turn event has been raised.");
-    }
-
-    [Rpc(SendTo.Everyone)]
-    public void TestRpc()
-    {
-        Debug.Log("This is a test.");
-    }
-
-    [Rpc(SendTo.Everyone)]
-    public void MapBuildRpc()
-    {
-        // Actual game data (based)
-
-        Debug.Log("The map has been built.");
+            // How do I trangulate from this location?
+            hexMeshInstance.Triangulate(_hexCellNetwork, HexGrid.HexSize, HexGrid.HexOrientation);
+        }
     }
 
     public void StartRaiseSea()
