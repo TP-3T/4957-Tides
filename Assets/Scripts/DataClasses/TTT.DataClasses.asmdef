@@ -1,9 +1,7 @@
 {
     "name": "TTT.DataClasses",
     "rootNamespace": "TTT.DataClasses",
-    "references": [
-        "Unity.Netcode.Runtime"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

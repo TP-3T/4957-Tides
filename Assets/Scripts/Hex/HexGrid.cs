@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace TTT.Hex
 {
-    public class HexGrid : NetworkBehaviour
+    public class HexGrid
     {
         // Key: Player's Network Client ID Value: The HexCell the player has selected
         // private Dictionary<ulong, HexCell> playerSelections = new Dictionary<ulong, HexCell>();
@@ -45,7 +45,7 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="coords"></param>
         /// <returns></returns>
-        public HexCell? GetCellFromCubeCoordinates(
+        public HexCell GetCellFromCubeCoordinates(
             HexCell[,] cells, CubeCoordinates coords)
         {
             if (HexGrid.HexOrientation == HexOrientation.pointyTop)
@@ -81,7 +81,7 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        public HexCell? GetCellFromPosition(
+        public HexCell GetCellFromPosition(
             HexCell[,] cells, Vector3 position)
         {
             CubeCoordinatesF hcf = HexMath.PositionToCubeF(HexSize, position, HexOrientation);
@@ -104,10 +104,10 @@ namespace TTT.Hex
             {
                 CubeCoordinates neighborPos = c.CellCubeCoordinates + dir;
 
-                HexCell? n = GetCellFromCubeCoordinates(cells, neighborPos);
+                HexCell n = GetCellFromCubeCoordinates(cells, neighborPos);
 
                 if (n != null)
-                    neighbours.Add((HexCell)n);
+                    neighbours.Add(n);
             }
 
             return neighbours;
@@ -121,7 +121,7 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="md"></param>
         /// <param name="cells"></param>
-        public void BuildMap(MapData md, out HexCell[,] cells, NetworkList<HexCell> ncells)
+        public void BuildMap(MapData md, out HexCell[,] cells)
         {
 
             Padding =
@@ -167,8 +167,6 @@ namespace TTT.Hex
                     CellCubeCoordinates = hexCubeCoordinates,
                     CellPosition = hexCenter,
                 };
-
-                ncells.Add(hexCell);
 
                 // string terrainUid = mapTileData.TileType;
                 // hexCell.TerrainType = AllowedTerrains.Get(terrainUid);

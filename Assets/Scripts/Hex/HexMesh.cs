@@ -83,16 +83,18 @@ namespace TTT.Hex
             triangles.Add(triVertexStart + i + 1);
         }
 
-        public void Triangulate(NetworkList<HexCell> hexCells, float hexSize, HexOrientation hexOrientation)
+        public void Triangulate(HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
         {
             ClearMesh();
 
             foreach (HexCell hexCell in hexCells)
             {
+                if (hexCell is null)
+                    continue;
 
                 bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
                 int triVertexStart = vertices.Count;
-                hexCell.SetCenterVertex(triVertexStart);
+                hexCell.CenterVertexIndex = triVertexStart;
 
                 vertices.Add(hexCell.CellPosition);
                 colors.Add(hexCell.CellColor);
@@ -149,7 +151,7 @@ namespace TTT.Hex
         /// <param name="hexCell"></param>
         /// <param name="hexSize"></param>
         /// <param name="hexOrientation"></param>
-        public void ReTriangulateCell(ref HexCell hexCell, float hexSize, HexOrientation hexOrientation)
+        public void ReTriangulateCell(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
         {
             bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
             int count = hexCell.CenterVertexIndex; // c = counter, 😉
