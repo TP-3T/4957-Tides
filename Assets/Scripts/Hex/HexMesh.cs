@@ -91,15 +91,9 @@ namespace TTT.Hex
 
             foreach (HexCell hexCell in hexCells)
             {
-<<<<<<< HEAD
-=======
-                if (hexCell is null)
-                    continue;
-
->>>>>>> parent of c770534 (WO: Working for multiple players connecting to the same map!)
                 bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
                 int triVertexStart = vertices.Count;
-                hexCell.CenterVertexIndex = triVertexStart;
+                hexCell.SetCenterVertex(triVertexStart);
 
                 vertices.Add(hexCell.CellPosition);
                 colors.Add(hexCell.CellColor);
@@ -156,7 +150,7 @@ namespace TTT.Hex
         /// <param name="hexCell"></param>
         /// <param name="hexSize"></param>
         /// <param name="hexOrientation"></param>
-        public void ReTriangulateCell(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
+        public void ReTriangulateCell(ref HexCell hexCell, float hexSize, HexOrientation hexOrientation)
         {
             bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
             int count = hexCell.CenterVertexIndex; // c = counter, 😉
