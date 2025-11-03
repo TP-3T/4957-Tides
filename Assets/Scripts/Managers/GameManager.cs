@@ -32,8 +32,8 @@ namespace TTT.Managers
             {
                 Debug.Log("I am being spawned as a host");
                 NetworkManager.Singleton.StartHost();
-
-                newMapEvent.Raise(new NewMapEventArgs() {
+                newMapEvent.Raise(new NewMapEventArgs
+                {
                     DataFile = LevelFile
                 });
             }

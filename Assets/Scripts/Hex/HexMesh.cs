@@ -83,13 +83,14 @@ namespace TTT.Hex
             triangles.Add(triVertexStart + i + 1);
         }
 
-        public void Triangulate(NetworkList<HexCell> hexCells, float hexSize, HexOrientation hexOrientation)
+        public void Triangulate(HexCell[,] hexCells, float hexSize, HexOrientation hexOrientation)
         {
             ClearMesh();
 
+            Debug.Log(hexCells);
+
             foreach (HexCell hexCell in hexCells)
             {
-
                 bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
                 int triVertexStart = vertices.Count;
                 hexCell.SetCenterVertex(triVertexStart);

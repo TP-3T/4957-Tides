@@ -29,9 +29,6 @@ public class MapManager : GenericSingleton<MapManager>
     private AssetReference _seaMeshAsset = new("P_SeaMesh");
 
     [SerializeField]
-    private TextAsset _jsonMap;
-
-    [SerializeField]
     private GameEvent MapLoadFinishEvent;
 
     private HexGrid _hexGrid;
@@ -76,62 +73,32 @@ public class MapManager : GenericSingleton<MapManager>
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
     }
 
-    public void LoadGameAssets(UnityEngine.Object eventArgs)
-    {
-        NewMapEventArgs args = eventArgs as NewMapEventArgs;
-
-        if (IsServer)
-        {
-            try
-            {
-                // Deserialized data (cringe)
-                _gameMapData = JsonUtility.FromJson<MapData>(args.DataFile.text);
-
-                if (_gameMapData == null)
-                {
-                    throw new Exception($"{args.DataFile.name} is not a valid TTT Map object.");
-                }
-
-                StartCoroutine(SpawnMapObjects());
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
-            }
-        }
-    }
-
     public void OnNewMap(UnityEngine.Object eventArgs)
     {
+        Debug.Log("This event was raised");
+
         NewMapEventArgs args = eventArgs as NewMapEventArgs;
-
-        if (IsServer)
+        try
         {
-            try
-            {
-                // Deserialized data (cringe)
-                _gameMapData = JsonUtility.FromJson<MapData>(args.DataFile.text);
+            // Deserialized data (cringe)
+            _gameMapData = JsonUtility.FromJson<MapData>(args.DataFile.text);
 
-                if (_gameMapData == null)
-                {
-                    throw new Exception($"{args.DataFile.name} is not a valid TTT Map object.");
-                }
-
-                StartCoroutine(SpawnMapObjects());
-            }
-            catch (Exception e)
+            if (_gameMapData == null)
             {
-                Debug.LogException(e);
-                MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
+                throw new Exception($"{args.DataFile.name} is not a valid TTT Map object.");
             }
+
+            StartCoroutine(SpawnMapObjects());
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+            MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
         }
     }
 
-    public void OnClientConnect(ulong clientId)
+    private void TellMeshToTriangulate()
     {
-        Debug.Log($"Hello mr {clientId}");
-
         // How do I trangulate from this location?
         NetworkObject hexMeshInstance = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
         NetworkObject hexGridInstance = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexGridId.Value];
@@ -139,7 +106,28 @@ public class MapManager : GenericSingleton<MapManager>
         HexGrid hexGrid = hexGridInstance.GetComponent<HexGrid>();
         HexMesh hexMesh = hexMeshInstance.GetComponent<HexMesh>();
 
-        // hexMesh.Triangulate(_hexCellsNetwork, HexGrid.HexSize, HexGrid.HexOrientation);
+        Debug.Log(hexGrid);
+        Debug.Log(hexGrid.HexCells);
+
+        hexMesh.Triangulate(hexGrid.HexCells, HexGrid.HexSize, HexGrid.HexOrientation);
+    }
+
+    public void OnMapFinishedLoading(UnityEngine.Object eventArgs)
+    {
+        NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
+
+        Debug.Log("This does get called?");
+
+        TellMeshToTriangulate();
+    }
+
+    public void OnClientConnect(ulong clientId)
+    {
+        Debug.Log($"Hello mr {clientId}");
+
+        // Can't do this for the server as assets are not necessarily finished loading yet
+        // Likely there is a better way to do this
+        TellMeshToTriangulate();
     }
 
     public void OnNextTurn(UnityEngine.Object eventArgs)
@@ -153,6 +141,7 @@ public class MapManager : GenericSingleton<MapManager>
         HexGrid hexGrid = hexGridGameObject.GetComponent<HexGrid>();
 
         hexGrid.GetComponent<NetworkObject>().Spawn();
+        hexGrid.BuildMap(_gameMapData);
 
         Debug.Log($"HEX GRID ID {hexGrid.NetworkObjectId}");
 

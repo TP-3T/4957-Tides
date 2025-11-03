@@ -6,15 +6,15 @@ public class NetworkButton : MonoBehaviour
 {
     public GameEvent startEvent;
 
-    public void OnStartServer()
+    public void OnStartHost()
     {
-        Debug.Log("I am being clicked");
+        Debug.Log("I am being clicked HOST");
         startEvent.Raise(new StartNetworkEventArgs() { IsHost = true });
     }
 
     public void OnStartClient()
     {
-        Debug.Log("I am being clicked");
+        Debug.Log("I am being clicked CLIENT");
         startEvent.Raise(new StartNetworkEventArgs() { IsHost = false });
     }
 
