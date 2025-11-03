@@ -11,8 +11,6 @@ namespace TTT.DataClasses.HexData
         public Vector3 CellPosition { get; set; }
         public MapTileData CellMapTileData { get; set; }
         public Color CellColor { get; set; } = Color.white;
-
-        [SerializeField]
         public bool flooded = false;
         public int CenterVertexIndex;
 

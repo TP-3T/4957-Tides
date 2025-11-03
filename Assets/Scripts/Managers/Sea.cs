@@ -7,6 +7,9 @@ using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 
+// WO: Probably can delete this class
+// We will write a seperate class (perchance) to manage the mesh for the sea
+
 public class Sea : NetworkBehaviour
 {
 
@@ -20,7 +23,6 @@ public class Sea : NetworkBehaviour
     [SerializeField]
     private HexMesh hexMesh;
 
-    private const int CellsPerFrame = 100;
 
     void Awake()
     {

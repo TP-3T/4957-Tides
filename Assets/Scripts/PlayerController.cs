@@ -67,7 +67,7 @@ public class PlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
-            hexGrid = FindFirstObjectByType<HexGrid>();
+            // hexGrid = FindFirstObjectByType<HexGrid>();
             if (hexGrid == null)
             {
                 Debug.Log("HexGrid not found yet. Subscribing to OnClientConnectedCallback.");
@@ -107,7 +107,7 @@ public class PlayerController : NetworkBehaviour
 
             // Search the scene again now that the server's spawn message (for the HexGrid)
             // has had time to process.
-            hexGrid = FindFirstObjectByType<HexGrid>();
+            // hexGrid = FindFirstObjectByType<HexGrid>();
         }
     }
 

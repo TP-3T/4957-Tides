@@ -10,6 +10,11 @@ using System.Collections;
 using TTT.Managers;
 using System.Collections.Generic;
 
+// WO Notes regarding networking
+// Basically we will need to tell the clients how to update their grid and sea meshes
+// based off the game state data, that game state data will live in thie object on the server / host
+// and be synchronised across all of the clients
+
 public class MapManager : GenericSingleton<MapManager>
 {
     /**
@@ -17,25 +22,20 @@ public class MapManager : GenericSingleton<MapManager>
     Serialize fields for the SeaMesh, instances that are requried for each client
     */
 
-    [SerializeField]
     private AssetReference _hexGridMeshAsset = new("P_HexMesh");
 
-    [SerializeField]
     private AssetReference _seaMeshAsset = new("P_SeaMesh");
 
     [SerializeField]
     private TextAsset _jsonMap;
 
     [SerializeField]
-    private HexGrid _hexGrid;
-
-    [SerializeField]
     private GameEvent MapLoadFinishEvent;
 
-    [SerializeField]
-    private Sea _sea;
+    private HexGrid _hexGrid;
 
-    [SerializeField]
+    private Sea _sea;                           // Something that will be relevant in the future
+
     private MapData _gameMapData;
 
     private HexCell[,] _hexCells;
@@ -56,12 +56,14 @@ public class MapManager : GenericSingleton<MapManager>
 
     public override void OnNetworkSpawn()
     {
-        this.RisingRate = 1.0f;
-        this.SeaLevel = 0.0f;
-        this.ToFlood = new();
-        this.FloodQueue = new();
-        this.FloodQueue2 = new();
-        this.Flooded = new();
+        RisingRate = 1.0f;
+        SeaLevel = 0.0f;
+        ToFlood = new();
+        FloodQueue = new();
+        FloodQueue2 = new();
+        Flooded = new();
+
+        _hexGrid = new();
 
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
     }
@@ -72,9 +74,6 @@ public class MapManager : GenericSingleton<MapManager>
 
         try
         {
-            _hexGrid = GetComponentInChildren<HexGrid>();
-            _sea = GetComponentInChildren<Sea>();
-
             // Deserialized data (cringe)
             _gameMapData = JsonUtility.FromJson<MapData>(args.DataFile.text);
 
@@ -84,9 +83,6 @@ public class MapManager : GenericSingleton<MapManager>
             }
 
             _hexGrid.BuildMap(_gameMapData, out _hexCells);
-
-            // MapBuildRpc();
-            // MapMeshBuildRpc();      // On connect of any client
 
             StartCoroutine(SpawnMapObjects());
         }
@@ -108,8 +104,8 @@ public class MapManager : GenericSingleton<MapManager>
     private void SpawnGrid(GameObject hm)
     {
         // Get reference to HexMesh prefab
-        GameObject hexMeshGameObject    = Instantiate(hm);
-        HexMesh    hexMeshInstance      = hexMeshGameObject.GetComponent<HexMesh>();
+        GameObject hexMeshGameObject = Instantiate(hm);
+        HexMesh hexMeshInstance = hexMeshGameObject.GetComponent<HexMesh>();
 
         // Instance HexMesh prefab based off of the build data
         hexMeshInstance.GetComponent<NetworkObject>().Spawn();

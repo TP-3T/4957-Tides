@@ -46,6 +46,12 @@ namespace TTT.Hex
             InitializeMesh();
         }
 
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            InitializeMesh();
+        }
+
         /// <summary>
         /// Adds of the HexCell.
         /// </summary>

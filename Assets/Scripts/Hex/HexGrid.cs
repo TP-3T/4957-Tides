@@ -10,13 +10,13 @@ using UnityEngine;
 
 namespace TTT.Hex
 {
-    public class HexGrid : NetworkBehaviour
+    public class HexGrid
     {
         // Key: Player's Network Client ID Value: The HexCell the player has selected
-        private Dictionary<ulong, HexCell> playerSelections = new Dictionary<ulong, HexCell>();
+        // private Dictionary<ulong, HexCell> playerSelections = new Dictionary<ulong, HexCell>();
 
         // Key: The HexCell object Value: The original Color of the cell (before ANY player selected it)
-        private Dictionary<HexCell, Color?> cellOriginalColors = new Dictionary<HexCell, Color?>();
+        // private Dictionary<HexCell, Color?> cellOriginalColors = new Dictionary<HexCell, Color?>();
 
         // This so can detect collision with ray casts just to this object
         // public static readonly int GRID_LAYER_MASK = 1 << 10;
@@ -32,33 +32,13 @@ namespace TTT.Hex
             new CubeCoordinates(-1, 1, 0),
         };
 
-        [SerializeField]
-        private TerrainDictionary AllowedTerrains;
-
-
         public static readonly float HexSize = 3.0f;
 
         public static readonly HexOrientation HexOrientation = HexOrientation.pointyTop;
 
-        public int Padding { get; set; }
+        public int Padding { get; private set; }
 
         public MapData GameMapData { get; set; }
-
-        // public override void OnNetworkSpawn()
-        // {
-        //     try
-        //     {
-        //         base.OnNetworkSpawn();
-
-        //         BuildAndCreateGrid();
-        //     }
-        //     catch { }
-        // }
-
-        // public override void OnNetworkDespawn()
-        // {
-        //     base.OnNetworkDespawn();
-        // }
 
         /// <summary>
         /// Retrieves a HexCell from the HexCells array given its cube coordinates.
@@ -133,6 +113,14 @@ namespace TTT.Hex
             return neighbours;
         }
 
+
+        /// <summary>
+        /// Given MapData deserialized data, construct a 2D grid indexable with cube coordinates.
+        /// 
+        /// This involves determining the padding of the rows or columns, dependent on orientation.
+        /// </summary>
+        /// <param name="md"></param>
+        /// <param name="cells"></param>
         public void BuildMap(MapData md, out HexCell[,] cells)
         {
 

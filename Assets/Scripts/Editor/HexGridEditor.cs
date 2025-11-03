@@ -10,7 +10,7 @@ public class HexGridEditor : Editor
     {
         DrawDefaultInspector();
 
-        HexGrid t = (HexGrid)target;
+        // HexGrid t = (HexGrid)target;
 
         // if (GUILayout.Button("Clear Map"))
         // {
@@ -25,7 +25,7 @@ public class HexGridEditor : Editor
 
     void OnSceneGUI()
     {
-        HexGrid t = (HexGrid)target;
+        // HexGrid t = (HexGrid)target;
 
         // if (!t.DrawDebugLabels)
         //     return;
