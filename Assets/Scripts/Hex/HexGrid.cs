@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace TTT.Hex
 {
+    [RequireComponent(typeof(NetworkObject))]
     public class HexGrid : NetworkBehaviour
     {
         // Key: Player's Network Client ID Value: The HexCell the player has selected
@@ -40,13 +41,15 @@ namespace TTT.Hex
 
         public MapData GameMapData { get; set; }
 
+        private HexCell[,] _hexCells;
+
         /// <summary>
         /// Retrieves a HexCell from the HexCells array given its cube coordinates.
         /// </summary>
         /// <param name="coords"></param>
         /// <returns></returns>
         public HexCell? GetCellFromCubeCoordinates(
-            HexCell[,] cells, CubeCoordinates coords)
+            CubeCoordinates coords)
         {
             if (HexGrid.HexOrientation == HexOrientation.pointyTop)
             {
@@ -59,7 +62,7 @@ namespace TTT.Hex
                 {
                     return null;
                 }
-                return cells[coords.r, coords.q + Padding];
+                return _hexCells[coords.r, coords.q + Padding];
             }
             else
             {
@@ -72,7 +75,7 @@ namespace TTT.Hex
                 {
                     return null;
                 }
-                return cells[coords.r + Padding, coords.q];
+                return _hexCells[coords.r + Padding, coords.q];
             }
         }
 
@@ -81,13 +84,12 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        public HexCell? GetCellFromPosition(
-            HexCell[,] cells, Vector3 position)
+        public HexCell? GetCellFromPosition(Vector3 position)
         {
             CubeCoordinatesF hcf = HexMath.PositionToCubeF(HexSize, position, HexOrientation);
             CubeCoordinates hc = HexMath.RoundCube(hcf);
 
-            return GetCellFromCubeCoordinates(cells, hc);
+            return GetCellFromCubeCoordinates(hc);
         }
 
         /// <summary>
@@ -95,8 +97,7 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        public List<HexCell> GetCellNeighbours(
-            HexCell[,] cells, HexCell c)
+        public List<HexCell> GetCellNeighbours(HexCell c)
         {
             List<HexCell> neighbours = new List<HexCell>();
 
@@ -104,7 +105,7 @@ namespace TTT.Hex
             {
                 CubeCoordinates neighborPos = c.CellCubeCoordinates + dir;
 
-                HexCell? n = GetCellFromCubeCoordinates(cells, neighborPos);
+                HexCell? n = GetCellFromCubeCoordinates(neighborPos);
 
                 if (n != null)
                     neighbours.Add((HexCell)n);
@@ -121,7 +122,7 @@ namespace TTT.Hex
         /// </summary>
         /// <param name="md"></param>
         /// <param name="cells"></param>
-        public void BuildMap(MapData md, out HexCell[,] cells, NetworkList<HexCell> ncells)
+        public void BuildMap(MapData md)
         {
 
             Padding =
@@ -130,11 +131,11 @@ namespace TTT.Hex
 
             if (HexOrientation == HexOrientation.pointyTop)
             {
-                cells = new HexCell[md.Height, md.Width + Padding];
+                _hexCells = new HexCell[md.Height, md.Width + Padding];
             }
             else
             {
-                cells = new HexCell[md.Height + Padding, md.Width];
+                _hexCells = new HexCell[md.Height + Padding, md.Width];
             }
 
             // Add HexCell prefabs according to mapdata
@@ -168,18 +169,16 @@ namespace TTT.Hex
                     CellPosition = hexCenter,
                 };
 
-                ncells.Add(hexCell);
-
                 // string terrainUid = mapTileData.TileType;
                 // hexCell.TerrainType = AllowedTerrains.Get(terrainUid);
 
                 if (HexOrientation == HexOrientation.pointyTop)
                 {
-                    cells[hexCubeCoordinates.r, hexCubeCoordinates.q + Padding] = hexCell;
+                    _hexCells[hexCubeCoordinates.r, hexCubeCoordinates.q + Padding] = hexCell;
                 }
                 else
                 {
-                    cells[hexCubeCoordinates.r + Padding, hexCubeCoordinates.q] = hexCell;
+                    _hexCells[hexCubeCoordinates.r + Padding, hexCubeCoordinates.q] = hexCell;
                 }
             }
         }

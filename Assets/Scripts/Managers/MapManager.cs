@@ -22,6 +22,8 @@ public class MapManager : GenericSingleton<MapManager>
     Serialize fields for the SeaMesh, instances that are requried for each client
     */
 
+    private AssetReference _hexGridAsset = new("P_HexGrid");
+
     private AssetReference _hexGridMeshAsset = new("P_HexMesh");
 
     private AssetReference _seaMeshAsset = new("P_SeaMesh");
@@ -40,9 +42,9 @@ public class MapManager : GenericSingleton<MapManager>
 
     private HexCell[,] _hexCells;
 
-    private NetworkList<HexCell> _hexCellsNetwork = new NetworkList<HexCell>();
-
     private NetworkVariable<ulong> _hexMeshId = new NetworkVariable<ulong>();
+
+    private NetworkVariable<ulong> _hexGridId = new NetworkVariable<ulong>();
 
     private HexMesh _hexMesh;
 
@@ -71,9 +73,33 @@ public class MapManager : GenericSingleton<MapManager>
         FloodQueue2 = new();
         Flooded = new();
 
-        _hexGrid = new();
-
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
+    }
+
+    public void LoadGameAssets(UnityEngine.Object eventArgs)
+    {
+        NewMapEventArgs args = eventArgs as NewMapEventArgs;
+
+        if (IsServer)
+        {
+            try
+            {
+                // Deserialized data (cringe)
+                _gameMapData = JsonUtility.FromJson<MapData>(args.DataFile.text);
+
+                if (_gameMapData == null)
+                {
+                    throw new Exception($"{args.DataFile.name} is not a valid TTT Map object.");
+                }
+
+                StartCoroutine(SpawnMapObjects());
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
+            }
+        }
     }
 
     public void OnNewMap(UnityEngine.Object eventArgs)
@@ -92,8 +118,6 @@ public class MapManager : GenericSingleton<MapManager>
                     throw new Exception($"{args.DataFile.name} is not a valid TTT Map object.");
                 }
 
-                _hexGrid.BuildMap(_gameMapData, out _hexCells, _hexCellsNetwork);
-
                 StartCoroutine(SpawnMapObjects());
             }
             catch (Exception e)
@@ -110,8 +134,12 @@ public class MapManager : GenericSingleton<MapManager>
 
         // How do I trangulate from this location?
         NetworkObject hexMeshInstance = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
+        NetworkObject hexGridInstance = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexGridId.Value];
+
+        HexGrid hexGrid = hexGridInstance.GetComponent<HexGrid>();
         HexMesh hexMesh = hexMeshInstance.GetComponent<HexMesh>();
-        hexMesh.Triangulate(_hexCellsNetwork, HexGrid.HexSize, HexGrid.HexOrientation);
+
+        // hexMesh.Triangulate(_hexCellsNetwork, HexGrid.HexSize, HexGrid.HexOrientation);
     }
 
     public void OnNextTurn(UnityEngine.Object eventArgs)
@@ -119,7 +147,19 @@ public class MapManager : GenericSingleton<MapManager>
         Debug.Log("The next turn event has been raised.");
     }
 
-    private void SpawnGrid(GameObject hm)
+    private void SpawnGrid(GameObject hg)
+    {
+        GameObject hexGridGameObject = Instantiate(hg);
+        HexGrid hexGrid = hexGridGameObject.GetComponent<HexGrid>();
+
+        hexGrid.GetComponent<NetworkObject>().Spawn();
+
+        Debug.Log($"HEX GRID ID {hexGrid.NetworkObjectId}");
+
+        _hexGridId.Value = hexGrid.NetworkObjectId;
+    }
+
+    private void SpawnGridMesh(GameObject hm)
     {
         // Get reference to HexMesh prefab
         GameObject hexMeshGameObject = Instantiate(hm);
@@ -127,7 +167,6 @@ public class MapManager : GenericSingleton<MapManager>
 
         // Instance HexMesh prefab based off of the build data
         hexMesh.GetComponent<NetworkObject>().Spawn();
-        hexMesh.Triangulate(_hexCellsNetwork, HexGrid.HexSize, HexGrid.HexOrientation);
 
         Debug.Log($"HEX MESH ID {hexMesh.NetworkObjectId}");
 
@@ -145,7 +184,8 @@ public class MapManager : GenericSingleton<MapManager>
 
     private IEnumerator SpawnMapObjects()
     {
-        yield return AssetLoader<GameObject>.Load(_hexGridMeshAsset, SpawnGrid);
+        yield return AssetLoader<GameObject>.Load(_hexGridAsset, SpawnGrid);
+        yield return AssetLoader<GameObject>.Load(_hexGridMeshAsset, SpawnGridMesh);
 
         MapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
     }
@@ -199,7 +239,7 @@ public class MapManager : GenericSingleton<MapManager>
                 // hexMesh.ReTriangulateCell(
                 //    cell, hexGrid.HexSize, hexGrid.HexOrientation);
 
-                foreach (HexCell neighbor in _hexGrid.GetCellNeighbours(_hexCells, cell))
+                foreach (HexCell neighbor in _hexGrid.GetCellNeighbours(cell))
                 {
                     if (neighbor.IsFlooded())
                         continue;
