@@ -15,11 +15,6 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: e7e5ee7318adfcd448829a3590075345
   m_SerializeEntries:
-  - m_GUID: 8a4af36226b0a3e469288267ab5510d6
-    m_Address: P_HexGrid
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a574734cbcc1411429593620b463cc3a
     m_Address: P_HexMesh
     m_ReadOnly: 0

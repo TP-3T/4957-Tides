@@ -6,7 +6,6 @@
   <Project Path="TTT.PlayerResources.csproj" />
   <Project Path="TTT.Hex.csproj" />
   <Project Path="TTT.GameEvents.csproj" />
-  <Project Path="TTT.UI.csproj" />
   <Project Path="TTT.Managers.csproj" />
   <Project Path="TTT.ModularData.csproj" />
   <Project Path="TTT.States.csproj" />
