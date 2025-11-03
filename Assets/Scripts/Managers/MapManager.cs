@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using System.Collections;
 using TTT.Managers;
+using System.Collections.Generic;
 
 public class MapManager : GenericSingleton<MapManager>
 {
@@ -39,8 +40,29 @@ public class MapManager : GenericSingleton<MapManager>
 
     private HexCell[,] _hexCells;
 
+    private const int CellsPerFrame = 100;
+
+    public float SeaLevel;
+
+    public float RisingRate;
+
+    public Queue<HexCell> ToFlood;
+
+    public Queue<HexCell> FloodQueue;
+
+    public Queue<HexCell> FloodQueue2;
+
+    public List<HexCell> Flooded;
+
     public override void OnNetworkSpawn()
     {
+        this.RisingRate = 1.0f;
+        this.SeaLevel = 0.0f;
+        this.ToFlood = new();
+        this.FloodQueue = new();
+        this.FloodQueue2 = new();
+        this.Flooded = new();
+
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
     }
 
@@ -136,5 +158,81 @@ public class MapManager : GenericSingleton<MapManager>
         // Actual game data (based)
 
         Debug.Log("The map has been built.");
+    }
+
+    public void StartRaiseSea()
+    {
+        StopAllCoroutines();
+        StartCoroutine(RaiseSea());
+    }
+
+    /// <summary>
+    /// Simulate rising on a per turn basis, not per frame.
+    /// </summary>
+    public IEnumerator RaiseSea()
+    {
+        this.SeaLevel += this.RisingRate;
+
+        while (true)
+        {
+            // --- 1. Flood queue is empty, go through neighbours that were not eligable for flooding and see if they will be ---
+            if (ToFlood.Count == 0)
+            {
+                Debug.Log("Flood fill cycle complete");
+
+                while (this.FloodQueue.Count > 0)
+                {
+                    HexCell test = this.FloodQueue.Dequeue();
+
+                    if (test.CellPosition.y <= (this.SeaLevel + this.RisingRate))
+                        ToFlood.Enqueue(test);
+                    else
+                        this.FloodQueue2.Enqueue(test);
+                }
+
+                while (this.FloodQueue2.Count > 0)
+                {
+                    this.FloodQueue.Enqueue(this.FloodQueue2.Dequeue());
+                }
+
+                yield break;
+            }
+
+            // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
+            int i = 0;
+
+            Flooded.Clear();
+
+            while (ToFlood.Count > 0 && i < CellsPerFrame)
+            {
+                HexCell cell = ToFlood.Dequeue();
+
+                //if water level is higher and cell is a border cell.
+                cell.FloodCell();
+
+                Flooded.Add(cell);
+
+                // hexMesh.ReTriangulateCell(
+                //    cell, hexGrid.HexSize, hexGrid.HexOrientation);
+
+                foreach (HexCell neighbor in _hexGrid.GetCellNeighbours(_hexCells, cell))
+                {
+                    if (neighbor.IsFlooded())
+                        continue;
+                    if (this.ToFlood.Contains(neighbor) || this.FloodQueue.Contains(neighbor))
+                        continue;
+                    if (neighbor.CellPosition.y <= this.SeaLevel)
+                        ToFlood.Enqueue(neighbor);
+                    else
+                        this.FloodQueue.Enqueue(neighbor);
+                }
+                i++;
+            }
+
+            // --- 3. Retriangulate what has been flooded ---
+            // hexMesh.ReTriangulateCells(Flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
+
+            yield return null;
+        }
     }
 }

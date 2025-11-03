@@ -7,6 +7,7 @@ public class NetworkButton : MonoBehaviour
 
     public void OnStartServer()
     {
+        Debug.Log("I am being clicked");
         startEvent.Raise(new StartNetworkEventArgs() { IsHost = true });
     }
 
