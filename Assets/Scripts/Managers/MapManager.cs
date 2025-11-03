@@ -37,8 +37,11 @@ public class MapManager : GenericSingleton<MapManager>
 
     private MapData _gameMapData;
 
-    // private HexCell[,] _hexCells;
-    private NetworkList<HexCell> _hexCellsNetwork = new NetworkList<HexCell>();
+    private HexCell[,] _hexCells;
+
+    private NetworkVariable<ulong> _hexGridId = new();
+
+    private NetworkVariable<ulong> _hexMeshId = new();
 
     private const int CellsPerFrame = 100;
 
@@ -81,7 +84,7 @@ public class MapManager : GenericSingleton<MapManager>
                 throw new Exception($"{args.DataFile.name} is not a valid TTT Map object.");
             }
 
-            _hexGrid.BuildMap(_gameMapData, out _hexCells);
+            _hexGrid.BuildMap(_gameMapData);
 
             StartCoroutine(SpawnMapObjects());
         }
