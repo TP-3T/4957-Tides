@@ -43,8 +43,6 @@ namespace TTT.Hex
 
         private HexCell[,] _hexCells;
 
-        public HexCell[,] HexCells { get; private set; }
-
         /// <summary>
         /// Retrieves a HexCell from the HexCells array given its cube coordinates.
         /// </summary>
@@ -183,8 +181,6 @@ namespace TTT.Hex
                     _hexCells[hexCubeCoordinates.r + Padding, hexCubeCoordinates.q] = hexCell;
                 }
             }
-
-            HexCells = _hexCells;
         }
 
         // /// <summary>
