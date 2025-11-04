@@ -1,5 +1,5 @@
 using System;
-using TTT.Features;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using UnityEngine;
 
