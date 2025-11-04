@@ -4,7 +4,7 @@ using Unity.Netcode;
 
 namespace TTT.DataClasses.HexData
 {
-    public struct CubeCoordinates : INetworkSerializable
+    public struct CubeCoordinates : INetworkSerializable, IEquatable<CubeCoordinates>
     {
         public int q;
         public int r;
@@ -34,6 +34,13 @@ namespace TTT.DataClasses.HexData
             serializer.SerializeValue(ref q);
             serializer.SerializeValue(ref r);
             serializer.SerializeValue(ref s);
+        }
+
+        public bool Equals(CubeCoordinates other)
+        {
+            return this.q == other.q
+                && this.r == other.r
+                && this.s == other.s;
         }
 
         public static bool operator ==(CubeCoordinates one, CubeCoordinates two)

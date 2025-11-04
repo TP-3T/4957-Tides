@@ -85,16 +85,11 @@ public class MapManager : GenericSingleton<MapManager>
             // Deserialized data (cringe)
             _gameMapData = JsonUtility.FromJson<MapData>(args.DataFile.text);
 
-            if (_gameMapData == null)
-            {
-                throw new Exception($"{args.DataFile.name} is not a valid TTT Map object.");
-            }
-
             // Initialize map tile state data (based)
             foreach (MapTileData mapTileData in _gameMapData.MapTilesData)
             {
                 if (mapTileData.Height < 0)
-                    mapTileData.Height = 0;
+                    mapTileData.SetHeight(0);
 
                 Vector3 hexCenter = HexMath.GetHexCenter(
                     HexGrid.HexSize,
