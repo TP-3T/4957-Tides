@@ -1,3 +1,4 @@
+using TTT.GameEvents;
 using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,19 +14,20 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerController : NetworkBehaviour
 {
-    //? CB: What is this event doing?
-    public UnityEvent<Vector3> OnPlayerClick = new();
-    private Camera playerCamera;
-
-    //? CB: Does the player actually need a reference to the grid or can we use events to have the hex grid react?
-    private HexGrid hexGrid;
-
-    //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
-    //*  We should look into the Unity Input System Package
     const int LeftMouseIndex = 0;
     const int RightMouseIndex = 1;
     const float moveSpeed = 50f;
     const float rotationSpeed = 2f;
+
+    //? CB: Does the player actually need a reference to the grid or can we use events to have the hex grid react?
+    private HexGrid hexGrid;
+    private Camera playerCamera;
+
+    [SerializeField]
+    private GameEvent _mapMeshClicked;
+
+    //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
+    //*  We should look into the Unity Input System Package
     readonly Vector3 startingPosition = new(0, 10, -10);
     public NetworkVariable<Color> PlayerColor = new(
         Color.white,
@@ -163,19 +165,22 @@ public class PlayerController : NetworkBehaviour
         // Left click
         if (Input.GetMouseButtonDown(LeftMouseIndex))
         {
-            // Debug.Log("Player clicked left mouse button");
             Ray mousePositionRay = playerCamera.ScreenPointToRay(Input.mousePosition);
-            //Ray Cast Logic
-            if (
-                hexGrid != null
-                && Physics.Raycast(
+            if (Physics.Raycast(
                     mousePositionRay,
-                    out RaycastHit hit,
-                    Mathf.Infinity
-                ) // Layer mask will actually be defined on the mesh class
+                    out RaycastHit raycastHit,
+                    Mathf.Infinity,
+                    HexMesh.LayerMask)
             )
             {
                 // Raise some event will deal with this later
+                Debug.DrawLine(transform.position, raycastHit.point, Color.red);
+
+                _mapMeshClicked.Raise(new MapMeshClickedEventArgs
+                {
+                    ClickedPoint = raycastHit.point,
+                    PlayerId = OwnerClientId
+                });
             }
         }
     }

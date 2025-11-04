@@ -10,6 +10,7 @@ namespace TTT.Hex
     public class HexMesh : NetworkBehaviour
     {
         public static LayerMask LayerMask = 1 << 10;
+
         private Mesh mesh;
         private MeshFilter meshFilter;
         private MeshCollider meshCollider;
@@ -88,8 +89,9 @@ namespace TTT.Hex
         {
             ClearMesh();
 
-            foreach (HexCell hexCell in hexCells)
+            for (int i = 0; i < hexCells.Count; i++)
             {
+                HexCell hexCell = hexCells[i];
                 bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
                 int triVertexStart = vertices.Count;
                 hexCell.SetCenterVertex(triVertexStart);
@@ -121,15 +123,17 @@ namespace TTT.Hex
                 }
 
                 // Populate triangle and color arrays
-                for (int i = 0; i < corners.Length; i++)
+                for (int k = 0; k < corners.Length; k++)
                 {
-                    AddTopTriangles(triVertexStart, i);
+                    AddTopTriangles(triVertexStart, k);
 
                     if (!aboveSeaLevel)
                         continue;
 
-                    AddSideTriangles(triVertexStart, sideTriVertexStart, i);
+                    AddSideTriangles(triVertexStart, sideTriVertexStart, k);
                 }
+
+                hexCells[i] = hexCell;
             }
 
             mesh.vertices = cvertices = vertices.ToArray();
@@ -151,6 +155,9 @@ namespace TTT.Hex
         /// <param name="hexOrientation"></param>
         public void ReTriangulateCell(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
         {
+            Debug.Log(hexCell.CenterVertexIndex);
+            Debug.Log(hexCell.CellColor);
+
             bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
             int count = hexCell.CenterVertexIndex; // c = counter, 😉
 

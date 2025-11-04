@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 459232547441961772}
   - component: {fileID: 4501877893874324670}
   - component: {fileID: 7227047647059873641}
+  - component: {fileID: 5925874576535686948}
   m_Layer: 0
   m_Name: MapManager
   m_TagString: Untagged
@@ -73,7 +74,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   _jsonMap: {fileID: 0}
-  MapLoadFinishEvent: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
+  _mapLoadFinishEvent: {fileID: 0}
+  DrawDebugLabels: 0
   SeaLevel: 0
   RisingRate: 0
 --- !u!114 &7227047647059873641
@@ -95,6 +97,34 @@ MonoBehaviour:
       - m_Target: {fileID: 4501877893874324670}
         m_TargetAssemblyTypeName: MapManager, TTT.Managers
         m_MethodName: OnNewMap
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+--- !u!114 &5925874576535686948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065302472941044375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 430d05d8968fdce498f62567aa054de0, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4501877893874324670}
+        m_TargetAssemblyTypeName: MapManager, TTT.Managers
+        m_MethodName: OnMapMeshClicked
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

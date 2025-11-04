@@ -43,10 +43,7 @@ public class MapManager : GenericSingleton<MapManager>
     private TextAsset _jsonMap;
     [SerializeField]
     private GameEvent _mapLoadFinishEvent;
-    private HexGrid _hexGrid;
-    private Sea _sea;                           // Something that will be relevant in the future
     private MapData _gameMapData;
-    private HexCell[,] _hexCells;
     private NetworkVariable<int> _hexGridWidth = new();
     private NetworkVariable<int> _hexGridHeight = new();
     private NetworkVariable<ulong> _hexMeshId = new();
@@ -70,65 +67,7 @@ public class MapManager : GenericSingleton<MapManager>
         FloodQueue2 = new();
         Flooded = new();
 
-        _hexGrid = new();
-
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
-    }
-
-    public void OnNewMap(UnityEngine.Object eventArgs)
-    {
-        NewMapEventArgs args = eventArgs as NewMapEventArgs;
-
-        try
-        {
-            // Deserialized data (cringe)
-            _gameMapData            = JsonUtility.FromJson<MapData>(args.DataFile.text);
-            _hexGridWidth.Value     = _gameMapData.Width;
-            _hexGridHeight.Value = _gameMapData.Height;
-
-            HexCell[] hexCells = new HexCell[_gameMapData.MapTilesData.Count];
-
-            foreach (MapTileData mapTileData in _gameMapData.MapTilesData)
-            {
-                if (mapTileData.Height < 0)
-                    mapTileData.SetHeight(0);
-
-                Vector3 hexCenter = HexMath.GetHexCenter(
-                    MapManager.HexSize,
-                    mapTileData.Height + 1,
-                    mapTileData.OffsetCoordinates,
-                    MapManager.HexOrientation
-                ) + Vector3.zero;
-
-                CubeCoordinates hc = HexMath.OddOffsetToCube(
-                    mapTileData.OffsetCoordinates,
-                    MapManager.HexOrientation
-                );
-
-                HexCell hexCell = new()
-                {
-                    CellCubeCoordinates = hc,
-                    CellPosition = hexCenter,
-                    CellColor = Color.white
-                };
-
-                int cubeCoordinateIndex = GetCellIndexFromCubeCoordinates(hc);
-
-                hexCells[cubeCoordinateIndex] = hexCell;
-            }
-
-            foreach (HexCell hc in hexCells)
-            {
-                HexCells.Add(hc);
-            }
-
-            StartCoroutine(SpawnMapObjects());
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e);
-            _mapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
-        }
     }
 
     private IEnumerator SpawnMapObjects()
@@ -163,12 +102,30 @@ public class MapManager : GenericSingleton<MapManager>
         NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
         HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();       // Get the hex mesh in the scene
 
-        Debug.Log(HexCells.Count);
-
-        // How do I trangulate from this location?
         hexMeshInstance.Triangulate(HexCells, MapManager.HexSize, MapManager.HexOrientation);
 
         _mapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void TriangulateMeshInstanceRpc(HexCell cell)
+    {
+
+        NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
+        HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
+
+        hexMeshInstance.ReTriangulateCell(cell, MapManager.HexSize, MapManager.HexOrientation);
+    }
+
+    private void TriangulateMeshInstance(HexCell[] cells)
+    {
+    }
+
+    private CubeCoordinates GetCubeCoordinatesFromPosition(Vector3 position)
+    {
+        CubeCoordinatesF cf = HexMath.PositionToCubeF(MapManager.HexSize, position, MapManager.HexOrientation);
+        CubeCoordinates cc = HexMath.RoundCube(cf);
+        return cc;
     }
 
     private int GetCellIndexFromCubeCoordinates(
@@ -182,6 +139,13 @@ public class MapManager : GenericSingleton<MapManager>
         {
             throw new Exception("This math has lazily not been implemented yet, get on it you git!");
         }
+    }
+
+    private int GetCellIndexFromPosition(Vector3 position)
+    {
+        CubeCoordinates cc = GetCubeCoordinatesFromPosition(position);
+        int ci = GetCellIndexFromCubeCoordinates(cc);
+        return ci;
     }
 
     private HexCell GetCellFromCubeCoordinates(
@@ -202,9 +166,7 @@ public class MapManager : GenericSingleton<MapManager>
 
     public HexCell GetCellFromPosition(Vector3 position, out bool success)
     {
-        CubeCoordinatesF hcf = HexMath.PositionToCubeF(MapManager.HexSize, position, MapManager.HexOrientation);
-        CubeCoordinates hc = HexMath.RoundCube(hcf);
-
+        CubeCoordinates hc = GetCubeCoordinatesFromPosition(position);
         return GetCellFromCubeCoordinates(hc, out success);
     }
 
@@ -224,23 +186,6 @@ public class MapManager : GenericSingleton<MapManager>
         }
 
         return neighbours;
-    }
-
-    public void OnClientConnect(ulong clientId)
-    {
-        Debug.Log($"Hello mr {clientId}");
-
-        if (IsClient)
-        {
-            TriangulateMeshInstance();
-        }
-    }
-
-    [Rpc(SendTo.Everyone)]
-    public void StartRaiseSeaRpc()
-    {
-        StopAllCoroutines();
-        StartCoroutine(RaiseSea());
     }
 
     /// <summary>
@@ -311,5 +256,94 @@ public class MapManager : GenericSingleton<MapManager>
 
             yield return null;
         }
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void StartRaiseSeaRpc()
+    {
+        StopAllCoroutines();
+        StartCoroutine(RaiseSea());
+    }
+
+    public void OnNewMap(UnityEngine.Object eventArgs)
+    {
+        NewMapEventArgs args = eventArgs as NewMapEventArgs;
+
+        try
+        {
+            // Deserialized data (cringe)
+            _gameMapData = JsonUtility.FromJson<MapData>(args.DataFile.text);
+            _hexGridWidth.Value = _gameMapData.Width;
+            _hexGridHeight.Value = _gameMapData.Height;
+
+            HexCell[] hexCells = new HexCell[_gameMapData.MapTilesData.Count];
+
+            foreach (MapTileData mapTileData in _gameMapData.MapTilesData)
+            {
+                if (mapTileData.Height < 0)
+                    mapTileData.SetHeight(0);
+
+                Vector3 hexCenter = HexMath.GetHexCenter(
+                    MapManager.HexSize,
+                    mapTileData.Height + 1,
+                    mapTileData.OffsetCoordinates,
+                    MapManager.HexOrientation
+                ) + Vector3.zero;
+
+                CubeCoordinates hc = HexMath.OddOffsetToCube(
+                    mapTileData.OffsetCoordinates,
+                    MapManager.HexOrientation
+                );
+
+                HexCell hexCell = new()
+                {
+                    CellCubeCoordinates = hc,
+                    CellPosition = hexCenter,
+                    CellColor = Color.white
+                };
+
+                int cubeCoordinateIndex = GetCellIndexFromCubeCoordinates(hc);
+
+                hexCells[cubeCoordinateIndex] = hexCell;
+            }
+
+            foreach (HexCell hc in hexCells)
+            {
+                HexCells.Add(hc);
+            }
+
+            StartCoroutine(SpawnMapObjects());
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+            _mapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = false });
+        }
+    }
+
+    public void OnClientConnect(ulong clientId)
+    {
+        Debug.Log($"Hello mr {clientId}");
+
+        if (IsClient)
+        {
+            TriangulateMeshInstance();
+        }
+    }
+
+    public void OnMapMeshClicked(UnityEngine.Object eventArgs)
+    {
+        MapMeshClickedEventArgs args = eventArgs as MapMeshClickedEventArgs;
+
+        Debug.Log($"{args.ClickedPoint}, {args.PlayerId}");
+
+        int index = GetCellIndexFromPosition(args.ClickedPoint);
+
+        // Bizzare
+        HexCell hc = HexCells[index];
+        hc.CellColor = Color.red;
+        HexCells[index] = hc;
+
+        TriangulateMeshInstanceRpc(HexCells[index]);
     }
 }
