@@ -1,0 +1,19 @@
+{
+    "name": "TTT.DataClasses.HexData",
+    "rootNamespace": "TTT.DataClasses.HexData",
+    "references": [
+        "GUID:560ff959ba426d6449085b72011d1a21",
+        "GUID:b197b3fd4e861734c9d7ecd4e907be6d",
+        "GUID:de2ca83ec28bad84ea08b6c94aaa6e23",
+        "GUID:7e6c88045c6d6cb499d55a47044b4c5f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
