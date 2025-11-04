@@ -49,7 +49,8 @@ public class MapManager : GenericSingleton<MapManager>
     private NetworkVariable<ulong> _hexMeshId = new();
     private const int CellsPerFrame = 100;
 
-    public NetworkList<HexCell> HexCells = new();
+    public NetworkList<HexCell> HexCells = new(default,
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public bool DrawDebugLabels;
     public float SeaLevel;
     public float RisingRate;
@@ -107,8 +108,8 @@ public class MapManager : GenericSingleton<MapManager>
         _mapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
     }
 
-    [Rpc(SendTo.Everyone)]
-    private void TriangulateMeshInstanceRpc(HexCell cell)
+    [ClientRpc]
+    private void TriangulateMeshInstanceClientRpc(HexCell cell)
     {
 
         NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
@@ -331,19 +332,21 @@ public class MapManager : GenericSingleton<MapManager>
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void OnMapMeshCickedServerRpc(Vector3 point, Color newColor)
+    {
+        int index = GetCellIndexFromPosition(point);
+        HexCell hc = HexCells[index];
+        hc.CellColor = newColor;
+        HexCells[index] = hc;
+
+        TriangulateMeshInstanceClientRpc(HexCells[index]);
+    }
+
     public void OnMapMeshClicked(UnityEngine.Object eventArgs)
     {
         MapMeshClickedEventArgs args = eventArgs as MapMeshClickedEventArgs;
 
-        Debug.Log($"{args.ClickedPoint}, {args.PlayerId}");
-
-        int index = GetCellIndexFromPosition(args.ClickedPoint);
-
-        // Bizzare
-        HexCell hc = HexCells[index];
-        hc.CellColor = Color.red;
-        HexCells[index] = hc;
-
-        TriangulateMeshInstanceRpc(HexCells[index]);
+        OnMapMeshCickedServerRpc(args.ClickedPoint, args.PlayerColor);
     }
 }

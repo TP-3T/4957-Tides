@@ -94,7 +94,9 @@ namespace TTT.Hex
                 HexCell hexCell = hexCells[i];
                 bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
                 int triVertexStart = vertices.Count;
-                hexCell.SetCenterVertex(triVertexStart);
+
+                if (IsServer)
+                    hexCell.SetCenterVertex(triVertexStart);
 
                 vertices.Add(hexCell.CellPosition);
                 colors.Add(hexCell.CellColor);
@@ -133,7 +135,8 @@ namespace TTT.Hex
                     AddSideTriangles(triVertexStart, sideTriVertexStart, k);
                 }
 
-                hexCells[i] = hexCell;
+                if (IsServer)
+                    hexCells[i] = hexCell;
             }
 
             mesh.vertices = cvertices = vertices.ToArray();
@@ -155,8 +158,8 @@ namespace TTT.Hex
         /// <param name="hexOrientation"></param>
         public void ReTriangulateCell(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
         {
-            Debug.Log(hexCell.CenterVertexIndex);
-            Debug.Log(hexCell.CellColor);
+            // Debug.Log(hexCell.CenterVertexIndex);
+            // Debug.Log(hexCell.CellColor);
 
             bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
             int count = hexCell.CenterVertexIndex; // c = counter, 😉

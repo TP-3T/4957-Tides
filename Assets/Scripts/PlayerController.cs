@@ -179,6 +179,7 @@ public class PlayerController : NetworkBehaviour
                 _mapMeshClicked.Raise(new MapMeshClickedEventArgs
                 {
                     ClickedPoint = raycastHit.point,
+                    PlayerColor = PlayerColor.Value,
                     PlayerId = OwnerClientId
                 });
             }
