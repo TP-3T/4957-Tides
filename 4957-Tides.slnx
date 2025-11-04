@@ -2,10 +2,11 @@
   <Project Path="TTT.DataClasses.HexData.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="TTT.Features.csproj" />
-  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="TTT.PlayerResources.csproj" />
   <Project Path="TTT.Hex.csproj" />
   <Project Path="TTT.GameEvents.csproj" />
+  <Project Path="TTT.Editors.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="TTT.Managers.csproj" />
   <Project Path="TTT.ModularData.csproj" />
   <Project Path="TTT.States.csproj" />

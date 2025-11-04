@@ -9,6 +9,7 @@ namespace TTT.Hex
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
     public class HexMesh : NetworkBehaviour
     {
+        public static LayerMask LayerMask = 1 << 10;
         private Mesh mesh;
         private MeshFilter meshFilter;
         private MeshCollider meshCollider;
@@ -86,8 +87,6 @@ namespace TTT.Hex
         public void Triangulate(NetworkList<HexCell> hexCells, float hexSize, HexOrientation hexOrientation)
         {
             ClearMesh();
-
-            Debug.Log(hexCells);
 
             foreach (HexCell hexCell in hexCells)
             {

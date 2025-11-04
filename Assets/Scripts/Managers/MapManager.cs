@@ -9,6 +9,8 @@ using UnityEngine.AddressableAssets;
 using System.Collections;
 using TTT.Managers;
 using System.Collections.Generic;
+using Codice.Client.BaseCommands.Download;
+using UnityEditor.PackageManager;
 
 // WO Notes regarding networking
 // Basically we will need to tell the clients how to update their grid and sea meshes
@@ -22,44 +24,41 @@ public class MapManager : GenericSingleton<MapManager>
     Serialize fields for the SeaMesh, instances that are requried for each client
     */
 
-    private AssetReference _hexGridMeshAsset = new("P_HexMesh");
+    public static readonly CubeCoordinates[] NeighbourDirections =
+    {
+        new CubeCoordinates(1, 0, -1),
+        new CubeCoordinates(-1, 0, 1),
+        new CubeCoordinates(0, 1, -1),
+        new CubeCoordinates(0, -1, 1),
+        new CubeCoordinates(1, -1, 0),
+        new CubeCoordinates(-1, 1, 0),
+    };
+    public static readonly float HexSize = 3.0f;
+    public static readonly HexOrientation HexOrientation = HexOrientation.pointyTop;
 
+    private AssetReference _hexGridMeshAsset = new("P_HexMesh");
     private AssetReference _seaMeshAsset = new("P_SeaMesh");
 
     [SerializeField]
     private TextAsset _jsonMap;
-
     [SerializeField]
     private GameEvent _mapLoadFinishEvent;
-
     private HexGrid _hexGrid;
-
     private Sea _sea;                           // Something that will be relevant in the future
-
     private MapData _gameMapData;
-
     private HexCell[,] _hexCells;
-
-    private NetworkList<HexCell> _hexCellNetwork = new();
-
     private NetworkVariable<int> _hexGridWidth = new();
-
     private NetworkVariable<int> _hexGridHeight = new();
-
     private NetworkVariable<ulong> _hexMeshId = new();
-
     private const int CellsPerFrame = 100;
 
+    public NetworkList<HexCell> HexCells = new();
+    public bool DrawDebugLabels;
     public float SeaLevel;
-
     public float RisingRate;
-
     public Queue<HexCell> ToFlood;
-
     public Queue<HexCell> FloodQueue;
-
     public Queue<HexCell> FloodQueue2;
-
     public List<HexCell> Flooded;
 
     public override void OnNetworkSpawn()
@@ -83,38 +82,45 @@ public class MapManager : GenericSingleton<MapManager>
         try
         {
             // Deserialized data (cringe)
-            _gameMapData = JsonUtility.FromJson<MapData>(args.DataFile.text);
+            _gameMapData            = JsonUtility.FromJson<MapData>(args.DataFile.text);
+            _hexGridWidth.Value     = _gameMapData.Width;
+            _hexGridHeight.Value = _gameMapData.Height;
 
-            // Initialize map tile state data (based)
+            HexCell[] hexCells = new HexCell[_gameMapData.MapTilesData.Count];
+
             foreach (MapTileData mapTileData in _gameMapData.MapTilesData)
             {
                 if (mapTileData.Height < 0)
                     mapTileData.SetHeight(0);
 
                 Vector3 hexCenter = HexMath.GetHexCenter(
-                    HexGrid.HexSize,
+                    MapManager.HexSize,
                     mapTileData.Height + 1,
                     mapTileData.OffsetCoordinates,
-                    HexGrid.HexOrientation
+                    MapManager.HexOrientation
                 ) + Vector3.zero;
 
-                CubeCoordinates hexCubeCoordinates = HexMath.OddOffsetToCube(
+                CubeCoordinates hc = HexMath.OddOffsetToCube(
                     mapTileData.OffsetCoordinates,
-                    HexGrid.HexOrientation
+                    MapManager.HexOrientation
                 );
 
                 HexCell hexCell = new()
                 {
-                    CellCubeCoordinates = hexCubeCoordinates,
+                    CellCubeCoordinates = hc,
                     CellPosition = hexCenter,
                     CellColor = Color.white
                 };
 
-                _hexCellNetwork.Add(hexCell);
+                int cubeCoordinateIndex = GetCellIndexFromCubeCoordinates(hc);
+
+                hexCells[cubeCoordinateIndex] = hexCell;
             }
 
-            _hexGridWidth.Value     = _gameMapData.Width;
-            _hexGridHeight.Value    = _gameMapData.Height;
+            foreach (HexCell hc in hexCells)
+            {
+                HexCells.Add(hc);
+            }
 
             StartCoroutine(SpawnMapObjects());
         }
@@ -157,10 +163,67 @@ public class MapManager : GenericSingleton<MapManager>
         NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
         HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();       // Get the hex mesh in the scene
 
+        Debug.Log(HexCells.Count);
+
         // How do I trangulate from this location?
-        hexMeshInstance.Triangulate(_hexCellNetwork, HexGrid.HexSize, HexGrid.HexOrientation);
+        hexMeshInstance.Triangulate(HexCells, MapManager.HexSize, MapManager.HexOrientation);
 
         _mapLoadFinishEvent.Raise(new NewMapFinishedEventArgs() { WasSuccessful = true });
+    }
+
+    private int GetCellIndexFromCubeCoordinates(
+        CubeCoordinates hc)
+    {
+        if (MapManager.HexOrientation == HexOrientation.pointyTop)
+        {
+            return ((Mathf.RoundToInt(hc.r / 2) + hc.q) + (hc.r * _gameMapData.Width));
+        }
+        else
+        {
+            throw new Exception("This math has lazily not been implemented yet, get on it you git!");
+        }
+    }
+
+    private HexCell GetCellFromCubeCoordinates(
+        CubeCoordinates hc, out bool success)
+    {
+        if (MapManager.HexOrientation == HexOrientation.pointyTop)
+        {
+            int cubeCoordinateIndex = GetCellIndexFromCubeCoordinates(hc);
+            success = true;
+            return HexCells[cubeCoordinateIndex];
+        }
+        else
+        {
+            success = false;
+            throw new Exception("The math for this is not implemented");
+        }
+    }
+
+    public HexCell GetCellFromPosition(Vector3 position, out bool success)
+    {
+        CubeCoordinatesF hcf = HexMath.PositionToCubeF(MapManager.HexSize, position, MapManager.HexOrientation);
+        CubeCoordinates hc = HexMath.RoundCube(hcf);
+
+        return GetCellFromCubeCoordinates(hc, out success);
+    }
+
+    public List<HexCell> GetCellNeighbours(
+        HexCell c)
+    {
+        List<HexCell> neighbours = new List<HexCell>();
+
+        foreach (CubeCoordinates dir in MapManager.NeighbourDirections)
+        {
+            bool success;
+            CubeCoordinates neighborPos = c.CellCubeCoordinates + dir;
+            HexCell n = GetCellFromCubeCoordinates(neighborPos, out success);
+
+            if (success)
+                neighbours.Add(n);
+        }
+
+        return neighbours;
     }
 
     public void OnClientConnect(ulong clientId)
@@ -173,7 +236,8 @@ public class MapManager : GenericSingleton<MapManager>
         }
     }
 
-    public void StartRaiseSea()
+    [Rpc(SendTo.Everyone)]
+    public void StartRaiseSeaRpc()
     {
         StopAllCoroutines();
         StartCoroutine(RaiseSea());
@@ -228,7 +292,7 @@ public class MapManager : GenericSingleton<MapManager>
                 // hexMesh.ReTriangulateCell(
                 //    cell, hexGrid.HexSize, hexGrid.HexOrientation);
 
-                foreach (HexCell neighbor in _hexGrid.GetCellNeighbours(_hexCells, cell))
+                foreach (HexCell neighbor in GetCellNeighbours(cell))
                 {
                     if (neighbor.IsFlooded())
                         continue;
