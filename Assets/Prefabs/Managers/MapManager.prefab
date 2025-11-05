@@ -75,6 +75,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _jsonMap: {fileID: 0}
   _mapLoadFinishEvent: {fileID: 0}
+  _allowedTerrains: {fileID: 11400000, guid: d58def7f9d21b0740bf047b7637efa9e, type: 2}
   DrawDebugLabels: 0
   SeaLevel: 0
   RisingRate: 0

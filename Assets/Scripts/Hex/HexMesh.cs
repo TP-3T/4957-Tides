@@ -92,7 +92,6 @@ namespace TTT.Hex
             for (int i = 0; i < hexCells.Count; i++)
             {
                 HexCell hexCell = hexCells[i];
-                bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
                 int triVertexStart = vertices.Count;
 
                 if (IsServer)
@@ -115,9 +114,6 @@ namespace TTT.Hex
                 // Vertices that will be used to draw the side faces
                 foreach (Vector3 corner in corners)
                 {
-                    if (!aboveSeaLevel)
-                        continue;
-
                     vertices.Add(
                         hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0)
                     );
@@ -128,10 +124,6 @@ namespace TTT.Hex
                 for (int k = 0; k < corners.Length; k++)
                 {
                     AddTopTriangles(triVertexStart, k);
-
-                    if (!aboveSeaLevel)
-                        continue;
-
                     AddSideTriangles(triVertexStart, sideTriVertexStart, k);
                 }
 
@@ -161,7 +153,6 @@ namespace TTT.Hex
             // Debug.Log(hexCell.CenterVertexIndex);
             // Debug.Log(hexCell.CellColor);
 
-            bool aboveSeaLevel = hexCell.CellPosition.y > 0f;
             int count = hexCell.CenterVertexIndex; // c = counter, 😉
 
             cvertices[count] = hexCell.CellPosition;
@@ -179,9 +170,6 @@ namespace TTT.Hex
             // Vertices that will be used to draw the side faces
             foreach (Vector3 corner in corners)
             {
-                if (!aboveSeaLevel)
-                    continue;
-
                 cvertices[count] =
                     hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0);
                 ccolors[count++] = hexCell.CellColor;
@@ -205,7 +193,6 @@ namespace TTT.Hex
         {
             foreach (HexCell c in hexCells)
             {
-                bool aboveSeaLevel = c.CellPosition.y > 0f;
                 int count = c.CenterVertexIndex; // c = counter, 😉
 
                 cvertices[count] = c.CellPosition;
@@ -223,9 +210,6 @@ namespace TTT.Hex
                 // Vertices that will be used to draw the side faces
                 foreach (Vector3 corner in corners)
                 {
-                    if (!aboveSeaLevel)
-                        continue;
-
                     cvertices[count] =
                         c.CellPosition + corner - new Vector3(0, c.CellPosition.y, 0);
                     ccolors[count++] = c.CellColor;
