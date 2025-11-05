@@ -25,7 +25,7 @@ namespace TTT.DataClasses.HexData
             CellColor           = cellColor;
 
             CenterVertexIndex = -1;     // To let everyone know that this is not set
-            Flooded = false;
+            Flooded = false;            // default flooded state of the cell
         }
 
         /// <summary>
@@ -37,11 +37,6 @@ namespace TTT.DataClasses.HexData
         /// The model of the feature currently instantiated on this cell.
         /// </summary>
         // public GameObject InstantiatedFeature { get; set; }
-
-        public void SetCenterVertex(int centerVertexIndex)
-        {
-            CenterVertexIndex = centerVertexIndex;
-        }
 
         /// <summary>
         /// Mainly for debugging.

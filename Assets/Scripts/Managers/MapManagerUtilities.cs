@@ -14,10 +14,11 @@ namespace TTT.Managers
     /// </summary>
     public partial class MapManager
     {
-        private void FloodCell(HexCell hc)
+        private void FloodCell(ref HexCell hc)
         {
             int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
             hc.Flooded = true;
+            hc.CellColor = Color.blue;
             HexCells[index] = hc;
         }
 
@@ -123,6 +124,7 @@ namespace TTT.Managers
                 // string test2 = "";
                 // foreach (var hxc in ToFlood) test2 += $"{hxc}\n";
                 // Debug.Log(test2);
+                // Debug.Log(ToFlood.Count);
 
                 // --- 1. Flood queue is empty, go through neighbours that were not eligable for flooding and see if they will be ---
                 if (ToFlood.Count == 0)
@@ -147,13 +149,14 @@ namespace TTT.Managers
 
                 // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
                 List<HexCell> flooded = new();
-                while (ToFlood.Count > 0 && i < CellsPerFrame)
+                int cellCount = 0;
+                while (ToFlood.Count > 0 && cellCount < CellsPerFrame)
                 {
                     HexCell cell = ToFlood.Dequeue();
-                    FloodCell(cell);
+                    FloodCell(ref cell);
                     flooded.Add(cell);
-                    List<HexCell> neighbours = GetCellNeighbours(cell);
 
+                    List<HexCell> neighbours = GetCellNeighbours(cell);
                     foreach (HexCell neighbor in neighbours)
                     {
                         if (neighbor.Flooded)
@@ -165,6 +168,8 @@ namespace TTT.Managers
                         else
                             floodQueue.Enqueue(neighbor);
                     }
+
+                    cellCount++;
                 }
 
                 // --- 3. Retriangulate what has been flooded ---

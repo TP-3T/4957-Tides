@@ -95,7 +95,7 @@ namespace TTT.Hex
                 int triVertexStart = vertices.Count;
 
                 if (IsServer)
-                    hexCell.SetCenterVertex(triVertexStart);
+                    hexCell.CenterVertexIndex = triVertexStart;
 
                 vertices.Add(hexCell.CellPosition);
                 colors.Add(hexCell.CellColor);

@@ -140,6 +140,8 @@ namespace TTT.Managers
         {
             NewMapEventArgs args = eventArgs as NewMapEventArgs;
 
+            // WO: Deserializer / Serializer class for game data will eventually do the job of this routine
+            // Maybe...
             try
             {
                 // Deserialized data (cringe)
