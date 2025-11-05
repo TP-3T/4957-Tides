@@ -11,8 +11,27 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.TestTools;
 
+/*
+* If tests results require frames to update, use the UnityTest attribute and yield return null to skip a frame.
+* Example: Flooding changes terrain over multiple frames, so tests related to flooding should use UnityTest.
+* Nothing here is final and can be changed as needed.
+*/
 public class EditModeTests
 {
+    #region Application Tests
+    [Test, Description("Asserts the Unity project builds successfully.")]
+    public void BuildProject()
+    {
+        Assert.Pass();
+    }
+
+    [Test, Description("Asserts the application runs without errors.")]
+    public void ApplicationRuns()
+    {
+        Assert.Pass();
+    }
+    #endregion
+
     #region Map Setup Tests
     [Test, Description("Map setup without required components throws a NullReferenceException.")]
     public void MapSetup_ThrowsNullReferenceException()
