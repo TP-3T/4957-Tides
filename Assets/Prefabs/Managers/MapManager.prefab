@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4501877893874324670}
   - component: {fileID: 7227047647059873641}
   - component: {fileID: 5925874576535686948}
+  - component: {fileID: 9158636743349474806}
   m_Layer: 0
   m_Name: MapManager
   m_TagString: Untagged
@@ -126,6 +127,34 @@ MonoBehaviour:
       - m_Target: {fileID: 4501877893874324670}
         m_TargetAssemblyTypeName: MapManager, TTT.Managers
         m_MethodName: OnMapMeshClicked
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+--- !u!114 &9158636743349474806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065302472941044375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 944619221b6664749b66a67e05cb4b08, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4501877893874324670}
+        m_TargetAssemblyTypeName: TTT.Managers.MapManager, TTT.Managers
+        m_MethodName: OnFlood
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TTT.DataClasses.HexData;
 using TTT.Helpers;
 using TTT.Hex;
+using UnityEditor.TerrainTools;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -13,6 +14,20 @@ namespace TTT.Managers
     /// </summary>
     public partial class MapManager
     {
+        private void FloodCell(HexCell hc)
+        {
+            int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
+            hc.Flooded = true;
+            HexCells[index] = hc;
+        }
+
+        private void SetCellCenterVertex(HexCell hc, int cv)
+        {
+            int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
+            hc.CenterVertexIndex = cv;
+            HexCells[index] = hc;
+        }
+
         private CubeCoordinates GetCubeCoordinatesFromPosition(Vector3 position)
 
         {
@@ -41,14 +56,25 @@ namespace TTT.Managers
             return ci;
         }
 
-        private HexCell GetCellFromCubeCoordinates(
+        private HexCell? GetCellFromCubeCoordinates(
             CubeCoordinates hc, out bool success)
         {
             if (MapManager.HexOrientation == HexOrientation.pointyTop)
             {
                 int cubeCoordinateIndex = GetCellIndexFromCubeCoordinates(hc);
-                success = true;
-                return HexCells[cubeCoordinateIndex];
+                // Debug.Log(cubeCoordinateIndex);
+                if (   cubeCoordinateIndex < HexCells.Count 
+                    && cubeCoordinateIndex >= 0
+                    && ((Mathf.RoundToInt(hc.r / 2) + hc.q) >= 0))      // Prevent row wrap-around, enforce row constraint (r component / 2 + q component zeros out if this is a valid cell)
+                {
+                    success = true;
+                    return HexCells[cubeCoordinateIndex];
+                }
+                else
+                {
+                    success = false;
+                    return null;
+                }
             }
             else
             {
@@ -57,7 +83,7 @@ namespace TTT.Managers
             }
         }
 
-        public HexCell GetCellFromPosition(Vector3 position, out bool success)
+        public HexCell? GetCellFromPosition(Vector3 position, out bool success)
         {
             CubeCoordinates hc = GetCubeCoordinatesFromPosition(position);
             return GetCellFromCubeCoordinates(hc, out success);
@@ -72,10 +98,11 @@ namespace TTT.Managers
             {
                 bool success;
                 CubeCoordinates neighborPos = c.CellCubeCoordinates + dir;
-                HexCell n = GetCellFromCubeCoordinates(neighborPos, out success);
+                HexCell? n = GetCellFromCubeCoordinates(neighborPos, out success);
+                // Debug.Log($"{success}, {neighborPos}, {dir}");
 
                 if (success)
-                    neighbours.Add(n);
+                    neighbours.Add((HexCell)n);
             }
 
             return neighbours;
@@ -86,66 +113,62 @@ namespace TTT.Managers
         /// </summary>
         public IEnumerator RaiseSea()
         {
-            this.SeaLevel += this.RisingRate;
+            SeaLevel.Value += RisingRate.Value;
+
+            Queue<HexCell> floodQueue   = new();
+            Queue<HexCell> floodQueue2  = new();
 
             while (true)
             {
+                // string test2 = "";
+                // foreach (var hxc in ToFlood) test2 += $"{hxc}\n";
+                // Debug.Log(test2);
+
                 // --- 1. Flood queue is empty, go through neighbours that were not eligable for flooding and see if they will be ---
                 if (ToFlood.Count == 0)
                 {
-                    Debug.Log("Flood fill cycle complete");
-
-                    while (this.FloodQueue.Count > 0)
+                    while (floodQueue.Count > 0)
                     {
-                        HexCell test = this.FloodQueue.Dequeue();
+                        HexCell test = floodQueue.Dequeue();
 
-                        if (test.CellPosition.y <= (this.SeaLevel + this.RisingRate))
+                        if (test.CellPosition.y <= (SeaLevel.Value + RisingRate.Value))
                             ToFlood.Enqueue(test);
                         else
-                            this.FloodQueue2.Enqueue(test);
+                            floodQueue2.Enqueue(test);
                     }
 
-                    while (this.FloodQueue2.Count > 0)
-                    {
-                        this.FloodQueue.Enqueue(this.FloodQueue2.Dequeue());
-                    }
+                    while (floodQueue2.Count > 0)
+                        floodQueue.Enqueue(floodQueue2.Dequeue());
+
+                    Debug.Log("Flood fill cycle complete");
 
                     yield break;
                 }
 
                 // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
-                int i = 0;
-
-                Flooded.Clear();
-
+                List<HexCell> flooded = new();
                 while (ToFlood.Count > 0 && i < CellsPerFrame)
                 {
                     HexCell cell = ToFlood.Dequeue();
+                    FloodCell(cell);
+                    flooded.Add(cell);
+                    List<HexCell> neighbours = GetCellNeighbours(cell);
 
-                    //if water level is higher and cell is a border cell.
-                    cell.FloodCell();
-
-                    Flooded.Add(cell);
-
-                    // hexMesh.ReTriangulateCell(
-                    //    cell, hexGrid.HexSize, hexGrid.HexOrientation);
-
-                    foreach (HexCell neighbor in GetCellNeighbours(cell))
+                    foreach (HexCell neighbor in neighbours)
                     {
-                        if (neighbor.IsFlooded())
+                        if (neighbor.Flooded)
                             continue;
-                        if (this.ToFlood.Contains(neighbor) || this.FloodQueue.Contains(neighbor))
+                        if (ToFlood.Contains(neighbor) || floodQueue.Contains(neighbor))
                             continue;
-                        if (neighbor.CellPosition.y <= this.SeaLevel)
+                        if (neighbor.CellPosition.y <= SeaLevel.Value)
                             ToFlood.Enqueue(neighbor);
                         else
-                            this.FloodQueue.Enqueue(neighbor);
+                            floodQueue.Enqueue(neighbor);
                     }
-                    i++;
                 }
 
                 // --- 3. Retriangulate what has been flooded ---
-                // hexMesh.ReTriangulateCells(Flooded.ToArray(), hexGrid.HexSize, hexGrid.HexOrientation);
+                TriangulateMeshInstanceClientRpc(flooded.ToArray());
 
                 yield return null;
             }

@@ -10,13 +10,9 @@ namespace TTT.DataClasses.HexData
     public struct HexCell : INetworkSerializable, IEquatable<HexCell>
     {
         public CubeCoordinates CellCubeCoordinates;
-
         public Vector3 CellPosition;
-
         public Color CellColor;
-
         public int CenterVertexIndex;
-
         public bool Flooded;
 
         public HexCell(
@@ -42,23 +38,6 @@ namespace TTT.DataClasses.HexData
         /// </summary>
         // public GameObject InstantiatedFeature { get; set; }
 
-        /// <summary>
-        /// Flood this cell
-        /// </summary>
-        public void FloodCell()
-        {
-            Flooded = true;
-            CellColor = Color.blue;
-        }
-
-        /// <summary>
-        /// Get the flooded state of the cell.
-        /// </summary>
-        public bool IsFlooded()
-        {
-            return Flooded;
-        }
-
         public void SetCenterVertex(int centerVertexIndex)
         {
             CenterVertexIndex = centerVertexIndex;
@@ -70,7 +49,7 @@ namespace TTT.DataClasses.HexData
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor} }}";
+            return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor}, flooded: {Flooded} }}";
         }
 
         public bool Equals(HexCell other)
@@ -80,6 +59,15 @@ namespace TTT.DataClasses.HexData
                 && CellColor == other.CellColor
                 && CenterVertexIndex == other.CenterVertexIndex
                 && Flooded == other.Flooded;
+        }
+
+        public override bool Equals(object other)
+        {
+            return CellCubeCoordinates == ((HexCell)other).CellCubeCoordinates
+                && CellColor == ((HexCell)other).CellColor
+                && CellPosition == ((HexCell)other).CellPosition
+                && CenterVertexIndex == ((HexCell)other).CenterVertexIndex
+                && Flooded == ((HexCell)other).Flooded;
         }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter

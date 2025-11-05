@@ -1654,7 +1654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c5a39d6f5dd674f81ab382788810bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nextTurnEvent: {fileID: 0}
+  _nextTurnEvent: {fileID: 11400000, guid: 944619221b6664749b66a67e05cb4b08, type: 2}
 --- !u!1 &4971699643227154928
 GameObject:
   m_ObjectHideFlags: 0

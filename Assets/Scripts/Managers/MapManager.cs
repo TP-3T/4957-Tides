@@ -7,10 +7,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using System.Collections;
-using TTT.Managers;
 using System.Collections.Generic;
-using Codice.Client.BaseCommands.Download;
-using UnityEditor.PackageManager;
 using TTT.Terrain;
 
 namespace TTT.Managers
@@ -44,33 +41,23 @@ namespace TTT.Managers
         [SerializeField]
         private TerrainDictionary _allowedTerrains;
 
-        private AssetReference _hexGridMeshAsset = new("P_HexMesh");
-        private AssetReference _seaMeshAsset = new("P_SeaMesh");
-        private MapData _gameMapData;
         private NetworkVariable<int> _hexGridWidth = new();
         private NetworkVariable<int> _hexGridHeight = new();
         private NetworkVariable<ulong> _hexMeshId = new();
+        private AssetReference _hexGridMeshAsset = new("P_HexMesh");
+        private AssetReference _seaMeshAsset = new("P_SeaMesh");
+        private MapData _gameMapData;
         private const int CellsPerFrame = 100;
 
         public NetworkList<HexCell> HexCells = new(default,
             NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public Queue<HexCell> ToFlood = new();
+        public NetworkVariable<float> SeaLevel = new(0.0f);
+        public NetworkVariable<float> RisingRate = new(1.0f);
         public bool DrawDebugLabels;
-        public float SeaLevel;
-        public float RisingRate;
-        public Queue<HexCell> ToFlood;
-        public Queue<HexCell> FloodQueue;
-        public Queue<HexCell> FloodQueue2;
-        public List<HexCell> Flooded;
 
         public override void OnNetworkSpawn()
         {
-            RisingRate = 1.0f;
-            SeaLevel = 0.0f;
-            ToFlood = new();
-            FloodQueue = new();
-            FloodQueue2 = new();
-            Flooded = new();
-
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
         }
 
@@ -131,7 +118,7 @@ namespace TTT.Managers
             hexMeshInstance.ReTriangulateCells(cells, MapManager.HexSize, MapManager.HexOrientation);
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         public void StartRaiseSeaServerRpc()
         {
             StopAllCoroutines();
@@ -198,6 +185,8 @@ namespace TTT.Managers
                     HexCells.Add(hc);
                 }
 
+                ToFlood.Enqueue(HexCells[0]);       // There was some idea for this
+
                 StartCoroutine(SpawnMapObjects());
             }
             catch (Exception e)
@@ -209,8 +198,6 @@ namespace TTT.Managers
 
         public void OnClientConnect(ulong clientId)
         {
-            Debug.Log($"Hello mr {clientId}");
-
             if (IsClient)
             {
                 TriangulateMeshInstanceClientRpc();
