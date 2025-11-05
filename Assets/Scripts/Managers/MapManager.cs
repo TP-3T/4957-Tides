@@ -52,6 +52,8 @@ namespace TTT.Managers
         public NetworkList<HexCell> HexCells = new(default,
             NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public Queue<HexCell> ToFlood = new();
+        public Queue<HexCell> FloodQueue = new();
+        public Queue<HexCell> FloodQueue2 = new();
         public NetworkVariable<float> SeaLevel = new(0.0f);
         public NetworkVariable<float> RisingRate = new(1.0f);
         public bool DrawDebugLabels;

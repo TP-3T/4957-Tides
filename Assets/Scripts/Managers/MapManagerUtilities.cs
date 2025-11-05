@@ -116,31 +116,29 @@ namespace TTT.Managers
         {
             SeaLevel.Value += RisingRate.Value;
 
-            Queue<HexCell> floodQueue   = new();
-            Queue<HexCell> floodQueue2  = new();
 
             while (true)
             {
                 // string test2 = "";
                 // foreach (var hxc in ToFlood) test2 += $"{hxc}\n";
                 // Debug.Log(test2);
-                // Debug.Log(ToFlood.Count);
+                Debug.Log($"{FloodQueue.Count}, {ToFlood.Count}");
 
                 // --- 1. Flood queue is empty, go through neighbours that were not eligable for flooding and see if they will be ---
                 if (ToFlood.Count == 0)
                 {
-                    while (floodQueue.Count > 0)
+                    while (FloodQueue.Count > 0)
                     {
-                        HexCell test = floodQueue.Dequeue();
+                        HexCell test = FloodQueue.Dequeue();
 
                         if (test.CellPosition.y <= (SeaLevel.Value + RisingRate.Value))
                             ToFlood.Enqueue(test);
                         else
-                            floodQueue2.Enqueue(test);
+                            FloodQueue2.Enqueue(test);
                     }
 
-                    while (floodQueue2.Count > 0)
-                        floodQueue.Enqueue(floodQueue2.Dequeue());
+                    while (FloodQueue2.Count > 0)
+                        FloodQueue.Enqueue(FloodQueue2.Dequeue());
 
                     Debug.Log("Flood fill cycle complete");
 
@@ -161,12 +159,12 @@ namespace TTT.Managers
                     {
                         if (neighbor.Flooded)
                             continue;
-                        if (ToFlood.Contains(neighbor) || floodQueue.Contains(neighbor))
+                        if (ToFlood.Contains(neighbor) || FloodQueue.Contains(neighbor))
                             continue;
                         if (neighbor.CellPosition.y <= SeaLevel.Value)
                             ToFlood.Enqueue(neighbor);
                         else
-                            floodQueue.Enqueue(neighbor);
+                            FloodQueue.Enqueue(neighbor);
                     }
 
                     cellCount++;
