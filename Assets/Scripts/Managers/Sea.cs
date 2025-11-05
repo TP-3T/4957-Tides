@@ -6,6 +6,7 @@ using TTT.Helpers;
 using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
+using TTT.UI;
 
 public class Sea : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class Sea : MonoBehaviour
         this.FloodQueue = new();
         this.FloodQueue2 = new();
         this.Flooded = new();
+
     }
 
     /// <summary>
@@ -141,4 +143,20 @@ public class Sea : MonoBehaviour
     {
         HandleNextTurnClickedClientRpc();
     }
+
+    private void OnEnable()
+    {
+        NextTurn.OnNextTurnClicked += listenForNextTurn;
+    }
+
+    private void OnDisable()
+    {
+        NextTurn.OnNextTurnClicked -= listenForNextTurn;
+    }
+
+    public void listenForNextTurn(NextTurn nt)
+    {
+        Debug.Log("1. Rise The Sea Level - Sea.cs" + nt.ToString());
+    }
+
 }

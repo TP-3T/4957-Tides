@@ -1,4 +1,3 @@
-using TTT.DataClasses.HexData;
 using TTT.Hex;
 using UnityEditor;
 using UnityEngine;
@@ -30,7 +29,7 @@ public class HexGridEditor : Editor
         if (!t.DrawDebugLabels)
             return;
 
-        foreach (HexCell hexCell in t.HexCells)
+        foreach (TTT.DataClasses.HexData.HexCell hexCell in t.HexCells)
         {
             if (hexCell == null)
                 continue;
