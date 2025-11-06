@@ -44,6 +44,7 @@ namespace TTT.Managers
         private NetworkVariable<int> _hexGridWidth = new();
         private NetworkVariable<int> _hexGridHeight = new();
         private NetworkVariable<ulong> _hexMeshId = new();
+        private NetworkVariable<ulong> _seaMeshId = new();
         private AssetReference _hexGridMeshAsset = new("P_HexMesh");
         private AssetReference _seaMeshAsset = new("P_SeaMesh");
         private MapData _gameMapData;
@@ -66,6 +67,7 @@ namespace TTT.Managers
         private IEnumerator SpawnMapObjects()
         {
             yield return AssetLoader<GameObject>.Load(_hexGridMeshAsset, SpawnGridMesh);
+            yield return AssetLoader<GameObject>.Load(_seaMeshAsset, SpawnSeaMesh);
         }
 
         private void SpawnGridMesh(GameObject hm)
@@ -81,14 +83,16 @@ namespace TTT.Managers
             TriangulateMeshInstanceClientRpc();
         }
 
-        // private void SpawnSea(SeaMesh sm)
-        // {
-        //     // Get reference to SeaMesh prefab
-        //     var inst = Instantiate(sm);
+        private void SpawnSeaMesh(GameObject sm)
+        {
+            // Get reference to SeaMesh prefab
+            GameObject seaMeshGameObject = Instantiate(sm);
+            SeaMesh seaMeshInstance = seaMeshGameObject.GetComponent<SeaMesh>();
 
-        //     // Instance SeaMesh prefab based off of the build data
-        //     inst.GetComponent<NetworkObject>().Spawn();
-        // }
+            // Instance SeaMesh prefab based off of the
+            seaMeshInstance.GetComponent<NetworkObject>().Spawn();
+            _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
+        }
 
         [ClientRpc]
         private void TriangulateMeshInstanceClientRpc()

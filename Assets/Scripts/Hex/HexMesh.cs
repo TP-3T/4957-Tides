@@ -6,7 +6,8 @@ using UnityEngine.Rendering;
 
 namespace TTT.Hex
 {
-    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
+    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider)),
+    RequireComponent(typeof(NetworkObject))]
     public class HexMesh : NetworkBehaviour
     {
         public static LayerMask LayerMask = 1 << 10;
