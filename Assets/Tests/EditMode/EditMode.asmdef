@@ -6,8 +6,9 @@
         "UnityEditor.TestRunner",
         "TTT.Hex",
         "TTT.DataClasses.HexData",
+        "TTT.DataClasses.Terrain",
         "TTT.GameEvents",
-        "TTT.Terrain",
+        "TTT.Managers",
         "TTT.ModularData",
         "Unity.Netcode.Runtime"
     ],

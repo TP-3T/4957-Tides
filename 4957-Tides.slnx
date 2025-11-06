@@ -10,5 +10,7 @@
   <Project Path="TTT.DataClasses.Terrain.csproj" />
   <Project Path="TTT.States.csproj" />
   <Project Path="TTT.DataClasses.PlayerResources.csproj" />
+  <Project Path="EditMode.csproj" />
+  <Project Path="PlayMode.csproj" />
   <Project Path="TTT.Helpers.csproj" />
 </Solution>
