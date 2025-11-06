@@ -85,9 +85,6 @@ namespace TTT.DataClasses.HexData
                 return;
             }
 
-            FeatureType = null;
-            RemoveFeaturePrefab();
-
             if (wasSold)
             {
                 foreach (var producer in FeatureType.ResourceProducers)
@@ -102,6 +99,9 @@ namespace TTT.DataClasses.HexData
                     producer.OnSold();
                 }
             }
+
+            FeatureType = null;
+            RemoveFeaturePrefab();
         }
 
         /// <summary>

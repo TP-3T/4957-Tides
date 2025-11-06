@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Materials
   m_EditorClassIdentifier: 
   resourceName: materials
-  amountOwned: 0
+  amountOwned: 10
