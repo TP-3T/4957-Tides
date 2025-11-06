@@ -19,12 +19,6 @@ using UnityEngine.TestTools;
 public class EditModeTests
 {
     #region Application Tests
-    [Test, Description("Asserts the Unity project builds successfully.")]
-    public void BuildProject()
-    {
-        Assert.Pass();
-    }
-
     [Test, Description("Asserts the application runs without errors.")]
     public void ApplicationRuns()
     {
