@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TTT.GameEvents
 {
-    public class StateGameStateChangedEventArgs
+    public class StateGameStateChangedEventArgs : ScriptableObject
     {
         public GameState NewState { get; set; }
     }
