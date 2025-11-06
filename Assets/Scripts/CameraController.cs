@@ -17,10 +17,10 @@ public class CameraController : MonoBehaviour
     const float STEP_SIZE = 2f;
     const float DAMPING = 15f;
     const float ZOOM_DAMPING = 7.5f;
-    const float ZOOM_SPEED = 5f;
+    const float ZOOM_SPEED = 20f;
     const float ZOOM_DELTA_THRESHOLD = 0.1f;
     const float MIN_HEIGHT = 10f;
-    const float MAX_HEIGHT = 20f;
+    const float MAX_HEIGHT = 40f;
     const float MAX_ROTATION_SPEED = 0.25f;
     const float ROTATION_X = 0f;
     const float ROTATION_Z = 0f;
@@ -262,7 +262,8 @@ public class CameraController : MonoBehaviour
             cameraTransform.localPosition.z
         );
 
-        zoomTarget -= ZOOM_SPEED * (zoomHeight - cameraTransform.localPosition.y) * Vector3.forward;
+        zoomTarget -=
+            ZOOM_SPEED * (zoomHeight - cameraTransform.localPosition.y) * cameraTransform.forward;
 
         cameraTransform.localPosition = Vector3.Lerp(
             cameraTransform.localPosition,
