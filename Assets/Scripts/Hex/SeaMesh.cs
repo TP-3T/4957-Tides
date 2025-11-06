@@ -55,10 +55,8 @@ namespace TTT.Hex
             _triangles.Add(triVertexStart + i + 1);
         }
 
-        public void Verticify(NetworkList<HexCell> hexCells, float hexSize, HexOrientation hexOrientation)
+        public void Triangulate(NetworkList<HexCell> hexCells, float seaLevel, float hexSize, HexOrientation hexOrientation)
         {
-            ClearMesh();
-
             for (int i = 0; i < hexCells.Count; i++)
             {
                 HexCell hexCell = hexCells[i];
@@ -85,18 +83,21 @@ namespace TTT.Hex
                     );
                 }
 
-                // Populate triangle and color arrays
-                for (int k = 0; k < corners.Length; k++)
+                if (hexCell.CellPosition.y <= seaLevel)
                 {
-                    AddTopTriangles(count, k);
+                    // Populate triangle and color arrays
+                    for (int k = 0; k < corners.Length; k++)
+                    {
+                        AddTopTriangles(count, k);
+                    }
                 }
             }
 
             _seaMesh.vertices = /*_cvertices =*/ _vertices.ToArray();
-            _seaMesh.triangles = _triangles.ToArray();
+            _seaMesh.SetTriangles(_triangles, 0);
 
-            _seaMesh.RecalculateNormals();
             _seaMesh.RecalculateBounds();
+            _seaMesh.RecalculateNormals();
 
             _meshFilter.sharedMesh = _seaMesh;
             _meshCollider.sharedMesh = _seaMesh;
@@ -132,6 +133,8 @@ namespace TTT.Hex
             }
 
             _seaMesh.SetTriangles(_triangles, 0);
+
+            _seaMesh.RecalculateNormals();
         }
 
         public void ClearMesh()
