@@ -7,8 +7,9 @@ using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 using TTT.UI;
+using TTT.Dispatch;
 
-public class Sea : MonoBehaviour
+public class Sea : MonoBehaviour, IGameEventListener<NextTurn>
 {
     public float SeaLevel;
 
@@ -27,6 +28,9 @@ public class Sea : MonoBehaviour
     private HexMesh hexMesh;
     private const int CellsPerFrame = 100;
 
+    /// <summary>
+    /// Unity built-in method, gets called once at the beginning.
+    /// </summary>
     void Awake()
     {
         this.RisingRate = 1.0f;
@@ -37,6 +41,15 @@ public class Sea : MonoBehaviour
         this.FloodQueue2 = new();
         this.Flooded = new();
 
+        GameEventDispatch.RegisterListener(this);   
+    }
+
+    /// <summary>
+    /// Unity built-in method, gets called when the object is being destroyed.
+    /// </summary>
+    void OnDestroy()
+    {
+        GameEventDispatch.UnregisterListener(this);
     }
 
     /// <summary>
@@ -144,19 +157,13 @@ public class Sea : MonoBehaviour
         HandleNextTurnClickedClientRpc();
     }
 
-    private void OnEnable()
+    /// <summary>
+    /// Method from INextTurnListener interface. Called when Next Turn event is dispatched.
+    /// </summary>
+    /// <param name="nt">The Next Turn Event</param>
+    public void OnEventRaised(NextTurn nt)
     {
-        NextTurn.OnNextTurnClicked += listenForNextTurn;
-    }
-
-    private void OnDisable()
-    {
-        NextTurn.OnNextTurnClicked -= listenForNextTurn;
-    }
-
-    public void listenForNextTurn(NextTurn nt)
-    {
+        //rise sea level here
         Debug.Log("1. Rise The Sea Level - Sea.cs" + nt.ToString());
     }
-
 }

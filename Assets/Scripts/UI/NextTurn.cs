@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TTT.GameEvents;
 using System;
+using TTT.Dispatch;
 
 namespace TTT.UI
 {
@@ -29,7 +30,7 @@ namespace TTT.UI
         /// </summary>
         public void OnClick()
         {
-            OnNextTurnClicked?.Invoke(this);
+            GameEventDispatch.Raise<NextTurn>(new NextTurn());
         }
     }
 }

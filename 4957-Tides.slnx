@@ -12,4 +12,5 @@
   <Project Path="TTT.States.csproj" />
   <Project Path="TTT.DataClasses.PlayerResources.csproj" />
   <Project Path="TTT.Helpers.csproj" />
+  <Project Path="TTT.Dispatch.csproj" />
 </Solution>
