@@ -3,24 +3,15 @@ using UnityEngine;
 
 public class NetworkButton : MonoBehaviour
 {
-    public GameEvent startEvent;
+    [SerializeField]
+    private GameEvent SystemStateChangeEvent;
 
-    public void OnStartServer()
+    public void OnButtonClickEpico()
     {
-        startEvent.Raise(new StartNetworkEventArgs() { IsHost = true });
-    }
-
-    public void OnStartClient()
-    {
-        startEvent.Raise(new StartNetworkEventArgs() { IsHost = false });
-    }
-
-    public void OnMapLoad(Object eventArgs)
-    {
-        NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
-        if (args.WasSuccessful)
+        SystemStateChangeEvent.Raise(new StateSystemChangeEventArgs
         {
-            gameObject.SetActive(false);
+            NewState = TTT.DataClasses.States.SystemState.PLAYING
         }
+        );
     }
-}
+}   
