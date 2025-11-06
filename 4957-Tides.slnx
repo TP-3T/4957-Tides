@@ -5,6 +5,7 @@
   <Project Path="TTT.DataClasses.PlayerResources.csproj" />
   <Project Path="TTT.Hex.csproj" />
   <Project Path="TTT.GameEvents.csproj" />
+  <Project Path="UI.csproj" />
   <Project Path="TTT.Editors.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="TTT.ModularData.csproj" />
@@ -13,4 +14,5 @@
   <Project Path="TTT.DataClasses.Terrain.csproj" />
   <Project Path="TTT.DataClasses.States.csproj" />
   <Project Path="TTT.Helpers.csproj" />
+  <Project Path="TTT.Dispatch.csproj" />
 </Solution>
