@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using TTT.DataClasses.HexData;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace TTT.Hex
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider)),
-    RequireComponent(typeof(NetworkObject))]
+    RequireComponent(typeof(NetworkObject)),
+    RequireComponent(typeof(NetworkTransform))]
     public class HexMesh : NetworkBehaviour
     {
         public static LayerMask LayerMask = 1 << 10;

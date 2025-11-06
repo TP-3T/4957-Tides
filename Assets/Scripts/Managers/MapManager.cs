@@ -78,6 +78,7 @@ namespace TTT.Managers
 
             // Instance HexMesh prefab based off of the build data
             hexMeshInstance.GetComponent<NetworkObject>().Spawn();
+            hexMeshInstance.transform.position += new Vector3(0.0f, -0.01f, 0.0f);
             _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
 
             TriangulateMeshInstanceClientRpc();
@@ -92,6 +93,8 @@ namespace TTT.Managers
             // Instance SeaMesh prefab based off of the
             seaMeshInstance.GetComponent<NetworkObject>().Spawn();
             _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
+
+            VerticifySeaMeshInstanceClientRpc();
         }
 
         [ClientRpc]
@@ -122,6 +125,34 @@ namespace TTT.Managers
             HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
 
             hexMeshInstance.ReTriangulateCells(cells, MapManager.HexSize, MapManager.HexOrientation);
+        }
+
+        [ClientRpc]
+        private void TriangulateSeaMeshClientRpc(HexCell cell)
+        {
+            NetworkObject seaMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_seaMeshId.Value];
+            SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
+
+            seaMeshInstance.TriangulateCell(cell, MapManager.HexSize, MapManager.HexOrientation);
+        }
+
+        [ClientRpc]
+        private void TriangulateSeaMeshClientRpc(HexCell[] cells)
+        {
+            NetworkObject seaMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_seaMeshId.Value];
+            SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
+
+            seaMeshInstance.TriangulateCells(cells, SeaLevel.Value, MapManager.HexSize, MapManager.HexOrientation);
+            Debug.Log(SeaLevel.Value);
+        }
+
+        [ClientRpc]
+        private void VerticifySeaMeshInstanceClientRpc()
+        {
+            NetworkObject seaMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_seaMeshId.Value];
+            SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
+
+            seaMeshInstance.Verticify(HexCells, MapManager.HexSize, MapManager.HexOrientation);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -209,6 +240,7 @@ namespace TTT.Managers
             if (IsClient)
             {
                 TriangulateMeshInstanceClientRpc();
+                VerticifySeaMeshInstanceClientRpc();
             }
         }
 

@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
 using TTT.DataClasses.HexData;
+using Unity.Netcode.Components;
 
 namespace TTT.Hex
 {
@@ -28,7 +29,7 @@ namespace TTT.Hex
 
             _seaMesh = new Mesh
             {
-                name = "The Hexagon Mesh",
+                name = "The Sea Mesh",
                 indexFormat = IndexFormat.UInt32, // This is so that we can have > 65000 vertices in the mesh, platform dependant so idk, multiple meshes (please no)
             };
 
@@ -61,37 +62,37 @@ namespace TTT.Hex
             for (int i = 0; i < hexCells.Count; i++)
             {
                 HexCell hexCell = hexCells[i];
-                int triVertexStart = _vertices.Count;
+                int count = hexCell.CenterVertexIndex;
+                // int triVertexStart = _vertices.Count;
+                Vector3 seaCellPosition = hexCell.CellPosition;
+                seaCellPosition.y = 0.0f;
 
-                _vertices.Add(hexCell.CellPosition);
+                _vertices.Add(seaCellPosition);
 
                 Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
                 // Regular triangle vertices
                 foreach (Vector3 corner in corners)
                 {
-                    _vertices.Add(hexCell.CellPosition + corner);
+                    _vertices.Add(seaCellPosition + corner);
                 }
-
-                int sideTriVertexStart = _vertices.Count;
 
                 // Vertices that will be used to draw the side faces
                 foreach (Vector3 corner in corners)
                 {
                     _vertices.Add(
-                        hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0)
+                        seaCellPosition + corner - new Vector3(0, seaCellPosition.y, 0)
                     );
                 }
 
                 // Populate triangle and color arrays
                 for (int k = 0; k < corners.Length; k++)
                 {
-                    AddTopTriangles(triVertexStart, k);
+                    AddTopTriangles(count, k);
                 }
             }
 
             _seaMesh.vertices = /*_cvertices =*/ _vertices.ToArray();
-            // _seaMesh.colors = ccolors = colors.ToArray();
             _seaMesh.triangles = _triangles.ToArray();
 
             _seaMesh.RecalculateNormals();
@@ -110,44 +111,36 @@ namespace TTT.Hex
         
         public void TriangulateCells(
             HexCell[] hexCells,
+            float seaLevel,
             float hexSize,
             HexOrientation hexOrientation
         )
         {
+            transform.position = new Vector3(0.0f, seaLevel, 0.0f);
+
             foreach (HexCell c in hexCells)
             {
                 int count = c.CenterVertexIndex; // c = counter, 😉
 
-                // cvertices[count] = c.CellPosition;
-                // ccolors[count++] = (c.CellColor);
-
                 Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
-                // Regular triangle vertices
-                foreach (Vector3 corner in corners)
+                // Populate triangle and color arrays
+                for (int k = 0; k < corners.Length; k++)
                 {
-                    // cvertices[count] = c.CellPosition + corner;
-                    // ccolors[count++] = c.CellColor;
-                }
-
-                // Vertices that will be used to draw the side faces
-                foreach (Vector3 corner in corners)
-                {
-                    // cvertices[count] =
-                    //     c.CellPosition + corner - new Vector3(0, c.CellPosition.y, 0);
-                    // ccolors[count++] = c.CellColor;
+                    AddTopTriangles(count, k);
                 }
             }
 
-            // mesh.SetVertices(cvertices);
-            // mesh.SetColors(ccolors);
+            _seaMesh.SetTriangles(_triangles, 0);
+
+            _seaMesh.RecalculateNormals();
+            _seaMesh.RecalculateBounds();
         }
 
         public void ClearMesh()
         {
             _vertices.Clear();
             _triangles.Clear();
-            // colors.Clear();
             _seaMesh.Clear();
         }
     }

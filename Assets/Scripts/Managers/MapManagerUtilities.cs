@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TTT.DataClasses.HexData;
 using TTT.Helpers;
 using TTT.Hex;
+using UnityEditor.Search;
 using UnityEditor.TerrainTools;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace TTT.Managers
         {
             int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
             hc.Flooded = true;
-            hc.CellColor = Color.blue;
+            // hc.CellColor = Color.blue;
             HexCells[index] = hc;
         }
 
@@ -116,13 +117,12 @@ namespace TTT.Managers
         {
             SeaLevel.Value += RisingRate.Value;
 
-
             while (true)
             {
                 // string test2 = "";
                 // foreach (var hxc in ToFlood) test2 += $"{hxc}\n";
                 // Debug.Log(test2);
-                Debug.Log($"{FloodQueue.Count}, {ToFlood.Count}");
+                // Debug.Log($"{FloodQueue.Count}, {ToFlood.Count}");
 
                 // --- 1. Flood queue is empty, go through neighbours that were not eligable for flooding and see if they will be ---
                 if (ToFlood.Count == 0)
@@ -171,7 +171,8 @@ namespace TTT.Managers
                 }
 
                 // --- 3. Retriangulate what has been flooded ---
-                TriangulateMeshInstanceClientRpc(flooded.ToArray());
+                // TriangulateMeshInstanceClientRpc(flooded.ToArray());
+                TriangulateSeaMeshClientRpc(flooded.ToArray());
 
                 yield return null;
             }
