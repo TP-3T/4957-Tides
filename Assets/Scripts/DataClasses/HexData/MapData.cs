@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace TTT.DataClasses.HexData
 {
     [Serializable]
-    public class MapData
+    public struct MapData
     {
         public string Name;
         public int Width;
