@@ -1,7 +1,7 @@
 ﻿<Solution>
   <Project Path="TTT.DataClasses.HexData.csproj" />
-  <Project Path="TTT.DataClasses.TileFeatures.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="TTT.DataClasses.TileFeatures.csproj" />
   <Project Path="TTT.DataClasses.PlayerResources.csproj" />
   <Project Path="TTT.Hex.csproj" />
   <Project Path="TTT.GameEvents.csproj" />

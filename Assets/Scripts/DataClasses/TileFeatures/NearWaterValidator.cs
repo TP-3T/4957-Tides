@@ -2,6 +2,7 @@ using System.Linq;
 using TTT.DataClasses;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.TileFeatures;
+using TTT.ModularData;
 using UnityEngine;
 
 [CreateAssetMenu(
@@ -13,17 +14,18 @@ public class NearWaterValidator : DefaultValidator
     private static bool TileHasWater(HexCell tile)
     {
         // we don't have a water/ocean/river/lake terrain type yet
-        return false;
+        return tile.Flooded;
     }
 
     public override bool CanBuild(
         HexCell buildLocation,
         HexCell[] nearbyTiles,
+        FeatureRuntimeSet spawnedFeatures,
         BuildConstraints constraints
     )
     {
         // default validation
-        if (base.CanBuild(buildLocation, nearbyTiles, constraints))
+        if (!base.CanBuild(buildLocation, nearbyTiles, spawnedFeatures, constraints))
         {
             return false;
         }

@@ -1,5 +1,6 @@
 using System.Linq;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.TileFeatures;
 using TTT.Managers;
 using TTT.ModularData;
@@ -7,11 +8,11 @@ using UnityEngine;
 
 public class FeatureBuilder : MonoBehaviour
 {
-    public FeatureRuntimeSet FeatureRuntimeSet;
+    public FeatureRuntimeSet SpawnedFeatures;
 
     private void TryToBuild(Vector3 location, FeatureType featureType)
     {
-        if (CheckConstraints(location, featureType))
+        if (CheckIfCanBuild(location, featureType))
         {
             BuildAt(location, featureType);
         }
@@ -21,10 +22,17 @@ public class FeatureBuilder : MonoBehaviour
         }
     }
 
-    private bool CheckConstraints(Vector3 location, FeatureType featureType)
+    private bool CheckIfCanBuild(Vector3 location, FeatureType featureType)
     {
-        if (FeatureRuntimeSet.Items.Any(feats => feats.CellPosition.Equals(location)))
+        if (SpawnedFeatures.Items.Any(feats => feats.CellPosition.Equals(location)))
         {
+            // then there's already something at this location
+            return false;
+        }
+
+        if (CheckCost(featureType))
+        {
+            // then the player is too poor
             return false;
         }
 
@@ -36,7 +44,7 @@ public class FeatureBuilder : MonoBehaviour
 
         if (selectedTile == null || !foundCell)
         {
-            Debug.Log("Tried to build but couldn't find a HexCell");
+            Debug.LogWarning("Tried to build but couldn't find a HexCell");
             return false;
         }
 
@@ -51,8 +59,22 @@ public class FeatureBuilder : MonoBehaviour
         return featureType.BuildValidator.CanBuild(
             (HexCell)selectedTile,
             adjacentTiles,
+            SpawnedFeatures,
             constraints
         );
+    }
+
+    private bool CheckCost(FeatureType featureType)
+    {
+        foreach (var resourceCost in featureType.Cost)
+        {
+            PlayerResource resource = resourceCost.Thing;
+            if (resource.AmountOwned < resourceCost.Count)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void BuildAt(Vector3 location, FeatureType featureType)
@@ -64,14 +86,14 @@ public class FeatureBuilder : MonoBehaviour
         gameInstance.transform.position = displayLocation;
 
         Feature feature = new(location, featureType, gameInstance);
-        FeatureRuntimeSet.Add(feature);
+        SpawnedFeatures.Add(feature);
 
         feature.Type.ResourceProducers.ForEach(p => p.OnCreated());
     }
 
     private void DestroyAt(Vector3 location, bool wasSold)
     {
-        Feature feature = FeatureRuntimeSet.GetByLocation(location);
+        Feature feature = SpawnedFeatures.GetByLocation(location);
 
         if (feature == null)
         {
@@ -79,7 +101,7 @@ public class FeatureBuilder : MonoBehaviour
         }
 
         Destroy(feature.PrefabInstance);
-        FeatureRuntimeSet.Remove(feature);
+        SpawnedFeatures.Remove(feature);
 
         if (wasSold)
         {
