@@ -9,8 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfe355f656467054a8ff105106e9592b, type: 3}
-  m_Name: Materials
+  m_Script: {fileID: 11500000, guid: 4dadebb4a9030a64fa6f92e8f1a6791b, type: 3}
+  m_Name: Near Water
   m_EditorClassIdentifier: 
-  resourceName: materials
-  amountOwned: 10
