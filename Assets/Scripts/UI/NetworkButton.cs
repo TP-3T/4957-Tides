@@ -1,25 +1,17 @@
 using TTT.GameEvents;
-using Unity.Netcode;
 using UnityEngine;
 
 public class NetworkButton : MonoBehaviour
 {
-    public GameEvent startEvent;
+    [SerializeField]
+    private GameEvent SystemStateChangeEvent;
 
-    public void OnStartServer()
+    public void OnButtonClickEpico()
     {
-        Debug.Log("I am being clicked");
-        startEvent.Raise(new StartNetworkEventArgs() { IsHost = true });
+        SystemStateChangeEvent.Raise(new StateSystemChangeEventArgs
+        {
+            NewState = TTT.DataClasses.States.SystemState.PLAYING
+        }
+        );
     }
-
-    public void OnStartClient()
-    {
-        Debug.Log("I am being clicked");
-        startEvent.Raise(new StartNetworkEventArgs() { IsHost = false });
-    }
-
-    public void OnMapLoad(Object eventArgs)
-    {
-        gameObject.SetActive(false);
-    }
-}
+}   
