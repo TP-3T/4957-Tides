@@ -48,7 +48,7 @@ namespace TTT.Managers
         private AssetReference _hexGridMeshAsset = new("P_HexMesh");
         private AssetReference _seaMeshAsset = new("P_SeaMesh");
         private MapData _gameMapData;
-        private const int CellsPerFrame = 100;
+        private const int CellsPerFrame = 25;
 
         public NetworkList<HexCell> HexCells = new(default,
             NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -143,7 +143,6 @@ namespace TTT.Managers
             SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
 
             seaMeshInstance.TriangulateCells(cells, SeaLevel.Value, MapManager.HexSize, MapManager.HexOrientation);
-            Debug.Log(SeaLevel.Value);
         }
 
         [ClientRpc]
