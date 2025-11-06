@@ -8,11 +8,12 @@ namespace TTT.Managers
     {
         [SerializeField]
         GameObject drawerPanel;
-        
+
         [SerializeField]
-        Vector2 openPosition, closedPosition;
-        
-        [SerializeField] 
+        Vector2 openPosition,
+            closedPosition;
+
+        [SerializeField]
         AnimationCurve animationCurve;
 
         private RectTransform m_RT;
@@ -24,7 +25,6 @@ namespace TTT.Managers
             FindFurthestKeyFrame();
             m_RT = GetComponent<RectTransform>();
             closedPosition = m_RT.anchoredPosition;
-
         }
 
         public void ToggleDrawer()
@@ -41,28 +41,24 @@ namespace TTT.Managers
 
         private IEnumerator OpenRoutine()
         {
-            float elapsedTime = 0f;
+            float elapsedTime = 0;
             while (elapsedTime < endTime)
             {
-                float curveValue = animationCurve.Evaluate(elapsedTime);
-                m_RT.anchoredPosition = Vector2.Lerp(closedPosition, openPosition, curveValue); // Interpolate position based on curve
+                m_RT.anchoredPosition = Vector2.Lerp(closedPosition, openPosition, animationCurve.Evaluate(elapsedTime)); // Interpolate position based on curve
                 yield return new WaitForEndOfFrame();
                 elapsedTime += Time.deltaTime;
-
             }
             isOpen = true;
         }
 
         private IEnumerator CloseRoutine()
         {
-            float elapsedTime = 0f;
+            float elapsedTime = 0;
             while (elapsedTime < endTime)
             {
-                float curveValue = animationCurve.Evaluate(elapsedTime);
-                m_RT.anchoredPosition = Vector2.Lerp(openPosition, closedPosition, curveValue); // Interpolate position based on curve
+                m_RT.anchoredPosition = Vector2.Lerp(openPosition, closedPosition, animationCurve.Evaluate(elapsedTime)); // Interpolate position based on curve
                 yield return new WaitForEndOfFrame();
                 elapsedTime += Time.deltaTime;
-
             }
             isOpen = false;
         }
