@@ -18,11 +18,66 @@ using UnityEngine.TestTools;
 */
 public class EditModeTests
 {
+    private GameObject testGameObject;
+
+    [SetUp]
+    public void SetUp()
+    {
+        testGameObject = new GameObject("TestObject");
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        UnityEngine.Object.DestroyImmediate(testGameObject);
+    }
+
     #region Application Tests
     [Test, Description("Asserts the application runs without errors.")]
     public void ApplicationRuns()
     {
-        Assert.Pass();
+        bool encounteredError = false;
+        string errorMessage = string.Empty;
+
+        Application.logMessageReceived += (condition, stackTrace, type) =>
+        {
+            if (type == LogType.Error || type == LogType.Exception)
+            {
+                encounteredError = true;
+                errorMessage = condition;
+            }
+        };
+
+        try
+        {
+            var testObj = new GameObject("AppRunTest");
+            var testComponent = testObj.AddComponent<Camera>();
+            Assert.IsNotNull(testComponent, "Unity component system should be functional");
+
+            UnityEngine.Object.DestroyImmediate(testObj);
+            var testScriptableObj = new MapData();
+            Assert.IsNotNull(testScriptableObj, "MapData creation should work");
+
+            var testCoords = new CubeCoordinates(1, 2, -3);
+            Assert.AreEqual(1, testCoords.q, "Data classes should be usable");
+
+            Type hexGridType = typeof(HexGrid);
+            Type mapManagerType = typeof(MapManager);
+            Assert.IsNotNull(hexGridType, "Core game types should be compiled correctly");
+            Assert.IsNotNull(mapManagerType, "Manager types should be compiled correctly");
+
+            // Assert
+            Assert.IsFalse(
+                encounteredError,
+                $"Application should run without errors. Error encountered: {errorMessage}"
+            );
+
+            Assert.Pass("Application core systems are functional and run without errors");
+        }
+        finally
+        {
+            Application.logMessageReceived -= (condition, stackTrace, type) => { };
+        }
     }
     #endregion
 
