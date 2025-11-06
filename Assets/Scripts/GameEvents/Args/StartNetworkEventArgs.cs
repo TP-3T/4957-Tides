@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace TTT.GameEvents
 {
-    public class StartNetworkEventArgs : Object
+    public class StartNetworkEventArgs : ScriptableObject
     {
         public bool IsHost { get; set; }
     }

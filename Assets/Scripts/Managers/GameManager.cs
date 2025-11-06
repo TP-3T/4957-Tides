@@ -8,7 +8,7 @@ namespace TTT.Managers
     public class GameManager : GenericSingleton<GameManager>
     {
         [SerializeField]
-        private TextAsset LevelFile;
+        public TextAsset LevelFile;
 
         [SerializeField]
         private GameEvent newMapEvent;
@@ -21,9 +21,7 @@ namespace TTT.Managers
         // private GameObject hexGrid;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        }
+        void Start() { }
 
         public void OnStartNetworkEvent(Object eventArgs)
         {
@@ -31,11 +29,17 @@ namespace TTT.Managers
             if (args.IsHost)
             {
                 Debug.Log("I am being spawned as a host");
-                NetworkManager.Singleton.StartHost();
+                try
+                {
+                    NetworkManager.Singleton.StartHost();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"Failed to start host: {e.Message}");
+                    return;
+                }
 
-                newMapEvent.Raise(new NewMapEventArgs() {
-                    DataFile = LevelFile
-                });
+                newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
             }
             else
             {

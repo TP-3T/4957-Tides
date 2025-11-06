@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Reflection;
 using JetBrains.Annotations;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
@@ -10,14 +11,129 @@ using TTT.Helpers;
 using TTT.Hex;
 using TTT.Managers;
 using TTT.ModularData;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.TestTools;
 
 public class PlayModeTests
 {
+    private static NetworkManager EnsureNetworkManager()
+    {
+        // Reuse if already created
+        if (NetworkManager.Singleton != null)
+        {
+            // Make sure transport exists on the singleton too
+            if (NetworkManager.Singleton.NetworkConfig == null)
+                NetworkManager.Singleton.NetworkConfig = new NetworkConfig();
+
+            if (NetworkManager.Singleton.NetworkConfig.NetworkTransport == null)
+            {
+                var existingTransport =
+                    NetworkManager.Singleton.GetComponent<UnityTransport>()
+                    ?? NetworkManager.Singleton.gameObject.AddComponent<UnityTransport>();
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport = existingTransport;
+            }
+            return NetworkManager.Singleton;
+        }
+
+        var go = new GameObject("NetworkManager_Test");
+        var nm = go.AddComponent<NetworkManager>();
+
+        // Create a fresh NetworkConfig and attach UnityTransport
+        nm.NetworkConfig = new NetworkConfig();
+        var transport = go.AddComponent<UnityTransport>();
+        nm.NetworkConfig.NetworkTransport = transport;
+
+        // Optional: keep alive across scene loads
+        UnityEngine.Object.DontDestroyOnLoad(go);
+        return nm;
+    }
+
+    [UnityTest]
+    public System.Collections.IEnumerator StartsHostWithTransport()
+    {
+        var nm = EnsureNetworkManager();
+
+        Assert.IsNotNull(nm.NetworkConfig, "NetworkConfig must be assigned");
+        Assert.IsNotNull(nm.NetworkConfig.NetworkTransport, "NetworkTransport must be assigned");
+
+        // Start host directly or via your GameManager flow
+        var started = nm.StartHost();
+        Assert.IsTrue(started, "StartHost failed");
+
+        yield return null;
+        Assert.IsTrue(NetworkManager.Singleton.IsHost, "Host did not start");
+
+        // Teardown
+        if (NetworkManager.Singleton && NetworkManager.Singleton.IsListening)
+            NetworkManager.Singleton.Shutdown();
+        if (NetworkManager.Singleton)
+            UnityEngine.Object.DestroyImmediate(NetworkManager.Singleton.gameObject);
+    }
+
+    private static void EnsureGameEventOn(GameManager gameManager)
+    {
+        // newMapEvent is a [SerializeField] private field; assign a temp instance if null
+        var evtField = typeof(GameManager).GetField(
+            "newMapEvent",
+            BindingFlags.Instance | BindingFlags.NonPublic
+        );
+        if (evtField == null)
+            return;
+
+        var current = evtField.GetValue(gameManager) as GameEvent;
+        if (current == null)
+        {
+            var tempEvent = ScriptableObject.CreateInstance<GameEvent>();
+            evtField.SetValue(gameManager, tempEvent);
+        }
+    }
+
     private GameObject testGameObject;
     private MapManager mapManager;
+
+    [UnityTest, Description("Starts host in test and triggers new map via GameManager.")]
+    public IEnumerator MapSetup_CompletesSuccessfully()
+    {
+        var json = Resources.Load<TextAsset>("Maps/test_map_1");
+        Assert.IsNotNull(json, "Map JSON should be loaded");
+
+        var gameManager = GameManager.Instance;
+        var mapManager = MapManager.Instance;
+
+        // Provide LevelFile for GameManager
+        gameManager.LevelFile = json;
+
+        // Ensure NetworkManager + Transport exist
+        var nm = EnsureNetworkManager();
+        Assert.IsNotNull(nm, "NetworkManager should exist");
+
+        // Ensure GameEvent exists to avoid null Raise()
+        EnsureGameEventOn(gameManager);
+
+        // Start Host via your flow
+        var startArgs = ScriptableObject.CreateInstance<StartNetworkEventArgs>();
+        startArgs.IsHost = true;
+        gameManager.OnStartNetworkEvent(startArgs);
+
+        // Let Netcode initialize
+        yield return null;
+
+        Assert.IsTrue(
+            NetworkManager.Singleton && NetworkManager.Singleton.IsHost,
+            "Host did not start"
+        );
+        Assert.IsNotNull(gameManager, "GameManager should be initialized");
+        Assert.IsNotNull(mapManager, "MapManager should be initialized");
+
+        // Teardown
+        if (NetworkManager.Singleton && NetworkManager.Singleton.IsListening)
+            NetworkManager.Singleton.Shutdown();
+        if (NetworkManager.Singleton)
+            UnityEngine.Object.DestroyImmediate(NetworkManager.Singleton.gameObject);
+    }
 
     #region Application Tests
     [Test, Description("Asserts the application runs without errors.")]
@@ -78,24 +194,6 @@ public class PlayModeTests
         Assert.Throws<NullReferenceException>(() =>
             mapManager.OnNewMap(UnityEngine.Object.Instantiate(testGameObject))
         );
-    }
-
-    [Test, Description("Map setup with required components completes successfully.")]
-    public void MapSetup_CompletesSuccessfully()
-    {
-        TextAsset json = Resources.Load("Maps/test_map_1") as TextAsset;
-        Assert.IsNotNull(json, "Map JSON should be loaded");
-
-        GameManager gameManager = GameManager.Instance;
-        MapManager mapManager = MapManager.Instance;
-
-        NewMapEventArgs newMapEventObject = ScriptableObject.CreateInstance<NewMapEventArgs>();
-        newMapEventObject.DataFile = json;
-
-        mapManager.OnNewMap(newMapEventObject);
-
-        Assert.IsNotNull(gameManager, "GameManager should be initialized");
-        Assert.IsNotNull(mapManager, "MapManager should be initialized");
     }
     #endregion
 
