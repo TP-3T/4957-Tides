@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
+using System.Reflection;
 using JetBrains.Annotations;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.Terrain;
 using TTT.GameEvents;
+using TTT.Helpers;
 using TTT.Hex;
+using TTT.Managers;
 using TTT.ModularData;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -15,22 +19,12 @@ using UnityEngine.TestTools;
 * If tests results require frames to update, use the UnityTest attribute and yield return null to skip a frame.
 * Example: Flooding changes terrain over multiple frames, so tests related to flooding should use UnityTest.
 * Nothing here is final and can be changed as needed.
+* It's very likely anything that requires RPCs or networking will need to be moved to PlayModeTests.
 */
 public class EditModeTests
 {
     private GameObject testGameObject;
-
-    [SetUp]
-    public void SetUp()
-    {
-        testGameObject = new GameObject("TestObject");
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-        UnityEngine.Object.DestroyImmediate(testGameObject);
-    }
+    private MapManager mapManager;
 
     #region Application Tests
     [Test, Description("Asserts the application runs without errors.")]
@@ -85,13 +79,43 @@ public class EditModeTests
     [Test, Description("Map setup without required components throws a NullReferenceException.")]
     public void MapSetup_ThrowsNullReferenceException()
     {
-        Assert.Pass();
+        testGameObject = new GameObject("Test_MapManager");
+        mapManager = MapManager.Instance;
+        LogAssert.ignoreFailingMessages = true; // If there are expected log errors use LogAssert.Expect(LogType.Error, "*"); Replace * with expected message
+        Assert.Throws<NullReferenceException>(() =>
+            mapManager.OnNewMap(UnityEngine.Object.Instantiate(testGameObject))
+        );
     }
 
     [Test, Description("Map setup with required components completes successfully.")]
     public void MapSetup_CompletesSuccessfully()
     {
-        Assert.Pass();
+        TextAsset json = Resources.Load("Maps/test_map_1") as TextAsset;
+        Assert.IsNotNull(json, "Map JSON should be loaded");
+
+        GameManager gameManager = GameManager.Instance;
+        MapManager mapManager = MapManager.Instance;
+        var args = ScriptableObject.CreateInstance<NewMapEventArgs>();
+        args.DataFile = json;
+
+        // Create a HexGrid GameObject and assign it to the MapManager
+        var hexGridGameObject = new GameObject("Test_HexGrid");
+        mapManager = MapManager.Instance;
+        var hexGridField = mapManager
+            .GetType()
+            .GetField("hexGrid", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (hexGridField != null)
+        {
+            // Use the non-generic AddComponent(Type) overload and the FieldType obtained via reflection
+            var hexGridType = hexGridField.FieldType;
+            var component = hexGridGameObject.AddComponent(hexGridType);
+            hexGridField.SetValue(mapManager, component);
+        }
+        Assert.IsNotNull(args, "NewMapEventArgs should be created");
+        mapManager.OnNewMap(args);
+
+        Assert.IsNotNull(gameManager, "GameManager should be initialized");
+        Assert.IsNotNull(mapManager, "MapManager should be initialized");
     }
     #endregion
 

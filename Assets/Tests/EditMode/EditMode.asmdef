@@ -5,6 +5,7 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "TTT.Hex",
+        "TTT.Helpers",
         "TTT.DataClasses.HexData",
         "TTT.DataClasses.Terrain",
         "TTT.GameEvents",
