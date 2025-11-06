@@ -12,14 +12,9 @@ public class NextTurn : MonoBehaviour
     [SerializeField]
     private GameEvent _nextTurnEvent;
 
-    private HexGrid hg;
-    private Sea s;
-
     void Start()
     {
         this.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
-
-        s = FindFirstObjectByType<Sea>();
     }
 
     /// <summary>

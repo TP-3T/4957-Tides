@@ -1,4 +1,4 @@
-using TTT.Features;
+using TTT.DataClasses.TileFeatures;
 using UnityEngine;
 
 namespace TTT.GameEvents

@@ -19,8 +19,6 @@ public class PlayerController : NetworkBehaviour
     const float moveSpeed = 50f;
     const float rotationSpeed = 2f;
 
-    //? CB: Does the player actually need a reference to the grid or can we use events to have the hex grid react?
-    private HexGrid hexGrid;
     private Camera playerCamera;
 
     [SerializeField]
@@ -70,11 +68,11 @@ public class PlayerController : NetworkBehaviour
         if (IsOwner)
         {
             // hexGrid = FindFirstObjectByType<HexGrid>();
-            if (hexGrid == null)
-            {
-                Debug.Log("HexGrid not found yet. Subscribing to OnClientConnectedCallback.");
-                NetworkManager.Singleton.OnClientConnectedCallback += FindHexGridAfterConnection;
-            }
+            // if (hexGrid == null)
+            // {
+            //     Debug.Log("HexGrid not found yet. Subscribing to OnClientConnectedCallback.");
+            //     NetworkManager.Singleton.OnClientConnectedCallback += FindHexGridAfterConnection;
+            // }
             transform.position = startingPosition;
             if (playerCamera != null)
             {

@@ -1,7 +1,6 @@
 using System;
-using TTT.DataClasses.HexData;
-using TTT.Features;
-using TTT.Terrain;
+// using TTT.Features;
+// using TTT.Terrain;
 using Unity.Netcode;
 using UnityEngine;
 

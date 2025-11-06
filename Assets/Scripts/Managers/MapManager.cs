@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using System.Collections;
 using System.Collections.Generic;
-using TTT.Terrain;
+using TTT.DataClasses.Terrain;
 
 namespace TTT.Managers
 {
