@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace TTT.Managers
 {
-    public class ResourcesController : GenericSingleton<ResourcesController>
+    public class ResourcesController : GenericSingletonNOTNETWORK<ResourcesController>
     {
         /// <summary>
         /// TurnEnding event specifically for resource producers

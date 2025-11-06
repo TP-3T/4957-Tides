@@ -13,7 +13,7 @@ public class NearWaterValidator : DefaultValidator
     private static bool TileHasWater(HexCell tile)
     {
         // we don't have a water/ocean/river/lake terrain type yet
-        return tile.IsFlooded();
+        return false;
     }
 
     public override bool CanBuild(
