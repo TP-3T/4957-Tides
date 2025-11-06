@@ -1,36 +1,30 @@
 using TTT.Hex;
+using TTT.GameEvents;
 using UnityEngine;
 using UnityEngine.UI;
 using TTT.GameEvents;
 using System;
 using TTT.Dispatch;
 
-namespace TTT.UI
+[RequireComponent(typeof(Image))]
+/// <summary>
+/// Handles the functionality of the "Next Turn" button in the game UI.
+/// </summary>
+public class NextTurn : MonoBehaviour
 {
-    [RequireComponent(typeof(Image))]
-    /// <summary>
-    /// Handles the functionality of the "Next Turn" button in the game UI.
-    /// </summary>
-    public class NextTurn : MonoBehaviour
+    [SerializeField]
+    private GameEvent _nextTurnEvent;
+
+    void Start()
     {
-        private HexGrid hg;
-        // private Sea s; //removed for events
+        this.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
+    }
 
-        public static event Action<NextTurn> OnNextTurnClicked;
-
-        void Start()
-        {
-            this.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
-
-            // s = FindFirstObjectByType<Sea>();
-        }
-
-        /// <summary>
-        /// Handles the button click event to proceed to the next turn.
-        /// </summary>
-        public void OnClick()
-        {
-            GameEventDispatch.Raise<NextTurn>(new NextTurn());
-        }
+    /// <summary>
+    /// Handles the button click event to proceed to the next turn.
+    /// </summary>
+    public void OnClick()
+    {
+        _nextTurnEvent.Raise();
     }
 }

@@ -1,15 +1,12 @@
-using System.Collections;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using TTT.UI;
-using TTT.Dispatch;
 
 namespace TTT.Managers
 {
-    public class GameManager : GenericSingleton<GameManager>, IGameEventListener<NextTurn>
+    public class GameManager : GenericSingleton<GameManager>
     {
         [SerializeField]
         private TextAsset LevelFile;
@@ -38,47 +35,24 @@ namespace TTT.Managers
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
-        /// <summary>
-        /// Unity built-in method, gets called once at the very beginning.
-        /// </summary>
-        new void Awake()
-        {
-            GameEventDispatch.RegisterListener(this);
-        }
-
-        /// <summary>
-        /// Unity built-in method, gets called when the object is being destroyed.
-        /// </summary>
-        void OnDestroy()
-        {
-            GameEventDispatch.UnregisterListener(this);
-        }
-
         public void OnStartNetworkEvent(Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
             if (args.IsHost)
             {
+                Debug.Log("I am being spawned as a host");
                 NetworkManager.Singleton.StartHost();
+
+                newMapEvent.Raise(new NewMapEventArgs() {
+                    DataFile = LevelFile
+                });
             }
             else
             {
+                Debug.Log("I am being spawned as a client");
                 NetworkManager.Singleton.StartClient();
             }
-
-            newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
         }
-
-        // private void ServerStartHandler()
-        // {
-        //     StartCoroutine(LoadAssets());
-        // }
-
-        // private IEnumerator LoadAssets()
-        // {
-        //     yield return AssetLoader<GameObject>.Load(HexGrid, SpawnGrid);
-        //     yield return AssetLoader<GameObject>.Load(SeaPrefab, SpawnSea);
-        // }
 
         // private void SpawnSea(GameObject obj)
         // {
@@ -135,15 +109,15 @@ namespace TTT.Managers
             this.Year += 1;
         }
 
-        /// <summary>
-        /// Method from INextTurnListener interface. Called when Next Turn event is dispatched.
-        /// </summary>
-        /// <param name="nt">The Next Turn Event</param>
-        public void OnEventRaised(NextTurn nt)
-        {
-            // increment season here
-            Debug.Log("1. Increment Season -GameManager" + nt.ToString());
-            this.IncrementSeason();
-        }
+        // /// <summary>
+        // /// Method from INextTurnListener interface. Called when Next Turn event is dispatched.
+        // /// </summary>
+        // /// <param name="nt">The Next Turn Event</param>
+        // public void OnEventRaised(NextTurn nt)
+        // {
+        //     // increment season here
+        //     Debug.Log("1. Increment Season -GameManager" + nt.ToString());
+        //     this.IncrementSeason();
+        // }
     }
 }
