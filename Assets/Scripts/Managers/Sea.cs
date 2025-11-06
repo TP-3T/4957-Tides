@@ -165,5 +165,6 @@ public class Sea : MonoBehaviour, IGameEventListener<NextTurn>
     {
         //rise sea level here
         Debug.Log("1. Rise The Sea Level - Sea.cs" + nt.ToString());
+        StartRaiseSea();
     }
 }

@@ -143,6 +143,7 @@ namespace TTT.Managers
         {
             // increment season here
             Debug.Log("1. Increment Season -GameManager" + nt.ToString());
+            this.IncrementSeason();
         }
     }
 }
