@@ -5,7 +5,7 @@ using TTT.DataClasses.TileFeatures;
 using UnityEngine;
 
 [CreateAssetMenu(
-    fileName = "Adjacency Validation",
+    fileName = "Near Water",
     menuName = "Scriptable Objects/TileFeatures/Build Validators/Near Water"
 )]
 public class NearWaterValidator : DefaultValidator

@@ -694,6 +694,17 @@ PrefabInstance:
       insertIndex: 3
       addedObject: {fileID: 266195701}
   m_SourcePrefab: {fileID: 100100000, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+--- !u!114 &948417642 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9019153559405829278, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+  m_PrefabInstance: {fileID: 948417641}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1021693145 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5248143721908876236, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
@@ -1298,7 +1309,7 @@ PrefabInstance:
       objectReference: {fileID: 291925971}
     - target: {fileID: 3453212153071236675, guid: 66d763d1f96f39542b9e055dbdb5bd90, type: 3}
       propertyPath: resourceTextFields.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3453212153071236675, guid: 66d763d1f96f39542b9e055dbdb5bd90, type: 3}
       propertyPath: resourceTextFields.Array.data[0].<Resource>k__BackingField
@@ -1313,6 +1324,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
     - target: {fileID: 3453212153071236675, guid: 66d763d1f96f39542b9e055dbdb5bd90, type: 3}
+      propertyPath: resourceTextFields.Array.data[3].<Resource>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+    - target: {fileID: 3453212153071236675, guid: 66d763d1f96f39542b9e055dbdb5bd90, type: 3}
       propertyPath: resourceTextFields.Array.data[0].<TextField>k__BackingField
       value: 
       objectReference: {fileID: 792392492}
@@ -1324,6 +1339,10 @@ PrefabInstance:
       propertyPath: resourceTextFields.Array.data[2].<TextField>k__BackingField
       value: 
       objectReference: {fileID: 291925971}
+    - target: {fileID: 3453212153071236675, guid: 66d763d1f96f39542b9e055dbdb5bd90, type: 3}
+      propertyPath: resourceTextFields.Array.data[3].<TextField>k__BackingField
+      value: 
+      objectReference: {fileID: 948417642}
     - target: {fileID: 6316282635932843258, guid: 66d763d1f96f39542b9e055dbdb5bd90, type: 3}
       propertyPath: m_Name
       value: ResourceTracker

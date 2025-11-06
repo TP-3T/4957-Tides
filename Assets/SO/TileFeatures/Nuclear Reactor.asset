@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d8a447a0febedb24e8cd2e631a1f15d7, type: 3}
-  m_Name: Port
+  m_Name: Nuclear Reactor
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: port
   <PollutionEmission>k__BackingField: 30
