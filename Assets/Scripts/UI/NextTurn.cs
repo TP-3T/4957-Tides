@@ -1,4 +1,5 @@
 using TTT.Hex;
+using TTT.GameEvents;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,14 +9,12 @@ using UnityEngine.UI;
 /// </summary>
 public class NextTurn : MonoBehaviour
 {
-    private HexGrid hg;
-    private Sea s;
+    [SerializeField]
+    private GameEvent _nextTurnEvent;
 
     void Start()
     {
         this.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
-
-        s = FindFirstObjectByType<Sea>();
     }
 
     /// <summary>
@@ -23,6 +22,6 @@ public class NextTurn : MonoBehaviour
     /// </summary>
     public void OnClick()
     {
-        s.HandleNextTurnClickedServerRpc();
+        _nextTurnEvent.Raise();
     }
 }

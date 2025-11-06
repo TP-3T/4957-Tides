@@ -1,9 +1,7 @@
-using System.Collections;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace TTT.Managers
 {
@@ -25,7 +23,6 @@ namespace TTT.Managers
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
         public void OnStartNetworkEvent(Object eventArgs)
@@ -33,26 +30,19 @@ namespace TTT.Managers
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
             if (args.IsHost)
             {
+                Debug.Log("I am being spawned as a host");
                 NetworkManager.Singleton.StartHost();
+
+                newMapEvent.Raise(new NewMapEventArgs() {
+                    DataFile = LevelFile
+                });
             }
             else
             {
+                Debug.Log("I am being spawned as a client");
                 NetworkManager.Singleton.StartClient();
             }
-
-            newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
         }
-
-        // private void ServerStartHandler()
-        // {
-        //     StartCoroutine(LoadAssets());
-        // }
-
-        // private IEnumerator LoadAssets()
-        // {
-        //     yield return AssetLoader<GameObject>.Load(HexGrid, SpawnGrid);
-        //     yield return AssetLoader<GameObject>.Load(SeaPrefab, SpawnSea);
-        // }
 
         // private void SpawnSea(GameObject obj)
         // {
