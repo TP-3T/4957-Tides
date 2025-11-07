@@ -1,29 +1,51 @@
-name: Unity Test Runner
+name: Validate Core
 
-on:
+on: 
   push:
-    branches: [ core_test_unity_runner_BL ]
-  pull_request:
-    branches: [ core_test_unity_runner_BL ]
+    branches: [ core, devops ]
+    paths: [ "**/*.cs" ] 
 
 jobs:
-  test:
-    name: Run Unity PlayMode Tests
+  csharpier:
     runs-on: ubuntu-latest
-    
+    name: format
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "9.0.x"
+      - run: dotnet tool restore
+      - run: dotnet csharpier format .
 
-      - name: Run PlayMode Tests
+  unity_runner:
+    runs-on: ubuntu-latest
+    name: test runner
+    steps: 
+      - uses: actions/checkout@v5
+      - name: setup unity
         uses: game-ci/unity-test-runner@v4
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_LICENSE: ${{ secrets.UNITY_TEST_RUNNER_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_TEST_RUNNER_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_TEST_RUNNER_PASSWORD }}
+          
+  stylecop:
+    runs-on: ubuntu-latest
+    name: docstring enforcement
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up .NET core SDK
+        uses: actions/setup-dotnet@v5
         with:
-          unityVersion: 6000.0.60f1
-          testMode: PlayMode
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          dockerCpuLimit: 4
-          dockerMemoryLimit: 8g
+          dotnet-version: '9.0.x'
+      - name: Install StyleCop Analyzers
+        run: |
+          dotnet add package StyleCop.Analyzers --version 1.1.118 
+      - name: Restore dependencies 
+        run: dotnet restore
+      - name: Run StyleCop and build
+        run: | 
+          dotnet stylecop analyze
+          dotnet build --configuration Release
+          
+  
