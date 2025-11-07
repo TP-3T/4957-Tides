@@ -15,8 +15,8 @@ namespace TTT.DataClasses.Terrain
         [Tooltip("Terrain types to be indexed by this dictionary")]
         public List<TerrainType> Values;
 
-        private Dictionary<string, TerrainType> _uidToTerrain;
-        public Dictionary<string, TerrainType> UidToTerrain
+        private Dictionary<TerrainTypeId, TerrainType> _uidToTerrain;
+        public Dictionary<TerrainTypeId, TerrainType> UidToTerrain
         {
             get
             {
@@ -28,7 +28,7 @@ namespace TTT.DataClasses.Terrain
         /// <summary>
         /// Gets an indexed terrain type from its UID
         /// </summary>
-        public TerrainType Get(string uid)
+        public TerrainType Get(TerrainTypeId uid)
         {
             TerrainType terrain;
             try
@@ -48,9 +48,9 @@ namespace TTT.DataClasses.Terrain
         /// <summary>
         /// Makes a dictionary from the List of terrain types and their UIDs
         /// </summary>
-        private Dictionary<string, TerrainType> MakeDictionary()
+        private Dictionary<TerrainTypeId, TerrainType> MakeDictionary()
         {
-            Dictionary<string, TerrainType> uidToTerrain = new();
+            Dictionary<TerrainTypeId, TerrainType> uidToTerrain = new();
             foreach (TerrainType terrain in Values)
             {
                 uidToTerrain[terrain.UniqueID] = terrain;

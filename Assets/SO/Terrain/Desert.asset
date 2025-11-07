@@ -16,4 +16,4 @@ MonoBehaviour:
     UseConstant: 1
     Constant: {r: 1, g: 0.88149357, b: 0, a: 0}
     Variable: {fileID: 0}
-  Uid: desert
+  uid: 1
