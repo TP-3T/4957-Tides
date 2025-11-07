@@ -10,6 +10,49 @@ public class FeatureBuilder : MonoBehaviour
 {
     public FeatureRuntimeSet SpawnedFeatures;
 
+    private static Vector3 FixLocation(Vector3 location)
+    {
+        HexCell? exactCell = MapManager.Instance.GetCellFromPosition(location, out _);
+
+        if (exactCell == null)
+        {
+            Debug.LogWarning($"Could not find cell at location {location}");
+            return new Vector3(0, 0, 0);
+        }
+
+        return ((HexCell)exactCell).CellPosition;
+    }
+
+    public void OnBuildingFeature(Object eventArgs)
+    {
+        if (eventArgs is not BuildingFeatureArgs bfArgs)
+        {
+            return;
+        }
+
+        TryToBuild(FixLocation(bfArgs.Location), bfArgs.FeatureType);
+    }
+
+    public void OnDestroyingFeature(Object eventArgs)
+    {
+        if (eventArgs is not BuildingFeatureArgs bfArgs)
+        {
+            return;
+        }
+
+        DestroyAt(FixLocation(bfArgs.Location), wasSold: false);
+    }
+
+    public void OnSellingFeature(Object eventArgs)
+    {
+        if (eventArgs is not BuildingFeatureArgs bfArgs)
+        {
+            return;
+        }
+
+        DestroyAt(bfArgs.Location, wasSold: true);
+    }
+
     private void TryToBuild(Vector3 location, FeatureType featureType)
     {
         if (CheckIfCanBuild(location, featureType))
@@ -30,7 +73,7 @@ public class FeatureBuilder : MonoBehaviour
             return false;
         }
 
-        if (CheckCost(featureType))
+        if (!CheckCost(featureType))
         {
             // then the player is too poor
             return false;

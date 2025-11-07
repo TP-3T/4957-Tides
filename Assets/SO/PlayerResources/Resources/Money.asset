@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Money
   m_EditorClassIdentifier: 
   resourceName: money
-  amountOwned: 0
+  amountOwned: 100

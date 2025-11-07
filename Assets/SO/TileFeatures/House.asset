@@ -31,5 +31,5 @@ MonoBehaviour:
       <Count>k__BackingField: -2
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
-    <Count>k__BackingField: 20
+    <Count>k__BackingField: 0
   <Prefab>k__BackingField: {fileID: 8383225200055468465, guid: 61d41a7c4fbecf44ebc05c1c324abd74, type: 3}
