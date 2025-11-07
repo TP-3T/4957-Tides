@@ -33,12 +33,7 @@ jobs:
           unityVersion: 6000.0.60f1
           testMode: PlayMode
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with: 
-          name: test results
-          path: artifacts
+          
   build:
     name: build 
     runs-on: ubuntu-latest
@@ -63,10 +58,5 @@ jobs:
           targetPlatform: StandaloneWindows64
           buildName: turn-the-tides
 
-      - name: upload buikd
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-windows
-          path: build
         
 
