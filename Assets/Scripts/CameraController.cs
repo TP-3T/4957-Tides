@@ -93,7 +93,7 @@ public class CameraController : MonoBehaviour
     {
         GetKeyboardMovement();
 
-        CheckMouseAtScreenEdge();
+        // CheckMouseAtScreenEdge();
 
         DragCamera();
 
@@ -326,13 +326,14 @@ public class CameraController : MonoBehaviour
     private void DragCamera()
     {
         Ray ray;
-        Plane plane;
-
+        RaycastHit hit;
         ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        plane = new Plane(Vector3.up, Vector3.zero);
 
-        if (plane.Raycast(ray, out float distance))
+
+        if (Physics.Raycast(ray,out hit, Mathf.Infinity))
         {
+            int distance = (int)hit.distance;
+            Debug.DrawLine(ray.origin, ray.GetPoint(distance), Color.red);
             Vector3 hitPoint;
 
             hitPoint = ray.GetPoint(distance);
@@ -343,8 +344,9 @@ public class CameraController : MonoBehaviour
             }
             else if (Mouse.current.leftButton.isPressed)
             {
-                Vector3 dragDisplacement = startDrag - hitPoint;
-
+                
+                Vector3 dragDisplacement = startDrag - hitPoint; 
+                dragDisplacement.y = NO_VERTICAL_VELOCITY;
                 transform.position += dragDisplacement;
             }
             else if (Mouse.current.leftButton.wasReleasedThisFrame)
