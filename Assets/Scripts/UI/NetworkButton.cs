@@ -7,20 +7,18 @@ public class NetworkButton : MonoBehaviour
 
     public void OnStartServer()
     {
+        Debug.Log("I am being clicked");
         startEvent.Raise(new StartNetworkEventArgs() { IsHost = true });
     }
 
     public void OnStartClient()
     {
+        Debug.Log("I am being clicked");
         startEvent.Raise(new StartNetworkEventArgs() { IsHost = false });
     }
 
     public void OnMapLoad(Object eventArgs)
     {
-        NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
-        if (args.WasSuccessful)
-        {
-            gameObject.SetActive(false);
-        }
+        gameObject.SetActive(false);
     }
 }

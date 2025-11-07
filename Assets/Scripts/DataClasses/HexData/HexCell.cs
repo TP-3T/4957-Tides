@@ -1,47 +1,41 @@
-using TTT.DataClasses.Terrain;
-using TTT.DataClasses.TileFeatures;
+using System;
+// using TTT.Features;
+// using TTT.Terrain;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace TTT.DataClasses.HexData
 {
-    public class HexCell : MonoBehaviour
+    public struct HexCell : INetworkSerializable, IEquatable<HexCell>
     {
         public CubeCoordinates CellCubeCoordinates;
         public Vector3 CellPosition;
-        public Color? CellColor = null;
-        public MapTileData MapTileData;
-        public TerrainType TerrainType;
-
-        [SerializeField]
-        public bool flooded = false;
+        public Color CellColor;
         public int CenterVertexIndex;
+        public bool Flooded;
+
+        public HexCell(
+            CubeCoordinates cellCubeCoordinates,
+            Vector3 cellPosition,
+            Color cellColor)
+        {
+            CellCubeCoordinates = cellCubeCoordinates;
+            CellPosition        = cellPosition;
+            CellColor           = cellColor;
+
+            CenterVertexIndex = -1;     // To let everyone know that this is not set
+            Flooded = false;            // default flooded state of the cell
+        }
 
         /// <summary>
         /// The type of feature currently instantiated on this cell.
         /// </summary>
-        public FeatureType FeatureType { get; set; }
+        // public FeatureType FeatureType { get; set; }
 
         /// <summary>
         /// The model of the feature currently instantiated on this cell.
         /// </summary>
-        public GameObject InstantiatedFeature { get; set; }
-
-        /// <summary>
-        /// Flood this cell
-        /// </summary>
-        public void FloodCell()
-        {
-            this.flooded = true;
-            this.CellColor = Color.blue;
-        }
-
-        /// <summary>
-        /// Get the flooded state of the cell.
-        /// </summary>
-        public bool IsFlooded()
-        {
-            return this.flooded;
-        }
+        // public GameObject InstantiatedFeature { get; set; }
 
         /// <summary>
         /// Mainly for debugging.
@@ -49,84 +43,74 @@ namespace TTT.DataClasses.HexData
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor} }}";
+            return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor}, flooded: {Flooded} }}";
         }
 
-        /// <summary>
-        /// Builds a feature on this cell.
-        /// </summary>
-        /// <param name="featureType">The kind of feature to build.</param>
-        public void BuildFeature(FeatureType featureType)
+        public bool Equals(HexCell other)
         {
-            if (FeatureType != null)
-            {
-                // then there's already something on this cell
-                return;
-            }
-
-            FeatureType = featureType;
-            InstantiateFeaturePrefab(featureType);
-
-            foreach (var producer in featureType.ResourceProducers)
-            {
-                producer.OnCreated();
-            }
+            return CellCubeCoordinates == other.CellCubeCoordinates
+                && CellPosition == other.CellPosition
+                && CellColor == other.CellColor
+                && CenterVertexIndex == other.CenterVertexIndex
+                && Flooded == other.Flooded;
         }
 
-        /// <summary>
-        /// Destroys the feature on this cell, if one exists.
-        /// </summary>
-        /// <param name="wasSold">If this feature is being destroyed due to being sold.</param>
-        public void DestroyFeature(bool wasSold)
+        public override bool Equals(object other)
         {
-            if (FeatureType == null)
-            {
-                // then there's nothing on this cell
-                return;
-            }
-
-            FeatureType = null;
-            RemoveFeaturePrefab();
-
-            if (wasSold)
-            {
-                foreach (var producer in FeatureType.ResourceProducers)
-                {
-                    producer.OnSold();
-                }
-            }
-            else
-            {
-                foreach (var producer in FeatureType.ResourceProducers)
-                {
-                    producer.OnSold();
-                }
-            }
+            return CellCubeCoordinates == ((HexCell)other).CellCubeCoordinates
+                && CellColor == ((HexCell)other).CellColor
+                && CellPosition == ((HexCell)other).CellPosition
+                && CenterVertexIndex == ((HexCell)other).CenterVertexIndex
+                && Flooded == ((HexCell)other).Flooded;
         }
 
-        /// <summary>
-        /// Spawns the model prefab of the given feature type on this cell.
-        /// </summary>
-        /// <param name="featureType">The type of feature to instantiate from.</param>
-        private void InstantiateFeaturePrefab(FeatureType featureType)
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            Vector3 cellPos = CellPosition;
-            Vector3 featurePos = new(cellPos.x, cellPos.y, cellPos.z);
+            CellCubeCoordinates.NetworkSerialize(serializer);
 
-            GameObject feature = Instantiate(featureType.Prefab);
-            InstantiatedFeature = feature;
-
-            featurePos.y += 0.5f * feature.transform.localScale.y;
-            feature.transform.position = featurePos;
+            serializer.SerializeValue(ref CellPosition);
+            serializer.SerializeValue(ref CellColor);
+            serializer.SerializeValue(ref Flooded);
+            serializer.SerializeValue(ref CenterVertexIndex);
         }
 
-        /// <summary>
-        /// Removes the current model prefab from this cell.
-        /// </summary>
-        private void RemoveFeaturePrefab()
-        {
-            Destroy(InstantiatedFeature);
-            InstantiatedFeature = null;
-        }
+        // /// <summary>
+        // /// Builds a feature on this cell.
+        // /// </summary>
+        // /// <param name="featureType">The kind of feature to build.</param>
+        // public void BuildFeature(FeatureType featureType)
+        // {
+        //     if (FeatureType != null)
+        //     {
+        //         // then there's already something on this cell
+        //         return;
+        //     }
+
+        //     Vector3 cellPos = CellPosition;
+        //     Vector3 featurePos = new(cellPos.x, cellPos.y, cellPos.z);
+
+        //     FeatureType = featureType;
+        //     GameObject feature = Instantiate(featureType.Prefab);
+        //     InstantiatedFeature = feature;
+
+        //     featurePos.y += 0.5f * feature.transform.localScale.y;
+        //     feature.transform.position = featurePos;
+        // }
+
+        // /// <summary>
+        // /// Destroys the feature on this cell, if one exists.
+        // /// </summary>
+        // public void DestroyFeature()
+        // {
+        //     if (FeatureType == null)
+        //     {
+        //         // then there's nothing on this cell
+        //         return;
+        //     }
+
+        //     FeatureType = null;
+        //     Destroy(InstantiatedFeature);
+        //     InstantiatedFeature = null;
+        // }
     }
 }

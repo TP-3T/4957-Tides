@@ -1,3 +1,4 @@
+using TTT.GameEvents;
 using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,19 +14,18 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerController : NetworkBehaviour
 {
-    //? CB: What is this event doing?
-    public UnityEvent<Vector3> OnPlayerClick = new();
-    private Camera playerCamera;
-
-    //? CB: Does the player actually need a reference to the grid or can we use events to have the hex grid react?
-    private HexGrid hexGrid;
-
-    //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
-    //*  We should look into the Unity Input System Package
     const int LeftMouseIndex = 0;
     const int RightMouseIndex = 1;
     const float moveSpeed = 50f;
     const float rotationSpeed = 2f;
+
+    private Camera playerCamera;
+
+    [SerializeField]
+    private GameEvent _mapMeshClicked;
+
+    //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
+    //*  We should look into the Unity Input System Package
     readonly Vector3 startingPosition = new(0, 10, -10);
     public NetworkVariable<Color> PlayerColor = new(
         Color.white,
@@ -67,12 +67,6 @@ public class PlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
-            hexGrid = FindFirstObjectByType<HexGrid>();
-            if (hexGrid == null)
-            {
-                Debug.Log("HexGrid not found yet. Subscribing to OnClientConnectedCallback.");
-                NetworkManager.Singleton.OnClientConnectedCallback += FindHexGridAfterConnection;
-            }
             transform.position = startingPosition;
             if (playerCamera != null)
             {
@@ -104,10 +98,6 @@ public class PlayerController : NetworkBehaviour
         {
             // Unsubscribe immediately to prevent running again.
             NetworkManager.Singleton.OnClientConnectedCallback -= FindHexGridAfterConnection;
-
-            // Search the scene again now that the server's spawn message (for the HexGrid)
-            // has had time to process.
-            hexGrid = FindFirstObjectByType<HexGrid>();
         }
     }
 
@@ -163,20 +153,23 @@ public class PlayerController : NetworkBehaviour
         // Left click
         if (Input.GetMouseButtonDown(LeftMouseIndex))
         {
-            // Debug.Log("Player clicked left mouse button");
             Ray mousePositionRay = playerCamera.ScreenPointToRay(Input.mousePosition);
-            //Ray Cast Logic
-            if (
-                hexGrid != null
-                && Physics.Raycast(
+            if (Physics.Raycast(
                     mousePositionRay,
-                    out RaycastHit hit,
+                    out RaycastHit raycastHit,
                     Mathf.Infinity,
-                    HexGrid.GRID_LAYER_MASK
-                )
+                    HexMesh.LayerMask)
             )
             {
-                hexGrid.HandlePlayerClickServerRpc(hit.point, PlayerColor.Value, DesiredCellHeight);
+                // Raise some event will deal with this later
+                Debug.DrawLine(transform.position, raycastHit.point, Color.red);
+
+                _mapMeshClicked.Raise(new MapMeshClickedEventArgs
+                {
+                    ClickedPoint = raycastHit.point,
+                    PlayerColor = PlayerColor.Value,
+                    PlayerId = OwnerClientId
+                });
             }
         }
     }
