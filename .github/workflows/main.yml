@@ -1,51 +1,72 @@
-name: Validate Core
+name: Unity Test Runner
 
 on: 
   push:
     branches: [ core_test_unity_runner_BL ]
-    paths: [ "**/*.cs" ] 
+  pull_request:
+    branches: [ core_test_unity_runner_BL ]
 
 jobs:
-  csharpier:
+  test:
+    name: run unity tests
     runs-on: ubuntu-latest
-    name: format
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: "9.0.x"
-      - run: dotnet tool restore
-      - run: dotnet csharpier format .
 
-  unity_runner:
-    runs-on: ubuntu-latest
-    name: test runner
-    steps: 
-      - uses: actions/checkout@v5
-      - name: setup unity
+    steps:
+      - name: checkout
+        uses: actions/checkout@v5
+        
+      - name: cache library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+            
+      - name: run playmode 
         uses: game-ci/unity-test-runner@v4
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_TEST_RUNNER_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_TEST_RUNNER_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_TEST_RUNNER_PASSWORD }}
-          
-  stylecop:
-    runs-on: ubuntu-latest
-    name: docstring enforcement
-    steps:
-      - uses: actions/checkout@v5
-      - name: Set up .NET core SDK
-        uses: actions/setup-dotnet@v5
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secretes.UNITY_PASSWORD }}
         with:
-          dotnet-version: '9.0.x'
-      - name: Install StyleCop Analyzers
-        run: |
-          dotnet add package StyleCop.Analyzers --version 1.1.118 
-      - name: Restore dependencies 
-        run: dotnet restore
-      - name: Run StyleCop and build
-        run: | 
-          dotnet stylecop analyze
-          dotnet build --configuration Release
+          unityVersion: 6000.0.60f1
+          testMode: PlayMode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with: 
+          name: test results
+          path: artifacts
+  build:
+    - name: checkout code
+      runs-on: ubuntu-latest
+      needs: test
+
+      steps:
+        - name: checkout
+          uses: actions/checkout@v4
+          with:
+            path: library\
+            key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+            restore-keys: |
+              Library-
+        - name: build for windows
+          uses: game-ci/unity-builder@v4
+          env:
+            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+            UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+            UNITY_PASSOWRD: ${{ secrets.UNITY_PASSWORD }}
+          with:
+            unityVersion: 6000.0.60f1
+            targetPlatform: StandaloneWindows64
+            buildName: turn-the-tides
+
+        - name: upload buikd
+          uses: actions/upload-artifact@v4
+          with:
+            name: build-windows
+            path: build
           
   
