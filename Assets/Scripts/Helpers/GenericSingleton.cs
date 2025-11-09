@@ -10,7 +10,7 @@ namespace TTT.Helpers
     /// </summary>
     /// <typeparam name="T"> The class to make into a singleton</typeparam>
     [RequireComponent(typeof(NetworkObject))]
-    public class GenericSingleton<T> : NetworkBehaviour
+    public class GenericSingleton<T> : MonoBehaviour
         where T : Component
     {
         // create a private reference to T instance

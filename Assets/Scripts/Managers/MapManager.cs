@@ -15,7 +15,7 @@ namespace TTT.Managers
     /// <summary>
     /// Business logic / game related logic and networking stuff shall live here.
     /// </summary>
-    public partial class MapManager : GenericSingleton<MapManager>
+    public partial class MapManager : GenericNetworkSingleton<MapManager>
     {
         /**
         Serialize fields for the HexMesh, instances that are required for each client
