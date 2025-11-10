@@ -1,7 +1,10 @@
+using TTT.GameEvents;
 using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
+
+// [RequireComponent(typeof(Camera))]
 
 /// <summary>
 /// Controls the camera for a local player in a multiplayer game.
@@ -12,15 +15,17 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerController : NetworkBehaviour
 {
-    public UnityEvent<Vector3> OnPlayerClick = new UnityEvent<Vector3>();
-    private Camera playerCamera;
-    private HexGrid hexGrid;
     const int LeftMouseIndex = 0;
-    const float moveSpeed = 50f;
-    const int RightMouseIndex = 1;
-    const float rotationSpeed = 2f;
-    readonly Vector3 startingPosition = new Vector3(0, 10, -10);
-    public NetworkVariable<Color> PlayerColor = new NetworkVariable<Color>(
+
+    private Camera playerCamera;
+
+    [SerializeField]
+    private GameEvent _mapMeshClicked;
+
+    //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
+    //*  We should look into the Unity Input System Package
+    readonly Vector3 startingPosition = new(0, 10, -10);
+    public NetworkVariable<Color> PlayerColor = new(
         Color.white,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
@@ -52,7 +57,7 @@ public class PlayerController : NetworkBehaviour
     /// </summary>
     public override void OnNetworkSpawn()
     {
-        // ⭐ NEW: Server assigns a unique color when the player spawns.
+        // NEW: Server assigns a unique color when the player spawns.
         if (IsServer)
         {
             AssignUniquePlayerColor(OwnerClientId);
@@ -60,12 +65,6 @@ public class PlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
-            hexGrid = GameObject.FindFirstObjectByType<HexGrid>();
-            if (hexGrid == null)
-            {
-                Debug.Log("HexGrid not found yet. Subscribing to OnClientConnectedCallback.");
-                NetworkManager.Singleton.OnClientConnectedCallback += FindHexGridAfterConnection;
-            }
             transform.position = startingPosition;
             if (playerCamera != null)
             {
@@ -77,26 +76,15 @@ public class PlayerController : NetworkBehaviour
 
     private void AssignUniquePlayerColor(ulong clientId)
     {
-        Color uniqueColor;
-        // Simple color assignment logic based on client ID. You can make this more robust.
-        switch (clientId % 4) // Cycle through 4 basic colors
+        Color uniqueColor = (clientId % 4) switch
         {
-            case 0:
-                uniqueColor = Color.red;
-                break;
-            case 1:
-                uniqueColor = Color.blue;
-                break;
-            case 2:
-                uniqueColor = Color.green;
-                break;
-            case 3:
-                uniqueColor = Color.yellow;
-                break;
-            default:
-                uniqueColor = Color.white;
-                break;
-        }
+            // Cycle through 4 basic colors
+            0 => Color.red,
+            1 => Color.blue,
+            2 => Color.green,
+            3 => Color.yellow,
+            _ => Color.white,
+        };
         PlayerColor.Value = uniqueColor;
         Debug.Log($"Assigned color {PlayerColor.Value} to Player {clientId}");
     }
@@ -108,10 +96,39 @@ public class PlayerController : NetworkBehaviour
         {
             // Unsubscribe immediately to prevent running again.
             NetworkManager.Singleton.OnClientConnectedCallback -= FindHexGridAfterConnection;
+        }
+    }
 
-            // Search the scene again now that the server's spawn message (for the HexGrid)
-            // has had time to process.
-            hexGrid = GameObject.FindFirstObjectByType<HexGrid>();
+    // Add to Start() or OnEnable()
+    void Start()
+    {
+        // ...existing code...
+
+        // === ADD THIS CHECK ===
+        Camera[] allCameras = FindObjectsByType<Camera>(FindObjectsSortMode.None);
+        Debug.Log($"[CAMERA CHECK] Total cameras in scene: {allCameras.Length}");
+        int activeCameras = 0;
+        foreach (var cam in allCameras)
+        {
+            if (cam.enabled)
+            {
+                activeCameras++;
+                Debug.Log(
+                    $"[CAMERA CHECK] Active camera: {cam.gameObject.name} on {cam.transform.parent?.name}"
+                );
+            }
+        }
+
+        if (activeCameras > 1)
+        {
+            Debug.LogError(
+                $"[CAMERA CHECK] WARNING: {activeCameras} cameras are active! This may cause issues."
+            );
+        }
+
+        if (Camera.main != playerCamera)
+        {
+            Debug.LogError("[CAMERA CHECK] Camera.main is NOT the same as _camera reference!");
         }
     }
 
@@ -122,29 +139,30 @@ public class PlayerController : NetworkBehaviour
     /// </summary>
     void Update()
     {
-        // The camera controls should only run for the local player.
-        if (!IsOwner)
-        {
-            return;
-        }
-
         // Left click
         if (Input.GetMouseButtonDown(LeftMouseIndex))
         {
-            // Debug.Log("Player clicked left mouse button");
             Ray mousePositionRay = playerCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            //Ray Cast Logic
-            if (Physics.Raycast(mousePositionRay, out hit, Mathf.Infinity, HexGrid.GRID_LAYER_MASK))
+            if (
+                Physics.Raycast(
+                    mousePositionRay,
+                    out RaycastHit raycastHit,
+                    Mathf.Infinity,
+                    HexMesh.LayerMask
+                )
+            )
             {
-                if (hexGrid != null)
-                {
-                    hexGrid.HandlePlayerClickServerRpc(
-                        hit.point,
-                        PlayerColor.Value,
-                        DesiredCellHeight
-                    );
-                }
+                // Raise some event will deal with this later
+                Debug.DrawLine(transform.position, raycastHit.point, Color.red);
+
+                _mapMeshClicked.Raise(
+                    new MapMeshClickedEventArgs
+                    {
+                        ClickedPoint = raycastHit.point,
+                        PlayerColor = PlayerColor.Value,
+                        PlayerId = OwnerClientId,
+                    }
+                );
             }
         }
     }

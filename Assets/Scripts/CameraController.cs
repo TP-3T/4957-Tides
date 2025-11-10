@@ -31,10 +31,11 @@ public class CameraController : MonoBehaviour
     const float NO_VERTICAL_VELOCITY = 0f;
 
     private Transform cameraTransform;
+    private Camera playerCamera;
     private CameraControlActions cameraActions;
     private InputAction movement;
     private float speed;
-    private readonly bool useScreenEdge = true; // Toggle on and off
+    private readonly bool useScreenEdge = false; // Toggle on and off
     private float zoomHeight;
     private Vector3 horizontalVelocity;
     private Vector3 lastPosition;
@@ -50,7 +51,8 @@ public class CameraController : MonoBehaviour
 
         if (cameraTransform == null)
         {
-            cameraTransform = this.GetComponentInChildren<Camera>().transform;
+            playerCamera = GetComponentInChildren<Camera>();
+            cameraTransform = playerCamera.transform;
         }
     }
 
@@ -93,7 +95,7 @@ public class CameraController : MonoBehaviour
     {
         GetKeyboardMovement();
 
-        // CheckMouseAtScreenEdge();
+        CheckMouseAtScreenEdge();
 
         DragCamera();
 
@@ -262,8 +264,7 @@ public class CameraController : MonoBehaviour
             cameraTransform.localPosition.z
         );
 
-        zoomTarget -=
-            ZOOM_SPEED * (zoomHeight - cameraTransform.localPosition.y) * cameraTransform.forward;
+        zoomTarget -= ZOOM_SPEED * (zoomHeight - cameraTransform.localPosition.y) * Vector3.forward;
 
         cameraTransform.localPosition = Vector3.Lerp(
             cameraTransform.localPosition,
@@ -326,14 +327,13 @@ public class CameraController : MonoBehaviour
     private void DragCamera()
     {
         Ray ray;
-        RaycastHit hit;
-        ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Plane plane;
 
+        ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        plane = new Plane(Vector3.up, Vector3.zero);
 
-        if (Physics.Raycast(ray,out hit, Mathf.Infinity))
+        if (plane.Raycast(ray, out float distance))
         {
-            int distance = (int)hit.distance;
-            Debug.DrawLine(ray.origin, ray.GetPoint(distance), Color.red);
             Vector3 hitPoint;
 
             hitPoint = ray.GetPoint(distance);
@@ -344,9 +344,8 @@ public class CameraController : MonoBehaviour
             }
             else if (Mouse.current.leftButton.isPressed)
             {
-                
-                Vector3 dragDisplacement = startDrag - hitPoint; 
-                dragDisplacement.y = NO_VERTICAL_VELOCITY;
+                Vector3 dragDisplacement = startDrag - hitPoint;
+
                 transform.position += dragDisplacement;
             }
             else if (Mouse.current.leftButton.wasReleasedThisFrame)
