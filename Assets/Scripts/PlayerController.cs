@@ -99,39 +99,6 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    // Add to Start() or OnEnable()
-    void Start()
-    {
-        // ...existing code...
-
-        // === ADD THIS CHECK ===
-        Camera[] allCameras = FindObjectsByType<Camera>(FindObjectsSortMode.None);
-        Debug.Log($"[CAMERA CHECK] Total cameras in scene: {allCameras.Length}");
-        int activeCameras = 0;
-        foreach (var cam in allCameras)
-        {
-            if (cam.enabled)
-            {
-                activeCameras++;
-                Debug.Log(
-                    $"[CAMERA CHECK] Active camera: {cam.gameObject.name} on {cam.transform.parent?.name}"
-                );
-            }
-        }
-
-        if (activeCameras > 1)
-        {
-            Debug.LogError(
-                $"[CAMERA CHECK] WARNING: {activeCameras} cameras are active! This may cause issues."
-            );
-        }
-
-        if (Camera.main != playerCamera)
-        {
-            Debug.LogError("[CAMERA CHECK] Camera.main is NOT the same as _camera reference!");
-        }
-    }
-
     /// <summary>
     /// Called once per frame to handle real-time input and camera controls.
     /// It checks for local ownership before processing movement and rotation
