@@ -257,9 +257,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4900000, guid: 00efaab874b0b054089135eee112af66, type: 3}
     - target: {fileID: 154332724618842616, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      propertyPath: _FloodEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 944619221b6664749b66a67e05cb4b08, type: 2}
+    - target: {fileID: 154332724618842616, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       propertyPath: newMapEvent
       value: 
       objectReference: {fileID: 11400000, guid: 9438c37d1b6c53b408804b0dce45c597, type: 2}
+    - target: {fileID: 154332724618842616, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      propertyPath: _OnYearChangeEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 41e01cdfff1d08a408a8a22cfe7bcc81, type: 2}
     - target: {fileID: 5028386992981110786, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -313,6 +321,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 136165318042533967, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 131909886}
+    - targetCorrespondingSourceObject: {fileID: 136165318042533967, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 131909891}
+    - targetCorrespondingSourceObject: {fileID: 136165318042533967, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 131909890}
   m_SourcePrefab: {fileID: 100100000, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
 --- !u!1 &131909882 stripped
 GameObject:
@@ -411,6 +425,62 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &131909890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131909882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 41e01cdfff1d08a408a8a22cfe7bcc81, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 131909883}
+        m_TargetAssemblyTypeName: TTT.Managers.GameManager, TTT.Managers
+        m_MethodName: OnYearChange
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &131909891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131909882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 0f6684a922f3e8d45b032f0e51c747bc, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 131909883}
+        m_TargetAssemblyTypeName: TTT.Managers.GameManager, TTT.Managers
+        m_MethodName: OnLastPlayerTurnEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &301371853
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,6 +850,10 @@ PrefabInstance:
       propertyPath: _mapLoadFinishEvent
       value: 
       objectReference: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
+    - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      propertyPath: _OnLastPlayerTurnEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 0f6684a922f3e8d45b032f0e51c747bc, type: 2}
     - target: {fileID: 5925874576535686948, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
       propertyPath: Response.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 0
@@ -835,8 +909,55 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1065302472941044375, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 966887914}
   m_SourcePrefab: {fileID: 100100000, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+--- !u!1 &966887907 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1065302472941044375, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+  m_PrefabInstance: {fileID: 894281457}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &966887911 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+  m_PrefabInstance: {fileID: 894281457}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966887907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f602876cc3bd104e9d93287e1b4ea48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &966887914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966887907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: a8d0fdbaf27ed27499b9b3d43051c0e6, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 966887911}
+        m_TargetAssemblyTypeName: TTT.Managers.MapManager, TTT.Managers
+        m_MethodName: OnNextTurnClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1586668267
 GameObject:
   m_ObjectHideFlags: 0
