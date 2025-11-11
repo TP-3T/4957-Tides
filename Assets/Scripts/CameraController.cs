@@ -14,13 +14,13 @@ public class CameraController : MonoBehaviour
 {
     const float MAX_SPEED = 20f;
     const float ACCELERATION = 10f;
-    const float STEP_SIZE = 2f;
+    const float STEP_SIZE = 10f;
     const float DAMPING = 15f;
-    const float ZOOM_DAMPING = 7.5f;
-    const float ZOOM_SPEED = 20f;
+    const float ZOOM_DAMPING = 60f;
+    const float ZOOM_MOMENTUM_DAMPING = 5f;
     const float ZOOM_DELTA_THRESHOLD = 0.1f;
     const float MIN_HEIGHT = 10f;
-    const float MAX_HEIGHT = 40f;
+    const float MAX_HEIGHT = 100f;
     const float MAX_ROTATION_SPEED = 0.25f;
     const float ROTATION_X = 0f;
     const float ROTATION_Z = 0f;
@@ -29,6 +29,8 @@ public class CameraController : MonoBehaviour
     const float SCREEN_MIDPOINT_DIVISOR = 2f;
     const float MAGNITUDE_THRESHOLD = 0.001f;
     const float NO_VERTICAL_VELOCITY = 0f;
+    const float NO_ZOOM_VELOCITY = 0f;
+    const float TILTING_MOVEMENT_FACTOR = 0.7f;
 
     private Transform cameraTransform;
     private Camera playerCamera;
@@ -37,6 +39,7 @@ public class CameraController : MonoBehaviour
     private float speed;
     private readonly bool useScreenEdge = false; // Toggle on and off
     private float zoomHeight;
+    private float zoomVelocity;
     private Vector3 horizontalVelocity;
     private Vector3 lastPosition;
     private Vector3 targetPosition;
@@ -238,16 +241,7 @@ public class CameraController : MonoBehaviour
 
         if (Mathf.Abs(zoomDelta) > ZOOM_DELTA_THRESHOLD)
         {
-            zoomHeight = cameraTransform.localPosition.y - zoomDelta * STEP_SIZE;
-
-            if (zoomHeight < MIN_HEIGHT)
-            {
-                zoomHeight = MIN_HEIGHT;
-            }
-            else if (zoomHeight > MAX_HEIGHT)
-            {
-                zoomHeight = MAX_HEIGHT;
-            }
+            zoomVelocity += zoomDelta * STEP_SIZE;
         }
     }
 
@@ -258,13 +252,35 @@ public class CameraController : MonoBehaviour
     {
         Vector3 zoomTarget;
 
+        // VELOCITY
+        if (Mathf.Abs(zoomVelocity) > 0.01f)
+        {
+            zoomHeight -= zoomVelocity * Time.deltaTime;
+
+            zoomHeight = Mathf.Clamp(zoomHeight, MIN_HEIGHT, MAX_HEIGHT);
+
+            // MOMENTUM DECAY
+            zoomVelocity = Mathf.Lerp(
+                zoomVelocity,
+                NO_ZOOM_VELOCITY,
+                ZOOM_MOMENTUM_DAMPING * Time.deltaTime
+            );
+        }
+        else
+        {
+            zoomVelocity = NO_ZOOM_VELOCITY;
+        }
+
         zoomTarget = new Vector3(
             cameraTransform.localPosition.x,
             zoomHeight,
             cameraTransform.localPosition.z
         );
 
-        zoomTarget -= ZOOM_SPEED * (zoomHeight - cameraTransform.localPosition.y) * Vector3.forward;
+        float heightDifference = zoomHeight - cameraTransform.localPosition.y;
+        float backwardOffset = heightDifference * TILTING_MOVEMENT_FACTOR;
+
+        zoomTarget -= backwardOffset * Vector3.forward;
 
         cameraTransform.localPosition = Vector3.Lerp(
             cameraTransform.localPosition,
