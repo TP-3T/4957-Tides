@@ -25,6 +25,7 @@ public class NextTurn : MonoBehaviour
     /// </summary>
     public void OnClick()
     {
+        Debug.Log("Next Turn Button Clicked");
         _nextTurnEvent.Raise();
     }
 }
