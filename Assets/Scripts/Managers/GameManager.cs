@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 
 namespace TTT.Managers
 {
-    public class GameManager : GenericSingleton<GameManager>
+    public class GameManager : GenericNetworkSingleton<GameManager>
     {
         [SerializeField]
         private TextAsset LevelFile;
