@@ -31,6 +31,10 @@ public class CameraController : MonoBehaviour
     const float NO_VERTICAL_VELOCITY = 0f;
     const float NO_ZOOM_VELOCITY = 0f;
     const float TILTING_MOVEMENT_FACTOR = 0.7f;
+    const float TERRAIN_RAYCAST_HEIGHT_OFFSET = 50f;
+    const float TERRAIN_RAYCAST_DISTANCE = 100f;
+    const float TERRAIN_HEIGHT_SMOOTH_SPEED = 3f;
+    const float ZOOM_VELOCITY_BENCHMARK = 0.01f;
 
     private Transform cameraTransform;
     private Camera playerCamera;
@@ -40,6 +44,8 @@ public class CameraController : MonoBehaviour
     private readonly bool useScreenEdge = false; // Toggle on and off
     private float zoomHeight;
     private float zoomVelocity;
+    private float dynamicMinHeight = MIN_HEIGHT;
+    private float targetMinHeight = MIN_HEIGHT;
     private Vector3 horizontalVelocity;
     private Vector3 lastPosition;
     private Vector3 targetPosition;
@@ -103,6 +109,8 @@ public class CameraController : MonoBehaviour
         DragCamera();
 
         UpdateVelocity();
+
+        CheckTerrainHeight();
 
         UpdateCameraPos();
 
@@ -253,11 +261,9 @@ public class CameraController : MonoBehaviour
         Vector3 zoomTarget;
 
         // VELOCITY
-        if (Mathf.Abs(zoomVelocity) > 0.01f)
+        if (Mathf.Abs(zoomVelocity) > ZOOM_VELOCITY_BENCHMARK)
         {
             zoomHeight -= zoomVelocity * Time.deltaTime;
-
-            zoomHeight = Mathf.Clamp(zoomHeight, MIN_HEIGHT, MAX_HEIGHT);
 
             // MOMENTUM DECAY
             zoomVelocity = Mathf.Lerp(
@@ -270,6 +276,9 @@ public class CameraController : MonoBehaviour
         {
             zoomVelocity = NO_ZOOM_VELOCITY;
         }
+
+        // zoomHeight = Mathf.Clamp(zoomHeight, MIN_HEIGHT, MAX_HEIGHT);
+        zoomHeight = Mathf.Clamp(zoomHeight, dynamicMinHeight, MAX_HEIGHT);
 
         zoomTarget = new Vector3(
             cameraTransform.localPosition.x,
@@ -369,5 +378,44 @@ public class CameraController : MonoBehaviour
                 startDrag = Vector3.zero;
             }
         }
+    }
+
+    /// <summary>
+    /// Checks the terrain height below the camera and adjusts its position if necessary.
+    /// </summary>
+    private void CheckTerrainHeight()
+    {
+        Vector3 raycastOrigin;
+        Vector3 raycastDirection;
+        float terrainHeight;
+
+        raycastOrigin = transform.position + Vector3.up * TERRAIN_RAYCAST_HEIGHT_OFFSET;
+        raycastDirection = Vector3.down;
+
+        // debug ray
+        // Debug.DrawRay(raycastOrigin, raycastDirection * TERRAIN_RAYCAST_DISTANCE, Color.red);
+
+        if (
+            Physics.Raycast(
+                raycastOrigin,
+                raycastDirection,
+                out RaycastHit hit,
+                TERRAIN_RAYCAST_DISTANCE
+            )
+        )
+        {
+            terrainHeight = hit.point.y;
+            targetMinHeight = terrainHeight + MIN_HEIGHT;
+        }
+        else
+        {
+            targetMinHeight = MIN_HEIGHT;
+        }
+
+        dynamicMinHeight = Mathf.Lerp(
+            dynamicMinHeight,
+            targetMinHeight,
+            TERRAIN_HEIGHT_SMOOTH_SPEED * Time.deltaTime
+        );
     }
 }
