@@ -1,9 +1,12 @@
-name: Validate Core
+name: validate core and above
 
 on: 
   push:
     branches: [ core ]
     paths: [ "**/*.cs" ] 
+  pull_request:
+    branches: [ main, dev, core ]
+    paths: [ "**/*.cs" ]
 
 jobs:
   csharpier:
