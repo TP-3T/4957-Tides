@@ -12,8 +12,7 @@ using UnityEngine.TestTools;
 
 /// <summary>
 /// Basic unit tests for public APIs, singletons, data classes, and utilities.
-/// Tests singleton behavior and public methods of actual project implementations.
-/// No networking, no ScriptableObject events, no complex async setup.
+/// Tests singleton behavior and public methods in the project.
 /// </summary>
 public class EditModeTests
 {
@@ -241,13 +240,6 @@ public class EditModeTests
         var mapManager = MapManager.Instance;
         Assert.IsNotNull(mapManager.FloodQueue, "FloodQueue should not be null");
     }
-
-    #endregion
-
-    #region ResourcesController Public Methods
-
-    // ResourcesController is in a separate assembly that requires additional setup
-    // Defer testing to integration tests
 
     #endregion
 
