@@ -35,7 +35,7 @@ namespace TTT.Managers
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            this.Season = Seasons[Year];
+            this.Season = Seasons[0];
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
@@ -128,6 +128,17 @@ namespace TTT.Managers
             _FloodEvent.Raise();
 
         }
+
+        public int GetYear()
+        {
+            return this.Year;
+        }
+
+        public string GetSeason()
+        {
+            return this.Season;
+        }
+
 
         // /// <summary>
         // /// Method from INextTurnListener interface. Called when Next Turn event is dispatched.
