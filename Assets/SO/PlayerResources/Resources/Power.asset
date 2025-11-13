@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Power
   m_EditorClassIdentifier: 
   resourceName: power
-  amountOwned: 0
+  amountOwned: 100

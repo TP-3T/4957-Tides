@@ -1,24 +1,16 @@
-using TMPro;
-using TTT.DataClasses.TileFeatures;
-using TTT.Managers;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.UI;
 
 public class BottomMenu : MonoBehaviour
 {
-    [SerializeField]
-    private FeatureType featureType;
-
-    public void Awake()
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
-        if (featureType == null){
-            throw new System.Exception("bozo: FeatureType not set for bottom Menu");
-        }
+        
     }
 
-    public void SetFeatureTypeTitle()
+    // Update is called once per frame
+    void Update()
     {
-        GetComponentInChildren<TextMeshPro>().text = featureType.UniqueID;
+        
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,7 +9,7 @@ namespace TTT.GameEvents
         public GameEvent Event;
 
         [Tooltip("What to call when the GameEvent is raised.")]
-        public UnityEvent<UnityEngine.Object> Response;
+        public UnityEvent<Object> Response;
 
         private void OnEnable()
         {
@@ -22,7 +21,7 @@ namespace TTT.GameEvents
             Event.UnregisterListener(this);
         }
 
-        public void OnEventRaised(UnityEngine.Object eventArgs)
+        public void OnEventRaised(Object eventArgs)
         {
             Response.Invoke(eventArgs);
         }

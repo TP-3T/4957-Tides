@@ -3,15 +3,22 @@ using UnityEngine;
 
 public class NetworkButton : MonoBehaviour
 {
-    [SerializeField]
-    private GameEvent SystemStateChangeEvent;
+    public GameEvent startEvent;
 
-    public void OnButtonClickEpico()
+    public void OnStartServer()
     {
-        SystemStateChangeEvent.Raise(new StateSystemChangeEventArgs
-        {
-            NewState = TTT.DataClasses.States.SystemState.PLAYING
-        }
-        );
+        Debug.Log("I am being clicked");
+        startEvent.Raise(new StartNetworkEventArgs() { IsHost = true });
     }
-}   
+
+    public void OnStartClient()
+    {
+        Debug.Log("I am being clicked");
+        startEvent.Raise(new StartNetworkEventArgs() { IsHost = false });
+    }
+
+    public void OnMapLoad(Object eventArgs)
+    {
+        gameObject.SetActive(false);
+    }
+}
