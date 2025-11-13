@@ -15,7 +15,7 @@ namespace TTT.Managers
     /// <summary>
     /// Business logic / game related logic and networking stuff shall live here.
     /// </summary>
-    public partial class MapManager : GenericSingleton<MapManager>
+    public partial class MapManager : GenericNetworkSingleton<MapManager>
     {
         /**
         Serialize fields for the HexMesh, instances that are required for each client
@@ -48,7 +48,7 @@ namespace TTT.Managers
         private AssetReference _hexGridMeshAsset = new("P_HexMesh");
         private AssetReference _seaMeshAsset = new("P_SeaMesh");
         private MapData _gameMapData;
-        private const int CellsPerFrame = 100;
+        private const int CellsPerFrame = 25;
 
         public NetworkList<HexCell> HexCells = new(default,
             NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -58,6 +58,8 @@ namespace TTT.Managers
         public NetworkVariable<float> SeaLevel = new(0.0f);
         public NetworkVariable<float> RisingRate = new(1.0f);
         public bool DrawDebugLabels;
+
+        [SerializeField] public GameEvent _OnLastPlayerTurnEvent;
 
         public override void OnNetworkSpawn()
         {
@@ -81,7 +83,7 @@ namespace TTT.Managers
             hexMeshInstance.transform.position += new Vector3(0.0f, -0.01f, 0.0f);
             _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
 
-            TriangulateMeshInstanceClientRpc();
+            TriangulateHexMeshClientRpc();
         }
 
         private void SpawnSeaMesh(GameObject sm)
@@ -94,11 +96,11 @@ namespace TTT.Managers
             seaMeshInstance.GetComponent<NetworkObject>().Spawn();
             _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
 
-            VerticifySeaMeshInstanceClientRpc();
+            TriangulateSeaMeshClientRpc();          // for the host, this should eventually not be necessary
         }
 
         [ClientRpc]
-        private void TriangulateMeshInstanceClientRpc()
+        private void TriangulateHexMeshClientRpc()
         {
             NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
             HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();       // Get the hex mesh in the scene
@@ -109,7 +111,7 @@ namespace TTT.Managers
         }
 
         [ClientRpc]
-        private void TriangulateMeshInstanceClientRpc(HexCell cell)
+        private void TriangulateHexMeshClientRpc(HexCell cell)
         {
 
             NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
@@ -119,12 +121,21 @@ namespace TTT.Managers
         }
 
         [ClientRpc]
-        private void TriangulateMeshInstanceClientRpc(HexCell[] cells)
+        private void TriangulateHexMeshClientRpc(HexCell[] cells)
         {
             NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
             HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
 
             hexMeshInstance.ReTriangulateCells(cells, MapManager.HexSize, MapManager.HexOrientation);
+        }
+
+        [ClientRpc]
+        private void TriangulateSeaMeshClientRpc()
+        {
+            NetworkObject seaMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_seaMeshId.Value];
+            SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
+
+            seaMeshInstance.Triangulate(HexCells, SeaLevel.Value, MapManager.HexSize, MapManager.HexOrientation);
         }
 
         [ClientRpc]
@@ -143,16 +154,6 @@ namespace TTT.Managers
             SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
 
             seaMeshInstance.TriangulateCells(cells, SeaLevel.Value, MapManager.HexSize, MapManager.HexOrientation);
-            Debug.Log(SeaLevel.Value);
-        }
-
-        [ClientRpc]
-        private void VerticifySeaMeshInstanceClientRpc()
-        {
-            NetworkObject seaMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_seaMeshId.Value];
-            SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
-
-            seaMeshInstance.Verticify(HexCells, MapManager.HexSize, MapManager.HexOrientation);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -170,7 +171,7 @@ namespace TTT.Managers
             hc.CellColor = newColor;
             HexCells[index] = hc;
 
-            TriangulateMeshInstanceClientRpc(HexCells[index]);
+            TriangulateHexMeshClientRpc(HexCells[index]);
         }
 
         public void OnNewMap(UnityEngine.Object eventArgs)
@@ -239,8 +240,8 @@ namespace TTT.Managers
         {
             if (IsClient)
             {
-                TriangulateMeshInstanceClientRpc();
-                VerticifySeaMeshInstanceClientRpc();
+                TriangulateHexMeshClientRpc();
+                TriangulateSeaMeshClientRpc();
             }
         }
 
@@ -255,7 +256,21 @@ namespace TTT.Managers
         {
             FloodEventArgs args = eventArgs as FloodEventArgs;
 
+            Debug.Log("Flood Event Triggered - MapManager line 261");
+
             StartRaiseSeaServerRpc();
+        }
+
+        public void OnNextTurnClick(UnityEngine.Object eventArgs)
+        {
+            // needs current player info
+            Debug.Log("Next Turn Clicked - MapManager line 262");
+
+            // if not last players turn, switch the player context to the next player
+            // next player turn event or something
+
+            //if last player turn then
+            _OnLastPlayerTurnEvent.Raise();
         }
     }
 }
