@@ -183,6 +183,30 @@ namespace TTT.Hex
         }
 
         /// <summary>
+        /// Retriangulates a single cell with a temporary highlight color applied ONLY to the side/edge vertices.
+        /// The top face retains its permanent color from the last full Triangulate (the cell's original color).
+        /// </summary>
+        /// <param name="hexCell">The cell data (used for vertex index).</param>
+        /// <param name="highlightColor">The temporary color to use for the edges.</param>
+        public void ReTriangulateCellEdgeHighlight(HexCell hexCell, Color highlightColor) 
+        {
+
+            int count = hexCell.CenterVertexIndex;
+        
+            count++; 
+
+            count += 6; 
+            
+            for (int i = 0; i < 6; i++) {
+                // Apply the highlight color to the side/edge vertices
+                ccolors[count++] = highlightColor; 
+            }
+
+            // Apply the new colors array to the mesh on the local client
+            mesh.SetColors(ccolors);
+
+        }
+        /// <summary>
         /// Retriangualtes a subset of the mesh.
         /// </summary>
         /// <param name="hexCells"></param>

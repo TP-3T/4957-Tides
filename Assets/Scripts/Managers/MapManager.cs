@@ -21,7 +21,6 @@ namespace TTT.Managers
         Serialize fields for the HexMesh, instances that are required for each client
         Serialize fields for the SeaMesh, instances that are requried for each client
         */
-
         public static readonly CubeCoordinates[] NeighbourDirections =
         {
             new CubeCoordinates(1, 0, -1),
@@ -33,6 +32,8 @@ namespace TTT.Managers
         };
         public static readonly float HexSize = 3.0f;
         public static readonly HexOrientation HexOrientation = HexOrientation.pointyTop;
+
+        private int _currentlyHighlightedIndex = -1;
 
         [SerializeField]
         private TextAsset _jsonMap;
@@ -248,9 +249,41 @@ namespace TTT.Managers
         public void OnMapMeshClicked(UnityEngine.Object eventArgs)
         {
             MapMeshClickedEventArgs args = eventArgs as MapMeshClickedEventArgs;
+            Vector3 point = args.ClickedPoint;
+            Color highlightColor = args.PlayerColor;
+            
+            // Get the index using the user's preferred method 
+            int newHighlightIndex = GetCellIndexFromPosition(point); 
 
+            // Safety check for clicks outside the map or on invalid coordinates
+            if (newHighlightIndex < 0 || newHighlightIndex >= HexCells.Count)
+            {
+                 // If invalid, clear any existing highlight
+                 if (_currentlyHighlightedIndex != -1)
+                 {
+                     LocalTriangulateHighlight(_currentlyHighlightedIndex, HexCells[_currentlyHighlightedIndex].CellColor);
+                     _currentlyHighlightedIndex = -1;
+                 }
+                 return;
+            }
+
+            // restore the previously highlighted hex (if one exists AND it's not the current hex)
+            if (_currentlyHighlightedIndex != -1 && _currentlyHighlightedIndex != newHighlightIndex)
+            {
+                // Use the permanent color to restore the original look
+                Color originalColor = HexCells[_currentlyHighlightedIndex].CellColor;
+                LocalTriangulateHighlight(_currentlyHighlightedIndex, originalColor);
+            }
+
+            // apply the highlight to the new hex
+            if (newHighlightIndex != _currentlyHighlightedIndex)
+            {
+                LocalTriangulateHighlight(newHighlightIndex, highlightColor);
+                _currentlyHighlightedIndex = newHighlightIndex;
+            }
             OnMapMeshCickedServerRpc(args.ClickedPoint, args.PlayerColor);
         }
+        
 
         public void OnFlood(UnityEngine.Object eventArgs)
         {
@@ -271,6 +304,36 @@ namespace TTT.Managers
 
             //if last player turn then
             _OnLastPlayerTurnEvent.Raise();
+        }
+       /// <summary>
+        /// Helper method to perform the local (client-side) mesh update for highlighting or restoring.
+        /// </summary>
+        private void LocalTriangulateHighlight(int index, Color color)
+        {
+            // Ensure we are a client and the HexMesh object is spawned
+            if (!IsClient || !NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(_hexMeshId.Value)) 
+                return;
+            
+            // Get the HexMesh instance on the local scene.
+            NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
+            HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
+            HexCell cellToHighlight = HexCells[index];
+
+            // If the color matches the cell's permanent color, it means we are RESTORING (un-highlighting).
+            if (color == cellToHighlight.CellColor)
+            {
+                // Call the existing ReTriangulateCell, which reads the permanent color for ALL vertices (top and sides).
+                hexMeshInstance.ReTriangulateCell(
+                    cellToHighlight, 
+                    MapManager.HexSize, 
+                    MapManager.HexOrientation
+                );
+            }
+            else
+            {
+                // Apply the temporary highlight color ONLY to the edges.
+                hexMeshInstance.ReTriangulateCellEdgeHighlight(cellToHighlight, color);
+            }
         }
     }
 }
