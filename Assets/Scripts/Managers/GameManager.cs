@@ -136,6 +136,7 @@ namespace TTT.Managers
 
         public string GetSeason()
         {
+            Debug.Log(this.Season);
             return this.Season;
         }
 
