@@ -23,11 +23,6 @@ namespace TTT.Managers
         private RectTransform m_RT;
         private float endTime;
         public bool isOpen = false;
-        private int currentTabID = -1;
-        public GameObject Tabs;
-        public Image[] TabButtons;
-        public Color activeTabColor, inactiveTabColor;
-        public Vector2 InactiveTabSize, activeTabSize;
 
         void Start()
         {
@@ -36,56 +31,16 @@ namespace TTT.Managers
             closedPosition = m_RT.anchoredPosition;
         }
 
-        public void TabClicked(int TabID)
-        {
-            if (currentTabID == TabID && isOpen)
-            {
-                ToggleDrawer();
-                currentTabID = -1;
-                
-            }
-            else if (isOpen == false)
-            {
-                ToggleDrawer();
-                // Emit toggle event
-                currentTabID = TabID;
-            }
-            else
-            {
-                SwitchToTab(TabID);
-                currentTabID = TabID;
-            }
-        }
-
         public void ToggleDrawer()
         {
-
             if (isOpen)
             {
-                Debug.Log("Closing Drawer:");
                 StartCoroutine(CloseRoutine());
             }
             else
             {
                 StartCoroutine(OpenRoutine());
             }
-        }
-
-        // event emitter goes here.
-        public void SwitchToTab(int TabID)
-        {
-        
-            Tabs.SetActive(true);
-
-            foreach (Image im in TabButtons)
-            {
-                im.color = inactiveTabColor;
-                im.rectTransform.sizeDelta = InactiveTabSize;
-            }
-
-            TabButtons[TabID].color = activeTabColor;
-            TabButtons[TabID].rectTransform.sizeDelta = activeTabSize;
-            Debug.Log("Switched to Tab: " + TabID);
         }
 
         private IEnumerator OpenRoutine()
