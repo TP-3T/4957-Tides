@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 
 namespace TTT.Managers
 {
-    public class GameManager : GenericSingleton<GameManager>
+    public class GameManager : GenericNetworkSingleton<GameManager>
     {
         [SerializeField]
         private TextAsset LevelFile;
@@ -19,6 +19,10 @@ namespace TTT.Managers
         //serialize for now
         [SerializeField] private int Year = 1;
         [SerializeField] private string Season;
+
+        [SerializeField] public GameEvent _OnYearChangeEvent;
+
+        [SerializeField] public GameEvent _FloodEvent;
 
 
         // private AssetReference SeaPrefab = new("P_Sea");
@@ -43,7 +47,8 @@ namespace TTT.Managers
                 Debug.Log("I am being spawned as a host");
                 NetworkManager.Singleton.StartHost();
 
-                newMapEvent.Raise(new NewMapEventArgs() {
+                newMapEvent.Raise(new NewMapEventArgs()
+                {
                     DataFile = LevelFile
                 });
             }
@@ -98,6 +103,7 @@ namespace TTT.Managers
             if (this.Season == this.Seasons[0])
             {
                 this.IncrementYear();
+                _OnYearChangeEvent.Raise();
             }
         }
 
@@ -107,6 +113,20 @@ namespace TTT.Managers
         public void IncrementYear()
         {
             this.Year += 1;
+        }
+
+        public void OnLastPlayerTurnEvent(UnityEngine.Object eventArgs)
+        {
+            Debug.Log("Last Player Made Turn, increment season - GameManager line 118");
+            this.IncrementSeason();
+        }
+
+        public void OnYearChange(UnityEngine.Object eventArgs)
+        {
+            Debug.Log("Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124");
+
+            _FloodEvent.Raise();
+
         }
 
         // /// <summary>

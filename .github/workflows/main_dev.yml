@@ -1,17 +1,36 @@
 name: Validate Main & Dev
-
-on:
-  pull_request:
-    branches: [ main, dev, ]
+on: 
+  push:
+    branches: [ main, dev ]
     paths: [ "**/*.cs" ] 
+
 jobs:
-  check_formatting:
+  csharpier:
     runs-on: ubuntu-latest
-    name: Check Formatting
+    name: format
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-dotnet@v5
-        with: 
+        with:
           dotnet-version: "9.0.x"
-      - run: dotnet tool restore 
-      - run: dotnet csharpier .
+      - run: dotnet tool restore
+      - run: dotnet csharpier format .
+
+  unity_runner:
+    runs-on: ubuntu-latest
+    name: unity test runner
+
+    steps:
+      - name: checkout code 
+        uses: actions/checkout@v4
+
+      - name: run playmode tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 6000.0.60f1
+          testMode: PlayMode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}  
