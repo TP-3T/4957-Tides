@@ -1,3 +1,4 @@
+using System;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
@@ -17,13 +18,17 @@ namespace TTT.Managers
         private string[] Seasons = { "Spring", "Summer", "Fall", "Winter" };
 
         //serialize for now
-        [SerializeField] private int Year = 1;
-        [SerializeField] private string Season;
+        [SerializeField]
+        private int Year = 1;
 
-        [SerializeField] public GameEvent _OnYearChangeEvent;
+        [SerializeField]
+        private string Season;
 
-        [SerializeField] public GameEvent _FloodEvent;
+        [SerializeField]
+        public GameEvent _OnYearChangeEvent;
 
+        [SerializeField]
+        public GameEvent _FloodEvent;
 
         // private AssetReference SeaPrefab = new("P_Sea");
 
@@ -39,40 +44,24 @@ namespace TTT.Managers
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
-        public void OnStartNetworkEvent(Object eventArgs)
+        public void OnStartNetworkEvent(UnityEngine.Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
             if (args.IsHost)
             {
-                Debug.Log("I am being spawned as a host");
+                // Debug.Log("I am being spawned as a host");
                 NetworkManager.Singleton.StartHost();
 
-                newMapEvent.Raise(new NewMapEventArgs()
-                {
-                    DataFile = LevelFile
-                });
+                newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
             }
             else
             {
-                Debug.Log("I am being spawned as a client");
+                // Debug.Log("I am being spawned as a client");
                 NetworkManager.Singleton.StartClient();
             }
         }
 
-        // private void SpawnSea(GameObject obj)
-        // {
-        //     sea = Instantiate(obj);
-        //     sea.GetComponent<NetworkObject>().Spawn();
-        // }
-
-        // private void SpawnGrid(GameObject obj)
-        // {
-        //     hexGrid = Instantiate(obj);
-        //     hexGrid.GetComponent<NetworkObject>().Spawn();
-        //     newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
-        // }
-
-        public void OnNewMapFinish(Object eventArgs)
+        public void OnNewMapFinish(UnityEngine.Object eventArgs)
         {
             NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
 
@@ -123,21 +112,29 @@ namespace TTT.Managers
 
         public void OnYearChange(UnityEngine.Object eventArgs)
         {
-            Debug.Log("Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124");
+            Debug.Log(
+                "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
+            );
 
             _FloodEvent.Raise();
-
         }
+    }
 
-        // /// <summary>
-        // /// Method from INextTurnListener interface. Called when Next Turn event is dispatched.
-        // /// </summary>
-        // /// <param name="nt">The Next Turn Event</param>
-        // public void OnEventRaised(NextTurn nt)
-        // {
-        //     // increment season here
-        //     Debug.Log("1. Increment Season -GameManager" + nt.ToString());
-        //     this.IncrementSeason();
-        // }
+    enum Season
+    {
+        Spring,
+        Summer,
+        Fall,
+        Winter,
+    }
+
+    static class SeasonMethods
+    {
+        public static Season Increment(Season season)
+        {
+            Season[] vals = (Season[])Enum.GetValues(season.GetType());
+            int nextVal = Array.IndexOf<Season>(vals, season) + 1;
+            return vals.Length.Equals(nextVal) ? vals[0] : vals[nextVal];
+        }
     }
 }
