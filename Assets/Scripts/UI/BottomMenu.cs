@@ -8,7 +8,14 @@ using UnityEngine.UI;
 public class BottomMenu : MonoBehaviour
 {
     [SerializeField]
-    private FeatureType featureType = new FeatureType();
+    private FeatureType featureType;
+
+    public void Awake()
+    {
+        if (featureType == null){
+            throw new System.Exception("bozo: FeatureType not set for bottom Menu");
+        }
+    }
 
     public void SetFeatureTypeTitle()
     {
