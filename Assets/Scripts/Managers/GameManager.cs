@@ -19,7 +19,7 @@ namespace TTT.Managers
         //serialize for now
         [SerializeField] private int Year = 1;
         [SerializeField] private string Season;
-
+        [SerializeField] private int CO2;
         [SerializeField] public GameEvent _OnYearChangeEvent;
 
         [SerializeField] public GameEvent _FloodEvent;
@@ -36,6 +36,7 @@ namespace TTT.Managers
         void Start()
         {
             this.Season = Seasons[0];
+            this.CO2 = 0;
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
@@ -137,6 +138,11 @@ namespace TTT.Managers
         public string GetSeason()
         {
             return this.Season;
+        }
+
+        public int GetCO2()
+        {
+            return this.CO2;
         }
 
 

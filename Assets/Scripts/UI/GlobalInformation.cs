@@ -12,23 +12,37 @@ public class GlobalInformation : MonoBehaviour
 
     private int Year;
     private string Season;
+    private int CO2;
 
     void Start()
     {
         GameManager = FindAnyObjectByType<GameManager>();
-        Season = GameManager.GetSeason();
-        Year = GameManager.GetYear();
-        _dateText.text = Season + ", " + Year.ToString();
+        setDateText();
+        setCO2Text();
     }
 
     void Update()
     {
-        if (GameManager.GetYear() == Year && GameManager.GetSeason() == Season)
+        if (GameManager.GetYear() != Year || GameManager.GetSeason() != Season)
         {
-            return;
+            setDateText();
         }
+        if (GameManager.GetCO2() != CO2)
+        {
+            setCO2Text();
+        }
+    }
+
+    private void setDateText()
+    {
         Year = GameManager.GetYear();
         Season = GameManager.GetSeason();
         _dateText.text = Season + ", " + Year.ToString();
+    }
+
+    private void setCO2Text()
+    {
+        CO2 = GameManager.GetCO2();
+        _CO2Text.text = "CO2: " + CO2.ToString() + " ppm";
     }
 }
