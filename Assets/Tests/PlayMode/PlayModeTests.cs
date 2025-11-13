@@ -19,6 +19,27 @@ using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.TestTools;
 
+/*
+                                      ,---,
+                                   ,`--.' |
+    ,---,                          |   :  :  ___
+  .'  .' `\                        |   |  ',--.'|_
+,---.'     \    ,---.        ,---, '   :  ||  | :,'
+|   |  .`\  |  '   ,'\   ,-+-. /  |;   |.' :  : ' :
+:   : |  '  | /   /   | ,--.'|'   |'---' .;__,'  /
+|   ' '  ;  :.   ; ,. :|   |  ,"' |      |  |   |
+'   | ;  .  |'   | |: :|   | /  | |      :__,'| :
+|   | :  |  ''   | .; :|   | |  | |        '  : |__
+'   : | /  ; |   :    ||   | |  |/         |  | '.'|
+|   | '` ,/   \   \  / |   | |--'          ;  :    ;
+;   :  .'      `----'  |   |/              |  ,   /
+|   ,.'                '---'                ---`-'
+'---'
+I wouldn't recommend trying to implement any playmode tests.
+Unless you really know both the networking and event system we're using.
+And are prepared to waste a lot of time.
+*/
+
 public class PlayModeTests
 {
     private static IEnumerator WaitForCondition(
