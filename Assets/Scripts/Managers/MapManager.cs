@@ -310,10 +310,6 @@ namespace TTT.Managers
         /// </summary>
         private void LocalTriangulateHighlight(int index, Color color)
         {
-            // Ensure we are a client and the HexMesh object is spawned
-            if (!IsClient || !NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(_hexMeshId.Value)) 
-                return;
-            
             // Get the HexMesh instance on the local scene.
             NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
             HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
