@@ -1,0 +1,16 @@
+{
+    "name": "TTT.ClimateModel",
+    "rootNamespace": "TTT.ClimateModel",
+    "references": [
+        "GUID:33fa1a77a93c87a4cae970e1e487bb77"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
