@@ -25,7 +25,7 @@ namespace TTT.Managers
         public bool isOpen = false;
 
         private int currentTabID = -1;
-        public GameObject Tabs;
+        public GameObject[] Tabs;
         public Image[] TabButtons;
         public Color activeTabColor, inactiveTabColor;
         public Vector2 InactiveTabSize, activeTabSize;
@@ -77,16 +77,8 @@ namespace TTT.Managers
         public void SwitchToTab(int TabID)
         {
 
-            Tabs.SetActive(true);
+            Tabs[TabID].SetActive(true);
 
-            foreach (Image im in TabButtons)
-            {
-                im.color = inactiveTabColor;
-                im.rectTransform.sizeDelta = InactiveTabSize;
-            }
-
-            TabButtons[TabID].color = activeTabColor;
-            TabButtons[TabID].rectTransform.sizeDelta = activeTabSize;
             Debug.Log("Switched to Tab: " + TabID);
         }
 
