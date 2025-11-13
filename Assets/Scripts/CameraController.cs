@@ -388,9 +388,11 @@ public class CameraController : MonoBehaviour
         Vector3 raycastOrigin;
         Vector3 raycastDirection;
         float terrainHeight;
+        int layerMask;
 
         raycastOrigin = transform.position + Vector3.up * TERRAIN_RAYCAST_HEIGHT_OFFSET;
         raycastDirection = Vector3.down;
+        layerMask = ~LayerMask.GetMask("Ignore Raycast");
 
         // debug ray
         // Debug.DrawRay(raycastOrigin, raycastDirection * TERRAIN_RAYCAST_DISTANCE, Color.red);
@@ -400,7 +402,8 @@ public class CameraController : MonoBehaviour
                 raycastOrigin,
                 raycastDirection,
                 out RaycastHit hit,
-                TERRAIN_RAYCAST_DISTANCE
+                TERRAIN_RAYCAST_DISTANCE,
+                layerMask
             )
         )
         {
