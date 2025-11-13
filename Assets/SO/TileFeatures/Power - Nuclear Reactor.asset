@@ -10,26 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d8a447a0febedb24e8cd2e631a1f15d7, type: 3}
-  m_Name: House
+  m_Name: Power - Nuclear Reactor
   m_EditorClassIdentifier: 
-  <UniqueID>k__BackingField: house
+  <UniqueID>k__BackingField: nuclear
   <PollutionEmission>k__BackingField: 10
   <Constraints>k__BackingField:
-    <MaximumHeight>k__BackingField: 500
+    <MaximumHeight>k__BackingField: 750
     <TerrainConstraints>k__BackingField:
       <Mode>k__BackingField: 1
       <List>k__BackingField:
-      - {fileID: 11400000, guid: bbf1927decf0b83429343952dbf6ea8b, type: 2}
+      - {fileID: 0}
     <FeatureConstraints>k__BackingField: []
-  <BuildValidator>k__BackingField: {fileID: 11400000, guid: 418d17bf1c05a9c40aff3428a267cd49, type: 2}
+  <BuildValidator>k__BackingField: {fileID: 11400000, guid: 415d8be488ae7e54388aaea4cfe19dc7, type: 2}
   <ResourceProducers>k__BackingField:
   - productionSchedule: {fileID: 11400000, guid: edef3b431516b8048a30517cd2383a7b, type: 2}
     resourceAmounts:
-    - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
-      <Count>k__BackingField: 4
     - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-      <Count>k__BackingField: -2
+      <Count>k__BackingField: 1000
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
-    <Count>k__BackingField: 0
-  <Prefab>k__BackingField: {fileID: 8383225200055468465, guid: 61d41a7c4fbecf44ebc05c1c324abd74, type: 3}
+    <Count>k__BackingField: 1
+  <Prefab>k__BackingField: {fileID: 8506843664173545344, guid: 6280a125f160edd4a87b99e065d60309, type: 3}

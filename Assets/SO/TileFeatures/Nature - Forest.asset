@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d8a447a0febedb24e8cd2e631a1f15d7, type: 3}
-  m_Name: Factory
+  m_Name: Nature - Forest
   m_EditorClassIdentifier: 
-  <UniqueID>k__BackingField: factory
+  <UniqueID>k__BackingField: forest
   <PollutionEmission>k__BackingField: 200
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
@@ -33,4 +33,4 @@ MonoBehaviour:
     <Count>k__BackingField: 4
   - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
     <Count>k__BackingField: 30
-  <Prefab>k__BackingField: {fileID: 1866574322958476332, guid: cae176dfbb772c24ea6ced55d016911b, type: 3}
+  <Prefab>k__BackingField: {fileID: 1379389056011696956, guid: cbc6071669b55b442969c7ce8e8f40c2, type: 3}
