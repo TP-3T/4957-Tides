@@ -1,13 +1,105 @@
+using System.Collections;
+using System.Collections.Generic;
+using TTT.Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TTT.Managers
 {
     public class UIManager : MonoBehaviour
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start() { }
+        [SerializeField]
+        GameObject drawerPanel;
 
-        // Update is called once per frame
-        void Update() { }
+        [SerializeField]
+        Vector2 openPosition,
+            closedPosition;
+
+        [SerializeField]
+        AnimationCurve animationCurve;
+
+        public string currentFeatureType;
+
+        private RectTransform m_RT;
+        private float endTime;
+        public bool isOpen = false;
+
+        void Start()
+        {
+            FindFurthestKeyFrame();
+            m_RT = GetComponent<RectTransform>();
+            closedPosition = m_RT.anchoredPosition;
+        }
+
+        public void ToggleDrawer()
+        {
+            if (isOpen)
+            {
+                StartCoroutine(CloseRoutine());
+            }
+            else
+            {
+                StartCoroutine(OpenRoutine());
+            }
+        }
+
+        private IEnumerator OpenRoutine()
+        {
+            float elapsedTime = 0;
+            while (elapsedTime < endTime)
+            {
+                m_RT.anchoredPosition = Vector2.Lerp(
+                    closedPosition,
+                    openPosition,
+                    animationCurve.Evaluate(elapsedTime)
+                ); // Interpolate position based on curve
+                yield return new WaitForEndOfFrame();
+                elapsedTime += Time.deltaTime;
+            }
+            isOpen = true;
+            HideUnopenedButtons();
+        }
+
+        private IEnumerator CloseRoutine()
+        {
+            float elapsedTime = 0;
+            while (elapsedTime < endTime)
+            {
+                m_RT.anchoredPosition = Vector2.Lerp(
+                    openPosition,
+                    closedPosition,
+                    animationCurve.Evaluate(elapsedTime)
+                ); // Interpolate position based on curve
+                yield return new WaitForEndOfFrame();
+                elapsedTime += Time.deltaTime;
+            }
+            isOpen = false;
+        }
+
+        private void FindFurthestKeyFrame()
+        {
+            float maxTime = Mathf.NegativeInfinity;
+            foreach (Keyframe frame in animationCurve.keys)
+            {
+                if (frame.time > maxTime)
+                {
+                    maxTime = frame.time;
+                }
+            }
+            endTime = maxTime;
+        }
+
+        private void HideUnopenedButtons()
+        {
+            // Placeholder for future implementation
+            foreach (Transform child in transform)
+            {
+                Button button = child.GetComponent<Button>();
+                if (button != null && button.gameObject.activeSelf != isOpen)
+                {
+                    button.interactable = false;
+                }
+            }
+        }
     }
 }

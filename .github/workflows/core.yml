@@ -1,12 +1,9 @@
-name: validate core and above
+name: Validate Core
 
 on: 
   push:
-    branches: [ core ]
+    branches: [ core, devops ]
     paths: [ "**/*.cs" ] 
-  pull_request:
-    branches: [ main, dev, core ]
-    paths: [ "**/*.cs" ]
 
 jobs:
   csharpier:
@@ -18,24 +15,17 @@ jobs:
         with:
           dotnet-version: "9.0.x"
       - run: dotnet tool restore
-      - run: dotnet csharpier format .
+      - run: dotnet csharpier format -h
 
   unity_runner:
     runs-on: ubuntu-latest
-    name: unity test runner
-
-    steps:
-      - name: checkout code 
-        uses: actions/checkout@v4
-
-      - name: run playmode tests
+    name: test runner
+    steps: 
+      - uses: actions/checkout@v5
+      - name: setup unity
         uses: game-ci/unity-test-runner@v4
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          unityVersion: 6000.0.60f1
-          testMode: PlayMode
-          githubToken: ${{ secrets.GITHUB_TOKEN }}         
-  
+          UNITY_LICENSE: ${{ secrets.UNITY_TEST_RUNNER_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_TEST_RUNNER_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_TEST_RUNNER_PASSWORD }}
+          

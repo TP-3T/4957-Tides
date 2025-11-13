@@ -1,7 +1,6 @@
 using System.Linq;
 using TTT.DataClasses;
 using TTT.DataClasses.HexData;
-using TTT.ModularData;
 using UnityEngine;
 
 namespace TTT.DataClasses.TileFeatures
@@ -13,26 +12,46 @@ namespace TTT.DataClasses.TileFeatures
     public class DefaultValidator : BuildValidator
     {
         public override bool CanBuild(
-            HexCell buildTile,
+            HexCell buildLocation,
             HexCell[] nearbyTiles,
-            FeatureRuntimeSet spawnedFeatures,
             BuildConstraints constraints
         )
         {
-            if (ExceedsMaxHeight(buildTile, constraints))
-            {
-                return false;
-            }
+            // height check
+            // (comparing tileHeight and maxHeight)
+            // var maxHeight = constraints.MaximumHeight;
+            // var tileHeight = buildLocation.MapTileData.Height;
+            // if (tileHeight > maxHeight)
+            // {
+            //     // failed height check
+            //     return false;
+            // }
 
-            if (TerrainTypeAtLocationIsInvalid(buildTile, constraints))
-            {
-                return false;
-            }
+            // terrain check
+            // (checking only the terrain at the build location)
+            var terrains = constraints.TerrainConstraints.List;
+            var isWhitelist = constraints.TerrainConstraints.Mode is FilterListMode.WHITELIST;
+            var terrainIds = terrains.Select(terrain => terrain.UniqueID);
+            // if (!terrainIds.Contains(buildLocation.TerrainType.UniqueID) == isWhitelist)
+            // {
+            //     // failed terrain check
+            //     return false;
+            // }
 
-            Vector3[] nearbyTilePositions = nearbyTiles.Select(t => t.CellPosition).ToArray();
-            if (NotEnoughNearbyFeatures(nearbyTilePositions, spawnedFeatures, constraints))
+            // nearby features check
+            // (checking for at least X features nearby)
+            var featureRequirements = constraints.FeatureConstraints;
+            foreach (var requirement in featureRequirements)
             {
-                return false;
+                // var matchingCells = nearbyTiles.Where(cell =>
+                // {
+                //     return cell.FeatureType.UniqueID == requirement.Thing.UniqueID;
+                // });
+                // if (matchingCells.Count() < requirement.Count)
+                // {
+                //     // failed nearby features check
+                //     return false;
+                // }
             }
 
             // all checks passed

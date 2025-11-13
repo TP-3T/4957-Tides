@@ -2,8 +2,7 @@
     "name": "TTT.DataClasses.Terrain",
     "rootNamespace": "TTT.DataClasses.Terrain",
     "references": [
-        "GUID:80a120755bd37c14f8c7866f38551991",
-        "GUID:7e6c88045c6d6cb499d55a47044b4c5f"
+        "GUID:80a120755bd37c14f8c7866f38551991"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

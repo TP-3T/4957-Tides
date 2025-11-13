@@ -9,7 +9,7 @@ namespace TTT.DataClasses.HexData
         /// <summary>
         /// The UID of the tile's terrain type.
         /// </summary>
-        public TerrainTypeId TileType;
+        public string TileType;
         public int Height;
         public OffsetCoordinates OffsetCoordinates;
 

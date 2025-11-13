@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using TTT.Managers;
 using UnityEngine;
 
 namespace TTT.DataClasses.PlayerResources
@@ -29,20 +28,6 @@ namespace TTT.DataClasses.PlayerResources
         /// </summary>
         public List<Amount<PlayerResource>> ResourceAmounts => resourceAmounts;
 
-        private void Initialize()
-        {
-            ResourcesController.Instance.TurnEnding += OnTurnEnding;
-            ResourcesController.Instance.SeasonEnding += OnSeasonEnding;
-            ResourcesController.Instance.YearEnding += OnYearEnding;
-        }
-
-        private void Dispose()
-        {
-            ResourcesController.Instance.TurnEnding -= OnTurnEnding;
-            ResourcesController.Instance.SeasonEnding -= OnSeasonEnding;
-            ResourcesController.Instance.YearEnding -= OnYearEnding;
-        }
-
         private void Produce(int multiplier)
         {
             foreach (var resource in ResourceAmounts)
@@ -54,16 +39,8 @@ namespace TTT.DataClasses.PlayerResources
         /// <summary>
         /// This should only be called once per producer.
         /// </summary>
-        public void OnCreated()
-        {
-            Initialize();
-            Produce(productionSchedule.OnCreated);
-        }
+        public void OnCreated() => Produce(productionSchedule.OnCreated);
 
-        /// <summary>
-        /// Produces some resources and adds to the player's resource amount.
-        /// Warning: this is called every time a player's turn ends, including players other than the client.
-        /// </summary>
         public void OnTurnEnding() => Produce(productionSchedule.OnTurnEnding);
 
         public void OnSeasonEnding() => Produce(productionSchedule.OnSeasonEnding);
@@ -78,10 +55,6 @@ namespace TTT.DataClasses.PlayerResources
         /// <summary>
         /// This should only be called once per producer.
         /// </summary>
-        public void OnDestroyed()
-        {
-            Produce(productionSchedule.OnDestroyed);
-            Dispose();
-        }
+        public void OnDestroyed() => Produce(productionSchedule.OnDestroyed);
     }
 }

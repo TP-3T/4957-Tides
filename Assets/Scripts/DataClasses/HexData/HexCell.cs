@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-
 // using TTT.Features;
 // using TTT.Terrain;
 using Unity.Netcode;
@@ -15,19 +13,15 @@ namespace TTT.DataClasses.HexData
         public Color CellColor;
         public int CenterVertexIndex;
         public bool Flooded;
-        public TerrainTypeId TerrainTypeId;
 
         public HexCell(
             CubeCoordinates cellCubeCoordinates,
             Vector3 cellPosition,
-            Color cellColor,
-            TerrainTypeId terrainTypeId = 0 // TODO: remove placeholder uid
-        )
+            Color cellColor)
         {
             CellCubeCoordinates = cellCubeCoordinates;
             CellPosition        = cellPosition;
-            CellColor = cellColor;
-            TerrainTypeId = terrainTypeId;
+            CellColor           = cellColor;
 
             CenterVertexIndex = -1;     // To let everyone know that this is not set
             Flooded = false;            // default flooded state of the cell
@@ -49,7 +43,7 @@ namespace TTT.DataClasses.HexData
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor}, flooded: {Flooded}, terrain: {TerrainTypeId} }}";
+            return $"{{ cellPosition: {CellPosition}, cellCubeCoordinates: {CellCubeCoordinates}, cellColor: {CellColor}, flooded: {Flooded} }}";
         }
 
         public bool Equals(HexCell other)
@@ -58,8 +52,7 @@ namespace TTT.DataClasses.HexData
                 && CellPosition == other.CellPosition
                 && CellColor == other.CellColor
                 && CenterVertexIndex == other.CenterVertexIndex
-                && Flooded == other.Flooded
-                && TerrainTypeId == other.TerrainTypeId;
+                && Flooded == other.Flooded;
         }
 
         public override bool Equals(object other)
@@ -68,8 +61,7 @@ namespace TTT.DataClasses.HexData
                 && CellColor == ((HexCell)other).CellColor
                 && CellPosition == ((HexCell)other).CellPosition
                 && CenterVertexIndex == ((HexCell)other).CenterVertexIndex
-                && Flooded == ((HexCell)other).Flooded
-                && TerrainTypeId == ((HexCell)other).TerrainTypeId;
+                && Flooded == ((HexCell)other).Flooded;
         }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
@@ -80,7 +72,6 @@ namespace TTT.DataClasses.HexData
             serializer.SerializeValue(ref CellColor);
             serializer.SerializeValue(ref Flooded);
             serializer.SerializeValue(ref CenterVertexIndex);
-            serializer.SerializeValue(ref TerrainTypeId);
         }
 
         // /// <summary>

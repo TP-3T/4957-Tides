@@ -17,7 +17,7 @@ namespace TTT.DataClasses.PlayerResources
 
         [Tooltip("How much of this resource the player has")]
         [SerializeField]
-        private int amountOwned = 0;
+        private int amountOwned;
 
         /// <summary>
         /// The name of this resource.

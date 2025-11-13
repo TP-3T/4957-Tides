@@ -1,4 +1,3 @@
-using System;
 using TTT.ModularData;
 using UnityEngine;
 
@@ -14,9 +13,9 @@ namespace TTT.DataClasses.Terrain
         [SerializeField]
         private ColorReference TileColor;
 
-        [Tooltip("The unique ID of this terrain.")]
+        [Tooltip("Identifier unique for all terrain types")]
         [SerializeField]
-        private TerrainTypeId uid;
+        private string Uid;
 
         /// <summary>
         /// The color of this terrain type.
@@ -26,6 +25,6 @@ namespace TTT.DataClasses.Terrain
         /// <summary>
         /// The unique ID representing this terrain type.
         /// </summary>
-        public TerrainTypeId UniqueID => uid;
+        public string UniqueID => Uid;
     }
 }
