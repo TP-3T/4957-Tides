@@ -15,7 +15,7 @@ namespace TTT.Managers
     /// <summary>
     /// Business logic / game related logic and networking stuff shall live here.
     /// </summary>
-    public partial class MapManager : GenericSingleton<MapManager>
+    public partial class MapManager : GenericNetworkSingleton<MapManager>
     {
         /**
         Serialize fields for the HexMesh, instances that are required for each client
@@ -58,6 +58,8 @@ namespace TTT.Managers
         public NetworkVariable<float> SeaLevel = new(0.0f);
         public NetworkVariable<float> RisingRate = new(1.0f);
         public bool DrawDebugLabels;
+
+        [SerializeField] public GameEvent _OnLastPlayerTurnEvent;
 
         public override void OnNetworkSpawn()
         {
@@ -254,7 +256,21 @@ namespace TTT.Managers
         {
             FloodEventArgs args = eventArgs as FloodEventArgs;
 
+            Debug.Log("Flood Event Triggered - MapManager line 261");
+
             StartRaiseSeaServerRpc();
+        }
+
+        public void OnNextTurnClick(UnityEngine.Object eventArgs)
+        {
+            // needs current player info
+            Debug.Log("Next Turn Clicked - MapManager line 262");
+
+            // if not last players turn, switch the player context to the next player
+            // next player turn event or something
+
+            //if last player turn then
+            _OnLastPlayerTurnEvent.Raise();
         }
     }
 }

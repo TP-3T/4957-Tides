@@ -4,7 +4,8 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Camera))]
+// [RequireComponent(typeof(Camera))]
+
 /// <summary>
 /// Controls the camera for a local player in a multiplayer game.
 /// This script manages camera activation and provides movement
@@ -15,9 +16,6 @@ using UnityEngine.Events;
 public class PlayerController : NetworkBehaviour
 {
     const int LeftMouseIndex = 0;
-    const int RightMouseIndex = 1;
-    const float moveSpeed = 50f;
-    const float rotationSpeed = 2f;
 
     private Camera playerCamera;
 
@@ -42,7 +40,7 @@ public class PlayerController : NetworkBehaviour
     void Awake()
     {
         //Get a reference to the camera component on this object itself
-        playerCamera = GetComponent<Camera>();
+        playerCamera = GetComponentInChildren<Camera>();
 
         //Disable camera by default so it wont activate on other clients.
         if (playerCamera != null)
@@ -108,68 +106,30 @@ public class PlayerController : NetworkBehaviour
     /// </summary>
     void Update()
     {
-        // The camera controls should only run for the local player.
-        if (!IsOwner)
-        {
-            return;
-        }
-
-        // WASD Movement
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-
-        Vector3 forward = transform.forward;
-        Vector3 right = transform.right;
-        forward.y = 0;
-        right.y = 0;
-
-        Vector3 movement = (forward * verticalInput) + (right * horizontalInput);
-        transform.position += moveSpeed * Time.deltaTime * movement;
-
-        // Q and E Vertical Movement
-        float verticalMove = 0f;
-        if (Input.GetKey(KeyCode.E))
-        {
-            verticalMove = moveSpeed;
-        }
-        else if (Input.GetKey(KeyCode.Q))
-        {
-            verticalMove = -moveSpeed;
-        }
-
-        transform.position += Time.deltaTime * verticalMove * Vector3.up;
-
-        // Mouse-based Rotation
-        if (Input.GetMouseButton(RightMouseIndex)) // Right-click held down
-        {
-            float mouseX = Input.GetAxis("Mouse X");
-            float mouseY = Input.GetAxis("Mouse Y");
-
-            // Rotate based on mouse movement
-            transform.Rotate(Vector3.up, mouseX * rotationSpeed, Space.World);
-            transform.Rotate(Vector3.right, -mouseY * rotationSpeed, Space.Self);
-        }
-
         // Left click
         if (Input.GetMouseButtonDown(LeftMouseIndex))
         {
             Ray mousePositionRay = playerCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(
+            if (
+                Physics.Raycast(
                     mousePositionRay,
                     out RaycastHit raycastHit,
                     Mathf.Infinity,
-                    HexMesh.LayerMask)
+                    HexMesh.LayerMask
+                )
             )
             {
                 // Raise some event will deal with this later
                 Debug.DrawLine(transform.position, raycastHit.point, Color.red);
 
-                _mapMeshClicked.Raise(new MapMeshClickedEventArgs
-                {
-                    ClickedPoint = raycastHit.point,
-                    PlayerColor = PlayerColor.Value,
-                    PlayerId = OwnerClientId
-                });
+                _mapMeshClicked.Raise(
+                    new MapMeshClickedEventArgs
+                    {
+                        ClickedPoint = raycastHit.point,
+                        PlayerColor = PlayerColor.Value,
+                        PlayerId = OwnerClientId,
+                    }
+                );
             }
         }
     }

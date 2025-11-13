@@ -44,6 +44,8 @@
       "Addressables",
       "Behaviour",
       "Despawn",
+      "ifndef",
+      "lerp",
       "Mathf",
       "neighbour",
       "neighbours",
