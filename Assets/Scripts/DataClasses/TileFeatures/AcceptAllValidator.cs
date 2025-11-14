@@ -1,6 +1,6 @@
 using TTT.DataClasses.HexData;
+using TTT.ModularData;
 using UnityEngine;
-
 
 namespace TTT.DataClasses.TileFeatures
 {
@@ -13,6 +13,7 @@ namespace TTT.DataClasses.TileFeatures
         public override bool CanBuild(
             HexCell buildLocation,
             HexCell[] nearbyTiles,
+            FeatureRuntimeSet spawnedFeatures,
             BuildConstraints constraints
         )
         {
