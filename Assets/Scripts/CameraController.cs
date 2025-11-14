@@ -392,10 +392,11 @@ public class CameraController : MonoBehaviour
 
         raycastOrigin = transform.position + Vector3.up * TERRAIN_RAYCAST_HEIGHT_OFFSET;
         raycastDirection = Vector3.down;
-        layerMask = ~LayerMask.GetMask("Ignore Raycast");
+        // layerMask = ~LayerMask.GetMask("Ignore Raycast");
+        layerMask = 1 << 10;
 
         // debug ray
-        // Debug.DrawRay(raycastOrigin, raycastDirection * TERRAIN_RAYCAST_DISTANCE, Color.red);
+        Debug.DrawRay(raycastOrigin, raycastDirection * TERRAIN_RAYCAST_DISTANCE, Color.red);
 
         if (
             Physics.Raycast(
@@ -409,9 +410,13 @@ public class CameraController : MonoBehaviour
         {
             terrainHeight = hit.point.y;
             targetMinHeight = terrainHeight + MIN_HEIGHT;
+            
+            Debug.Log("We are hitting");
+            Debug.DrawLine(raycastOrigin, hit.point, Color.green);
         }
         else
         {
+            Debug.Log("We are folding");
             targetMinHeight = MIN_HEIGHT;
         }
 

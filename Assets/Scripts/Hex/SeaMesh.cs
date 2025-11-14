@@ -135,6 +135,7 @@ namespace TTT.Hex
             _seaMesh.SetTriangles(_triangles, 0);
 
             _seaMesh.RecalculateNormals();
+            _seaMesh.RecalculateBounds();
         }
 
         public void ClearMesh()
