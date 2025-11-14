@@ -13,6 +13,8 @@
   <Project Path="TTT.DataClasses.csproj" />
   <Project Path="TTT.DataClasses.Terrain.csproj" />
   <Project Path="TTT.DataClasses.States.csproj" />
+  <Project Path="EditMode.csproj" />
+  <Project Path="PlayMode.csproj" />
   <Project Path="TTT.Helpers.csproj" />
   <Project Path="TTT.Dispatch.csproj" />
 </Solution>
