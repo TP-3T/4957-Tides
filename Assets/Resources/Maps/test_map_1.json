@@ -1,0 +1,79 @@
+{
+    "MapTilesData": [
+        {
+            "TileType": "coastal",
+            "OffsetCoordinates": {
+                "x": 0,
+                "z": 0
+            },
+            "Height": 0
+        },
+        {
+            "TileType": "coastal",
+            "OffsetCoordinates": {
+                "x": 0,
+                "z": 1
+            },
+            "Height": 0
+        },
+        {
+            "TileType": "coastal",
+            "OffsetCoordinates": {
+                "x": 0,
+                "z": 2
+            },
+            "Height": 0
+        },
+        {
+            "TileType": "coastal",
+            "OffsetCoordinates": {
+                "x": 1,
+                "z": 0
+            },
+            "Height": 0
+        },
+        {
+            "TileType": "coastal",
+            "OffsetCoordinates": {
+                "x": 1,
+                "z": 1
+            },
+            "Height": 0
+        },
+        {
+            "TileType": "coastal",
+            "OffsetCoordinates": {
+                "x": 1,
+                "z": 2
+            },
+            "Height": 0
+        },
+        {
+            "TileType": "coastal",
+            "OffsetCoordinates": {
+                "x": 2,
+                "z": 0
+            },
+            "Height": 0
+        },
+        {
+            "TileType": "coastal",
+            "OffsetCoordinates": {
+                "x": 2,
+                "z": 1
+            },
+            "Height": 0
+        },
+        {
+            "TileType": "coastal",
+            "OffsetCoordinates": {
+                "x": 2,
+                "z": 2
+            },
+            "Height": 0
+        }
+    ],
+    "Name": "test_map_1",
+    "Height": 3,
+    "Width": 3
+}

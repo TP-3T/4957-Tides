@@ -9,7 +9,7 @@ namespace TTT.Managers
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
         [SerializeField]
-        private TextAsset LevelFile;
+        public TextAsset LevelFile;
 
         [SerializeField]
         private GameEvent newMapEvent;
@@ -17,13 +17,20 @@ namespace TTT.Managers
         private string[] Seasons = { "Spring", "Summer", "Fall", "Winter" };
 
         //serialize for now
-        [SerializeField] private int Year = 1;
-        [SerializeField] private string Season;
+        [SerializeField]
+        private int Year = 1;
 
-        [SerializeField] public GameEvent _OnYearChangeEvent;
+        [SerializeField]
+        private string Season;
 
-        [SerializeField] public GameEvent _FloodEvent;
+        [SerializeField]
+        private int CO2;
 
+        [SerializeField]
+        public GameEvent _OnYearChangeEvent;
+
+        [SerializeField]
+        public GameEvent _FloodEvent;
 
         // private AssetReference SeaPrefab = new("P_Sea");
 
@@ -35,7 +42,8 @@ namespace TTT.Managers
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            this.Season = Seasons[Year];
+            this.Season = Seasons[0];
+            this.CO2 = 0;
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
@@ -45,12 +53,17 @@ namespace TTT.Managers
             if (args.IsHost)
             {
                 Debug.Log("I am being spawned as a host");
-                NetworkManager.Singleton.StartHost();
-
-                newMapEvent.Raise(new NewMapEventArgs()
+                try
                 {
-                    DataFile = LevelFile
-                });
+                    NetworkManager.Singleton.StartHost();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"Failed to start host: {e.Message}");
+                    return;
+                }
+
+                newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
             }
             else
             {
@@ -123,10 +136,26 @@ namespace TTT.Managers
 
         public void OnYearChange(UnityEngine.Object eventArgs)
         {
-            Debug.Log("Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124");
+            Debug.Log(
+                "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
+            );
 
             _FloodEvent.Raise();
+        }
 
+        public int GetYear()
+        {
+            return this.Year;
+        }
+
+        public string GetSeason()
+        {
+            return this.Season;
+        }
+
+        public int GetCO2()
+        {
+            return this.CO2;
         }
 
         // /// <summary>
