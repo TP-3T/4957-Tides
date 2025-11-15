@@ -212,7 +212,8 @@ namespace TTT.Managers
                     {
                         CellCubeCoordinates = hc,
                         CellPosition = hexCenter,
-                        CellColor = cc
+                        CellColor = cc,
+                        TerrainTypeId = mapTileData.TileType,
                     };
 
                     int cubeCoordinateIndex = GetCellIndexFromCubeCoordinates(hc);
