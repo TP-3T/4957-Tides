@@ -23,6 +23,13 @@ namespace TTT.DataClasses.TileFeatures
         public string UniqueID { get; private set; }
 
         /// <summary>
+        /// Name to be displayed on UI.
+        /// </summary>
+        [field: Tooltip("Name to be displayed on UI.")]
+        [field: SerializeField]
+        public string DisplayName { get; private set; }
+
+        /// <summary>
         /// The amount of pollution emitted per turn.
         /// </summary>
         [field: Tooltip("The amount of polution emited per turn.")]
