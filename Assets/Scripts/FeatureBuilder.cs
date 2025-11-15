@@ -67,7 +67,7 @@ public class FeatureBuilder : MonoBehaviour
 
     private bool CheckIfCanBuild(Vector3 location, FeatureType featureType)
     {
-        if (SpawnedFeatures.Items.Any(feats => feats.CellPosition.Equals(location)))
+        if (SpawnedFeatures.GetItems().Any(feats => feats.CellPosition.Equals(location)))
         {
             // then there's already something at this location
             return false;
@@ -132,8 +132,6 @@ public class FeatureBuilder : MonoBehaviour
 
         Feature feature = new(location, featureType, gameInstance);
         SpawnedFeatures.Add(feature);
-
-        feature.Type.ResourceProducers.ForEach(p => p.OnCreated());
     }
 
     private void DestroyAt(Vector3 location, bool wasSold)
@@ -147,14 +145,5 @@ public class FeatureBuilder : MonoBehaviour
 
         Destroy(feature.PrefabInstance);
         SpawnedFeatures.Remove(feature);
-
-        if (wasSold)
-        {
-            feature.Type.ResourceProducers.ForEach(p => p.OnSold());
-        }
-        else
-        {
-            feature.Type.ResourceProducers.ForEach(p => p.OnDestroyed());
-        }
     }
 }

@@ -28,6 +28,8 @@ namespace TTT.Managers
         [SerializeField]
         private int CO2;
 
+        public GameEvent SeasonChanging;
+
         [SerializeField]
         public GameEvent _OnYearChangeEvent;
 
@@ -138,7 +140,7 @@ namespace TTT.Managers
 
         public void OnLastPlayerTurnEvent(UnityEngine.Object eventArgs)
         {
-            Debug.Log("Last Player Made Turn, increment season - GameManager line 118");
+            SeasonChanging.Raise();
             this.IncrementSeason();
         }
 
