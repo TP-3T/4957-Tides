@@ -125,8 +125,10 @@ public class FeatureBuilder : MonoBehaviour
         GameObject gameInstance = Instantiate(featureType.Prefab);
 
         Vector3 displayLocation = new(location.x, location.y, location.z);
-        displayLocation.y += 0.5f * gameInstance.transform.localScale.y;
         gameInstance.transform.position = displayLocation;
+
+        Vector3 displayScale = new(2, 2, 2);
+        gameInstance.transform.localScale = displayScale;
 
         Feature feature = new(location, featureType, gameInstance);
         SpawnedFeatures.Add(feature);
