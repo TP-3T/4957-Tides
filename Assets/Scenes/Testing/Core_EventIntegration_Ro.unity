@@ -268,6 +268,10 @@ PrefabInstance:
       propertyPath: _OnYearChangeEvent
       value: 
       objectReference: {fileID: 11400000, guid: 41e01cdfff1d08a408a8a22cfe7bcc81, type: 2}
+    - target: {fileID: 154332724618842616, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      propertyPath: BuildingFeatureEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
     - target: {fileID: 5028386992981110786, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -327,6 +331,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 136165318042533967, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 131909890}
+    - targetCorrespondingSourceObject: {fileID: 136165318042533967, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 131909894}
+    - targetCorrespondingSourceObject: {fileID: 136165318042533967, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 131909893}
+    - targetCorrespondingSourceObject: {fileID: 136165318042533967, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 131909895}
   m_SourcePrefab: {fileID: 100100000, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
 --- !u!1 &131909882 stripped
 GameObject:
@@ -412,7 +425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 926995475
+  GlobalObjectIdHash: 2418118555
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -472,6 +485,90 @@ MonoBehaviour:
       - m_Target: {fileID: 131909883}
         m_TargetAssemblyTypeName: TTT.Managers.GameManager, TTT.Managers
         m_MethodName: OnLastPlayerTurnEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &131909893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131909882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 430d05d8968fdce498f62567aa054de0, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 131909883}
+        m_TargetAssemblyTypeName: TTT.Managers.GameManager, TTT.Managers
+        m_MethodName: OnMeshClicked
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &131909894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131909882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: e35ecdd7fe7b48348beb53c5ee9a06b6, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 131909883}
+        m_TargetAssemblyTypeName: TTT.Managers.GameManager, TTT.Managers
+        m_MethodName: StartBuildMode
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &131909895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131909882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: d044f0a4c8d4e62419ddfec40a9a4a6b, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 131909883}
+        m_TargetAssemblyTypeName: TTT.Managers.GameManager, TTT.Managers
+        m_MethodName: StartInspectMode
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -675,7 +772,7 @@ PrefabInstance:
       objectReference: {fileID: 3588933447207156260, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
     - target: {fileID: 5287792316253268995, guid: 897fad17376beb44da7e5f8638f4b74d, type: 3}
       propertyPath: ConnectionData.Port
-      value: 6767
+      value: 2100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
