@@ -12,24 +12,20 @@ using UnityEngine.AddressableAssets;
 
 namespace TTT.Managers
 {
+    [RequireComponent(typeof(LineRenderer))]
     /// <summary>
     /// Business logic / game related logic and networking stuff shall live here.
     /// </summary>
     public partial class MapManager : GenericNetworkSingleton<MapManager>
     {
-        /**
-        Serialize fields for the HexMesh, instances that are required for each client
-        Serialize fields for the SeaMesh, instances that are required for each client
-        */
-
         public static readonly CubeCoordinates[] NeighbourDirections =
         {
-            new CubeCoordinates(1, 0, -1),
-            new CubeCoordinates(-1, 0, 1),
-            new CubeCoordinates(0, 1, -1),
-            new CubeCoordinates(0, -1, 1),
-            new CubeCoordinates(1, -1, 0),
-            new CubeCoordinates(-1, 1, 0),
+            new(1, 0, -1),
+            new(-1, 0, 1),
+            new(0, 1, -1),
+            new(0, -1, 1),
+            new(1, -1, 0),
+            new(-1, 1, 0),
         };
         public static readonly float HexSize = 3.0f;
         public static readonly HexOrientation HexOrientation = HexOrientation.pointyTop;
@@ -47,8 +43,8 @@ namespace TTT.Managers
         private NetworkVariable<int> _hexGridHeight = new();
         private NetworkVariable<ulong> _hexMeshId = new();
         private NetworkVariable<ulong> _seaMeshId = new();
-        private AssetReference _hexGridMeshAsset = new("P_HexMesh");
-        private AssetReference _seaMeshAsset = new("P_SeaMesh");
+        private readonly AssetReference _hexGridMeshAsset = new("P_HexMesh");
+        private readonly AssetReference _seaMeshAsset = new("P_SeaMesh");
         private MapData _gameMapData;
         private const int CellsPerFrame = 25;
 
@@ -81,8 +77,8 @@ namespace TTT.Managers
 
         private IEnumerator SpawnMapObjects()
         {
-            yield return AssetLoader<GameObject>.Load(_hexGridMeshAsset, SpawnGridMesh);
-            yield return AssetLoader<GameObject>.Load(_seaMeshAsset, SpawnSeaMesh);
+            yield return AssetLoader<GameObject>.Load(new("P_HexMesh"), SpawnGridMesh);
+            yield return AssetLoader<GameObject>.Load(new("P_SeaMesh"), SpawnSeaMesh);
         }
 
         private void SpawnGridMesh(GameObject hm)
