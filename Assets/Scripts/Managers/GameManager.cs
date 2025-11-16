@@ -16,11 +16,17 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent newMapEvent;
 
-        private string[] Seasons = { "Spring", "Summer", "Fall", "Winter" };
+        private readonly string[] Seasons =
+        {
+            "Spring",
+            "Summer",
+            "Fall",
+            "Winter",
+        };
 
         //serialize for now
-        [SerializeField]
-        private int Year = 1;
+        [field: SerializeField]
+        public int Year { get; private set; } = 1;
 
         [SerializeField]
         private string Season;
@@ -37,10 +43,13 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent _FloodEvent;
 
+        [SerializeField]
         private InteractionMode interactionMode;
 
+        [SerializeField]
         private FeatureType buildingFeatureType;
 
+        [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -54,32 +63,40 @@ namespace TTT.Managers
         public void OnStartNetworkEvent(UnityEngine.Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
-            if (args.IsHost)
+            try
             {
-                Debug.Log("I am being spawned as a host");
-                try
+                if (args.IsHost)
                 {
-                    NetworkManager.Singleton.StartHost();
+                    StartGameHost();
+                }
+                else
+                {
+                    StartGameClient();
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to start host: {e.Message}");
+                return;
+            }
+        }
 
-                    if (Helpers.LoadExternalJson.TryGetDataJson(out TextAsset newMap))
-                    {
-                        newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
-                    }
-                    else
-                    {
-                        throw new IOException("Could not load file.");
-                    }
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError($"Failed to start host: {e.Message}");
-                    return;
-                }
+        private void StartGameClient()
+        {
+            NetworkManager.Singleton.StartClient();
+        }
+
+        private void StartGameHost()
+        {
+            NetworkManager.Singleton.StartHost();
+
+            if (LoadExternalJson.TryGetDataJson(out TextAsset newMap))
+            {
+                newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
             }
             else
             {
-                // Debug.Log("I am being spawned as a client");
-                NetworkManager.Singleton.StartClient();
+                throw new IOException("Could not load file.");
             }
         }
 
@@ -107,7 +124,8 @@ namespace TTT.Managers
             int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
 
             // % to wrap around to the beginning after winter
-            int nextSeasonIndex = (currentSeasonIndex + 1) % this.Seasons.Length;
+            int nextSeasonIndex =
+                (currentSeasonIndex + 1) % this.Seasons.Length;
 
             this.Season = this.Seasons[nextSeasonIndex];
 
@@ -194,7 +212,8 @@ namespace TTT.Managers
             if (interactionMode == InteractionMode.BUILDING)
             {
                 // raise build event
-                var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                var args =
+                    ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                 args.Location = clickedArgs.ClickedPoint;
                 args.FeatureType = buildingFeatureType;
 

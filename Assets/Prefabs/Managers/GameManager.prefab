@@ -49,8 +49,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 926995475
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 1056258444
+  InScenePlacedSourceGlobalObjectIdHash: 3812141244
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -75,14 +75,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  LevelFile: {fileID: 4900000, guid: 00efaab874b0b054089135eee112af66, type: 3}
   newMapEvent: {fileID: 11400000, guid: 9438c37d1b6c53b408804b0dce45c597, type: 2}
   Year: 1
   Season: 
   CO2: 0
-  SeasonChanging: {fileID: 0}
+  SeasonChanging: {fileID: 11400000, guid: 9972c717c1f0dd14d901eee8e5cd8aa5, type: 2}
   _OnYearChangeEvent: {fileID: 11400000, guid: 41e01cdfff1d08a408a8a22cfe7bcc81, type: 2}
   _FloodEvent: {fileID: 11400000, guid: 944619221b6664749b66a67e05cb4b08, type: 2}
+  interactionMode: 0
+  buildingFeatureType: {fileID: 0}
   BuildingFeatureEvent: {fileID: 0}
 --- !u!114 &8295717535427168372
 MonoBehaviour:

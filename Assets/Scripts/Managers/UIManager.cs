@@ -31,10 +31,10 @@ namespace TTT.Managers
         private int currentTabID = -1;
         private GameObject[] Tabs;
 
-        private Color activeTabColor,
-            inactiveTabColor;
-        public Vector2 InactiveTabSize,
-            activeTabSize;
+        private Color activeTabColor;
+        private Color inactiveTabColor;
+        private Vector2 InactiveTabSize;
+        private Vector2 activeTabSize;
 
         /// <summary>
         /// The prefab for a shop slot.
