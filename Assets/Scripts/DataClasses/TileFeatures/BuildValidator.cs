@@ -38,8 +38,9 @@ namespace TTT.DataClasses.TileFeatures
         )
         {
             var terrainConstraints = constraints.TerrainConstraints.List;
-            var isBlacklist = constraints.TerrainConstraints.Mode is FilterListMode.BLACKLIST;
             var terrainConstraintsUids = terrainConstraints.Select(terrain => terrain.UniqueID);
+
+            var isBlacklist = constraints.TerrainConstraints.Mode is FilterListMode.BLACKLIST;
 
             var buildLocationTerrain = buildLocation.TerrainTypeId;
 

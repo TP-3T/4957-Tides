@@ -120,7 +120,7 @@ public class PlayerController : NetworkBehaviour
             )
             {
                 // Raise some event will deal with this later
-                Debug.DrawLine(transform.position, raycastHit.point, Color.red);
+                // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
 
                 _mapMeshClicked.Raise(
                     new MapMeshClickedEventArgs
