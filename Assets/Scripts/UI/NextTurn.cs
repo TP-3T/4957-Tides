@@ -1,10 +1,9 @@
-using TTT.Hex;
-using TTT.GameEvents;
-using UnityEngine;
-using UnityEngine.UI;
-using TTT.GameEvents;
 using System;
 using TTT.Dispatch;
+using TTT.GameEvents;
+using TTT.Hex;
+using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
 /// <summary>

@@ -2,27 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
-using TTT.Managers;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace TTT.Managers
 {
     /// <summary>
-    /// Manager class that handles 
+    /// Manager class that handles UI elements and state switching.
     /// <author> Rodrigo, Richard </author>
     /// </summary>
     public class UIManager : MonoBehaviour
     {
         [SerializeField]
-        GameObject drawerPanel;
+        private GameObject drawerPanel;
 
         [SerializeField]
         Vector2 openPosition,
             closedPosition;
 
         [SerializeField]
-        AnimationCurve animationCurve;
+        private AnimationCurve animationCurve;
 
         public string currentFeatureType;
 
@@ -31,9 +29,9 @@ namespace TTT.Managers
         public bool isOpen = false;
 
         private int currentTabID = -1;
-        public GameObject[] Tabs;
+        private GameObject[] Tabs;
 
-        public Color activeTabColor,
+        private Color activeTabColor,
             inactiveTabColor;
         public Vector2 InactiveTabSize,
             activeTabSize;
@@ -64,9 +62,8 @@ namespace TTT.Managers
 
         [SerializeField]
         private GameEvent startInspectMode;
-        
-        private readonly List<List<GameObject>> shopTabContents = new();
 
+        private readonly List<List<GameObject>> shopTabContents = new();
 
         void Start()
         {
@@ -193,7 +190,6 @@ namespace TTT.Managers
             }
         }
 
-        
         /// <summary>
         /// Handles switching to a different tab.
         /// </summary>
@@ -247,7 +243,7 @@ namespace TTT.Managers
         }
 
         /// <summary>
-        /// Finds the furthest keyframe in the animation curve to determine the duration of the animation. 
+        /// Finds the furthest keyframe in the animation curve to determine the duration of the animation.
         /// </summary>
         private void FindFurthestKeyFrame()
         {

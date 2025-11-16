@@ -1,11 +1,7 @@
 {
-    "name": "TTT.Helpers",
+    "name": "SFB",
     "rootNamespace": "",
-    "references": [
-        "GUID:1491147abca9d7d4bb7105af628b223e",
-        "GUID:4fc462806a32aa245a7b28367381bf24",
-        "GUID:a229a84e8e23db742918a3b10ed177ac"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
