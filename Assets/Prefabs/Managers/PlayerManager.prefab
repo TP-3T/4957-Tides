@@ -1999,11 +1999,16 @@ MonoBehaviour:
   currentFeatureType: 
   isOpen: 0
   Tabs: []
-  TabButtons: []
   activeTabColor: {r: 0, g: 0, b: 0, a: 0}
   inactiveTabColor: {r: 0, g: 0, b: 0, a: 0}
   InactiveTabSize: {x: 0, y: 0}
   activeTabSize: {x: 0, y: 0}
+  ShopSlotPrefab: {fileID: 0}
+  featureTypesHouses: []
+  featureTypesIndustry: []
+  featureTypesEnergy: []
+  featureTypesRenewable: []
+  featureTypesNature: []
 --- !u!1001 &6007230632825988716
 PrefabInstance:
   m_ObjectHideFlags: 0

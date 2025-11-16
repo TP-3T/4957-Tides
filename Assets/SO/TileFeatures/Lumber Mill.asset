@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Lumber Mill
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: lumber
+  <DisplayName>k__BackingField: Lumber
   <PollutionEmission>k__BackingField: 60
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 1000

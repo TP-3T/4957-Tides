@@ -1,3 +1,5 @@
+using TTT.DataClasses.States;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
@@ -26,11 +28,19 @@ namespace TTT.Managers
         [SerializeField]
         private int CO2;
 
+        public GameEvent SeasonChanging;
+
         [SerializeField]
         public GameEvent _OnYearChangeEvent;
 
         [SerializeField]
         public GameEvent _FloodEvent;
+
+        private InteractionMode interactionMode;
+
+        private FeatureType buildingFeatureType;
+
+        public GameEvent BuildingFeatureEvent;
 
         // private AssetReference SeaPrefab = new("P_Sea");
 
@@ -130,7 +140,7 @@ namespace TTT.Managers
 
         public void OnLastPlayerTurnEvent(UnityEngine.Object eventArgs)
         {
-            Debug.Log("Last Player Made Turn, increment season - GameManager line 118");
+            SeasonChanging.Raise();
             this.IncrementSeason();
         }
 
@@ -168,5 +178,57 @@ namespace TTT.Managers
         //     Debug.Log("1. Increment Season -GameManager" + nt.ToString());
         //     this.IncrementSeason();
         // }
+
+        /// <summary>
+        /// Starts the build mode event, disabling certain features.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void StartBuildMode(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not FeatureType featureType)
+            {
+                return;
+            }
+
+            interactionMode = InteractionMode.BUILDING;
+            buildingFeatureType = featureType;
+        }
+
+        /// <summary>
+        /// Starts the Inspect mode, disabling building.
+        /// </summary>
+        /// <param name="_"></param>
+        public void StartInspectMode(UnityEngine.Object _)
+        {
+            interactionMode = InteractionMode.INSPECTING;
+        }
+
+        /// <summary>
+        /// Handles mesh click logic for buildmode to raise build event.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void OnMeshClicked(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not MapMeshClickedEventArgs clickedArgs)
+            {
+                return;
+            }
+
+            if (interactionMode == InteractionMode.BUILDING)
+            {
+                // raise build event
+                var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                args.Location = clickedArgs.ClickedPoint;
+                args.FeatureType = buildingFeatureType;
+
+                if (buildingFeatureType == null)
+                {
+                    return;
+                }
+
+                BuildingFeatureEvent.Raise(args);
+            }
+        }
     }
+    
 }
