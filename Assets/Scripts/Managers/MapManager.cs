@@ -1,14 +1,14 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using TTT.DataClasses.HexData;
+using TTT.DataClasses.Terrain;
 using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
-using TTT.DataClasses.HexData;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using System.Collections;
-using System.Collections.Generic;
-using TTT.DataClasses.Terrain;
 
 namespace TTT.Managers
 {
@@ -19,7 +19,7 @@ namespace TTT.Managers
     {
         /**
         Serialize fields for the HexMesh, instances that are required for each client
-        Serialize fields for the SeaMesh, instances that are requried for each client
+        Serialize fields for the SeaMesh, instances that are required for each client
         */
 
         public static readonly CubeCoordinates[] NeighbourDirections =
@@ -36,8 +36,10 @@ namespace TTT.Managers
 
         [SerializeField]
         private TextAsset _jsonMap;
+
         [SerializeField]
         private GameEvent _mapLoadFinishEvent;
+
         [SerializeField]
         private TerrainDictionary _allowedTerrains;
 
@@ -50,8 +52,11 @@ namespace TTT.Managers
         private MapData _gameMapData;
         private const int CellsPerFrame = 25;
 
-        public NetworkList<HexCell> HexCells = new(default,
-            NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkList<HexCell> HexCells = new(
+            default,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Owner
+        );
         public Queue<HexCell> ToFlood = new();
         public Queue<HexCell> FloodQueue = new();
         public Queue<HexCell> FloodQueue2 = new();
@@ -59,7 +64,8 @@ namespace TTT.Managers
         public NetworkVariable<float> RisingRate = new(1.0f);
         public bool DrawDebugLabels;
 
-        [SerializeField] public GameEvent _OnLastPlayerTurnEvent;
+        [SerializeField]
+        public GameEvent _OnLastPlayerTurnEvent;
 
         private LineRenderer lineRenderer;
 
@@ -103,14 +109,17 @@ namespace TTT.Managers
             seaMeshInstance.GetComponent<NetworkObject>().Spawn();
             _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
 
-            TriangulateSeaMeshClientRpc();          // for the host, this should eventually not be necessary
+            TriangulateSeaMeshClientRpc(); // for the host, this should eventually not be necessary
         }
 
         [ClientRpc]
         private void TriangulateHexMeshClientRpc()
         {
-            NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
-            HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();       // Get the hex mesh in the scene
+            NetworkObject hexMeshNetworkObject = NetworkManager
+                .Singleton
+                .SpawnManager
+                .SpawnedObjects[_hexMeshId.Value];
+            HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>(); // Get the hex mesh in the scene
 
             hexMeshInstance.Triangulate(HexCells, MapManager.HexSize, MapManager.HexOrientation);
 
@@ -120,8 +129,10 @@ namespace TTT.Managers
         [ClientRpc]
         private void TriangulateHexMeshClientRpc(HexCell cell)
         {
-
-            NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
+            NetworkObject hexMeshNetworkObject = NetworkManager
+                .Singleton
+                .SpawnManager
+                .SpawnedObjects[_hexMeshId.Value];
             HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
 
             hexMeshInstance.ReTriangulateCell(cell, MapManager.HexSize, MapManager.HexOrientation);
@@ -130,25 +141,43 @@ namespace TTT.Managers
         [ClientRpc]
         private void TriangulateHexMeshClientRpc(HexCell[] cells)
         {
-            NetworkObject hexMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_hexMeshId.Value];
+            NetworkObject hexMeshNetworkObject = NetworkManager
+                .Singleton
+                .SpawnManager
+                .SpawnedObjects[_hexMeshId.Value];
             HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
 
-            hexMeshInstance.ReTriangulateCells(cells, MapManager.HexSize, MapManager.HexOrientation);
+            hexMeshInstance.ReTriangulateCells(
+                cells,
+                MapManager.HexSize,
+                MapManager.HexOrientation
+            );
         }
 
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc()
         {
-            NetworkObject seaMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_seaMeshId.Value];
+            NetworkObject seaMeshNetworkObject = NetworkManager
+                .Singleton
+                .SpawnManager
+                .SpawnedObjects[_seaMeshId.Value];
             SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
 
-            seaMeshInstance.Triangulate(HexCells, SeaLevel.Value, MapManager.HexSize, MapManager.HexOrientation);
+            seaMeshInstance.Triangulate(
+                HexCells,
+                SeaLevel.Value,
+                MapManager.HexSize,
+                MapManager.HexOrientation
+            );
         }
 
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc(HexCell cell)
         {
-            NetworkObject seaMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_seaMeshId.Value];
+            NetworkObject seaMeshNetworkObject = NetworkManager
+                .Singleton
+                .SpawnManager
+                .SpawnedObjects[_seaMeshId.Value];
             SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
 
             seaMeshInstance.TriangulateCell(cell, MapManager.HexSize, MapManager.HexOrientation);
@@ -157,10 +186,18 @@ namespace TTT.Managers
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc(HexCell[] cells)
         {
-            NetworkObject seaMeshNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_seaMeshId.Value];
+            NetworkObject seaMeshNetworkObject = NetworkManager
+                .Singleton
+                .SpawnManager
+                .SpawnedObjects[_seaMeshId.Value];
             SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
 
-            seaMeshInstance.TriangulateCells(cells, SeaLevel.Value, MapManager.HexSize, MapManager.HexOrientation);
+            seaMeshInstance.TriangulateCells(
+                cells,
+                SeaLevel.Value,
+                MapManager.HexSize,
+                MapManager.HexOrientation
+            );
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -171,22 +208,30 @@ namespace TTT.Managers
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void OnMapMeshCickedServerRpc(Vector3 point, Color newColor)
+        public void OnMapMeshClickedServerRpc(Vector3 point, Color newColor)
         {
             int index = GetCellIndexFromPosition(point);
             HexCell hc = HexCells[index];
             Vector3[] corners = HexMath.GetHexCorners(HexSize, HexOrientation);
             for (int i = 0; i < 6; i++)
             {
-                lineRenderer.SetPosition(i, new Vector3(
-                    hc.CellPosition.x + corners[i].x,
-                    hc.CellPosition.y + 0.5f,
-                    hc.CellPosition.z + corners[i].z));
+                lineRenderer.SetPosition(
+                    i,
+                    new Vector3(
+                        hc.CellPosition.x + corners[i].x,
+                        hc.CellPosition.y + 0.5f,
+                        hc.CellPosition.z + corners[i].z
+                    )
+                );
             }
-            lineRenderer.SetPosition(6, new Vector3(
-                hc.CellPosition.x + corners[0].x,
-                hc.CellPosition.y + 0.5f,
-                hc.CellPosition.z + corners[0].z));
+            lineRenderer.SetPosition(
+                6,
+                new Vector3(
+                    hc.CellPosition.x + corners[0].x,
+                    hc.CellPosition.y + 0.5f,
+                    hc.CellPosition.z + corners[0].z
+                )
+            );
         }
 
         public void OnNewMap(UnityEngine.Object eventArgs)
@@ -209,12 +254,13 @@ namespace TTT.Managers
                     if (mapTileData.Height < 0)
                         mapTileData.SetHeight(0);
 
-                    Vector3 hexCenter = HexMath.GetHexCenter(
-                        MapManager.HexSize,
-                        mapTileData.Height + 1,
-                        mapTileData.OffsetCoordinates,
-                        MapManager.HexOrientation
-                    ) + Vector3.zero;
+                    Vector3 hexCenter =
+                        HexMath.GetHexCenter(
+                            MapManager.HexSize,
+                            mapTileData.Height + 1,
+                            mapTileData.OffsetCoordinates,
+                            MapManager.HexOrientation
+                        ) + Vector3.zero;
 
                     CubeCoordinates hc = HexMath.OddOffsetToCube(
                         mapTileData.OffsetCoordinates,
@@ -241,7 +287,7 @@ namespace TTT.Managers
                     HexCells.Add(hc);
                 }
 
-                ToFlood.Enqueue(HexCells[0]);       // There was some idea for this
+                ToFlood.Enqueue(HexCells[0]); // There was some idea for this
 
                 StartCoroutine(SpawnMapObjects());
             }
@@ -265,7 +311,7 @@ namespace TTT.Managers
         {
             MapMeshClickedEventArgs args = eventArgs as MapMeshClickedEventArgs;
 
-            OnMapMeshCickedServerRpc(args.ClickedPoint, args.PlayerColor);
+            OnMapMeshClickedServerRpc(args.ClickedPoint, args.PlayerColor);
         }
 
         public void OnFlood(UnityEngine.Object eventArgs)
