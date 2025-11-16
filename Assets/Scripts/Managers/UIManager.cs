@@ -99,13 +99,17 @@ namespace TTT.Managers
         /// <summary>
         /// Initializes one tab in the building shop with the given list of tile features.
         /// </summary>
-        private List<GameObject> InitializeShopTab(List<FeatureType> featureList)
+        private List<GameObject> InitializeShopTab(
+            List<FeatureType> featureList
+        )
         {
             List<GameObject> tabShopSlots = new();
 
             for (int index = 0; index < featureList.Count; index++)
             {
-                float slotWidth = ShopSlotPrefab.transform.GetComponent<RectTransform>().rect.width;
+                float slotWidth = ShopSlotPrefab
+                    .transform.GetComponent<RectTransform>()
+                    .rect.width;
 
                 float xOffset = SlotSpacing + index * (slotWidth * 2);
 
@@ -126,7 +130,8 @@ namespace TTT.Managers
 
                 tabShopSlots.Add(slotGameObject);
 
-                BuildingShopSlot slot = slotGameObject.GetComponent<BuildingShopSlot>();
+                BuildingShopSlot slot =
+                    slotGameObject.GetComponent<BuildingShopSlot>();
 
                 slot.feature = featureList[index];
                 slot.UpdateText();
@@ -164,7 +169,8 @@ namespace TTT.Managers
             }
             else
             {
-                shopTabContents[currentTabID].ForEach(obj => obj.SetActive(false));
+                shopTabContents[currentTabID]
+                    .ForEach(obj => obj.SetActive(false));
 
                 SwitchToTab(tabID);
                 shopTabContents[tabID].ForEach(obj => obj.SetActive(true));

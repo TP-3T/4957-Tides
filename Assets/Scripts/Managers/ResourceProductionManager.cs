@@ -1,13 +1,13 @@
 using System;
 using TTT.DataClasses.TileFeatures;
-using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.ModularData;
 using UnityEngine;
 
 namespace TTT.Managers
 {
-    public class ResourceProductionManager : GenericSingleton<ResourceProductionManager>
+    public class ResourceProductionManager
+        : GenericSingleton<ResourceProductionManager>
     {
         [SerializeField]
         private FeatureRuntimeSet spawnedFeatures;
