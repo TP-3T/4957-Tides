@@ -61,6 +61,13 @@ namespace TTT.Managers
 
         [SerializeField] public GameEvent _OnLastPlayerTurnEvent;
 
+        private LineRenderer lineRenderer;
+
+        void Start()
+        {
+            lineRenderer = GetComponent<LineRenderer>();
+        }
+
         public override void OnNetworkSpawn()
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnect;
@@ -168,10 +175,18 @@ namespace TTT.Managers
         {
             int index = GetCellIndexFromPosition(point);
             HexCell hc = HexCells[index];
-            hc.CellColor = newColor;
-            HexCells[index] = hc;
-
-            TriangulateHexMeshClientRpc(HexCells[index]);
+            Vector3[] corners = HexMath.GetHexCorners(HexSize, HexOrientation);
+            for (int i = 0; i < 6; i++)
+            {
+                lineRenderer.SetPosition(i, new Vector3(
+                    hc.CellPosition.x + corners[i].x,
+                    hc.CellPosition.y + 0.5f,
+                    hc.CellPosition.z + corners[i].z));
+            }
+            lineRenderer.SetPosition(6, new Vector3(
+                hc.CellPosition.x + corners[0].x,
+                hc.CellPosition.y + 0.5f,
+                hc.CellPosition.z + corners[0].z));
         }
 
         public void OnNewMap(UnityEngine.Object eventArgs)
