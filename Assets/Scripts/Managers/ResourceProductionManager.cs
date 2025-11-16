@@ -7,8 +7,7 @@ using UnityEngine;
 
 namespace TTT.Managers
 {
-    public class ResourceProductionManager
-        : Generic_NOT_A_NETWORK_OBJECT_Singleton<ResourceProductionManager>
+    public class ResourceProductionManager : GenericSingleton<ResourceProductionManager>
     {
         [SerializeField]
         private FeatureRuntimeSet spawnedFeatures;
