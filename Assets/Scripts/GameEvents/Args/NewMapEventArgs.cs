@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace TTT.GameEvents
 {
-    public class NewMapEventArgs : Object
+    public class NewMapEventArgs : ScriptableObject
     {
         public TextAsset DataFile { get; set; }
     }

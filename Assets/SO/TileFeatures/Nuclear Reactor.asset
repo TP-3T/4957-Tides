@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Nuclear Reactor
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: nuclear
+  <DisplayName>k__BackingField: Nuclear Reactor
   <PollutionEmission>k__BackingField: 10
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 750

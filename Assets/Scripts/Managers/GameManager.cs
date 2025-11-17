@@ -1,3 +1,5 @@
+using TTT.DataClasses.States;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
@@ -9,7 +11,7 @@ namespace TTT.Managers
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
         [SerializeField]
-        private TextAsset LevelFile;
+        public TextAsset LevelFile;
 
         [SerializeField]
         private GameEvent newMapEvent;
@@ -17,13 +19,28 @@ namespace TTT.Managers
         private string[] Seasons = { "Spring", "Summer", "Fall", "Winter" };
 
         //serialize for now
-        [SerializeField] private int Year = 1;
-        [SerializeField] private string Season;
+        [SerializeField]
+        private int Year = 1;
 
-        [SerializeField] public GameEvent _OnYearChangeEvent;
+        [SerializeField]
+        private string Season;
 
-        [SerializeField] public GameEvent _FloodEvent;
+        [SerializeField]
+        private int CO2;
 
+        public GameEvent SeasonChanging;
+
+        [SerializeField]
+        public GameEvent _OnYearChangeEvent;
+
+        [SerializeField]
+        public GameEvent _FloodEvent;
+
+        private InteractionMode interactionMode;
+
+        private FeatureType buildingFeatureType;
+
+        public GameEvent BuildingFeatureEvent;
 
         // private AssetReference SeaPrefab = new("P_Sea");
 
@@ -35,7 +52,8 @@ namespace TTT.Managers
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            this.Season = Seasons[Year];
+            this.Season = Seasons[0];
+            this.CO2 = 0;
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
@@ -45,12 +63,17 @@ namespace TTT.Managers
             if (args.IsHost)
             {
                 Debug.Log("I am being spawned as a host");
-                NetworkManager.Singleton.StartHost();
-
-                newMapEvent.Raise(new NewMapEventArgs()
+                try
                 {
-                    DataFile = LevelFile
-                });
+                    NetworkManager.Singleton.StartHost();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"Failed to start host: {e.Message}");
+                    return;
+                }
+
+                newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
             }
             else
             {
@@ -117,16 +140,32 @@ namespace TTT.Managers
 
         public void OnLastPlayerTurnEvent(UnityEngine.Object eventArgs)
         {
-            Debug.Log("Last Player Made Turn, increment season - GameManager line 118");
+            SeasonChanging.Raise();
             this.IncrementSeason();
         }
 
         public void OnYearChange(UnityEngine.Object eventArgs)
         {
-            Debug.Log("Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124");
+            Debug.Log(
+                "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
+            );
 
             _FloodEvent.Raise();
+        }
 
+        public int GetYear()
+        {
+            return this.Year;
+        }
+
+        public string GetSeason()
+        {
+            return this.Season;
+        }
+
+        public int GetCO2()
+        {
+            return this.CO2;
         }
 
         // /// <summary>
@@ -139,5 +178,57 @@ namespace TTT.Managers
         //     Debug.Log("1. Increment Season -GameManager" + nt.ToString());
         //     this.IncrementSeason();
         // }
+
+        /// <summary>
+        /// Starts the build mode event, disabling certain features.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void StartBuildMode(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not FeatureType featureType)
+            {
+                return;
+            }
+
+            interactionMode = InteractionMode.BUILDING;
+            buildingFeatureType = featureType;
+        }
+
+        /// <summary>
+        /// Starts the Inspect mode, disabling building.
+        /// </summary>
+        /// <param name="_"></param>
+        public void StartInspectMode(UnityEngine.Object _)
+        {
+            interactionMode = InteractionMode.INSPECTING;
+        }
+
+        /// <summary>
+        /// Handles mesh click logic for buildmode to raise build event.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void OnMeshClicked(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not MapMeshClickedEventArgs clickedArgs)
+            {
+                return;
+            }
+
+            if (interactionMode == InteractionMode.BUILDING)
+            {
+                // raise build event
+                var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                args.Location = clickedArgs.ClickedPoint;
+                args.FeatureType = buildingFeatureType;
+
+                if (buildingFeatureType == null)
+                {
+                    return;
+                }
+
+                BuildingFeatureEvent.Raise(args);
+            }
+        }
     }
+    
 }

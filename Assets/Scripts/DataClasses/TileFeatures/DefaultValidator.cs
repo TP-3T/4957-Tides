@@ -19,6 +19,11 @@ namespace TTT.DataClasses.TileFeatures
             BuildConstraints constraints
         )
         {
+            if (buildTile.Flooded)
+            {
+                return false;
+            }
+
             if (ExceedsMaxHeight(buildTile, constraints))
             {
                 return false;
