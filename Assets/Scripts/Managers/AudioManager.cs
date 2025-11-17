@@ -10,10 +10,10 @@ namespace TTT.Managers
     public class AudioManager : GenericSingleton<AudioManager>
     {
         [Header("One-Shot Sounds")]
-        [Tooltip("AudioSource used for playing one-shot sound effects")]
-        public AudioSource OneShotSource;
         [Tooltip("Array of one-shot sound effect AudioEntries")]
         public AudioEntry[] OneShotEntries;
+        [Tooltip("AudioSource used for playing one-shot sound effects")]
+        public AudioSource OneShotSource;
 
         [Header("Ambience")]
         public AudioEntry[] AmbienceEntries;
