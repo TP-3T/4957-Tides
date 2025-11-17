@@ -19,9 +19,5 @@ namespace TTT.DataClasses
         /// The audio clip associated with this entry.
         /// </summary>
         [SerializeField] public AudioClip Clip;
-        /// <summary>
-        /// Whether the audio should loop when played.
-        /// </summary>
-        [SerializeField] public bool Loop;
     }
 }

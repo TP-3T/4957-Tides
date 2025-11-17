@@ -9,16 +9,6 @@ namespace TTT.Managers
     /// </summary>
     public class AudioManager : GenericSingleton<AudioManager>
     {
-        //Implementation: Songs and SFX are limited so just load all as assets and have playable through methods?
-
-        //TODO 1: Just have a single song imported and playing
-
-        //TODO 2: Have multiple songs imported and shuffle through
-
-        //TODO 3: Expose volume options for UI
-
-        //TODO 3: Have SFX play based on game events like UI clicks and game state
-
         [Header("One-Shot Sounds")]
         [Tooltip("AudioSource used for playing one-shot sound effects")]
         public AudioSource OneShotSource;
@@ -26,20 +16,15 @@ namespace TTT.Managers
         public AudioEntry[] OneShotEntries;
 
         [Header("Ambience")]
-        [Tooltip("AudioSource used for playing ambience sounds")]
-        public AudioSource AmbienceSource;
-        //public AudioSource TempAmbienceSource;  // For cross-fading
-        [Tooltip("Array of ambience AudioEntries")]
         public AudioEntry[] AmbienceEntries;
-        //public double AmbienceFadeDuration = 1.0;
+        [Tooltip("AudioFadingPlayer used for playing and fading ambience")]
+        public AudioFadingPlayer AmbienceFadingPlayer;
 
         [Header("Music")]
-        [Tooltip("AudioSource used for playing music tracks")]
-        public AudioSource MusicSource;
-        //public AudioSource TempMusicSource;  // For cross-fading
         [Tooltip("Array of music AudioEntries")]
         public AudioEntry[] MusicEntries;
-        //public double MusicFadeDuration = 1.0;
+        [Tooltip("AudioFadingPlayer used for playing and fading music tracks")]
+        public AudioFadingPlayer MusicFadingPlayer;
 
         /// <summary>
         /// Plays a one-shot sound effect.
@@ -55,41 +40,63 @@ namespace TTT.Managers
         }
 
         /// <summary>
-        /// Plays ambience sound.
+        /// Plays the given ambience track.
         /// </summary>
-        /// <param name="name">The EntryName of the AudioEntry</param>
-        public void PlayAmbience(string name)
+        /// <param name="name">The name of the AudioEntry clip to play</param>
+        /// <param name="fade">Whether or not to fade the clip in</param>
+        public void PlayAmbience(string name, bool fade = true)
         {
             AudioEntry entry = GetAudioEntryByName(name, AmbienceEntries);
             if (entry != null && entry.Clip != null)
             {
-                if (AmbienceSource.isPlaying)
+                if (fade)
                 {
-                    AmbienceSource.Stop();
+                    AmbienceFadingPlayer.FadeToClip(entry.Clip);
                 }
-                AmbienceSource.clip = entry.Clip;
-                AmbienceSource.loop = entry.Loop;
-                AmbienceSource.Play();
+                else
+                {
+                    AmbienceFadingPlayer.PlayClipInstant(entry.Clip);
+                }
             }
         }
 
         /// <summary>
-        /// Plays music track.
+        /// Checks if ambience is currently fading.
         /// </summary>
-        /// <param name="name">The EntryName of the AudioEntry</param>
-        public void PlayMusic(string name)
+        /// <returns>True if ambience is fading, false otherwise</returns>
+        public bool IsAmbienceCurrentlyFading()
+        {
+            return AmbienceFadingPlayer.IsFadeInProgress();
+        }
+
+        /// <summary>
+        /// Plays the given music track.
+        /// </summary>
+        /// <param name="name">The name of the AudioEntry clip to play</param>
+        /// <param name="fade">Whether or not to fade the clip in</param>
+        public void PlayMusic(string name, bool fade = true)
         {
             AudioEntry entry = GetAudioEntryByName(name, MusicEntries);
             if (entry != null && entry.Clip != null)
             {
-                if (MusicSource.isPlaying)
+                if (fade)
                 {
-                    MusicSource.Stop();
+                    MusicFadingPlayer.FadeToClip(entry.Clip);
                 }
-                MusicSource.clip = entry.Clip;
-                MusicSource.loop = entry.Loop;
-                MusicSource.Play();
+                else
+                {
+                    MusicFadingPlayer.PlayClipInstant(entry.Clip);
+                }
             }
+        }
+
+        /// <summary>
+        /// Checks if music is currently fading.
+        /// </summary>
+        /// <returns>True if music is fading, false otherwise</returns>
+        public bool IsMusicCurrentlyFading()
+        {
+            return MusicFadingPlayer.IsFadeInProgress();
         }
 
         /// <summary>
