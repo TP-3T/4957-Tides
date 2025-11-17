@@ -8,18 +8,29 @@ namespace TTT.Helpers
     /// </summary>
     public class AudioFadingPlayer : MonoBehaviour
     {
+        /// <summary>
+        /// Default duration for fade transitions in seconds.
+        /// </summary>
         [Header("Controls")]
+        [Tooltip("Default duration for fade transitions in seconds")]
         public float DefaultFadeDuration = 1f;
 
         [Header("Audio Sources")]
+        [Tooltip("First AudioSource used for crossfading")]
         [SerializeField] private AudioSource sourceA;
+        [Tooltip("Second AudioSource used for crossfading")]
         [SerializeField] private AudioSource sourceB;
 
         private Coroutine crossfadeCoroutine;
         private bool isUsingSourceA = true;
 
+        /// <summary>
+        /// Plays the given audio clip instantly, stopping any currently playing clip.
+        /// </summary>
+        /// <param name="newClip">The Audio Clip to play</param>
         public void PlayClipInstant(AudioClip newClip)
         {
+            // Stop any ongoing crossfade
             if (crossfadeCoroutine != null)
             {
                 StopCoroutine(crossfadeCoroutine);
@@ -38,6 +49,12 @@ namespace TTT.Helpers
             isUsingSourceA = (inactiveSource == sourceA);
         }
 
+        /// <summary>
+        /// Fades from the currently playing clip to the new clip over the given duration.
+        /// If fadeDuration is less than 0, the DefaultFadeDuration will be used.
+        /// </summary>
+        /// <param name="newClip">The Audio Clip to play</param>
+        /// <param name="fadeDuration">The duration to fade, in seconds - if this is less than 0, uses DefaultFadeDuration instead</param>
         public void FadeToClip(AudioClip newClip, float fadeDuration = -1f)
         {
             if (fadeDuration < 0f)
@@ -53,12 +70,17 @@ namespace TTT.Helpers
             crossfadeCoroutine = StartCoroutine(FadeRoutine(newClip, fadeDuration));
         }
 
+        /// <summary>
+        /// Checks if a fade is currently in progress.
+        /// Use this to prevent overlapping fade requests.
+        /// </summary>
+        /// <returns>True if this player is currently fading, False otherwise</returns>
         public bool IsFadeInProgress()
         {
             return crossfadeCoroutine != null;
         }
 
-        private void Awake()
+        private void Awake()    // Ensure both audio sources are set up
         {
             if (sourceA == null)
             {
@@ -72,7 +94,7 @@ namespace TTT.Helpers
             }
         }
 
-        private IEnumerator FadeRoutine(AudioClip newClip, float fadeDuration)
+        private IEnumerator FadeRoutine(AudioClip newClip, float fadeDuration)  // Handles the crossfade between two audio sources
         {
             AudioSource audioSourceToFadeOut = GetActiveSource();
             AudioSource audioSourceToFadeIn = GetInactiveSource();
@@ -98,12 +120,12 @@ namespace TTT.Helpers
             isUsingSourceA = (audioSourceToFadeIn == sourceA);
         }
 
-        private AudioSource GetActiveSource()
+        private AudioSource GetActiveSource()   // The audio source currently playing
         {
             return isUsingSourceA ? sourceA : sourceB;
         }
 
-        private AudioSource GetInactiveSource()
+        private AudioSource GetInactiveSource() // The audio source not currently playing
         {
             return isUsingSourceA ? sourceB : sourceA;
         }
