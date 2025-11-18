@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace TTT.Managers
 {
+    [RequireComponent(typeof(RectTransform))]
     /// <summary>
     /// Manager class that handles UI elements and state switching.
     /// <author> Rodrigo, Richard </author>
@@ -41,7 +42,6 @@ namespace TTT.Managers
         /// </summary>
         [Tooltip("The prefab for a shop slot.")]
         public GameObject ShopSlotPrefab;
-
         public GameObject ShopSlotParent;
         public const float SlotSpacing = 20;
 
