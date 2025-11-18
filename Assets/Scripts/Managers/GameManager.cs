@@ -1,17 +1,17 @@
+using System.IO;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace TTT.Managers
 {
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
-        [SerializeField]
-        public TextAsset LevelFile;
+        // [SerializeField]
+        // private TextAsset LevelFile;
 
         [SerializeField]
         private GameEvent newMapEvent;
@@ -28,26 +28,20 @@ namespace TTT.Managers
         [SerializeField]
         private int CO2;
 
-        public GameEvent SeasonChanging;
+        [SerializeField]
+        private GameEvent SeasonChanging;
 
         [SerializeField]
-        public GameEvent _OnYearChangeEvent;
+        private GameEvent _OnYearChangeEvent;
 
         [SerializeField]
-        public GameEvent _FloodEvent;
+        private GameEvent _FloodEvent;
 
         private InteractionMode interactionMode;
 
         private FeatureType buildingFeatureType;
 
-        public GameEvent BuildingFeatureEvent;
-
-        // private AssetReference SeaPrefab = new("P_Sea");
-
-        // private AssetReference HexGrid = new("P_HexGrid");
-
-        // private GameObject sea;
-        // private GameObject hexGrid;
+        private GameEvent BuildingFeatureEvent;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -57,7 +51,7 @@ namespace TTT.Managers
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
-        public void OnStartNetworkEvent(Object eventArgs)
+        public void OnStartNetworkEvent(UnityEngine.Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
             if (args.IsHost)
@@ -66,36 +60,30 @@ namespace TTT.Managers
                 try
                 {
                     NetworkManager.Singleton.StartHost();
+
+                    if (Helpers.LoadExternalJson.TryGetDataJson(out TextAsset newMap))
+                    {
+                        newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
+                    }
+                    else
+                    {
+                        throw new IOException("Could not load file.");
+                    }
                 }
                 catch (System.Exception e)
                 {
                     Debug.LogError($"Failed to start host: {e.Message}");
                     return;
                 }
-
-                newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
             }
             else
             {
-                Debug.Log("I am being spawned as a client");
+                // Debug.Log("I am being spawned as a client");
                 NetworkManager.Singleton.StartClient();
             }
         }
 
-        // private void SpawnSea(GameObject obj)
-        // {
-        //     sea = Instantiate(obj);
-        //     sea.GetComponent<NetworkObject>().Spawn();
-        // }
-
-        // private void SpawnGrid(GameObject obj)
-        // {
-        //     hexGrid = Instantiate(obj);
-        //     hexGrid.GetComponent<NetworkObject>().Spawn();
-        //     newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
-        // }
-
-        public void OnNewMapFinish(Object eventArgs)
+        public void OnNewMapFinish(UnityEngine.Object eventArgs)
         {
             NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
 
@@ -168,17 +156,6 @@ namespace TTT.Managers
             return this.CO2;
         }
 
-        // /// <summary>
-        // /// Method from INextTurnListener interface. Called when Next Turn event is dispatched.
-        // /// </summary>
-        // /// <param name="nt">The Next Turn Event</param>
-        // public void OnEventRaised(NextTurn nt)
-        // {
-        //     // increment season here
-        //     Debug.Log("1. Increment Season -GameManager" + nt.ToString());
-        //     this.IncrementSeason();
-        // }
-
         /// <summary>
         /// Starts the build mode event, disabling certain features.
         /// </summary>
@@ -204,7 +181,7 @@ namespace TTT.Managers
         }
 
         /// <summary>
-        /// Handles mesh click logic for buildmode to raise build event.
+        /// Handles mesh click logic for BuildMode to raise build event.
         /// </summary>
         /// <param name="eventArgs"></param>
         public void OnMeshClicked(UnityEngine.Object eventArgs)
@@ -230,5 +207,4 @@ namespace TTT.Managers
             }
         }
     }
-    
 }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7227047647059873641}
   - component: {fileID: 5925874576535686948}
   - component: {fileID: 9158636743349474806}
+  - component: {fileID: 3764150141886477968}
   m_Layer: 0
   m_Name: MapManager
   m_TagString: Untagged
@@ -48,14 +49,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2967250625
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 1572295236
+  InScenePlacedSourceGlobalObjectIdHash: 2967250625
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
@@ -74,12 +75,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  _jsonMap: {fileID: 0}
-  _mapLoadFinishEvent: {fileID: 0}
+  _jsonMap: {fileID: 4900000, guid: c6a9af25535ba0f43b588e7289cf784a, type: 3}
+  _mapLoadFinishEvent: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
   _allowedTerrains: {fileID: 11400000, guid: d58def7f9d21b0740bf047b7637efa9e, type: 2}
+  SeaLevel:
+    m_InternalValue: 0
+  RisingRate:
+    m_InternalValue: 1
   DrawDebugLabels: 0
-  SeaLevel: 0
-  RisingRate: 0
+  _OnLastPlayerTurnEvent: {fileID: 11400000, guid: 0f6684a922f3e8d45b032f0e51c747bc, type: 2}
 --- !u!114 &7227047647059873641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,3 +168,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
+--- !u!114 &3764150141886477968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065302472941044375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: a8d0fdbaf27ed27499b9b3d43051c0e6, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4501877893874324670}
+        m_TargetAssemblyTypeName: TTT.Managers.MapManager, TTT.Managers
+        m_MethodName: OnNextTurnClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
