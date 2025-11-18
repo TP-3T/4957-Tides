@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: e7e5ee7318adfcd448829a3590075345
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: 1d51f3bc8b548796f27802b35b6b0bbc
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -60,6 +60,7 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
+  - {fileID: 11400000, guid: eeb5a6f65ebc58e459a1d66d6b874c4c, type: 2}
   - {fileID: 11400000, guid: c405fd5e977800840bdfe42a33e7f631, type: 2}
   - {fileID: 11400000, guid: 3b6079c427c90934e872609989109644, type: 2}
   m_BuildSettings:
@@ -101,6 +102,10 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - B_Housing
+    - B_Industry
+    - B_Energy
+    - B_Renewable
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: b576e5f53c69024498344eeddda3ab6c, type: 2}

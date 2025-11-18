@@ -30,6 +30,10 @@ namespace TTT.DataClasses.TileFeatures
         /// </summary>
         [field: Tooltip("Features to either require or ban.")]
         [field: SerializeField]
-        public List<Amount<FeatureType>> FeatureConstraints { get; private set; }
+        public List<Amount<FeatureType>> FeatureConstraints
+        {
+            get;
+            private set;
+        }
     }
 }
