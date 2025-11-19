@@ -230,8 +230,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2477828843532920126}
   - {fileID: 5089552924673054252}
+  - {fileID: 2477828843532920126}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2831436b37ecda94194df9d374f4955d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ToHide>k__BackingField: {fileID: 4655228308963635219}
+  <ToOpen>k__BackingField: {fileID: 4655228308963635219}
   <IsOpen>k__BackingField: 0
   <MovementCurve>k__BackingField:
     serializedVersion: 2
@@ -289,8 +289,8 @@ MonoBehaviour:
   <ShiftDirection>k__BackingField: 0
   <ShiftPadding>k__BackingField: {x: 0, y: 0}
   startInspectMode: {fileID: 11400000, guid: d044f0a4c8d4e62419ddfec40a9a4a6b, type: 2}
-  SlotArea: {fileID: 937438038014111108}
-  ShopTabArea: {fileID: 2519198667540855256}
-  ShopTab: {fileID: 7902394278506430923, guid: 9882b9346389f4244b5ee6f6e1ab0e08, type: 3}
+  ShopSlotArea: {fileID: 937438038014111108}
   ShopSlotPrefab: {fileID: 5876843518120190640, guid: 88b0b282012034e20bde3ab9b99486e7, type: 3}
   SlotSpacing: 20
+  ShopTabArea: {fileID: 2519198667540855256}
+  ShopTabPrefab: {fileID: 7902394278506430923, guid: 9882b9346389f4244b5ee6f6e1ab0e08, type: 3}

@@ -840,7 +840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4946eb48af5a8a64e8bca819617d7bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ToHide>k__BackingField: {fileID: 1876010637533716431}
+  <ToOpen>k__BackingField: {fileID: 0}
   <IsOpen>k__BackingField: 0
   <MovementCurve>k__BackingField:
     serializedVersion: 2
