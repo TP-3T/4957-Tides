@@ -170,9 +170,9 @@ RectTransform:
   m_Father: {fileID: 4655228308963635219}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 56.977}
+  m_SizeDelta: {x: 0, y: 56.977}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &2960165212936714186
 MonoBehaviour:
@@ -193,8 +193,8 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 6
   m_Spacing: 16.72
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
@@ -210,7 +210,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4655228308963635219}
   - component: {fileID: 2743887434435340111}
-  - component: {fileID: 2398447201625804909}
   - component: {fileID: 1396512214478044995}
   m_Layer: 5
   m_Name: Shop
@@ -248,62 +247,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8196562055711730827}
   m_CullTransparentMesh: 1
---- !u!114 &2398447201625804909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8196562055711730827}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef599d2a7e61a824e9a533da6b851098, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  drawerPanel: {fileID: 8196562055711730827}
-  openPosition: {x: -110, y: -150}
-  closedPosition: {x: -110, y: -250}
-  animationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  currentFeatureType: 
-  isOpen: 0
-  ShopSlotPrefab: {fileID: 5876843518120190640, guid: 88b0b282012034e20bde3ab9b99486e7, type: 3}
-  ShopSlotParent: {fileID: 937438038014111108}
-  featureTypesHouses:
-  - {fileID: 11400000, guid: 1bbdf26002f83de40973468ddd37bb8f, type: 2}
-  featureTypesIndustry:
-  - {fileID: 11400000, guid: 9f315c0b25ad56c458efb949b83d75e3, type: 2}
-  - {fileID: 11400000, guid: bb7f629c41bf6934797fb89b6d81cc7b, type: 2}
-  - {fileID: 11400000, guid: f7f0052c53e6d844ea7a1def77afa6b4, type: 2}
-  featureTypesEnergy:
-  - {fileID: 11400000, guid: e2ffd29714beea942bb4d985d389ee17, type: 2}
-  featureTypesRenewable:
-  - {fileID: 11400000, guid: bb7f629c41bf6934797fb89b6d81cc7b, type: 2}
-  featureTypesNature:
-  - {fileID: 11400000, guid: f7f0052c53e6d844ea7a1def77afa6b4, type: 2}
-  startInspectMode: {fileID: 11400000, guid: d044f0a4c8d4e62419ddfec40a9a4a6b, type: 2}
 --- !u!114 &1396512214478044995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,11 +285,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  <MovementSeconds>k__BackingField: 1
+  <MovementSeconds>k__BackingField: 0.5
   <ShiftDirection>k__BackingField: 0
   <ShiftPadding>k__BackingField: {x: 0, y: 0}
   startInspectMode: {fileID: 11400000, guid: d044f0a4c8d4e62419ddfec40a9a4a6b, type: 2}
-  ShopArea: {fileID: 1703231155487398613}
+  SlotArea: {fileID: 937438038014111108}
   ShopTabArea: {fileID: 2519198667540855256}
   ShopTab: {fileID: 7902394278506430923, guid: 9882b9346389f4244b5ee6f6e1ab0e08, type: 3}
   ShopSlotPrefab: {fileID: 5876843518120190640, guid: 88b0b282012034e20bde3ab9b99486e7, type: 3}
