@@ -10,7 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5028386992981110786}
   - component: {fileID: 7585464592453589953}
+  - component: {fileID: 7585464592453589953}
   - component: {fileID: 154332724618842616}
+  - component: {fileID: 8295717535427168372}
+  - component: {fileID: 1641907927456369220}
+  - component: {fileID: 6937626158144756847}
+  - component: {fileID: 860004148231905124}
   - component: {fileID: 8295717535427168372}
   - component: {fileID: 1641907927456369220}
   - component: {fileID: 6937626158144756847}
@@ -38,6 +43,7 @@ Transform:
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7585464592453589953
+--- !u!114 &7585464592453589953
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,6 +62,7 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0

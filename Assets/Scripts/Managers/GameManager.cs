@@ -10,9 +10,6 @@ namespace TTT.Managers
 {
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
-        // [SerializeField]
-        // private TextAsset LevelFile;
-
         [SerializeField]
         private GameEvent newMapEvent;
 
@@ -199,6 +196,7 @@ namespace TTT.Managers
         }
 
         /// <summary>
+        /// Handles mesh click logic for BuildMode to raise build event.
         /// Handles mesh click logic for BuildMode to raise build event.
         /// </summary>
         /// <param name="eventArgs"></param>

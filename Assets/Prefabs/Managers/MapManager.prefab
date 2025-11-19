@@ -52,11 +52,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 1572295236
   InScenePlacedSourceGlobalObjectIdHash: 2967250625
+  GlobalObjectIdHash: 1572295236
+  InScenePlacedSourceGlobalObjectIdHash: 2967250625
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
@@ -78,12 +81,19 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _jsonMap: {fileID: 4900000, guid: c6a9af25535ba0f43b588e7289cf784a, type: 3}
   _mapLoadFinishEvent: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
+  _jsonMap: {fileID: 4900000, guid: c6a9af25535ba0f43b588e7289cf784a, type: 3}
+  _mapLoadFinishEvent: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
   _allowedTerrains: {fileID: 11400000, guid: d58def7f9d21b0740bf047b7637efa9e, type: 2}
   SeaLevel:
     m_InternalValue: 0
   RisingRate:
     m_InternalValue: 1
+  SeaLevel:
+    m_InternalValue: 0
+  RisingRate:
+    m_InternalValue: 1
   DrawDebugLabels: 0
+  _OnLastPlayerTurnEvent: {fileID: 11400000, guid: 0f6684a922f3e8d45b032f0e51c747bc, type: 2}
   _OnLastPlayerTurnEvent: {fileID: 11400000, guid: 0f6684a922f3e8d45b032f0e51c747bc, type: 2}
 --- !u!114 &7227047647059873641
 MonoBehaviour:

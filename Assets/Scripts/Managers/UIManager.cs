@@ -34,8 +34,6 @@ namespace TTT.Managers
 
         private Color activeTabColor;
         private Color inactiveTabColor;
-        private Vector2 InactiveTabSize;
-        private Vector2 activeTabSize;
 
         /// <summary>
         /// The prefab for a shop slot.
