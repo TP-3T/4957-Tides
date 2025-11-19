@@ -4,6 +4,7 @@
   <Project Path="TTT.DataClasses.TileFeatures.csproj" />
   <Project Path="TTT.Hex.csproj" />
   <Project Path="TTT.GameEvents.csproj" />
+  <Project Path="SFB.csproj" />
   <Project Path="UI.csproj" />
   <Project Path="TTT.Editors.csproj" />
   <Project Path="TTT.Managers.csproj" />
@@ -13,8 +14,7 @@
   <Project Path="TTT.DataClasses.Terrain.csproj" />
   <Project Path="TTT.DataClasses.States.csproj" />
   <Project Path="TTT.DataClasses.PlayerResources.csproj" />
-  <Project Path="TTT.Helpers.csproj" />
   <Project Path="EditMode.csproj" />
   <Project Path="PlayMode.csproj" />
-  <Project Path="TTT.Dispatch.csproj" />
+  <Project Path="TTT.Helpers.csproj" />
 </Solution>
