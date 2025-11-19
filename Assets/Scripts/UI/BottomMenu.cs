@@ -5,7 +5,11 @@ using System.Linq;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Managers;
+using UnityEditor.Graphs;
+using UnityEditor.TerrainTools;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace TTT.UI
 {
@@ -39,7 +43,7 @@ namespace TTT.UI
         private GameEvent startInspectMode;
 
         [SerializeField]
-        private GameObject ShopArea;
+        private GameObject SlotArea;
 
         [SerializeField]
         private GameObject ShopTabArea;
@@ -59,6 +63,10 @@ namespace TTT.UI
         [SerializeField]
         private float SlotSpacing = 20;
 
+        private Dictionary<GameObject, List<GameObject>> tabSlots = new();
+
+        private GameObject currentTab;
+
         /// <summary>
         /// Stores all the SOs we'll need for each category in our shop menu
         /// </summary>
@@ -72,28 +80,75 @@ namespace TTT.UI
         {
             (this as IOpenable).SetupPositions();
             CreateShopTabs();
-            // var buildingRoutine = AssetLoader<ScriptableObject>.LoadGroup(
-            //     "BuildingSO",
-            //     AddToBuildingDictionary
-            // );
-            // while (buildingRoutine.MoveNext()) { }
         }
 
         public IEnumerator Start()
         {
             var buildingRoutine = AssetLoader<FeatureType>.LoadGroup(
                 "building",
-                AddToBuildingDictionary
+                AddToDictionaries
             );
             yield return buildingRoutine;
-            CreateShopTabs();
         }
 
-        private void AddToBuildingDictionary(FeatureType feature)
+        public void TabClicked(GameObject tab)
+        {
+            if (!IsOpen || currentTab.Equals(tab))
+            {
+                Toggle();
+                currentTab = tab;
+            }
+            if (IsOpen)
+            {
+                foreach (var slots in tabSlots.Values)
+                {
+                    foreach (
+                        var slot in slots.Where(slot =>
+                            slot.activeSelf.Equals(true)
+                        )
+                    )
+                    {
+                        slot.SetActive(false);
+                    }
+                }
+                FeatureCategory type = (FeatureCategory)
+                    Enum.Parse(typeof(FeatureCategory), tab.name, true);
+                tabSlots[tab]
+                    .ForEach(slot =>
+                    {
+                        slot.SetActive(true);
+                    });
+                currentTab = tab;
+            }
+        }
+
+        private void AddToDictionaries(FeatureType feature)
         {
             if (feature != null)
             {
                 Buildings[feature.Category][feature.UniqueID] = feature;
+                var tab = tabSlots.Keys.First(key =>
+                    key.name.Equals(feature.Category.ToString())
+                );
+                // Create the slot and insert into dictionary
+                List<GameObject> slotList = tabSlots[tab];
+                float slotWidth = ShopSlotPrefab
+                    .transform.GetComponent<RectTransform>()
+                    .rect.width;
+                float xOffset = SlotSpacing + slotList.Count * (slotWidth * 2);
+                Vector3 parentPosition = SlotArea.transform.position;
+
+                GameObject slotObject = Instantiate(
+                    ShopSlotPrefab,
+                    new Vector3(xOffset, 0, 0),
+                    Quaternion.identity,
+                    SlotArea.transform
+                );
+                BuildingShopSlot slot =
+                    slotObject.GetComponent<BuildingShopSlot>();
+                slot.feature = feature;
+
+                tabSlots[tab].Add(slotObject);
             }
         }
 
@@ -106,23 +161,24 @@ namespace TTT.UI
                 Buildings[type] = new();
                 var newTab = Instantiate(ShopTab);
                 var shopTab = newTab.GetComponent<ShopTab>();
+                newTab.name = type.ToString();
                 shopTab.TextArea.text = type.ToString();
                 shopTab.Button.onClick.AddListener(() =>
                 {
-                    if (Current != null)
-                    {
-                        StopCoroutine(Current);
-                        IsOpen = !IsOpen;
-                    }
-                    Current = StartCoroutine(
-                        (this as IOpenable).ToggleOpenable()
-                    );
-                    Debug.Log("Clicked on " + type.ToString());
+                    TabClicked(newTab);
                 });
                 newTab.transform.SetParent(ShopTabArea.transform);
+                tabSlots[newTab] = new();
             }
         }
 
-        private void CreateShopSlots() { }
+        public void Toggle()
+        {
+            if (Current != null)
+            {
+                StopCoroutine(Current);
+            }
+            Current = StartCoroutine((this as IOpenable).ToggleOpenable());
+        }
     }
 }

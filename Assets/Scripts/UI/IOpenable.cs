@@ -38,6 +38,7 @@ namespace TTT.UI
         {
             float currentTime = 0f;
             Vector2 start = ToHide.anchoredPosition;
+            IsOpen = !IsOpen;
             while (currentTime < MovementSeconds)
             {
                 float normalizedTime = currentTime / MovementSeconds;
@@ -50,13 +51,13 @@ namespace TTT.UI
                 yield return new WaitForEndOfFrame();
                 currentTime += Time.deltaTime;
             }
-            IsOpen = !IsOpen;
         }
 
         public virtual IEnumerator CloseRoutine()
         {
             float currentTime = 0f;
             Vector2 start = ToHide.anchoredPosition;
+            IsOpen = !IsOpen;
             while (currentTime < MovementSeconds)
             {
                 float normalizedTime = currentTime / MovementSeconds;
@@ -69,7 +70,6 @@ namespace TTT.UI
                 yield return new WaitForEndOfFrame();
                 currentTime += Time.deltaTime;
             }
-            IsOpen = !IsOpen;
         }
 
         public virtual void SetupPositions()
