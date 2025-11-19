@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: e7e5ee7318adfcd448829a3590075345
   m_SerializeEntries:
+  - m_GUID: 1bbdf26002f83de40973468ddd37bb8f
+    m_Address: B_House
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2d61ba89c473e434fb1b6413e393c74e
     m_Address: P_SeaMesh
     m_ReadOnly: 0
@@ -25,10 +31,34 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f315c0b25ad56c458efb949b83d75e3
+    m_Address: B_Factory
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a574734cbcc1411429593620b463cc3a
     m_Address: P_HexMesh
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb7f629c41bf6934797fb89b6d81cc7b
+    m_Address: B_LumberMill
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2ffd29714beea942bb4d985d389ee17
+    m_Address: B_NuclearReactor
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7f0052c53e6d844ea7a1def77afa6b4
+    m_Address: B_Port
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: dc847a122f093dc4080e470c320f582d, type: 2}

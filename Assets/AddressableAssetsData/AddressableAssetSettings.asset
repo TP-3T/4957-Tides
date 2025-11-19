@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: e7e5ee7318adfcd448829a3590075345
   m_currentHash:
     serializedVersion: 2
-    Hash: 1d51f3bc8b548796f27802b35b6b0bbc
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -54,7 +54,7 @@ MonoBehaviour:
     m_Id: 
   m_RemoteCatalogLoadPath:
     m_Id: 
-  m_ContentStateBuildPathProfileVariableName: 
+  m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
@@ -102,10 +102,7 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
-    - B_Housing
-    - B_Industry
-    - B_Energy
-    - B_Renewable
+    - building
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: b576e5f53c69024498344eeddda3ab6c, type: 2}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -27,13 +28,15 @@ namespace TTT.Managers
             Action<T> callback
         )
         {
-            var assetHandle = Addressables.LoadAssetsAsync<T>(
-                groupName,
-                callback,
-                Addressables.MergeMode.Union, //We want to have all assets with the same group
-                false //We don;t want to release if an asset fails to load
-            );
-            yield return assetHandle;
+            var assetHandle = Addressables.LoadAssetsAsync<T>(groupName);
+            while (!assetHandle.IsDone)
+            {
+                yield return assetHandle;
+            }
+            foreach (T item in assetHandle.Result)
+            {
+                callback(item);
+            }
         }
 
         private static void ValidateResult(AsyncOperationHandle<T> handle)

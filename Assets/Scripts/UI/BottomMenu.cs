@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TTT.DataClasses.TileFeatures;
@@ -67,27 +68,33 @@ namespace TTT.UI
             Dictionary<string, ScriptableObject>
         > Buildings = new();
 
-        void Awake()
+        public void Awake()
         {
             (this as IOpenable).SetupPositions();
             CreateShopTabs();
-            AssetLoader<IList<ScriptableObject>>.LoadGroup(
-                "BuildingSO",
-                AddToBuildingDictionary
-            );
+            // var buildingRoutine = AssetLoader<ScriptableObject>.LoadGroup(
+            //     "BuildingSO",
+            //     AddToBuildingDictionary
+            // );
+            // while (buildingRoutine.MoveNext()) { }
         }
 
-        private void AddToBuildingDictionary(IList<ScriptableObject> handle)
+        public IEnumerator Start()
         {
-            foreach (ScriptableObject asset in handle)
-            {
-                FeatureType type = asset as FeatureType;
-                if (type != null)
-                {
-                    Buildings[type.Category][type.UniqueID] = asset;
-                }
-            }
+            var buildingRoutine = AssetLoader<FeatureType>.LoadGroup(
+                "building",
+                AddToBuildingDictionary
+            );
+            yield return buildingRoutine;
             CreateShopTabs();
+        }
+
+        private void AddToBuildingDictionary(FeatureType feature)
+        {
+            if (feature != null)
+            {
+                Buildings[feature.Category][feature.UniqueID] = feature;
+            }
         }
 
         private void CreateShopTabs()
