@@ -140,7 +140,7 @@ namespace TTT.UI
 
                 GameObject slotObject = Instantiate(
                     ShopSlotPrefab,
-                    new Vector3(xOffset, 0, 0),
+                    new Vector3(xOffset, parentPosition.y, parentPosition.z),
                     Quaternion.identity,
                     SlotArea.transform
                 );
