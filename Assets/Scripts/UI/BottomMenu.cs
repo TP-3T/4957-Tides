@@ -51,7 +51,7 @@ namespace TTT.UI
         [SerializeField]
         private GameObject ShopTab;
 
-        private Coroutine Current { get; set; }
+        private Coroutine CurrentShift { get; set; }
 
         /// <summary>
         /// The prefab for a shop slot.
@@ -174,11 +174,11 @@ namespace TTT.UI
 
         public void Toggle()
         {
-            if (Current != null)
+            if (CurrentShift != null)
             {
-                StopCoroutine(Current);
+                StopCoroutine(CurrentShift);
             }
-            Current = StartCoroutine((this as IOpenable).ToggleOpenable());
+            CurrentShift = StartCoroutine((this as IOpenable).ToggleOpenable());
         }
     }
 }
