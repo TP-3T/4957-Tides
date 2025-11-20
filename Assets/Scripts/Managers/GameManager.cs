@@ -41,6 +41,9 @@ namespace TTT.Managers
         private GameEvent _FloodEvent;
 
         [SerializeField]
+        private GameEvent _TurnEndedEvent;
+
+        [SerializeField]
         private InteractionMode interactionMode;
 
         [SerializeField]
@@ -130,6 +133,9 @@ namespace TTT.Managers
             {
                 this.IncrementYear();
                 _OnYearChangeEvent.Raise();
+            } else
+            {
+                _TurnEndedEvent.Raise();
             }
         }
 
