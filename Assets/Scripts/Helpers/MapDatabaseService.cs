@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using TTT.DataClasses;
 using TTT.DataClasses.HexData;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -204,9 +205,9 @@ namespace TTT.Helpers
             {
                 MapTileData gameTile = new MapTileData
                 {
-                    OffsetCoordinates = new UnityEngine.Vector2Int(apiTile.x_coord, apiTile.z_coord),
+                    OffsetCoordinates = new OffsetCoordinates(apiTile.x_coord, apiTile.z_coord),
                     
-                    TileType = apiTile.tile_data.tile_type,
+                    TileType = (TerrainTypeId)apiTile.tile_data.tile_type,
                     
                     Height = apiTile.tile_data.elevation
                 };
