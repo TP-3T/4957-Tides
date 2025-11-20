@@ -28,20 +28,33 @@ public class PlayerInformation : MonoBehaviour
     [SerializeField]
     private PlayerResource population;
 
-    /// <summary>
-    /// Initializes the player information display.
-    /// </summary>
-    void Start()
-    {
-        setMoneyText();
-        setPowerText();
-        setPopulationText();
-    }
+    private int cachedMoneyAmount;
+
+    private int cachedPowerAmount;
+
+    private int cachedPopulationAmount;
 
     /// <summary>
     /// Updates the player information display each frame.
     /// </summary>
-    void Update() { }
+    void Update()
+    {
+        if (cachedMoneyAmount != money.AmountOwned)
+        {
+            cachedMoneyAmount = money.AmountOwned;
+            setMoneyText();
+        }
+        if (cachedPowerAmount != power.AmountOwned)
+        {
+            cachedPowerAmount = power.AmountOwned;
+            setPowerText();
+        }
+        if (cachedPopulationAmount != population.AmountOwned)
+        {
+            cachedPopulationAmount = population.AmountOwned;
+            setPopulationText();
+        }
+    }
 
     /// <summary>
     /// Updates the money display text.

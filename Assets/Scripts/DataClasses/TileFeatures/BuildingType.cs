@@ -1,11 +1,18 @@
+using System;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace TTT.DataClasses.TileFeatures
 {
-    [CreateAssetMenu(fileName = "BuildingType", menuName = "Scriptable Objects/BuildingType")]
+    [CreateAssetMenu(
+        fileName = "BuildingType",
+        menuName = "Scriptable Objects/BuildingType"
+    )]
     public class BuildingType : FeatureType
     {
-        [Tooltip("Radius of this feature's zone of control (1 = adjacent only).")]
+        [Tooltip(
+            "Radius of this feature's zone of control (1 = adjacent only)."
+        )]
         [SerializeField]
         private int zoneOfControlRadius;
 

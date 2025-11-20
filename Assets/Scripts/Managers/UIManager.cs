@@ -1,22 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
-using TTT.Managers;
+using TTT.DataClasses.TileFeatures;
+using TTT.GameEvents;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace TTT.Managers
 {
+    [RequireComponent(typeof(RectTransform))]
+    /// <summary>
+    /// Manager class that handles UI elements and state switching.
+    /// <author> Rodrigo, Richard </author>
+    /// </summary>
     public class UIManager : MonoBehaviour
     {
         [SerializeField]
-        GameObject drawerPanel;
+        private GameObject drawerPanel;
 
         [SerializeField]
         Vector2 openPosition,
             closedPosition;
 
         [SerializeField]
-        AnimationCurve animationCurve;
+        private AnimationCurve animationCurve;
 
         public string currentFeatureType;
 
@@ -25,42 +30,158 @@ namespace TTT.Managers
         public bool isOpen = false;
 
         private int currentTabID = -1;
-        public GameObject[] Tabs;
-        public Image[] TabButtons;
-        public Color activeTabColor, inactiveTabColor;
-        public Vector2 InactiveTabSize, activeTabSize;
+        private GameObject[] Tabs;
+
+        private Color activeTabColor;
+        private Color inactiveTabColor;
+
+        /// <summary>
+        /// The prefab for a shop slot.
+        /// </summary>
+        [Tooltip("The prefab for a shop slot.")]
+        public GameObject ShopSlotPrefab;
+        public GameObject ShopSlotParent;
+        public const float SlotSpacing = 20;
+
+        [SerializeField]
+        private List<FeatureType> featureTypesHouses;
+
+        [SerializeField]
+        private List<FeatureType> featureTypesIndustry;
+
+        [SerializeField]
+        private List<FeatureType> featureTypesEnergy;
+
+        [SerializeField]
+        private List<FeatureType> featureTypesRenewable;
+
+        [SerializeField]
+        private List<FeatureType> featureTypesNature;
+
+        [SerializeField]
+        private GameEvent startInspectMode;
+
+        private readonly List<List<GameObject>> shopTabContents = new();
 
         void Start()
         {
             FindFurthestKeyFrame();
             m_RT = GetComponent<RectTransform>();
             closedPosition = m_RT.anchoredPosition;
+
+            // dynamically populate shop
+            InitializeShopTabs();
         }
 
-        public void TabClicked(int TabID)
+        /// <summary>
+        /// Initializes all of the building shop's tabs with the given lists of tile features to display.
+        /// </summary>
+        private void InitializeShopTabs()
         {
-            if (currentTabID == TabID && isOpen)
+            List<List<FeatureType>> shopCategories = new()
+            {
+                featureTypesHouses,
+                featureTypesIndustry,
+                featureTypesEnergy,
+                featureTypesRenewable,
+                featureTypesNature,
+            };
+
+            for (int tabIndex = 0; tabIndex < shopCategories.Count; tabIndex++)
+            {
+                var tab = InitializeShopTab(shopCategories[tabIndex]);
+                shopTabContents.Add(tab);
+            }
+        }
+
+        /// <summary>
+        /// Initializes one tab in the building shop with the given list of tile features.
+        /// </summary>
+        private List<GameObject> InitializeShopTab(
+            List<FeatureType> featureList
+        )
+        {
+            List<GameObject> tabShopSlots = new();
+
+            for (int index = 0; index < featureList.Count; index++)
+            {
+                float slotWidth = ShopSlotPrefab
+                    .transform.GetComponent<RectTransform>()
+                    .rect.width;
+
+                float xOffset = SlotSpacing + index * (slotWidth * 2);
+
+                Vector3 parentPosition = ShopSlotParent.transform.position;
+                Vector3 slotPosition = new(
+                    parentPosition.x + xOffset,
+                    parentPosition.y,
+                    parentPosition.z
+                );
+
+                GameObject slotGameObject = Instantiate(
+                    ShopSlotPrefab,
+                    slotPosition,
+                    Quaternion.identity,
+                    ShopSlotParent.transform
+                );
+                slotGameObject.SetActive(false);
+
+                tabShopSlots.Add(slotGameObject);
+
+                BuildingShopSlot slot =
+                    slotGameObject.GetComponent<BuildingShopSlot>();
+
+                slot.feature = featureList[index];
+                slot.UpdateText();
+            }
+
+            return tabShopSlots;
+        }
+
+        /// <summary>
+        /// Handles logic for when a tab is clicked.
+        /// </summary>
+        /// <param name="tabID"></param>
+        public void TabClicked(int tabID)
+        {
+            if (currentTabID == tabID && isOpen)
             {
                 ToggleDrawer();
-                currentTabID = -1;
 
+                shopTabContents[tabID].ForEach(obj => obj.SetActive(false));
+
+                startInspectMode.Raise();
+
+                currentTabID = -1;
             }
             else if (isOpen == false)
             {
                 ToggleDrawer();
                 // Emit toggle event
-                currentTabID = TabID;
-                Debug.Log("Tab Clicked: " + TabID);
+
+                shopTabContents[tabID].ForEach(obj => obj.SetActive(true));
+
+                currentTabID = tabID;
+
+                Debug.Log("Tab Clicked: " + tabID);
             }
             else
             {
-                SwitchToTab(TabID);
-                currentTabID = TabID;
-                Debug.Log("Tab Clicked: " + TabID);
+                shopTabContents[currentTabID]
+                    .ForEach(obj => obj.SetActive(false));
+
+                SwitchToTab(tabID);
+                shopTabContents[tabID].ForEach(obj => obj.SetActive(true));
+
+                currentTabID = tabID;
+
+                Debug.Log("Tab Clicked: " + tabID);
             }
         }
 
-
+        /// <summary>
+        /// Toggles the drawer open or closed.
+        /// </summary>
         public void ToggleDrawer()
         {
             if (isOpen)
@@ -73,15 +194,22 @@ namespace TTT.Managers
             }
         }
 
-        // event emitter goes here.
-        public void SwitchToTab(int TabID)
+        /// <summary>
+        /// Handles switching to a different tab.
+        /// </summary>
+        /// <param name="tabID"></param>
+        /// event emitter goes here.
+        public void SwitchToTab(int tabID)
         {
+            Tabs[tabID].SetActive(true);
 
-            Tabs[TabID].SetActive(true);
-
-            Debug.Log("Switched to Tab: " + TabID);
+            Debug.Log("Switched to Tab: " + tabID);
         }
 
+        /// <summary>
+        /// Coroutine to open the drawer with animation.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator OpenRoutine()
         {
             float elapsedTime = 0;
@@ -96,9 +224,12 @@ namespace TTT.Managers
                 elapsedTime += Time.deltaTime;
             }
             isOpen = true;
-            HideUnopenedButtons();
         }
 
+        /// <summary>
+        /// Coroutine to close the drawer with animation.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator CloseRoutine()
         {
             float elapsedTime = 0;
@@ -115,6 +246,9 @@ namespace TTT.Managers
             isOpen = false;
         }
 
+        /// <summary>
+        /// Finds the furthest keyframe in the animation curve to determine the duration of the animation.
+        /// </summary>
         private void FindFurthestKeyFrame()
         {
             float maxTime = Mathf.NegativeInfinity;
@@ -126,19 +260,6 @@ namespace TTT.Managers
                 }
             }
             endTime = maxTime;
-        }
-
-        private void HideUnopenedButtons()
-        {
-            // Placeholder for future implementation
-            foreach (Transform child in transform)
-            {
-                Button button = child.GetComponent<Button>();
-                if (button != null && button.gameObject.activeSelf != isOpen)
-                {
-                    button.interactable = false;
-                }
-            }
         }
     }
 }

@@ -23,6 +23,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Testing/CoreOrderOfEvents.unity
     guid: 62c87947b01820a40aaddcdb1e2f2075
+  - enabled: 1
+    path: Assets/Scenes/Testing/Core_EventIntegration_Ro.unity
+    guid: 8ca61e373e3d3144a83b0c946c91cc7f
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 2cc4e184f0d14234791219624c7af01c, type: 2}
   m_UseUCBPForAssetBundles: 0
