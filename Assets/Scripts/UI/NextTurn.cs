@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class NextTurn : MonoBehaviour
 {
     [SerializeField]
-    private GameEvent _nextTurnEvent;
+    private GameEvent validatingNextTurnEvent;
 
     void Start()
     {
@@ -21,7 +21,6 @@ public class NextTurn : MonoBehaviour
     /// </summary>
     public void OnClick()
     {
-        Debug.Log("Next Turn Button Clicked");
-        _nextTurnEvent.Raise();
+        validatingNextTurnEvent.Raise();
     }
 }

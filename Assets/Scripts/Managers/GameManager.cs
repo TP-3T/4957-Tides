@@ -234,8 +234,6 @@ namespace TTT.Managers
 
         public void OnNextTurnClick(UnityEngine.Object eventArgs)
         {
-            // validate resource count
-
             // needs current player info
             Debug.Log("Next Turn Clicked - MapManager line 262");
             // if not last players turn, switch the player context to the next player
