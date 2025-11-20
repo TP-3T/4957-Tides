@@ -156,8 +156,55 @@ namespace TTT.Helpers
         }
 
         #endregion
-        
-        // transform to unity syntax
+
+        #region CONVERT MAPDATA
+
+        /// <summary>
+        /// Converts the API response into MapData
+        /// </summary>
+        /// <param name="apiTiles">List of tiles from the API</param>
+        /// <param name="mapName">Name for the map</param>
+        /// <returns>MapData ready to use in the game</returns>
+        private static MapData ConvertToMapData(List<ApiMapTile> apiTiles, string mapName)
+        {
+            int maxX = 0;
+            int maxZ = 0;
+
+            foreach (var tile in apiTiles)
+            {
+                if (tile.x_coord > maxX) { maxX = tile.x_coord; }
+                if (tile.z_coord > maxZ) { maxZ = tile.z_coord; }
+            }
+
+            int width = maxX + 1;
+            int height = maxZ + 1;
+
+            List<MapTileData> gameTiles = new List<MapTileData>();
+
+            foreach (var apiTile in apiTiles)
+            {
+                MapTileData gameTile = new MapTileData
+                {
+                    OffsetCoordinates = new UnityEngine.Vector2Int(apiTile.x_coord, apiTile.z_coord),
+                    
+                    TileType = apiTile.tile_data.tile_type,
+                    
+                    Height = apiTile.tile_data.elevation
+                };
+
+                gameTiles.Add(gameTile);
+            }
+
+            return new MapData
+            {
+                Name = mapName,
+                Width = width,
+                Height = height,
+                MapTilesData = gameTiles
+            };
+        }
+
+        #endregion
         
         // pass the data to other components
 
