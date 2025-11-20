@@ -235,10 +235,15 @@ namespace TTT.Managers
             StartCoroutine(RaiseSea());
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        public void OnMapMeshClickedServerRpc(Vector3 point, Color newColor)
+        public void OnMapMeshClicked(Vector3 point, Color newColor)
         {
+            // Debug.Log($"{point.x}, {point.y}, {point.z}");
+            Debug.Log(GetCubeCoordinatesFromPosition(point));
+
             int index = GetCellIndexFromPosition(point);
+
+            Debug.Log($"BIG INDEX: {index}");
+
             HexCell hc = HexCells[index];
             Vector3[] corners = HexMath.GetHexCorners(HexSize, HexOrientation);
             for (int i = 0; i < 6; i++)
@@ -347,7 +352,7 @@ namespace TTT.Managers
         {
             MapMeshClickedEventArgs args = eventArgs as MapMeshClickedEventArgs;
 
-            OnMapMeshClickedServerRpc(args.ClickedPoint, args.PlayerColor);
+            OnMapMeshClicked(args.ClickedPoint, args.PlayerColor);
         }
 
         public void OnFlood(UnityEngine.Object eventArgs)

@@ -9,6 +9,7 @@ namespace TTT.Helpers
     /// eg. public class MyClass: GenericSingleton<MyClass>{...}
     /// </summary>
     /// <typeparam name="T"> The class to make into a singleton</typeparam>
+    [RequireComponent(typeof(NetworkObject))]
     public class GenericNetworkSingleton<T> : NetworkBehaviour
         where T : Component
     {

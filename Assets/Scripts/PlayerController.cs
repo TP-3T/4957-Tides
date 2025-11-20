@@ -13,11 +13,12 @@ using UnityEngine.Events;
 /// It works by ensuring that only the owner of the networked
 /// player object has an active camera, preventing conflicts.
 /// </summary>
-public class PlayerController : NetworkBehaviour
+public class PlayerController : MonoBehaviour
 {
     const int LeftMouseIndex = 0;
 
     private Camera playerCamera;
+    private CameraController _cameraController;
 
     [SerializeField]
     private GameEvent _mapMeshClicked;
@@ -41,12 +42,7 @@ public class PlayerController : NetworkBehaviour
     {
         //Get a reference to the camera component on this object itself
         playerCamera = GetComponentInChildren<Camera>();
-
-        //Disable camera by default so it wont activate on other clients.
-        if (playerCamera != null)
-        {
-            playerCamera.enabled = false;
-        }
+        _cameraController = GetComponent<CameraController>();
     }
 
     /// <summary>
@@ -55,24 +51,24 @@ public class PlayerController : NetworkBehaviour
     /// it enables the camera for that player and disables the default
     /// scene camera to avoid conflicts.
     /// </summary>
-    public override void OnNetworkSpawn()
-    {
-        // NEW: Server assigns a unique color when the player spawns.
-        if (IsServer)
-        {
-            AssignUniquePlayerColor(OwnerClientId);
-        }
+    // public override void OnNetworkSpawn()
+    // {
+    //     // NEW: Server assigns a unique color when the player spawns.
+    //     if (IsServer)
+    //     {
+    //         AssignUniquePlayerColor(OwnerClientId);
+    //     }
 
-        if (IsOwner)
-        {
-            transform.position = startingPosition;
-            if (playerCamera != null)
-            {
-                playerCamera.enabled = true;
-                Debug.Log("Enable camera for local player");
-            }
-        }
-    }
+    //     if (IsOwner)
+    //     {
+    //         transform.position = startingPosition;
+    //         // if (playerCamera != null)
+    //         // {
+    //         //     playerCamera.enabled = true;
+    //         //     Debug.Log("Enable camera for local player");
+    //         // }
+    //     }
+    // }
 
     private void AssignUniquePlayerColor(ulong clientId)
     {
@@ -120,14 +116,13 @@ public class PlayerController : NetworkBehaviour
             )
             {
                 // Raise some event will deal with this later
-                // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
+                Debug.DrawLine(playerCamera.transform.position, raycastHit.point, Color.red);
 
                 _mapMeshClicked.Raise(
                     new MapMeshClickedEventArgs
                     {
                         ClickedPoint = raycastHit.point,
                         PlayerColor = PlayerColor.Value,
-                        PlayerId = OwnerClientId,
                     }
                 );
             }
