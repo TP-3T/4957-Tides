@@ -42,7 +42,10 @@ public class FeatureBuilder : MonoBehaviour
 
     private static Vector3 FixLocation(Vector3 location)
     {
-        HexCell? exactCell = MapManager.Instance.GetCellFromPosition(location, out _);
+        HexCell? exactCell = MapManager.Instance.GetCellFromPosition(
+            location,
+            out _
+        );
 
         if (exactCell == null)
         {
@@ -67,7 +70,11 @@ public class FeatureBuilder : MonoBehaviour
 
     private bool CheckIfCanBuild(Vector3 location, FeatureType featureType)
     {
-        if (SpawnedFeatures.GetItems().Any(feats => feats.CellPosition.Equals(location)))
+        if (
+            SpawnedFeatures
+                .GetItems()
+                .Any(feats => feats.CellPosition.Equals(location))
+        )
         {
             // then there's already something at this location
             return false;

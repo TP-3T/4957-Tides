@@ -7,7 +7,10 @@ namespace SFB
         public string Name;
         public string[] Extensions;
 
-        public ExtensionFilter(string filterName, params string[] filterExtensions)
+        public ExtensionFilter(
+            string filterName,
+            params string[] filterExtensions
+        )
         {
             Name = filterName;
             Extensions = filterExtensions;
@@ -67,7 +70,12 @@ namespace SFB
             bool multiselect
         )
         {
-            return _platformWrapper.OpenFilePanel(title, directory, extensions, multiselect);
+            return _platformWrapper.OpenFilePanel(
+                title,
+                directory,
+                extensions,
+                multiselect
+            );
         }
 
         /// <summary>
@@ -108,7 +116,13 @@ namespace SFB
             Action<string[]> cb
         )
         {
-            _platformWrapper.OpenFilePanelAsync(title, directory, extensions, multiselect, cb);
+            _platformWrapper.OpenFilePanelAsync(
+                title,
+                directory,
+                extensions,
+                multiselect,
+                cb
+            );
         }
 
         /// <summary>
@@ -119,9 +133,17 @@ namespace SFB
         /// <param name="directory">Root directory</param>
         /// <param name="multiselect"></param>
         /// <returns>Returns array of chosen paths. Zero length array when cancelled</returns>
-        public static string[] OpenFolderPanel(string title, string directory, bool multiselect)
+        public static string[] OpenFolderPanel(
+            string title,
+            string directory,
+            bool multiselect
+        )
         {
-            return _platformWrapper.OpenFolderPanel(title, directory, multiselect);
+            return _platformWrapper.OpenFolderPanel(
+                title,
+                directory,
+                multiselect
+            );
         }
 
         /// <summary>
@@ -139,7 +161,12 @@ namespace SFB
             Action<string[]> cb
         )
         {
-            _platformWrapper.OpenFolderPanelAsync(title, directory, multiselect, cb);
+            _platformWrapper.OpenFolderPanelAsync(
+                title,
+                directory,
+                multiselect,
+                cb
+            );
         }
 
         /// <summary>
@@ -178,7 +205,12 @@ namespace SFB
             ExtensionFilter[] extensions
         )
         {
-            return _platformWrapper.SaveFilePanel(title, directory, defaultName, extensions);
+            return _platformWrapper.SaveFilePanel(
+                title,
+                directory,
+                defaultName,
+                extensions
+            );
         }
 
         /// <summary>
@@ -219,7 +251,13 @@ namespace SFB
             Action<string> cb
         )
         {
-            _platformWrapper.SaveFilePanelAsync(title, directory, defaultName, extensions, cb);
+            _platformWrapper.SaveFilePanelAsync(
+                title,
+                directory,
+                defaultName,
+                extensions,
+                cb
+            );
         }
     }
 }

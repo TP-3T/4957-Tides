@@ -20,7 +20,7 @@ public class GameEventGenericListener<T> : MonoBehaviour
         GameEventEmitter<T>.OnEvent -= OnEvent;
     }
 
-    private void OnEvent(T data) 
+    private void OnEvent(T data)
     {
         _callback?.Invoke(data);
     }

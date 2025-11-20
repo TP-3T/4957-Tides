@@ -56,7 +56,8 @@ namespace SFB
                 fd.FileName = GetDirectoryPath(directory);
             }
             var res = fd.ShowDialog(new WindowWrapper(GetActiveWindow()));
-            var filenames = res == DialogResult.OK ? fd.FileNames : new string[0];
+            var filenames =
+                res == DialogResult.OK ? fd.FileNames : new string[0];
             fd.Dispose();
             return filenames;
         }
@@ -72,7 +73,11 @@ namespace SFB
             cb.Invoke(OpenFilePanel(title, directory, extensions, multiselect));
         }
 
-        public string[] OpenFolderPanel(string title, string directory, bool multiselect)
+        public string[] OpenFolderPanel(
+            string title,
+            string directory,
+            bool multiselect
+        )
         {
             var fd = new VistaFolderBrowserDialog();
             fd.Description = title;
@@ -81,7 +86,10 @@ namespace SFB
                 fd.SelectedPath = GetDirectoryPath(directory);
             }
             var res = fd.ShowDialog(new WindowWrapper(GetActiveWindow()));
-            var filenames = res == DialogResult.OK ? new[] { fd.SelectedPath } : new string[0];
+            var filenames =
+                res == DialogResult.OK
+                    ? new[] { fd.SelectedPath }
+                    : new string[0];
             fd.Dispose();
             return filenames;
         }
@@ -151,7 +159,9 @@ namespace SFB
 
         // .NET Framework FileDialog Filter format
         // https://msdn.microsoft.com/en-us/library/microsoft.win32.filedialog.filter
-        private static string GetFilterFromFileExtensionList(ExtensionFilter[] extensions)
+        private static string GetFilterFromFileExtensionList(
+            ExtensionFilter[] extensions
+        )
         {
             var filterString = "";
             foreach (var filter in extensions)
@@ -188,7 +198,8 @@ namespace SFB
             {
                 return directory;
             }
-            return Path.GetDirectoryName(directoryPath) + Path.DirectorySeparatorChar;
+            return Path.GetDirectoryName(directoryPath)
+                + Path.DirectorySeparatorChar;
         }
     }
 }

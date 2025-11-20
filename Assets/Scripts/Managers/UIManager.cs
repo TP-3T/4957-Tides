@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace TTT.Managers
 {
+    [RequireComponent(typeof(RectTransform))]
     /// <summary>
     /// Manager class that handles UI elements and state switching.
     /// <author> Rodrigo, Richard </author>
@@ -31,17 +32,14 @@ namespace TTT.Managers
         private int currentTabID = -1;
         private GameObject[] Tabs;
 
-        private Color activeTabColor,
-            inactiveTabColor;
-        public Vector2 InactiveTabSize,
-            activeTabSize;
+        private Color activeTabColor;
+        private Color inactiveTabColor;
 
         /// <summary>
         /// The prefab for a shop slot.
         /// </summary>
         [Tooltip("The prefab for a shop slot.")]
         public GameObject ShopSlotPrefab;
-
         public GameObject ShopSlotParent;
         public const float SlotSpacing = 20;
 

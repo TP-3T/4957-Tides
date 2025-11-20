@@ -10,7 +10,11 @@ namespace SFB
             ExtensionFilter[] extensions,
             bool multiselect
         );
-        string[] OpenFolderPanel(string title, string directory, bool multiselect);
+        string[] OpenFolderPanel(
+            string title,
+            string directory,
+            bool multiselect
+        );
         string SaveFilePanel(
             string title,
             string directory,

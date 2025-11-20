@@ -27,7 +27,12 @@ namespace TTT.Helpers
 
         private static string[] SelectFile()
         {
-            var paths = StandaloneFileBrowser.OpenFilePanel("Load Data", "", extensions, false);
+            var paths = StandaloneFileBrowser.OpenFilePanel(
+                "Load Data",
+                "",
+                extensions,
+                false
+            );
             return paths;
         }
     }

@@ -117,7 +117,11 @@ namespace SFB
             );
         }
 
-        public string[] OpenFolderPanel(string title, string directory, bool multiselect)
+        public string[] OpenFolderPanel(
+            string title,
+            string directory,
+            bool multiselect
+        )
         {
             var paths = Marshal.PtrToStringAnsi(
                 DialogOpenFolderPanel(title, directory, multiselect)
@@ -133,7 +137,12 @@ namespace SFB
         )
         {
             _openFolderCb = cb;
-            DialogOpenFolderPanelAsync(title, directory, multiselect, openFolderCb);
+            DialogOpenFolderPanelAsync(
+                title,
+                directory,
+                multiselect,
+                openFolderCb
+            );
         }
 
         public string SaveFilePanel(
@@ -171,7 +180,9 @@ namespace SFB
             );
         }
 
-        private static string GetFilterFromFileExtensionList(ExtensionFilter[] extensions)
+        private static string GetFilterFromFileExtensionList(
+            ExtensionFilter[] extensions
+        )
         {
             if (extensions == null)
             {
