@@ -155,6 +155,25 @@ namespace TTT.Helpers
             public ApiTileData tile_data;
         }
 
+        /// <summary>
+        /// Public class containing basic info about a map
+        /// Used for displaying map lists in UI
+        /// </summary>
+        [Serializable]
+        public class MapInfo
+        {
+            public int MapId;
+            public string MapName;
+            public string SteamId;
+
+            public MapInfo(int mapId, string mapName, string steamId)
+            {
+                MapId = mapId;
+                MapName = mapName;
+                SteamId = steamId;
+            }
+        }
+
         #endregion
 
         #region CONVERT MAPDATA
@@ -205,8 +224,83 @@ namespace TTT.Helpers
         }
 
         #endregion
-        
-        // pass the data to other components
+
+        #region PUBLIC METHODS
+
+        /// <summary>
+        /// Fetches and parses the list of available maps
+        /// Returns a list of MapInfo objects ready for UI display
+        /// </summary>
+        public static IEnumerator GetMapList(Action<List<MapInfo>> onSuccess, Action<string> onError)
+        {
+            string jsonResponse = null;
+            string error = null;
+
+            yield return FetchAllMaps(
+                json => jsonResponse = json,
+                err => error = err
+            );
+
+            if (error != null)
+            {
+                onError?.Invoke(error);
+                yield break;
+            }
+
+            try
+            {
+                List<ApiMapListItem> apiMaps = JsonConvert.DeserializeObject<List<ApiMapListItem>>(jsonResponse);
+
+                List<MapInfo> mapInfoList = new List<MapInfo>();
+                foreach (var apiMap in apiMaps)
+                {
+                    mapInfoList.Add(new MapInfo(apiMap.map_id, apiMap.map_name, apiMap.steam_id));
+                }
+
+                onSuccess?.Invoke(mapInfoList);
+            }
+            catch (Exception e)
+            {
+                onError?.Invoke($"Failed to parse map list: {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Fetches a map by ID, parses it, and converts it to MapData
+        /// Returns complete MapData ready for the game to use
+        /// </summary>
+        public static IEnumerator GetMapDataById(int mapId, string mapName, Action<MapData> onSuccess, Action<string> onError)
+        {
+            string jsonResponse = null;
+            string error = null;
+
+            yield return FetchMapByMapId(
+                mapId,
+                json => jsonResponse = json,
+                err => error = err
+            );
+
+            if (error != null)
+            {
+                onError?.Invoke(error);
+                yield break;
+            }
+
+            try
+            {
+                List<ApiMapTile> apiTiles = JsonConvert.DeserializeObject<List<ApiMapTile>>(jsonResponse);
+
+                MapData mapData = ConvertToMapData(apiTiles, mapName);
+
+                onSuccess?.Invoke(mapData);
+            }
+            catch (Exception e)
+            {
+                onError?.Invoke($"Failed to parse map data: {e.Message}");
+            }
+        }
+
+        #endregion
 
     }
 }
