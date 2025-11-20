@@ -52,6 +52,9 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
+        [SerializeField]
+        private GameEvent _OnLastPlayerTurnEvent;
+
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -227,6 +230,19 @@ namespace TTT.Managers
 
                 BuildingFeatureEvent.Raise(args);
             }
+        }
+
+        public void OnNextTurnClick(UnityEngine.Object eventArgs)
+        {
+            // validate resource count
+
+            // needs current player info
+            Debug.Log("Next Turn Clicked - MapManager line 262");
+            // if not last players turn, switch the player context to the next player
+            // next player turn event or something
+
+            //if last player turn then
+            _OnLastPlayerTurnEvent.Raise();
         }
     }
 }
