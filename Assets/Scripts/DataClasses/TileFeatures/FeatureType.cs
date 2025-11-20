@@ -24,7 +24,7 @@ namespace TTT.DataClasses.TileFeatures
         public string UniqueID { get; private set; }
 
         /// <summary>
-        /// The unique ID representing this feature type.
+        /// This feature's category (i.e. industrial, nature, etc.)
         /// </summary>
         [field: SerializeField]
         public FeatureCategory Category { get; private set; }

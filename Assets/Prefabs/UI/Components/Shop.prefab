@@ -33,7 +33,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.0005493164, y: 0.0000019073486}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &5607600237514026593
@@ -49,12 +49,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 20
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 0
+  m_ChildAlignment: 3
+  m_Spacing: 20
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 4776695680065651109}
   - component: {fileID: 4771369535010377852}
   m_Layer: 5
-  m_Name: ShopArea
+  m_Name: ShopContents
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -193,7 +193,7 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 6
   m_Spacing: 16.72
-  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ToOpen>k__BackingField: {fileID: 4655228308963635219}
-  <IsOpen>k__BackingField: 0
+  <IsOpen>k__BackingField: 1
   <MovementCurve>k__BackingField:
     serializedVersion: 2
     m_Curve:
@@ -286,7 +286,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   <MovementSeconds>k__BackingField: 0.5
-  <ShiftDirection>k__BackingField: 0
+  <ShiftDirection>k__BackingField: 1
   <ShiftPadding>k__BackingField: {x: 0, y: 0}
   startInspectMode: {fileID: 11400000, guid: d044f0a4c8d4e62419ddfec40a9a4a6b, type: 2}
   ShopSlotArea: {fileID: 937438038014111108}

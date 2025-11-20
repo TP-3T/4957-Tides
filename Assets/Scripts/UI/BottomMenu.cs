@@ -5,11 +5,7 @@ using System.Linq;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Managers;
-using UnityEditor.Graphs;
-using UnityEditor.TerrainTools;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 namespace TTT.UI
 {
@@ -119,6 +115,10 @@ namespace TTT.UI
                 AddToDictionaries
             );
             yield return buildingRoutine;
+            (EndPosition, StartPosition) = (StartPosition, EndPosition);
+            Toggle();
+            yield return CurrentShift;
+            IsOpen = false;
         }
 
         /// <summary>
@@ -192,12 +192,15 @@ namespace TTT.UI
             float slotWidth = ShopSlotPrefab
                 .transform.GetComponent<RectTransform>()
                 .rect.width;
-            float xOffset = SlotSpacing + slotList.Count * (slotWidth * 2);
             Vector3 parentPosition = ShopSlotArea.transform.position;
 
             GameObject slotObject = Instantiate(
                 ShopSlotPrefab,
-                new Vector3(xOffset, parentPosition.y, parentPosition.z),
+                new Vector3(
+                    parentPosition.x,
+                    parentPosition.y,
+                    parentPosition.z
+                ),
                 Quaternion.identity,
                 ShopSlotArea.transform
             );

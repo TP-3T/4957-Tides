@@ -197,7 +197,6 @@ namespace TTT.Managers
 
         /// <summary>
         /// Handles mesh click logic for BuildMode to raise build event.
-        /// Handles mesh click logic for BuildMode to raise build event.
         /// </summary>
         /// <param name="eventArgs"></param>
         public void OnMeshClicked(UnityEngine.Object eventArgs)

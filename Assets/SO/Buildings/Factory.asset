@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Factory
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: factory
+  <Category>k__BackingField: 0
   <DisplayName>k__BackingField: Factory
   <PollutionEmission>k__BackingField: 200
   <Constraints>k__BackingField:
@@ -21,7 +22,7 @@ MonoBehaviour:
       <Mode>k__BackingField: 0
       <List>k__BackingField: []
     <FeatureConstraints>k__BackingField: []
-  <BuildValidator>k__BackingField: {fileID: 11400000, guid: d4e273d8b77e90742a9605b7146ee4c8, type: 2}
+  <BuildValidator>k__BackingField: {fileID: 11400000, guid: 418d17bf1c05a9c40aff3428a267cd49, type: 2}
   <ResourceProducers>k__BackingField:
   - productionSchedule: {fileID: 11400000, guid: 17a0647e21e0cef458dc0b557a3a7cbe, type: 2}
     resourceAmounts:
