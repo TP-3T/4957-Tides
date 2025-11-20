@@ -642,6 +642,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      propertyPath: _OnFloodEnded
+      value: 
+      objectReference: {fileID: 11400000, guid: ae781f782e86038429c1d06bcfccf3ac, type: 2}
     - target: {fileID: 6838036057446226880, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
       propertyPath: m_Positions.Array.size
       value: 7
@@ -1351,6 +1355,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5329708062545644470, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      propertyPath: _TurnEndedEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: ae18fced95a4b6749b1a727654516355, type: 2}
     - target: {fileID: 6828651392784178001, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1455012885
