@@ -20,10 +20,100 @@ namespace TTT.Helpers
         private const string MAP_BY_NAME_ENDPOINT = "/maps/mapName";
 
         // build the request
-        
         // make the request
-        
         // gather the response
+
+        /// <summary>
+        /// Fetches the list of available maps from the database
+        /// </summary>
+        public static IEnumerator FetchAllMaps(Action<string> onSuccess, Action<string> onError)
+        {
+            string url = BASE_URL + MAPS_ENDPOINT;
+
+            UnityWebRequest request = UnityWebRequest.Get(url);
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = request.downloadHandler.text;
+                onSuccess?.Invoke(jsonResponse);
+            }
+            else
+            {
+                onError?.Invoke($"Request failed: {request.error}");
+            }
+
+            request.Dispose();
+        }
+
+        /// <summary>
+        /// Fetches a map by its map ID
+        /// </summary>
+        public static IEnumerator FetchMapByMapId(int mapId, Action<string> onSuccess, Action<string> onError)
+        {
+            string url = $"{BASE_URL}{MAP_BY_ID_ENDPOINT}/{mapId}";
+
+            UnityWebRequest request = UnityWebRequest.Get(url);
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = request.downloadHandler.text;
+                onSuccess?.Invoke(jsonResponse);
+            }
+            else
+            {
+                onError?.Invoke($"Request failed: {request.error}");
+            }
+
+            request.Dispose();
+        }
+
+        /// <summary>
+        /// Fetches all maps associated with the given steamID
+        /// </summary>
+        public static IEnumerator FetchAllMapsBySteamId(string steamId, Action<string> onSuccess, Action<string> onError)
+        {
+            string url = $"{BASE_URL}{MAP_BY_STEAMID_ENDPOINT}/{steamId}";
+
+            UnityWebRequest request = UnityWebRequest.Get(url);
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = request.downloadHandler.text;
+                onSuccess?.Invoke(jsonResponse);
+            }
+            else
+            {
+                onError?.Invoke($"Request failed: {request.error}");
+            }
+        }
+
+        /// <summary>
+        /// Fetches a map by its map name 
+        /// </summary>
+        public statuc IEnumerator FetchMapByMapName(string mapName, Action<string> onSuccess, Action<string> onError)
+        {
+            string url = $"{BASE_URL}{MAP_BY_NAME_ENDPOINT}/{mapName}";
+
+            UnityWebRequest request = UnityWebRequest.Get(url);
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = request.downloadHandler.text;
+                onSuccess?.Invoke(jsonResponse);
+            }
+            else
+            {
+                onError?.Invoke($"Request failed: {request.error}");
+            }
+        }
         
         // parse response into classes
         
