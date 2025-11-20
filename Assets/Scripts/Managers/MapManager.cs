@@ -363,7 +363,6 @@ namespace TTT.Managers
         {
             // needs current player info
             Debug.Log("Next Turn Clicked - MapManager line 262");
-
             // if not last players turn, switch the player context to the next player
             // next player turn event or something
 
