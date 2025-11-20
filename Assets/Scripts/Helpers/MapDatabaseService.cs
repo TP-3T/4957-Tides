@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using TTT.DataClasses.HexData;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -19,9 +20,7 @@ namespace TTT.Helpers
         private const string MAP_BY_STEAMID_ENDPOINT = "/maps/steamId";
         private const string MAP_BY_NAME_ENDPOINT = "/maps/mapName";
 
-        // build the request
-        // make the request
-        // gather the response
+        #region API REQUESTS
 
         /// <summary>
         /// Fetches the list of available maps from the database
@@ -96,7 +95,7 @@ namespace TTT.Helpers
         /// <summary>
         /// Fetches a map by its map name 
         /// </summary>
-        public statuc IEnumerator FetchMapByMapName(string mapName, Action<string> onSuccess, Action<string> onError)
+        public static IEnumerator FetchMapByMapName(string mapName, Action<string> onSuccess, Action<string> onError)
         {
             string url = $"{BASE_URL}{MAP_BY_NAME_ENDPOINT}/{mapName}";
 
@@ -114,8 +113,49 @@ namespace TTT.Helpers
                 onError?.Invoke($"Request failed: {request.error}");
             }
         }
+
+        #endregion
         
-        // parse response into classes
+        #region DATA CLASSES
+
+        /// <summary>
+        /// Represents a map with its details from the requests that return lists of maps
+        /// </summary>
+        [Serializable]
+        private class ApiMapListItem
+        {
+            public int map_id;
+            public string map_name;
+            public string steam_id;
+        }
+
+        /// <summary>
+        /// Represents a single tile's data
+        /// </summary>
+        [Serializable]
+        private class ApiTileData
+        {
+            public int tile_data_id;
+            public int tile_type;
+            public int elevation;
+        }
+
+        /// <summary>
+        /// Represents a single tile from the map tile array
+        /// </summary>
+        [Serializable]
+        private class ApiMapTile
+        {
+            public int map_id;
+            public int tile_data_id;
+            public int z_coord;
+            public int x_coord;
+            public int owner;
+            public string label;
+            public ApiTileData tile_data;
+        }
+
+        #endregion
         
         // transform to unity syntax
         
