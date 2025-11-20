@@ -22,6 +22,7 @@
       "Addressables",
       "Behaviour",
       "Despawn",
+      "Dont",
       "ifndef",
       "lerp",
       "Mathf",
@@ -138,8 +139,8 @@
       "ms-dotnettools.csdevkit",
       "visualstudiotoolsforunity.vstuc",
       //Intellicode autocomplete
-      "visualstudioexptteam.vscodeintellicode",
-      "visualstudioexptteam.intellicode-api-usage-examples",
+      //   "visualstudioexptteam.vscodeintellicode",
+      //   "visualstudioexptteam.intellicode-api-usage-examples",
       //Style
       "sdras.night-owl",
       "aaron-bond.better-comments",

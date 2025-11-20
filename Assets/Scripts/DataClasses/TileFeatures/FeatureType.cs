@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.PlayerResources;
+using UnityEditor;
 using UnityEngine;
 
 namespace TTT.DataClasses.TileFeatures
@@ -23,6 +24,12 @@ namespace TTT.DataClasses.TileFeatures
         public string UniqueID { get; private set; }
 
         /// <summary>
+        /// This feature's category (i.e. industrial, nature, etc.)
+        /// </summary>
+        [field: SerializeField]
+        public FeatureCategory Category { get; private set; }
+
+        /// <summary>
         /// Name to be displayed on UI.
         /// </summary>
         [field: Tooltip("Name to be displayed on UI.")]
@@ -32,7 +39,7 @@ namespace TTT.DataClasses.TileFeatures
         /// <summary>
         /// The amount of pollution emitted per turn.
         /// </summary>
-        [field: Tooltip("The amount of polution emited per turn.")]
+        [field: Tooltip("The amount of pollution emitted per turn.")]
         [field: SerializeField]
         public int PollutionEmission { get; private set; }
 

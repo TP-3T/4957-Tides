@@ -1,26 +1,29 @@
+using System.IO;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace TTT.Managers
 {
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
         [SerializeField]
-        public TextAsset LevelFile;
-
-        [SerializeField]
         private GameEvent newMapEvent;
 
-        private string[] Seasons = { "Spring", "Summer", "Fall", "Winter" };
+        private readonly string[] Seasons =
+        {
+            "Spring",
+            "Summer",
+            "Fall",
+            "Winter",
+        };
 
         //serialize for now
-        [SerializeField]
-        private int Year = 1;
+        [field: SerializeField]
+        public int Year { get; private set; } = 1;
 
         [SerializeField]
         private string Season;
@@ -28,26 +31,23 @@ namespace TTT.Managers
         [SerializeField]
         private int CO2;
 
-        public GameEvent SeasonChanging;
+        [SerializeField]
+        private GameEvent SeasonChanging;
 
         [SerializeField]
-        public GameEvent _OnYearChangeEvent;
+        private GameEvent _OnYearChangeEvent;
 
         [SerializeField]
-        public GameEvent _FloodEvent;
+        private GameEvent _FloodEvent;
 
+        [SerializeField]
         private InteractionMode interactionMode;
 
+        [SerializeField]
         private FeatureType buildingFeatureType;
 
-        public GameEvent BuildingFeatureEvent;
-
-        // private AssetReference SeaPrefab = new("P_Sea");
-
-        // private AssetReference HexGrid = new("P_HexGrid");
-
-        // private GameObject sea;
-        // private GameObject hexGrid;
+        [SerializeField]
+        private GameEvent BuildingFeatureEvent;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -57,45 +57,47 @@ namespace TTT.Managers
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
-        public void OnStartNetworkEvent(Object eventArgs)
+        public void OnStartNetworkEvent(UnityEngine.Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
-            if (args.IsHost)
+            try
             {
-                Debug.Log("I am being spawned as a host");
-                try
+                if (args.IsHost)
                 {
-                    NetworkManager.Singleton.StartHost();
+                    StartGameHost();
                 }
-                catch (System.Exception e)
+                else
                 {
-                    Debug.LogError($"Failed to start host: {e.Message}");
-                    return;
+                    StartGameClient();
                 }
-
-                newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
             }
-            else
+            catch (System.Exception e)
             {
-                Debug.Log("I am being spawned as a client");
-                NetworkManager.Singleton.StartClient();
+                Debug.LogError($"Failed to start host: {e.Message}");
+                return;
             }
         }
 
-        // private void SpawnSea(GameObject obj)
-        // {
-        //     sea = Instantiate(obj);
-        //     sea.GetComponent<NetworkObject>().Spawn();
-        // }
+        private void StartGameClient()
+        {
+            NetworkManager.Singleton.StartClient();
+        }
 
-        // private void SpawnGrid(GameObject obj)
-        // {
-        //     hexGrid = Instantiate(obj);
-        //     hexGrid.GetComponent<NetworkObject>().Spawn();
-        //     newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
-        // }
+        private void StartGameHost()
+        {
+            NetworkManager.Singleton.StartHost();
 
-        public void OnNewMapFinish(Object eventArgs)
+            if (LoadExternalJson.TryGetDataJson(out TextAsset newMap))
+            {
+                newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
+            }
+            else
+            {
+                throw new IOException("Could not load file.");
+            }
+        }
+
+        public void OnNewMapFinish(UnityEngine.Object eventArgs)
         {
             NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
 
@@ -119,7 +121,8 @@ namespace TTT.Managers
             int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
 
             // % to wrap around to the beginning after winter
-            int nextSeasonIndex = (currentSeasonIndex + 1) % this.Seasons.Length;
+            int nextSeasonIndex =
+                (currentSeasonIndex + 1) % this.Seasons.Length;
 
             this.Season = this.Seasons[nextSeasonIndex];
 
@@ -168,17 +171,6 @@ namespace TTT.Managers
             return this.CO2;
         }
 
-        // /// <summary>
-        // /// Method from INextTurnListener interface. Called when Next Turn event is dispatched.
-        // /// </summary>
-        // /// <param name="nt">The Next Turn Event</param>
-        // public void OnEventRaised(NextTurn nt)
-        // {
-        //     // increment season here
-        //     Debug.Log("1. Increment Season -GameManager" + nt.ToString());
-        //     this.IncrementSeason();
-        // }
-
         /// <summary>
         /// Starts the build mode event, disabling certain features.
         /// </summary>
@@ -204,7 +196,7 @@ namespace TTT.Managers
         }
 
         /// <summary>
-        /// Handles mesh click logic for buildmode to raise build event.
+        /// Handles mesh click logic for BuildMode to raise build event.
         /// </summary>
         /// <param name="eventArgs"></param>
         public void OnMeshClicked(UnityEngine.Object eventArgs)
@@ -217,7 +209,8 @@ namespace TTT.Managers
             if (interactionMode == InteractionMode.BUILDING)
             {
                 // raise build event
-                var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                var args =
+                    ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                 args.Location = clickedArgs.ClickedPoint;
                 args.FeatureType = buildingFeatureType;
 
@@ -230,5 +223,4 @@ namespace TTT.Managers
             }
         }
     }
-    
 }

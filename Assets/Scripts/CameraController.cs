@@ -124,7 +124,8 @@ public class CameraController : MonoBehaviour
     /// </summary>
     private void UpdateVelocity()
     {
-        horizontalVelocity = (this.transform.position - lastPosition) / Time.deltaTime;
+        horizontalVelocity =
+            (this.transform.position - lastPosition) / Time.deltaTime;
 
         horizontalVelocity.z = NO_VERTICAL_VELOCITY;
 
@@ -198,7 +199,8 @@ public class CameraController : MonoBehaviour
         {
             speed = Mathf.Lerp(speed, MAX_SPEED, ACCELERATION * Time.deltaTime);
 
-            transform.position += speed * Time.deltaTime * targetPosition.normalized;
+            transform.position +=
+                speed * Time.deltaTime * targetPosition.normalized;
         }
         else
         {
@@ -231,9 +233,15 @@ public class CameraController : MonoBehaviour
 
             mouseDeltaX = inputVal.ReadValue<Vector2>().x;
 
-            rotationY = mouseDeltaX * MAX_ROTATION_SPEED + transform.rotation.eulerAngles.y;
+            rotationY =
+                mouseDeltaX * MAX_ROTATION_SPEED
+                + transform.rotation.eulerAngles.y;
 
-            transform.rotation = Quaternion.Euler(ROTATION_X, rotationY, ROTATION_Z);
+            transform.rotation = Quaternion.Euler(
+                ROTATION_X,
+                rotationY,
+                ROTATION_Z
+            );
         }
     }
 
@@ -324,12 +332,15 @@ public class CameraController : MonoBehaviour
             moveDirection = Vector3.zero;
 
             if (
-                Mathf.Abs(screenDelta.x) > SCREEN_EDGE_MAX - SCREEN_EDGE_TOLERANCE
-                || Mathf.Abs(screenDelta.y) > SCREEN_EDGE_MAX - SCREEN_EDGE_TOLERANCE
+                Mathf.Abs(screenDelta.x)
+                    > SCREEN_EDGE_MAX - SCREEN_EDGE_TOLERANCE
+                || Mathf.Abs(screenDelta.y)
+                    > SCREEN_EDGE_MAX - SCREEN_EDGE_TOLERANCE
             )
             {
                 moveDirection =
-                    GetCameraRight() * screenDelta.x + GetCameraForward() * screenDelta.y;
+                    GetCameraRight() * screenDelta.x
+                    + GetCameraForward() * screenDelta.y;
 
                 moveDirection.y = NO_VERTICAL_VELOCITY;
 
@@ -390,7 +401,8 @@ public class CameraController : MonoBehaviour
         float terrainHeight;
         int layerMask;
 
-        raycastOrigin = transform.position + Vector3.up * TERRAIN_RAYCAST_HEIGHT_OFFSET;
+        raycastOrigin =
+            transform.position + Vector3.up * TERRAIN_RAYCAST_HEIGHT_OFFSET;
         raycastDirection = Vector3.down;
         // layerMask = ~LayerMask.GetMask("Ignore Raycast");
         layerMask = 1 << 10;
