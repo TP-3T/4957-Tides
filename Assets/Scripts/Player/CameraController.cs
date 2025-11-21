@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TTT.Input;
 
 /// <summary>
 /// Controls camera functionality

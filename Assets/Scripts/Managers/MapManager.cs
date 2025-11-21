@@ -77,6 +77,8 @@ namespace TTT.Managers
                 OnClientConnect;
         }
 
+#region:SPAWN MAP OBJECTS
+
         private IEnumerator SpawnMapObjects()
         {
             yield return AssetLoader<GameObject>.Load(
@@ -235,6 +237,10 @@ namespace TTT.Managers
             StartCoroutine(RaiseSea());
         }
 
+#endregion
+
+#region:COOL STUFF
+
         public void OnMapMeshClicked(Vector3 point, Color newColor)
         {
             // Debug.Log($"{point.x}, {point.y}, {point.z}");
@@ -377,3 +383,5 @@ namespace TTT.Managers
         }
     }
 }
+
+#endregion

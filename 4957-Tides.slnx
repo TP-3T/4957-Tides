@@ -6,6 +6,7 @@
   <Project Path="TTT.GameEvents.csproj" />
   <Project Path="SFB.csproj" />
   <Project Path="UI.csproj" />
+  <Project Path="TTT.Player.csproj" />
   <Project Path="TTT.Editors.csproj" />
   <Project Path="TTT.Managers.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
@@ -13,6 +14,7 @@
   <Project Path="TTT.DataClasses.csproj" />
   <Project Path="TTT.DataClasses.Terrain.csproj" />
   <Project Path="TTT.DataClasses.States.csproj" />
+  <Project Path="TTT.Input.csproj" />
   <Project Path="TTT.DataClasses.PlayerResources.csproj" />
   <Project Path="TTT.Helpers.csproj" />
   <Project Path="EditMode.csproj" />

@@ -1,3 +1,4 @@
+using System;
 using TTT.GameEvents;
 using TTT.Hex;
 using Unity.Netcode;
@@ -15,23 +16,20 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
-    const int LeftMouseIndex = 0;
-
-    private Camera playerCamera;
-    private CameraController _cameraController;
+    private const int LeftMouseIndex = 0;
 
     [SerializeField]
     private GameEvent _mapMeshClicked;
+    private Camera playerCamera;
+    private CameraController _cameraController;
+    private readonly Vector3 startingPosition = new(0, 10, -10);
 
-    //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
-    //*  We should look into the Unity Input System Package
-    readonly Vector3 startingPosition = new(0, 10, -10);
     public NetworkVariable<Color> PlayerColor = new(
         Color.white,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
-    public float DesiredCellHeight = 1.0f;
+    public Guid guid { get; set; }
 
     /// <summary>
     /// Called when the script instance is being loaded.
@@ -70,30 +68,20 @@ public class PlayerController : MonoBehaviour
     //     }
     // }
 
-    private void AssignUniquePlayerColor(ulong clientId)
-    {
-        Color uniqueColor = (clientId % 4) switch
-        {
-            // Cycle through 4 basic colors
-            0 => Color.red,
-            1 => Color.blue,
-            2 => Color.green,
-            3 => Color.yellow,
-            _ => Color.white,
-        };
-        PlayerColor.Value = uniqueColor;
-        Debug.Log($"Assigned color {PlayerColor.Value} to Player {clientId}");
-    }
-
-    private void FindHexGridAfterConnection(ulong clientId)
-    {
-        // The event fires for *all* clients connecting, but we only care about the local player's logic.
-        if (NetworkManager.Singleton.LocalClientId == clientId)
-        {
-            // Unsubscribe immediately to prevent running again.
-            NetworkManager.Singleton.OnClientConnectedCallback -= FindHexGridAfterConnection;
-        }
-    }
+    // private void AssignUniquePlayerColor(ulong clientId)
+    // {
+    //     Color uniqueColor = (clientId % 4) switch
+    //     {
+    //         // Cycle through 4 basic colors
+    //         0 => Color.red,
+    //         1 => Color.blue,
+    //         2 => Color.green,
+    //         3 => Color.yellow,
+    //         _ => Color.white,
+    //     };
+    //     PlayerColor.Value = uniqueColor;
+    //     Debug.Log($"Assigned color {PlayerColor.Value} to Player {clientId}");
+    // }
 
     /// <summary>
     /// Called once per frame to handle real-time input and camera controls.

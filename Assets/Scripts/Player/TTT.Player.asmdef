@@ -1,0 +1,20 @@
+{
+    "name": "TTT.Player",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0584c7e699b26eb43bd6f8f5022c28bc",
+        "GUID:4c861275823ef884d91df8647f4caa34",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:71e533fced2dadd4eb3e488bef7bdc27"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

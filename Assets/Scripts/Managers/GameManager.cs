@@ -4,6 +4,7 @@ using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
+using UnityEditor.Build;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -55,6 +56,12 @@ namespace TTT.Managers
             this.Season = Seasons[0];
             this.CO2 = 0;
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback +=
+                OnClientConnect;
         }
 
         public void OnStartNetworkEvent(UnityEngine.Object eventArgs)
@@ -111,6 +118,11 @@ namespace TTT.Managers
             {
                 Debug.Log("Wow, map was loaded!");
             }
+        }
+
+        public void OnClientConnect(ulong clientId)
+        {
+            Debug.Log($"new client connected {clientId}");
         }
 
         /// <summary>
@@ -195,8 +207,12 @@ namespace TTT.Managers
             interactionMode = InteractionMode.INSPECTING;
         }
 
-        [ClientRpc]
-        public void OnMeshClickedClientRpc(UnityEngine.Object eventArgs)
+        /// <summary>
+        /// TODO
+        /// - This will be a client RPC which will show the building that XYZ has placed.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void MeshClicked(UnityEngine.Object eventArgs)
         {
             if (eventArgs is not MapMeshClickedEventArgs clickedArgs)
             {
@@ -233,7 +249,7 @@ namespace TTT.Managers
 
             if (interactionMode == InteractionMode.BUILDING)
             {
-                OnMeshClickedClientRpc(eventArgs);
+                MeshClicked(eventArgs);
             }
         }
     }
