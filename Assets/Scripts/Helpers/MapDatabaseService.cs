@@ -131,29 +131,29 @@ namespace TTT.Helpers
         }
 
         /// <summary>
-        /// Represents a single tile's data
+        /// Represents a single tile's properties from the new API format
         /// </summary>
         [Serializable]
-        private class ApiTileData
+        private class ApiTileInfo
         {
-            public int tile_data_id;
-            public int tile_type;
-            public int elevation;
+            public string Feature;
+            public int TileType;
+            public int Owner;
+            public int Elevation;
+            public string Label;
         }
 
         /// <summary>
-        /// Represents a single tile from the map tile array
+        /// Represents the map response from the API
         /// </summary>
         [Serializable]
-        private class ApiMapTile
+        private class ApiMapResponse
         {
-            public int map_id;
-            public int tile_data_id;
-            public int z_coord;
-            public int x_coord;
-            public int owner;
-            public string label;
-            public ApiTileData tile_data;
+            public int MapID;
+            public string SteamID;
+            public string MapName;
+            public string WorldState;
+            public Dictionary<string, Dictionary<string, ApiTileInfo>> MapTile;
         }
 
         /// <summary>
@@ -182,18 +182,23 @@ namespace TTT.Helpers
         /// <summary>
         /// Converts the API response into MapData
         /// </summary>
-        /// <param name="apiTiles">List of tiles from the API</param>
-        /// <param name="mapName">Name for the map</param>
+        /// <param name="apiResponse">The map response from the API</param>
         /// <returns>MapData ready to use in the game</returns>
-        private static MapData ConvertToMapData(List<ApiMapTile> apiTiles, string mapName)
+        private static MapData ConvertToMapData(ApiMapResponse apiResponse)
         {
             int maxX = 0;
             int maxZ = 0;
 
-            foreach (var tile in apiTiles)
+            foreach (var xEntry in apiResponse.MapTile)
             {
-                if (tile.x_coord > maxX) { maxX = tile.x_coord; }
-                if (tile.z_coord > maxZ) { maxZ = tile.z_coord; }
+                int x = int.Parse(xEntry.Key);
+                if (x > maxX) { maxX = x; }
+
+                foreach (var zEntry in xEntry.Value)
+                {
+                    int z = int.Parse(zEntry.Key);
+                    if (z > maxZ) { maxZ = z; }
+                }
             }
 
             int width = maxX + 1;
@@ -201,23 +206,31 @@ namespace TTT.Helpers
 
             List<MapTileData> gameTiles = new List<MapTileData>();
 
-            foreach (var apiTile in apiTiles)
+            foreach (var xEntry in apiResponse.MapTile)
             {
-                MapTileData gameTile = new MapTileData
-                {
-                    OffsetCoordinates = new OffsetCoordinates(apiTile.x_coord, apiTile.z_coord),
-                    
-                    TileType = (TerrainTypeId)apiTile.tile_data.tile_type,
-                    
-                    Height = apiTile.tile_data.elevation
-                };
+                int x = int.Parse(xEntry.Key);
 
-                gameTiles.Add(gameTile);
+                foreach (var zEntry in xEntry.Value)
+                {
+                    int z = int.Parse(zEntry.Key);
+                    ApiTileInfo tileInfo = zEntry.Value;
+
+                    MapTileData gameTile = new MapTileData
+                    {
+                        OffsetCoordinates = new OffsetCoordinates(x, z),
+                        
+                        TileType = (TerrainTypeId)tileInfo.TileType,
+                        
+                        Height = tileInfo.Elevation
+                    };
+
+                    gameTiles.Add(gameTile);
+                }
             }
 
             return new MapData
             {
-                Name = mapName,
+                Name = apiResponse.MapName,
                 Width = width,
                 Height = height,
                 MapTilesData = gameTiles
