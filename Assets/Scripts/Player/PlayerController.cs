@@ -59,8 +59,7 @@ public class PlayerController : NetworkBehaviour
             Guid = Guid.NewGuid();
             PlayerPrefs.SetString(playerGuid, Guid.ToString());
         }
-
-        Debug.Log(Guid.ToString());
+        // Debug.Log(Guid.ToString());
     }
 
     /// <summary>

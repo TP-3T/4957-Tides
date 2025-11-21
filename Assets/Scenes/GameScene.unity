@@ -436,6 +436,10 @@ PrefabInstance:
       propertyPath: NetworkConfig.ForceSamePrefabs
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5287792316253268995, guid: 897fad17376beb44da7e5f8638f4b74d, type: 3}
+      propertyPath: ConnectionData.Port
+      value: 6768
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1321,15 +1325,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1682643022632770007, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 518.2298
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1682643022632770007, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 357.36414
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1682643022632770007, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.557776
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1682643022632770007, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1359,6 +1363,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5329708062545644470, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      propertyPath: _currentPlayers
+      value: 
+      objectReference: {fileID: 11400000, guid: fb4a8ec8b57b0e74986a5969c7a07241, type: 2}
+    - target: {fileID: 5329708062545644470, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      propertyPath: _connectedClients
+      value: 
+      objectReference: {fileID: 11400000, guid: fb4a8ec8b57b0e74986a5969c7a07241, type: 2}
     - target: {fileID: 6828651392784178001, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1455012885

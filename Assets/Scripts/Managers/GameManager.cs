@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Codice.CM.Common.Tree;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
+using TTT.GameEvents.Assets.Scripts.GameEvents.Args;
 using TTT.Helpers;
 using Unity.Netcode;
-using UnityEditor.Build;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -41,16 +44,22 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent _FloodEvent;
         [SerializeField]
-        private GameEvent _currentPlayer;
+        private GameEvent _currentClient;
+        [SerializeField]
+        private GameEvent _connectedClients;
 
         [SerializeField]
-        private InteractionMode interactionMode;
+        private TTT.DataClasses.States.InteractionMode interactionMode;
 
         [SerializeField]
         private FeatureType buildingFeatureType;
 
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
+
+
+        private List<ulong> _allPlayers = new List<ulong>();
+        private ulong _currentPlauer;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -69,8 +78,8 @@ namespace TTT.Managers
         public void OnStartNetworkEvent(UnityEngine.Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
-            try
-            {
+            // try
+            // {
                 if (args.IsHost)
                 {
                     StartGameHost();
@@ -79,12 +88,12 @@ namespace TTT.Managers
                 {
                     StartGameClient();
                 }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Failed to start host: {e.Message}");
-                return;
-            }
+            // }
+            // catch (System.Exception e)
+            // {
+            //     Debug.LogError($"Failed to start host: {e.Message}");
+            //     return;
+            // }
         }
 
         private void StartGameClient()
@@ -118,13 +127,27 @@ namespace TTT.Managers
             }
             else
             {
-                Debug.Log("Wow, map was loaded!");
+                // Debug.Log("Wow, map was loaded!");
             }
+        }
+
+        [ClientRpc]
+        public void RegisterClientClientRpc(ulong[] clients)
+        {
+            Debug.Log($"there are {clients.Count()} in the game rn");
+
+            _connectedClients.Raise(new ConnectedCilentsEventArgs()
+            {
+                clientIds = clients
+            });
         }
 
         public void OnClientConnect(ulong clientId)
         {
             Debug.Log($"new client connected {clientId}");
+            _allPlayers.Add(clientId);
+            ulong[] clientIds = _allPlayers.ToArray();
+            RegisterClientClientRpc(clientIds);
         }
 
         /// <summary>
@@ -196,7 +219,7 @@ namespace TTT.Managers
                 return;
             }
 
-            interactionMode = InteractionMode.BUILDING;
+            interactionMode = DataClasses.States.InteractionMode.BUILDING;
             buildingFeatureType = featureType;
         }
 
@@ -206,7 +229,7 @@ namespace TTT.Managers
         /// <param name="_"></param>
         public void StartInspectMode(UnityEngine.Object _)
         {
-            interactionMode = InteractionMode.INSPECTING;
+            interactionMode = DataClasses.States.InteractionMode.INSPECTING;
         }
 
         /// <summary>
@@ -221,7 +244,7 @@ namespace TTT.Managers
                 return;
             }
 
-            if (interactionMode == InteractionMode.BUILDING)
+            if (interactionMode == DataClasses.States.InteractionMode.BUILDING)
             {
                 // raise build event
                 var args =
@@ -249,7 +272,7 @@ namespace TTT.Managers
                 return;
             }
 
-            if (interactionMode == InteractionMode.BUILDING)
+            if (interactionMode == DataClasses.States.InteractionMode.BUILDING)
             {
                 MeshClicked(eventArgs);
             }
