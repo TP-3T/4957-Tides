@@ -638,10 +638,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25183917c5c65b3439d75f59c4c09548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OneShotSource: {fileID: 6910046185518524185}
   OneShotEntries:
   - {fileID: 11400000, guid: f327bbc264bbce749bbef7d6e590299e, type: 2}
-  AmbienceEntries: []
+  OneShotSource: {fileID: 6910046185518524185}
+  AmbienceEntries:
+  - {fileID: 11400000, guid: e6092e2c236a69a449bd61dc57f59b2e, type: 2}
+  - {fileID: 11400000, guid: e6f81a27e97c3e5468622d6e30339e35, type: 2}
+  - {fileID: 11400000, guid: feb82add8a556914994556e1641cd52c, type: 2}
+  - {fileID: 11400000, guid: df31b030ced5c9a448c3129382a68381, type: 2}
   AmbienceFadingPlayer: {fileID: 2526911699916503797}
   MusicEntries: []
   MusicFadingPlayer: {fileID: 7715076949276073071}

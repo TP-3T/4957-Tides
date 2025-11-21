@@ -61,6 +61,15 @@ namespace TTT.Managers
         }
 
         /// <summary>
+        /// Plays the given ambience track with fading.
+        /// </summary>
+        /// <param name="name">The name of the AudioEntry clip to play</param>
+        public void PlayAmbience(string name)
+        {
+            PlayAmbience(name, true);
+        }
+
+        /// <summary>
         /// Checks if ambience is currently fading.
         /// </summary>
         /// <returns>True if ambience is fading, false otherwise</returns>
