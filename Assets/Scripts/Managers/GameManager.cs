@@ -32,6 +32,9 @@ namespace TTT.Managers
         private int CO2;
 
         [SerializeField]
+        private int Temperature;
+
+        [SerializeField]
         private GameEvent SeasonChanging;
 
         [SerializeField]
@@ -181,6 +184,14 @@ namespace TTT.Managers
         }
 
         /// <summary>
+        /// Gets the current temperature.
+        /// </summary>
+        public int GetTemperature()
+        {
+            return this.Temperature;
+        }
+
+        /// <summary>
         /// Starts the build mode event, disabling certain features.
         /// </summary>
         /// <param name="eventArgs"></param>
@@ -232,7 +243,7 @@ namespace TTT.Managers
             }
         }
 
-        public void OnNextTurnClick(UnityEngine.Object eventArgs)
+        public void OnNextTurnClick(Object _)
         {
             // needs current player info
             Debug.Log("Next Turn Clicked - MapManager line 262");
@@ -241,6 +252,11 @@ namespace TTT.Managers
 
             //if last player turn then
             _OnLastPlayerTurnEvent.Raise();
+        }
+
+        public void OnPlayerLose(Object _)
+        {
+            Debug.Log("Player has lost the game.");
         }
     }
 }
