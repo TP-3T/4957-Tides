@@ -40,6 +40,8 @@ namespace TTT.Managers
 
         [SerializeField]
         private GameEvent _FloodEvent;
+        [SerializeField]
+        private GameEvent _currentPlayer;
 
         [SerializeField]
         private InteractionMode interactionMode;

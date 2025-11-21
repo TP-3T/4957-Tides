@@ -434,7 +434,7 @@ PrefabInstance:
       objectReference: {fileID: 3588933447207156260, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
     - target: {fileID: 2356306980104920488, guid: 897fad17376beb44da7e5f8638f4b74d, type: 3}
       propertyPath: NetworkConfig.ForceSamePrefabs
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

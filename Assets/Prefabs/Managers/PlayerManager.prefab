@@ -134,7 +134,7 @@ MonoBehaviour:
   _mapMeshClicked: {fileID: 11400000, guid: 430d05d8968fdce498f62567aa054de0, type: 2}
   PlayerColor:
     m_InternalValue: {r: 1, g: 1, b: 1, a: 1}
-  DesiredCellHeight: 1
+  playerGuid: playerguid
 --- !u!114 &486052804758396404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,7 +239,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3720085885817680194}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &8746416293728571210
 MonoBehaviour:
   m_ObjectHideFlags: 0

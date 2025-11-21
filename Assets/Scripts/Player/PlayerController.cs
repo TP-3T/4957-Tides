@@ -30,7 +30,7 @@ public class PlayerController : NetworkBehaviour
         NetworkVariableWritePermission.Server
     );
     public string playerGuid = "playerguid";
-    public Guid guid { get; set; }
+    public Guid Guid { get; set; }
 
     /// <summary>
     /// Called when the script instance is being loaded.
@@ -39,22 +39,28 @@ public class PlayerController : NetworkBehaviour
     /// </summary>
     void Awake()
     {
+
+        //Get a reference to the camera component on this object itself
+        playerCamera = GetComponentInChildren<Camera>();
+        _cameraController = GetComponent<CameraController>();
+    }
+
+    public override void OnNetworkSpawn()
+    {
         // WO: presumably this would be the players steam ID in the future
         // seeing as this is not something that currently is a thing
         // we will be improvising here in core logic (as we frequently find ourselves doing)
         if (PlayerPrefs.HasKey(playerGuid))
         {
-            guid = Guid.Parse(PlayerPrefs.GetString(playerGuid));
+            Guid = Guid.Parse(PlayerPrefs.GetString(playerGuid));
         }
         else
         {
-            guid = new Guid();
-            PlayerPrefs.SetString(playerGuid, guid.ToString());
+            Guid = Guid.NewGuid();
+            PlayerPrefs.SetString(playerGuid, Guid.ToString());
         }
 
-        //Get a reference to the camera component on this object itself
-        playerCamera = GetComponentInChildren<Camera>();
-        _cameraController = GetComponent<CameraController>();
+        Debug.Log(Guid.ToString());
     }
 
     /// <summary>

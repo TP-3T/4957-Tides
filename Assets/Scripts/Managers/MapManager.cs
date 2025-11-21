@@ -239,16 +239,16 @@ namespace TTT.Managers
 
 #endregion
 
-#region:COOL STUFF
+#region:INTERACT W/ MAP
 
         public void OnMapMeshClicked(Vector3 point, Color newColor)
         {
             // Debug.Log($"{point.x}, {point.y}, {point.z}");
-            Debug.Log(GetCubeCoordinatesFromPosition(point));
+            // Debug.Log(GetCubeCoordinatesFromPosition(point));
 
             int index = GetCellIndexFromPosition(point);
 
-            Debug.Log($"BIG INDEX: {index}");
+            // Debug.Log($"BIG INDEX: {index}");
 
             HexCell hc = HexCells[index];
             Vector3[] corners = HexMath.GetHexCorners(HexSize, HexOrientation);
