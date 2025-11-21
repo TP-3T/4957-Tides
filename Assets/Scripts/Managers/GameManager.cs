@@ -41,6 +41,9 @@ namespace TTT.Managers
         private GameEvent _FloodEvent;
 
         [SerializeField]
+        private GameEvent _TurnEndedEvent;
+
+        [SerializeField]
         private InteractionMode interactionMode;
 
         [SerializeField]
@@ -48,6 +51,9 @@ namespace TTT.Managers
 
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
+
+        [SerializeField]
+        private GameEvent _OnLastPlayerTurnEvent;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -130,6 +136,9 @@ namespace TTT.Managers
             {
                 this.IncrementYear();
                 _OnYearChangeEvent.Raise();
+            } else
+            {
+                _TurnEndedEvent.Raise();
             }
         }
 
@@ -221,6 +230,17 @@ namespace TTT.Managers
 
                 BuildingFeatureEvent.Raise(args);
             }
+        }
+
+        public void OnNextTurnClick(UnityEngine.Object eventArgs)
+        {
+            // needs current player info
+            Debug.Log("Next Turn Clicked - MapManager line 262");
+            // if not last players turn, switch the player context to the next player
+            // next player turn event or something
+
+            //if last player turn then
+            _OnLastPlayerTurnEvent.Raise();
         }
     }
 }

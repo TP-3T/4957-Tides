@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TTT.DataClasses.HexData;
+using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
 using UnityEditor.Search;
@@ -15,6 +16,10 @@ namespace TTT.Managers
     /// </summary>
     public partial class MapManager
     {
+
+        [SerializeField]
+        public GameEvent _OnFloodEnded;
+
         private void FloodCell(ref HexCell hc)
         {
             int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
@@ -141,6 +146,7 @@ namespace TTT.Managers
                         FloodQueue.Enqueue(FloodQueue2.Dequeue());
 
                     Debug.Log("Flood fill cycle complete");
+                    _OnFloodEnded.Raise();
 
                     yield break;
                 }
@@ -175,7 +181,9 @@ namespace TTT.Managers
                 TriangulateSeaMeshClientRpc(flooded.ToArray());
 
                 yield return null;
+
             }
+            //says unreachable but it is
         }
     }
 }
