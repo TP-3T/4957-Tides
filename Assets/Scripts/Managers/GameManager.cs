@@ -195,11 +195,8 @@ namespace TTT.Managers
             interactionMode = InteractionMode.INSPECTING;
         }
 
-        /// <summary>
-        /// Handles mesh click logic for BuildMode to raise build event.
-        /// </summary>
-        /// <param name="eventArgs"></param>
-        public void OnMeshClicked(UnityEngine.Object eventArgs)
+        [ClientRpc]
+        public void OnMeshClickedClientRpc(UnityEngine.Object eventArgs)
         {
             if (eventArgs is not MapMeshClickedEventArgs clickedArgs)
             {
@@ -220,6 +217,23 @@ namespace TTT.Managers
                 }
 
                 BuildingFeatureEvent.Raise(args);
+            }
+        }
+
+        /// <summary>
+        /// Handles mesh click logic for BuildMode to raise build event.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void OnMeshClicked(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not MapMeshClickedEventArgs clickedArgs)
+            {
+                return;
+            }
+
+            if (interactionMode == InteractionMode.BUILDING)
+            {
+                OnMeshClickedClientRpc(eventArgs);
             }
         }
     }
