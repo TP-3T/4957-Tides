@@ -77,6 +77,7 @@ public class PlayerInformation : MonoBehaviour
     /// </summary>
     private void setPopulationText()
     {
-        _populationText.text = "Population: " + population.AmountOwned.ToString();
+        _populationText.text =
+            "Population: " + population.AmountOwned.ToString();
     }
 }

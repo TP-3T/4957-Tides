@@ -12,11 +12,10 @@ using UnityEngine;
 namespace TTT.Managers
 {
     /// <summary>
-    /// Logicy stuff for the grid shall live here.
+    /// Logic-y stuff for the grid shall live here.
     /// </summary>
     public partial class MapManager
     {
-
         [SerializeField]
         public GameEvent _OnFloodEnded;
 
@@ -36,23 +35,30 @@ namespace TTT.Managers
         }
 
         private CubeCoordinates GetCubeCoordinatesFromPosition(Vector3 position)
-
         {
-            CubeCoordinatesF cf = HexMath.PositionToCubeF(MapManager.HexSize, position, MapManager.HexOrientation);
+            CubeCoordinatesF cf = HexMath.PositionToCubeF(
+                MapManager.HexSize,
+                position,
+                MapManager.HexOrientation
+            );
             CubeCoordinates cc = HexMath.RoundCube(cf);
             return cc;
         }
 
-        private int GetCellIndexFromCubeCoordinates(
-            CubeCoordinates hc)
+        private int GetCellIndexFromCubeCoordinates(CubeCoordinates hc)
         {
             if (MapManager.HexOrientation == HexOrientation.pointyTop)
             {
-                return ((Mathf.RoundToInt(hc.r / 2) + hc.q) + (hc.r * _gameMapData.Width));
+                return (
+                    (Mathf.RoundToInt(hc.r / 2) + hc.q)
+                    + (hc.r * _gameMapData.Width)
+                );
             }
             else
             {
-                throw new Exception("This math has lazily not been implemented yet, get on it you git!");
+                throw new Exception(
+                    "This math has lazily not been implemented yet, get on it you git!"
+                );
             }
         }
 
@@ -64,15 +70,19 @@ namespace TTT.Managers
         }
 
         private HexCell? GetCellFromCubeCoordinates(
-            CubeCoordinates hc, out bool success)
+            CubeCoordinates hc,
+            out bool success
+        )
         {
             if (MapManager.HexOrientation == HexOrientation.pointyTop)
             {
                 int cubeCoordinateIndex = GetCellIndexFromCubeCoordinates(hc);
                 // Debug.Log(cubeCoordinateIndex);
-                if (   cubeCoordinateIndex < HexCells.Count 
+                if (
+                    cubeCoordinateIndex < HexCells.Count
                     && cubeCoordinateIndex >= 0
-                    && ((Mathf.RoundToInt(hc.r / 2) + hc.q) >= 0))      // Prevent row wrap-around, enforce row constraint (r component / 2 + q component zeros out if this is a valid cell)
+                    && ((Mathf.RoundToInt(hc.r / 2) + hc.q) >= 0)
+                ) // Prevent row wrap-around, enforce row constraint (r component / 2 + q component zeros out if this is a valid cell)
                 {
                     success = true;
                     return HexCells[cubeCoordinateIndex];
@@ -96,8 +106,7 @@ namespace TTT.Managers
             return GetCellFromCubeCoordinates(hc, out success);
         }
 
-        public List<HexCell> GetCellNeighbours(
-            HexCell c)
+        public List<HexCell> GetCellNeighbours(HexCell c)
         {
             List<HexCell> neighbours = new List<HexCell>();
 
@@ -105,7 +114,10 @@ namespace TTT.Managers
             {
                 bool success;
                 CubeCoordinates neighborPos = c.CellCubeCoordinates + dir;
-                HexCell? n = GetCellFromCubeCoordinates(neighborPos, out success);
+                HexCell? n = GetCellFromCubeCoordinates(
+                    neighborPos,
+                    out success
+                );
                 // Debug.Log($"{success}, {neighborPos}, {dir}");
 
                 if (success)
@@ -129,14 +141,17 @@ namespace TTT.Managers
                 // Debug.Log(test2);
                 // Debug.Log($"{FloodQueue.Count}, {ToFlood.Count}");
 
-                // --- 1. Flood queue is empty, go through neighbours that were not eligable for flooding and see if they will be ---
+                // --- 1. Flood queue is empty, go through neighbours that were not eligible for flooding and see if they will be ---
                 if (ToFlood.Count == 0)
                 {
                     while (FloodQueue.Count > 0)
                     {
                         HexCell test = FloodQueue.Dequeue();
 
-                        if (test.CellPosition.y <= (SeaLevel.Value + RisingRate.Value))
+                        if (
+                            test.CellPosition.y
+                            <= (SeaLevel.Value + RisingRate.Value)
+                        )
                             ToFlood.Enqueue(test);
                         else
                             FloodQueue2.Enqueue(test);
@@ -165,7 +180,10 @@ namespace TTT.Managers
                     {
                         if (neighbor.Flooded)
                             continue;
-                        if (ToFlood.Contains(neighbor) || FloodQueue.Contains(neighbor))
+                        if (
+                            ToFlood.Contains(neighbor)
+                            || FloodQueue.Contains(neighbor)
+                        )
                             continue;
                         if (neighbor.CellPosition.y <= SeaLevel.Value)
                             ToFlood.Enqueue(neighbor);
@@ -181,7 +199,6 @@ namespace TTT.Managers
                 TriangulateSeaMeshClientRpc(flooded.ToArray());
 
                 yield return null;
-
             }
             //says unreachable but it is
         }

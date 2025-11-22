@@ -47,6 +47,5 @@ namespace TTT.DataClasses.States
         INSPECTING,
         DESTROYING,
         BUILDING,
-
     }
 }

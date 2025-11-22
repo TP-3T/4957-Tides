@@ -35,9 +35,13 @@ public class CameraController : MonoBehaviour
     const float TERRAIN_RAYCAST_DISTANCE = 100f;
     const float TERRAIN_HEIGHT_SMOOTH_SPEED = 3f;
     const float ZOOM_VELOCITY_BENCHMARK = 0.01f;
+    const float DRAG_THRESHOLD = 0.1f; // Minimum distance to consider it a drag vs click
 
     private Transform cameraTransform;
+
+    [SerializeField]
     private Camera playerCamera;
+
     private CameraControlActions cameraActions;
     private InputAction movement;
     private float speed;
@@ -50,26 +54,17 @@ public class CameraController : MonoBehaviour
     private Vector3 lastPosition;
     private Vector3 targetPosition;
     private Vector3 startDrag;
+    private bool isDragging = false;
 
     /// <summary>
-    /// Initializes the camera controller.
+    /// Returns true if the camera is currently being dragged by the user.
     /// </summary>
+    public bool IsDragging => isDragging;
+
     private void Awake()
     {
-        cameraActions = new CameraControlActions();
-
-        if (cameraTransform == null)
-        {
-            playerCamera = GetComponentInChildren<Camera>();
-            cameraTransform = playerCamera.transform;
-        }
-    }
-
-    /// <summary>
-    /// OnEnable is called when the object becomes enabled and active.
-    /// </summary>
-    private void OnEnable()
-    {
+        cameraActions = new();
+        cameraTransform = playerCamera.transform;
         zoomHeight = cameraTransform.localPosition.y;
         cameraTransform.LookAt(this.transform);
         lastPosition = this.transform.position;
@@ -78,7 +73,13 @@ public class CameraController : MonoBehaviour
         // Subscribe to the performed events of the camera actions.
         cameraActions.Camera.RotateCamera.performed += RotateCamera;
         cameraActions.Camera.ZoomCamera.performed += ZoomCamera;
+    }
 
+    /// <summary>
+    /// OnEnable is called when the object becomes enabled and active.
+    /// </summary>
+    private void OnEnable()
+    {
         // The name of the action map is "Camera". Enables the action map.
         cameraActions.Camera.Enable();
     }
@@ -377,16 +378,24 @@ public class CameraController : MonoBehaviour
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 startDrag = hitPoint;
+                isDragging = false; // Reset on new press
             }
             else if (Mouse.current.leftButton.isPressed)
             {
                 Vector3 dragDisplacement = startDrag - hitPoint;
+
+                // Check if movement exceeds threshold to consider it a drag
+                if (dragDisplacement.magnitude > DRAG_THRESHOLD)
+                {
+                    isDragging = true;
+                }
 
                 transform.position += dragDisplacement;
             }
             else if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 startDrag = Vector3.zero;
+                isDragging = false; // Reset when released
             }
         }
     }
