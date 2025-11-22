@@ -1,5 +1,10 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using TTT.DataClasses.States;
 using TTT.GameEvents;
 using TTT.Hex;
+using TTT.Managers;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,6 +20,11 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerController : NetworkBehaviour
 {
+    const string MAIN_MENU_STR = "mainmenu_ui";
+    const string LOADING_STR = "loading_ui";
+    const string PLAYING_STR = "playing_ui";
+    const string PAUSED_STR = "paused_ui";
+    const string STATE_STR_ERR = "Element is invalid.";
     const int LeftMouseIndex = 0;
 
     [SerializeField]
@@ -32,6 +42,47 @@ public class PlayerController : NetworkBehaviour
         NetworkVariableWritePermission.Server
     );
     public float DesiredCellHeight = 1.0f;
+    private Dictionary<SystemState, GameObject> UICanvases = new();
+
+    /// <summary>
+    /// Get desired state from element name
+    /// switch statement to check string name of variable, if contains ie "main menu" delete current canvas, create main menu canvas, assign state to main menu with main menu canvas. This will happen ANYTIME STATE IS CHANGED.
+    /// </summary>
+    IEnumerator Start()
+    {
+        yield return AssetLoader<GameObject>.LoadGroup(
+            "ui",
+            (element) =>
+            {
+                String elementName = element.name;
+
+                if (elementName.Contains(MAIN_MENU_STR))
+                {
+                    UICanvases.Clear();
+                    UICanvases.Add(SystemState.MAIN_MENU, element);
+                }
+                else if (elementName.Contains(LOADING_STR))
+                {
+                    UICanvases.Clear();
+                    UICanvases.Add(SystemState.LOADING, element);
+                }
+                else if (elementName.Contains(LOADING_STR))
+                {
+                    UICanvases.Clear();
+                    UICanvases.Add(SystemState.LOADING, element);
+                }
+                else if (elementName.Contains(PLAYING_STR))
+                {
+                    UICanvases.Clear();
+                    UICanvases.Add(SystemState.PLAYING, element);
+                }
+                else
+                {
+                    Debug.Log(STATE_STR_ERR);
+                }
+            }
+        );
+    }
 
     /// <summary>
     /// Called when the networked object is spawned on the network.

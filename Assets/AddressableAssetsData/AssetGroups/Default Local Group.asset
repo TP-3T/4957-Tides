@@ -29,6 +29,12 @@ MonoBehaviour:
   - m_GUID: 354fe57acf6514341a5aadb7dfc8cc52
     m_Address: UI_Game
     m_ReadOnly: 0
+    m_SerializedLabels:
+    - ui
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81ef3d119c508ed439bf1464a53e44c5
+    m_Address: Assets/Prefabs/UI/MainMenuUI.prefab
+    m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f315c0b25ad56c458efb949b83d75e3
