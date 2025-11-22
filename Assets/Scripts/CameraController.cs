@@ -37,7 +37,10 @@ public class CameraController : MonoBehaviour
     const float ZOOM_VELOCITY_BENCHMARK = 0.01f;
 
     private Transform cameraTransform;
+
+    [SerializeField]
     private Camera playerCamera;
+
     private CameraControlActions cameraActions;
     private InputAction movement;
     private float speed;
@@ -51,25 +54,10 @@ public class CameraController : MonoBehaviour
     private Vector3 targetPosition;
     private Vector3 startDrag;
 
-    /// <summary>
-    /// Initializes the camera controller.
-    /// </summary>
     private void Awake()
     {
-        cameraActions = new CameraControlActions();
-
-        if (cameraTransform == null)
-        {
-            playerCamera = GetComponentInChildren<Camera>();
-            cameraTransform = playerCamera.transform;
-        }
-    }
-
-    /// <summary>
-    /// OnEnable is called when the object becomes enabled and active.
-    /// </summary>
-    private void OnEnable()
-    {
+        cameraActions = new();
+        cameraTransform = playerCamera.transform;
         zoomHeight = cameraTransform.localPosition.y;
         cameraTransform.LookAt(this.transform);
         lastPosition = this.transform.position;
@@ -78,7 +66,13 @@ public class CameraController : MonoBehaviour
         // Subscribe to the performed events of the camera actions.
         cameraActions.Camera.RotateCamera.performed += RotateCamera;
         cameraActions.Camera.ZoomCamera.performed += ZoomCamera;
+    }
 
+    /// <summary>
+    /// OnEnable is called when the object becomes enabled and active.
+    /// </summary>
+    private void OnEnable()
+    {
         // The name of the action map is "Camera". Enables the action map.
         cameraActions.Camera.Enable();
     }
