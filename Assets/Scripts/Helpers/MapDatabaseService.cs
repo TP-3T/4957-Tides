@@ -283,7 +283,7 @@ namespace TTT.Helpers
         /// Fetches a map by ID, parses it, and converts it to MapData
         /// Returns complete MapData ready for the game to use
         /// </summary>
-        public static IEnumerator GetMapDataById(int mapId, string mapName, Action<MapData> onSuccess, Action<string> onError)
+        public static IEnumerator GetMapDataById(int mapId, Action<MapData> onSuccess, Action<string> onError)
         {
             string jsonResponse = null;
             string error = null;
@@ -302,9 +302,9 @@ namespace TTT.Helpers
 
             try
             {
-                List<ApiMapTile> apiTiles = JsonConvert.DeserializeObject<List<ApiMapTile>>(jsonResponse);
+                ApiMapResponse apiResponse = JsonConvert.DeserializeObject<ApiMapResponse>(jsonResponse);
 
-                MapData mapData = ConvertToMapData(apiTiles, mapName);
+                MapData mapData = ConvertToMapData(apiResponse);
 
                 onSuccess?.Invoke(mapData);
             }
