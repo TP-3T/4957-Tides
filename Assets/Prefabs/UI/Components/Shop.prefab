@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 4655228308963635219}
   - component: {fileID: 2743887434435340111}
   - component: {fileID: 1396512214478044995}
+  - component: {fileID: 2130797671389038496}
   m_Layer: 5
   m_Name: Shop
   m_TagString: Untagged
@@ -294,3 +295,23 @@ MonoBehaviour:
   SlotSpacing: 20
   ShopTabArea: {fileID: 2519198667540855256}
   ShopTabPrefab: {fileID: 7902394278506430923, guid: 9882b9346389f4244b5ee6f6e1ab0e08, type: 3}
+--- !u!114 &2130797671389038496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8196562055711730827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: 0.5
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
