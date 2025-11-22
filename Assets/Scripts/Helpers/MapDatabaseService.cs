@@ -195,18 +195,12 @@ namespace TTT.Helpers
             foreach (var xEntry in apiResponse.MapTile)
             {
                 int x = int.Parse(xEntry.Key);
-                if (x > maxX)
-                {
-                    maxX = x;
-                }
+                if (x > maxX) { maxX = x; }
 
                 foreach (var zEntry in xEntry.Value)
                 {
                     int z = int.Parse(zEntry.Key);
-                    if (z > maxZ)
-                    {
-                        maxZ = z;
-                    }
+                    if (z > maxZ) { maxZ = z; }
                 }
             }
 
@@ -224,13 +218,13 @@ namespace TTT.Helpers
                     int z = int.Parse(zEntry.Key);
                     ApiTileInfo tileInfo = zEntry.Value;
 
-                    MapTileData gameTile = new()
+                    MapTileData gameTile = new MapTileData
                     {
                         OffsetCoordinates = new OffsetCoordinates(x, z),
-
+                        
                         TileType = (TerrainTypeId)tileInfo.TileType,
-
-                        Height = tileInfo.Elevation,
+                        
+                        Height = tileInfo.Elevation
                     };
 
                     gameTiles.Add(gameTile);
