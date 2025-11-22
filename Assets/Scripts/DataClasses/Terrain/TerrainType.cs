@@ -7,7 +7,10 @@ namespace TTT.DataClasses.Terrain
     /// <summary>
     /// The terrain type of a tile. Represents climates and helps define regions.
     /// </summary>
-    [CreateAssetMenu(fileName = "TerrainType", menuName = "Scriptable Objects/TerrainType")]
+    [CreateAssetMenu(
+        fileName = "TerrainType",
+        menuName = "Scriptable Objects/TerrainType"
+    )]
     public class TerrainType : ScriptableObject
     {
         [Tooltip("The color that represents this terrain.")]
