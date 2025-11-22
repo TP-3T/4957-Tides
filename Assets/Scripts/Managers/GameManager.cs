@@ -136,7 +136,8 @@ namespace TTT.Managers
             {
                 this.IncrementYear();
                 _OnYearChangeEvent.Raise();
-            } else
+            }
+            else
             {
                 _TurnEndedEvent.Raise();
             }

@@ -2,7 +2,7 @@ namespace TTT.DataClasses.TileFeatures
 {
     public enum FeatureCategory
     {
-        INDUSTRIAL,
+        INDUSTRY,
         HOUSING,
         ENERGY,
         NATURE,

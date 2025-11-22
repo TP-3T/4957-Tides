@@ -21,7 +21,8 @@ namespace TTT.Managers
             }
             if (networkManager.NetworkConfig.NetworkTransport == null)
             {
-                networkManager.NetworkConfig.NetworkTransport = new UnityTransport();
+                networkManager.NetworkConfig.NetworkTransport =
+                    new UnityTransport();
             }
             networkManager.OnClientConnectedCallback += this.OnClientConnected;
         }
