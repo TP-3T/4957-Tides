@@ -61,6 +61,7 @@ public class PlayerController : NetworkBehaviour
 
     private void AssignUniquePlayerColor(ulong clientId)
     {
+        // TODO: Let players pick 4 colors they want to see.
         Color uniqueColor = (clientId % 4) switch
         {
             // Cycle through 4 basic colors
