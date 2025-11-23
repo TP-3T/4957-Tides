@@ -5,18 +5,47 @@ namespace TTT.ModularData
 {
     public abstract class RuntimeSet<T> : ScriptableObject
     {
-        public List<T> Items = new List<T>();
+        protected List<T> Items = new();
 
-        public void Add(T thing)
+        /// <summary>
+        /// Returns a copy of the items in this set.
+        /// </summary>
+        public T[] GetItems()
         {
-            if (!Items.Contains(thing))
-                Items.Add(thing);
+            return Items.ToArray();
         }
 
-        public void Remove(T thing)
+        public virtual bool Add(T thing)
+        {
+            if (!Items.Contains(thing))
+            {
+                Items.Add(thing);
+                return true;
+            }
+
+            return false;
+        }
+
+        public virtual bool Remove(T thing)
         {
             if (Items.Contains(thing))
+            {
                 Items.Remove(thing);
+                return true;
+            }
+
+            return false;
+        }
+
+        public virtual bool RemoveAt(int index)
+        {
+            if (index < Items.Count)
+            {
+                Items.RemoveAt(index);
+                return true;
+            }
+
+            return false;
         }
     }
 }

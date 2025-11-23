@@ -21,7 +21,7 @@ namespace TTT.DataClasses.HexData
             CubeCoordinates cellCubeCoordinates,
             Vector3 cellPosition,
             Color cellColor,
-            TerrainTypeId terrainTypeId = 0 // TODO: remove placeholder uid
+            TerrainTypeId terrainTypeId
         )
         {
             CellCubeCoordinates = cellCubeCoordinates;

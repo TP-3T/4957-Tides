@@ -1,12 +1,15 @@
-using UnityEngine;
 using TMPro;
-using TTT.Managers;
 using TTT.GameEvents;
+using TTT.Managers;
+using UnityEngine;
 
 public class GlobalInformation : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _dateText;
-    [SerializeField] private TextMeshProUGUI _CO2Text;
+    [SerializeField]
+    private TextMeshProUGUI _dateText;
+
+    [SerializeField]
+    private TextMeshProUGUI _CO2Text;
 
     private GameManager GameManager;
 

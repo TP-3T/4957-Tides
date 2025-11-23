@@ -10,19 +10,6 @@ public class FeatureBuilder : MonoBehaviour
 {
     public FeatureRuntimeSet SpawnedFeatures;
 
-    private static Vector3 FixLocation(Vector3 location)
-    {
-        HexCell? exactCell = MapManager.Instance.GetCellFromPosition(location, out _);
-
-        if (exactCell == null)
-        {
-            Debug.LogWarning($"Could not find cell at location {location}");
-            return new Vector3(0, 0, 0);
-        }
-
-        return ((HexCell)exactCell).CellPosition;
-    }
-
     public void OnBuildingFeature(Object eventArgs)
     {
         if (eventArgs is not BuildingFeatureArgs bfArgs)
@@ -53,6 +40,22 @@ public class FeatureBuilder : MonoBehaviour
         DestroyAt(bfArgs.Location, wasSold: true);
     }
 
+    private static Vector3 FixLocation(Vector3 location)
+    {
+        HexCell? exactCell = MapManager.Instance.GetCellFromPosition(
+            location,
+            out _
+        );
+
+        if (exactCell == null)
+        {
+            Debug.LogWarning($"Could not find cell at location {location}");
+            return new Vector3(0, 0, 0);
+        }
+
+        return ((HexCell)exactCell).CellPosition;
+    }
+
     private void TryToBuild(Vector3 location, FeatureType featureType)
     {
         if (CheckIfCanBuild(location, featureType))
@@ -67,7 +70,11 @@ public class FeatureBuilder : MonoBehaviour
 
     private bool CheckIfCanBuild(Vector3 location, FeatureType featureType)
     {
-        if (SpawnedFeatures.Items.Any(feats => feats.CellPosition.Equals(location)))
+        if (
+            SpawnedFeatures
+                .GetItems()
+                .Any(feats => feats.CellPosition.Equals(location))
+        )
         {
             // then there's already something at this location
             return false;
@@ -125,13 +132,13 @@ public class FeatureBuilder : MonoBehaviour
         GameObject gameInstance = Instantiate(featureType.Prefab);
 
         Vector3 displayLocation = new(location.x, location.y, location.z);
-        displayLocation.y += 0.5f * gameInstance.transform.localScale.y;
         gameInstance.transform.position = displayLocation;
+
+        Vector3 displayScale = new(2, 2, 2);
+        gameInstance.transform.localScale = displayScale;
 
         Feature feature = new(location, featureType, gameInstance);
         SpawnedFeatures.Add(feature);
-
-        feature.Type.ResourceProducers.ForEach(p => p.OnCreated());
     }
 
     private void DestroyAt(Vector3 location, bool wasSold)
@@ -145,14 +152,5 @@ public class FeatureBuilder : MonoBehaviour
 
         Destroy(feature.PrefabInstance);
         SpawnedFeatures.Remove(feature);
-
-        if (wasSold)
-        {
-            feature.Type.ResourceProducers.ForEach(p => p.OnSold());
-        }
-        else
-        {
-            feature.Type.ResourceProducers.ForEach(p => p.OnDestroyed());
-        }
     }
 }

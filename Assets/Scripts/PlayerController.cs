@@ -3,6 +3,7 @@ using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 // [RequireComponent(typeof(Camera))]
 
@@ -16,8 +17,13 @@ using UnityEngine.Events;
 public class PlayerController : NetworkBehaviour
 {
     const int LeftMouseIndex = 0;
+    const float CLICK_THRESHOLD = 5f; // Max pixel movement to still be considered a click
 
+    [SerializeField]
     private Camera playerCamera;
+
+    [SerializeField]
+    private CameraController cameraController;
 
     [SerializeField]
     private GameEvent _mapMeshClicked;
@@ -32,22 +38,7 @@ public class PlayerController : NetworkBehaviour
     );
     public float DesiredCellHeight = 1.0f;
 
-    /// <summary>
-    /// Called when the script instance is being loaded.
-    /// It gets a reference to the camera and disables it by default
-    /// to ensure it's not active for remote players.
-    /// </summary>
-    void Awake()
-    {
-        //Get a reference to the camera component on this object itself
-        playerCamera = GetComponentInChildren<Camera>();
-
-        //Disable camera by default so it wont activate on other clients.
-        if (playerCamera != null)
-        {
-            playerCamera.enabled = false;
-        }
-    }
+    private Vector3 mouseDownPosition;
 
     /// <summary>
     /// Called when the networked object is spawned on the network.
@@ -66,6 +57,7 @@ public class PlayerController : NetworkBehaviour
         if (IsOwner)
         {
             transform.position = startingPosition;
+            //! CB: We don't handle the not-null case. This causes silent errors.
             if (playerCamera != null)
             {
                 playerCamera.enabled = true;
@@ -76,6 +68,7 @@ public class PlayerController : NetworkBehaviour
 
     private void AssignUniquePlayerColor(ulong clientId)
     {
+        // TODO: Let players pick 4 colors they want to see.
         Color uniqueColor = (clientId % 4) switch
         {
             // Cycle through 4 basic colors
@@ -95,7 +88,8 @@ public class PlayerController : NetworkBehaviour
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
             // Unsubscribe immediately to prevent running again.
-            NetworkManager.Singleton.OnClientConnectedCallback -= FindHexGridAfterConnection;
+            NetworkManager.Singleton.OnClientConnectedCallback -=
+                FindHexGridAfterConnection;
         }
     }
 
@@ -106,10 +100,35 @@ public class PlayerController : NetworkBehaviour
     /// </summary>
     void Update()
     {
-        // Left click
+        // Track mouse down position
         if (Input.GetMouseButtonDown(LeftMouseIndex))
         {
-            Ray mousePositionRay = playerCamera.ScreenPointToRay(Input.mousePosition);
+            mouseDownPosition = Input.mousePosition;
+        }
+
+        // Only process tile selection on mouse up, and only if it wasn't a drag
+        if (Input.GetMouseButtonUp(LeftMouseIndex))
+        {
+            // Don't process world clicks when clicking on UI
+            if (IsMouseOverUI())
+            {
+                return;
+            }
+
+            // Check if mouse moved significantly (drag) vs stayed in place (click)
+            float mouseMovement = Vector3.Distance(
+                mouseDownPosition,
+                Input.mousePosition
+            );
+            if (mouseMovement > CLICK_THRESHOLD)
+            {
+                // This was a drag, not a click - don't select tile
+                return;
+            }
+
+            Ray mousePositionRay = playerCamera.ScreenPointToRay(
+                Input.mousePosition
+            );
             if (
                 Physics.Raycast(
                     mousePositionRay,
@@ -120,7 +139,7 @@ public class PlayerController : NetworkBehaviour
             )
             {
                 // Raise some event will deal with this later
-                Debug.DrawLine(transform.position, raycastHit.point, Color.red);
+                // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
 
                 _mapMeshClicked.Raise(
                     new MapMeshClickedEventArgs
@@ -132,5 +151,13 @@ public class PlayerController : NetworkBehaviour
                 );
             }
         }
+    }
+
+    /// <summary>
+    /// Check if the pointer is over a UI element.
+    /// </summary>
+    private bool IsMouseOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
     }
 }
