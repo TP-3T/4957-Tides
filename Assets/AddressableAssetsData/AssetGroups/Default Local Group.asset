@@ -35,19 +35,14 @@ MonoBehaviour:
   - m_GUID: 81ef3d119c508ed439bf1464a53e44c5
     m_Address: UI_Main
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - ui
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f315c0b25ad56c458efb949b83d75e3
     m_Address: B_Factory
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a1c6d0a09bcfb9b4da791ecc2a254e81
-    m_Address: UI_MainMenu
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ui
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a574734cbcc1411429593620b463cc3a
     m_Address: P_HexMesh
@@ -65,6 +60,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec1b89087c1d471438bf790255db6493
+    m_Address: UI_MainMenuButton
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f7f0052c53e6d844ea7a1def77afa6b4
     m_Address: B_Port

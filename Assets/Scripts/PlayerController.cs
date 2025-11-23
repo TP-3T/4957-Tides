@@ -44,6 +44,10 @@ public class PlayerController : NetworkBehaviour
     public float DesiredCellHeight = 1.0f;
     private Dictionary<SystemState, GameObject> UICanvases = new();
 
+    // MainMenu Canvas => UI Group
+    //      - MainMenuButton Component
+    //      - Header Component
+
     /// <summary>
     /// Get desired state from element name
     /// switch statement to check string name of variable, if contains ie "main menu" delete current canvas, create main menu canvas, assign state to main menu with main menu canvas. This will happen ANYTIME STATE IS CHANGED.
@@ -66,10 +70,10 @@ public class PlayerController : NetworkBehaviour
                     UICanvases.Clear();
                     UICanvases.Add(SystemState.LOADING, element);
                 }
-                else if (elementName.Contains(LOADING_STR))
+                else if (elementName.Contains(PAUSED_STR))
                 {
                     UICanvases.Clear();
-                    UICanvases.Add(SystemState.LOADING, element);
+                    UICanvases.Add(SystemState.PAUSED, element);
                 }
                 else if (elementName.Contains(PLAYING_STR))
                 {
