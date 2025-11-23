@@ -33,7 +33,7 @@ MonoBehaviour:
     - ui
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 81ef3d119c508ed439bf1464a53e44c5
-    m_Address: Assets/Prefabs/UI/MainMenuUI.prefab
+    m_Address: UI_Main
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -42,6 +42,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1c6d0a09bcfb9b4da791ecc2a254e81
+    m_Address: UI_MainMenu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ui
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a574734cbcc1411429593620b463cc3a
     m_Address: P_HexMesh
