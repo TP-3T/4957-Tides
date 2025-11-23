@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace TTT.DataClasses.MapData
+namespace TTT.DataClasses.HexData
 {
     [Serializable]
     public struct WorldState
