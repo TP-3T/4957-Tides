@@ -25,7 +25,10 @@ namespace TTT.DataClasses.TileFeatures
             BuildConstraints constraints
         );
 
-        public static bool ExceedsMaxHeight(HexCell buildLocation, BuildConstraints constraints)
+        public static bool ExceedsMaxHeight(
+            HexCell buildLocation,
+            BuildConstraints constraints
+        )
         {
             var maxHeight = constraints.MaximumHeight;
             var tileHeight = buildLocation.CellPosition.y;
@@ -38,12 +41,17 @@ namespace TTT.DataClasses.TileFeatures
         )
         {
             var terrainConstraints = constraints.TerrainConstraints.List;
-            var isBlacklist = constraints.TerrainConstraints.Mode is FilterListMode.BLACKLIST;
-            var terrainConstraintsUids = terrainConstraints.Select(terrain => terrain.UniqueID);
+            var terrainConstraintsUIDs = terrainConstraints.Select(terrain =>
+                terrain.UniqueID
+            );
+
+            var isBlacklist =
+                constraints.TerrainConstraints.Mode is FilterListMode.BLACKLIST;
 
             var buildLocationTerrain = buildLocation.TerrainTypeId;
 
-            return terrainConstraintsUids.Contains(buildLocationTerrain) == isBlacklist;
+            return terrainConstraintsUIDs.Contains(buildLocationTerrain)
+                == isBlacklist;
         }
 
         public static bool NotEnoughNearbyFeatures(

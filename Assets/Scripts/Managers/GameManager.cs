@@ -1,78 +1,109 @@
+using System.IO;
+using TTT.DataClasses.States;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace TTT.Managers
 {
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
         [SerializeField]
-        private TextAsset LevelFile;
-
-        [SerializeField]
         private GameEvent newMapEvent;
 
-        private string[] Seasons = { "Spring", "Summer", "Fall", "Winter" };
+        private readonly string[] Seasons =
+        {
+            "Spring",
+            "Summer",
+            "Fall",
+            "Winter",
+        };
 
         //serialize for now
-        [SerializeField] private int Year = 1;
-        [SerializeField] private string Season;
+        [field: SerializeField]
+        public int Year { get; private set; } = 1;
 
-        [SerializeField] public GameEvent _OnYearChangeEvent;
+        [SerializeField]
+        private string Season;
 
-        [SerializeField] public GameEvent _FloodEvent;
+        [SerializeField]
+        private int CO2;
 
+        [SerializeField]
+        private GameEvent SeasonChanging;
 
-        // private AssetReference SeaPrefab = new("P_Sea");
+        [SerializeField]
+        private GameEvent _OnYearChangeEvent;
 
-        // private AssetReference HexGrid = new("P_HexGrid");
+        [SerializeField]
+        private GameEvent _FloodEvent;
 
-        // private GameObject sea;
-        // private GameObject hexGrid;
+        [SerializeField]
+        private GameEvent _TurnEndedEvent;
+
+        [SerializeField]
+        private InteractionMode interactionMode;
+
+        [SerializeField]
+        private FeatureType buildingFeatureType;
+
+        [SerializeField]
+        private GameEvent BuildingFeatureEvent;
+
+        [SerializeField]
+        private GameEvent _OnLastPlayerTurnEvent;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            this.Season = Seasons[Year];
+            this.Season = Seasons[0];
+            this.CO2 = 0;
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
-        public void OnStartNetworkEvent(Object eventArgs)
+        public void OnStartNetworkEvent(UnityEngine.Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
-            if (args.IsHost)
+            try
             {
-                Debug.Log("I am being spawned as a host");
-                NetworkManager.Singleton.StartHost();
-
-                newMapEvent.Raise(new NewMapEventArgs()
+                if (args.IsHost)
                 {
-                    DataFile = LevelFile
-                });
+                    StartGameHost();
+                }
+                else
+                {
+                    StartGameClient();
+                }
             }
-            else
+            catch (System.Exception e)
             {
-                Debug.Log("I am being spawned as a client");
-                NetworkManager.Singleton.StartClient();
+                Debug.LogError($"Failed to start host: {e.Message}");
+                return;
             }
         }
 
-        // private void SpawnSea(GameObject obj)
-        // {
-        //     sea = Instantiate(obj);
-        //     sea.GetComponent<NetworkObject>().Spawn();
-        // }
+        private void StartGameClient()
+        {
+            NetworkManager.Singleton.StartClient();
+        }
 
-        // private void SpawnGrid(GameObject obj)
-        // {
-        //     hexGrid = Instantiate(obj);
-        //     hexGrid.GetComponent<NetworkObject>().Spawn();
-        //     newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
-        // }
+        private void StartGameHost()
+        {
+            NetworkManager.Singleton.StartHost();
 
-        public void OnNewMapFinish(Object eventArgs)
+            if (LoadExternalJson.TryGetDataJson(out TextAsset newMap))
+            {
+                newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
+            }
+            else
+            {
+                throw new IOException("Could not load file.");
+            }
+        }
+
+        public void OnNewMapFinish(UnityEngine.Object eventArgs)
         {
             NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
 
@@ -96,7 +127,8 @@ namespace TTT.Managers
             int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
 
             // % to wrap around to the beginning after winter
-            int nextSeasonIndex = (currentSeasonIndex + 1) % this.Seasons.Length;
+            int nextSeasonIndex =
+                (currentSeasonIndex + 1) % this.Seasons.Length;
 
             this.Season = this.Seasons[nextSeasonIndex];
 
@@ -104,6 +136,10 @@ namespace TTT.Managers
             {
                 this.IncrementYear();
                 _OnYearChangeEvent.Raise();
+            }
+            else
+            {
+                _TurnEndedEvent.Raise();
             }
         }
 
@@ -117,27 +153,95 @@ namespace TTT.Managers
 
         public void OnLastPlayerTurnEvent(UnityEngine.Object eventArgs)
         {
-            Debug.Log("Last Player Made Turn, increment season - GameManager line 118");
+            SeasonChanging.Raise();
             this.IncrementSeason();
         }
 
         public void OnYearChange(UnityEngine.Object eventArgs)
         {
-            Debug.Log("Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124");
+            Debug.Log(
+                "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
+            );
 
             _FloodEvent.Raise();
-
         }
 
-        // /// <summary>
-        // /// Method from INextTurnListener interface. Called when Next Turn event is dispatched.
-        // /// </summary>
-        // /// <param name="nt">The Next Turn Event</param>
-        // public void OnEventRaised(NextTurn nt)
-        // {
-        //     // increment season here
-        //     Debug.Log("1. Increment Season -GameManager" + nt.ToString());
-        //     this.IncrementSeason();
-        // }
+        public int GetYear()
+        {
+            return this.Year;
+        }
+
+        public string GetSeason()
+        {
+            return this.Season;
+        }
+
+        public int GetCO2()
+        {
+            return this.CO2;
+        }
+
+        /// <summary>
+        /// Starts the build mode event, disabling certain features.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void StartBuildMode(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not FeatureType featureType)
+            {
+                return;
+            }
+
+            interactionMode = InteractionMode.BUILDING;
+            buildingFeatureType = featureType;
+        }
+
+        /// <summary>
+        /// Starts the Inspect mode, disabling building.
+        /// </summary>
+        /// <param name="_"></param>
+        public void StartInspectMode(UnityEngine.Object _)
+        {
+            interactionMode = InteractionMode.INSPECTING;
+        }
+
+        /// <summary>
+        /// Handles mesh click logic for BuildMode to raise build event.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void OnMeshClicked(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not MapMeshClickedEventArgs clickedArgs)
+            {
+                return;
+            }
+
+            if (interactionMode == InteractionMode.BUILDING)
+            {
+                // raise build event
+                var args =
+                    ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                args.Location = clickedArgs.ClickedPoint;
+                args.FeatureType = buildingFeatureType;
+
+                if (buildingFeatureType == null)
+                {
+                    return;
+                }
+
+                BuildingFeatureEvent.Raise(args);
+            }
+        }
+
+        public void OnNextTurnClick(UnityEngine.Object eventArgs)
+        {
+            // needs current player info
+            Debug.Log("Next Turn Clicked - MapManager line 262");
+            // if not last players turn, switch the player context to the next player
+            // next player turn event or something
+
+            //if last player turn then
+            _OnLastPlayerTurnEvent.Raise();
+        }
     }
 }

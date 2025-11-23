@@ -7,6 +7,24 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Core_Scene.unity
+<<<<<<< HEAD
     guid: 68882d1099c0b234fb5f6f2b8e4ad7b6
   m_configObjects: {}
+=======
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Testing/Core_Buildmode_Ro.unity
+    guid: b85b9f7911c30a74389d2c2e5cd6165d
+  - enabled: 1
+    path: Assets/Scenes/Testing/Core Buildings Ro.unity
+    guid: a90c87e4ce573414189401739e11be32
+  - enabled: 1
+    path: Assets/Scenes/Testing/CoreOrderOfEvents.unity
+    guid: 62c87947b01820a40aaddcdb1e2f2075
+  - enabled: 1
+    path: Assets/Scenes/Testing/Core_EventIntegration_Ro.unity
+    guid: 8ca61e373e3d3144a83b0c946c91cc7f
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 2cc4e184f0d14234791219624c7af01c, type: 2}
+>>>>>>> core
   m_UseUCBPForAssetBundles: 0

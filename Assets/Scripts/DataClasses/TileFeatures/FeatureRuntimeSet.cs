@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using TTT.DataClasses.TileFeatures;
 using UnityEngine;
@@ -13,6 +14,47 @@ namespace TTT.ModularData
     )]
     public class FeatureRuntimeSet : RuntimeSet<Feature>
     {
+        public event Action<Feature> FeatureAdded;
+
+        public event Action<Feature> FeatureRemoved;
+
+        public override bool Add(Feature feature)
+        {
+            bool success = base.Add(feature);
+
+            if (success)
+            {
+                FeatureAdded?.Invoke(feature);
+            }
+
+            return success;
+        }
+
+        public override bool Remove(Feature feature)
+        {
+            bool success = base.Remove(feature);
+
+            if (success)
+            {
+                FeatureAdded?.Invoke(feature);
+            }
+
+            return success;
+        }
+
+        public override bool RemoveAt(int index)
+        {
+            Feature removedFeature = Items[index];
+            bool success = base.RemoveAt(index);
+
+            if (success)
+            {
+                FeatureRemoved.Invoke(removedFeature);
+            }
+
+            return success;
+        }
+
         public Feature GetByLocation(Vector3 cellPosition)
         {
             for (int i = 0; i < Items.Count; i++)
@@ -31,7 +73,7 @@ namespace TTT.ModularData
             {
                 if (Items[i].CellPosition == cellPosition)
                 {
-                    Items.RemoveAt(i);
+                    RemoveAt(i);
                     return;
                 }
             }
