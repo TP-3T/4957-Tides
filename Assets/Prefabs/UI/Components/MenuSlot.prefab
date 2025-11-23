@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6266292366093410534}
   - component: {fileID: 1849591943704540561}
   - component: {fileID: 8182804029425451958}
+  - component: {fileID: -2129791014438871717}
   m_Layer: 5
   m_Name: MenuSlot
   m_TagString: Untagged
@@ -149,6 +150,26 @@ MonoBehaviour:
   feature: {fileID: 0}
   textField: {fileID: 928972232084216365}
   BuildModeStartingEvent: {fileID: 11400000, guid: e35ecdd7fe7b48348beb53c5ee9a06b6, type: 2}
+--- !u!114 &-2129791014438871717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5876843518120190640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: 1
+  m_LayoutPriority: 1
 --- !u!1001 &4945129125588824670
 PrefabInstance:
   m_ObjectHideFlags: 0
