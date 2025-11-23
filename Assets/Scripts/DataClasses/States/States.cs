@@ -41,4 +41,14 @@ namespace TTT.DataClasses.States
         YEAR_END,
         FLOODING,
     }
+<<<<<<< HEAD
+=======
+
+    public enum InteractionMode
+    {
+        INSPECTING,
+        DESTROYING,
+        BUILDING,
+    }
+>>>>>>> core
 }

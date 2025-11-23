@@ -59,7 +59,16 @@ namespace TTT.Managers
         public NetworkVariable<float> RisingRate = new(1.0f);
         public bool DrawDebugLabels;
 
+<<<<<<< HEAD
         [SerializeField] public GameEvent _OnLastPlayerTurnEvent;
+=======
+        private LineRenderer lineRenderer;
+
+        void Start()
+        {
+            lineRenderer = GetComponent<LineRenderer>();
+        }
+>>>>>>> core
 
         public override void OnNetworkSpawn()
         {
@@ -259,18 +268,6 @@ namespace TTT.Managers
             Debug.Log("Flood Event Triggered - MapManager line 261");
 
             StartRaiseSeaServerRpc();
-        }
-
-        public void OnNextTurnClick(UnityEngine.Object eventArgs)
-        {
-            // needs current player info
-            Debug.Log("Next Turn Clicked - MapManager line 262");
-
-            // if not last players turn, switch the player context to the next player
-            // next player turn event or something
-
-            //if last player turn then
-            _OnLastPlayerTurnEvent.Raise();
         }
     }
 }

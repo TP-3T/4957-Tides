@@ -34,10 +34,21 @@ namespace TTT.Managers
 
         // private AssetReference SeaPrefab = new("P_Sea");
 
+<<<<<<< HEAD
         // private AssetReference HexGrid = new("P_HexGrid");
+=======
+        [SerializeField]
+        private GameEvent _TurnEndedEvent;
+
+        [SerializeField]
+        private InteractionMode interactionMode;
+>>>>>>> core
 
         // private GameObject sea;
         // private GameObject hexGrid;
+
+        [SerializeField]
+        private GameEvent _OnLastPlayerTurnEvent;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -118,6 +129,10 @@ namespace TTT.Managers
                 this.IncrementYear();
                 _OnYearChangeEvent.Raise();
             }
+            else
+            {
+                _TurnEndedEvent.Raise();
+            }
         }
 
         /// <summary>
@@ -158,6 +173,7 @@ namespace TTT.Managers
             return this.CO2;
         }
 
+<<<<<<< HEAD
         // /// <summary>
         // /// Method from INextTurnListener interface. Called when Next Turn event is dispatched.
         // /// </summary>
@@ -168,5 +184,69 @@ namespace TTT.Managers
         //     Debug.Log("1. Increment Season -GameManager" + nt.ToString());
         //     this.IncrementSeason();
         // }
+=======
+        /// <summary>
+        /// Starts the build mode event, disabling certain features.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void StartBuildMode(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not FeatureType featureType)
+            {
+                return;
+            }
+
+            interactionMode = InteractionMode.BUILDING;
+            buildingFeatureType = featureType;
+        }
+
+        /// <summary>
+        /// Starts the Inspect mode, disabling building.
+        /// </summary>
+        /// <param name="_"></param>
+        public void StartInspectMode(UnityEngine.Object _)
+        {
+            interactionMode = InteractionMode.INSPECTING;
+        }
+
+        /// <summary>
+        /// Handles mesh click logic for BuildMode to raise build event.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void OnMeshClicked(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not MapMeshClickedEventArgs clickedArgs)
+            {
+                return;
+            }
+
+            if (interactionMode == InteractionMode.BUILDING)
+            {
+                // raise build event
+                var args =
+                    ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                args.Location = clickedArgs.ClickedPoint;
+                args.FeatureType = buildingFeatureType;
+
+                if (buildingFeatureType == null)
+                {
+                    return;
+                }
+
+                BuildingFeatureEvent.Raise(args);
+            }
+        }
+
+        public void OnNextTurnClick(UnityEngine.Object eventArgs)
+        {
+            // needs current player info
+            Debug.Log("Next Turn Clicked - MapManager line 262");
+            // if not last players turn, switch the player context to the next player
+            // next player turn event or something
+
+            //if last player turn then
+            _OnLastPlayerTurnEvent.Raise();
+        }
+>>>>>>> core
     }
 }
