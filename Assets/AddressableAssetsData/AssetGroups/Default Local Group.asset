@@ -15,8 +15,8 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: e7e5ee7318adfcd448829a3590075345
   m_SerializeEntries:
-  - m_GUID: 1bbdf26002f83de40973468ddd37bb8f
-    m_Address: B_House
+  - m_GUID: 04d62943a9ba38d41a50517e4ea6a4bf
+    m_Address: B_INDLumberMill
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
@@ -26,13 +26,31 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 308b7c9e68e889748b60115f0907a8fd
+    m_Address: B_POWNuclear
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 354fe57acf6514341a5aadb7dfc8cc52
     m_Address: UI_Game
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9f315c0b25ad56c458efb949b83d75e3
-    m_Address: B_Factory
+  - m_GUID: 41b3622f0f526dd49979692beb304dfe
+    m_Address: B_INDFactory
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 66f83e618533dc84aa1410fce3525506
+    m_Address: B_INDPort
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8fbc040397b1362419688808a67eee03
+    m_Address: B_HOUHouse
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
@@ -41,24 +59,6 @@ MonoBehaviour:
     m_Address: P_HexMesh
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bb7f629c41bf6934797fb89b6d81cc7b
-    m_Address: B_LumberMill
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - building
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e2ffd29714beea942bb4d985d389ee17
-    m_Address: B_NuclearReactor
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - building
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f7f0052c53e6d844ea7a1def77afa6b4
-    m_Address: B_Port
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - building
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: dc847a122f093dc4080e470c320f582d, type: 2}
