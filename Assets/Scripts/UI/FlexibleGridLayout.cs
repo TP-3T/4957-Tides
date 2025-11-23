@@ -11,29 +11,23 @@ public class FlexibleGridLayout : LayoutGroup
     public enum Alignment
     {
         Horizontal,
-
         Vertical,
     }
 
     public enum FitType
     {
         Uniform,
-
         Width,
-
         Height,
-
         FixedRows,
-
         FixedColumns,
-
         FixedBoth,
     }
 
     public Alignment alignment;
 
     [Space]
-    /// <summary>The rule to determine the grid structure and cell size.</summary>
+    /// rule for grid and cell size.
     public FitType fitType;
 
     [Min(1)]
@@ -46,17 +40,13 @@ public class FlexibleGridLayout : LayoutGroup
     [Min(0)]
     public Vector2 spacing;
 
-    /// <summary>The calculated size of each cell in the grid.</summary>
     public Vector2 cellSize;
 
-    /// <summary>If true, cell width is calculated to fit the container size.</summary>
-    public bool fitX;
+    /// If true, cell width is calculated to fit the container size.
+    private bool fitX;
 
-    /// <summary>If true, cell height is calculated to fit the container size.</summary>
-    public bool fitY;
-
-    /// <summary> If true, centers the last item in the last partial row/column
-    public bool NudgeLastItemsOver;
+    /// If true, cell height is calculated to fit the container size.
+    private bool fitY;
 
     /// <summary>
     /// Calculates and applies the grid layout to all child RectTransforms.
@@ -64,338 +54,164 @@ public class FlexibleGridLayout : LayoutGroup
     /// </summary>
     public override void CalculateLayoutInputVertical()
     {
-        base.CalculateLayoutInputHorizontal();
+        // 1. Determine Rows and Columns based on FitType
+        CalculateGridCounts();
 
-        float sqrRt;
+        // 2. Calculate Cell Size based on Alignment and Fixed Padding/Spacing
+        Vector2 calculatedCellSize = CalculateCellSize();
+
+        // 3. Apply fit flags
+        cellSize.x = fitX ? Mathf.Max(0, calculatedCellSize.x) : cellSize.x;
+        cellSize.y = fitY ? Mathf.Max(0, calculatedCellSize.y) : cellSize.y;
+
+        // 4. Position all children
+        SetChildPositions();
+    }
+
+    /// <summary>
+    /// Calculates the amount of grids
+    /// </summary>
+    private void CalculateGridCounts()
+    {
+        float childCount = transform.childCount;
+        float sqrRt = Mathf.Sqrt(childCount);
+        fitX = fitY = false;
 
         switch (fitType)
         {
             case FitType.Uniform:
-
-            default:
-
+                rows = columns = Mathf.CeilToInt(sqrRt);
+                columns = Mathf.CeilToInt(childCount / (float)rows);
+                rows = Mathf.CeilToInt(childCount / (float)columns);
                 fitX = fitY = true;
-
-                sqrRt = Mathf.Sqrt(transform.childCount);
-
-                rows = Mathf.CeilToInt(sqrRt);
-
-                columns = Mathf.CeilToInt(sqrRt);
-
-                rows = Mathf.CeilToInt(transform.childCount / (float)columns);
-
-                columns = Mathf.CeilToInt(transform.childCount / (float)rows);
-
                 break;
-
             case FitType.Width:
-
-                fitX = fitY = true;
-
-                sqrRt = Mathf.Sqrt(transform.childCount);
-
-                rows = Mathf.CeilToInt(sqrRt);
-
-                columns = Mathf.CeilToInt(sqrRt);
-
-                rows = Mathf.CeilToInt(transform.childCount / (float)columns);
-
+                rows = Mathf.CeilToInt(childCount / (float)columns);
+                fitX = true;
                 break;
-
             case FitType.Height:
-
-                fitX = fitY = true;
-
-                sqrRt = Mathf.Sqrt(transform.childCount);
-
-                rows = Mathf.CeilToInt(sqrRt);
-
-                columns = Mathf.CeilToInt(sqrRt);
-
-                columns = Mathf.CeilToInt(transform.childCount / (float)rows);
-
+                columns = Mathf.CeilToInt(childCount / (float)rows);
+                fitY = true;
                 break;
-
             case FitType.FixedRows:
-
-                fitX = fitY = false;
-
-                columns = Mathf.CeilToInt(transform.childCount / (float)rows);
-
+                columns = Mathf.CeilToInt(childCount / (float)rows);
                 break;
-
             case FitType.FixedColumns:
-
-                fitX = fitY = false;
-
-                rows = Mathf.CeilToInt(transform.childCount / (float)columns);
-
+                rows = Mathf.CeilToInt(childCount / (float)columns);
                 break;
-
             case FitType.FixedBoth:
-
-                fitX = fitY = false;
-
+                // Uses user-defined rows/cols, fitX/fitY remain false
                 break;
         }
+    }
 
-        float cellWidth;
+    /// <summary>
+    /// Helper method to calculate cell size.
+    /// </summary>
+    private Vector2 CalculateCellSize()
+    {
+        float parentWidth = rectTransform.rect.width;
+        float parentHeight = rectTransform.rect.height;
 
-        float cellHeight;
+        float totalSpaceX =
+            padding.left
+            + padding.right
+            + (spacing.x * Mathf.Max(0, columns - 1));
+        float totalSpaceY =
+            padding.top + padding.bottom + (spacing.y * Mathf.Max(0, rows - 1));
 
-        switch (alignment)
+        float cellWidth = (parentWidth - totalSpaceX) / (float)columns;
+        float cellHeight = (parentHeight - totalSpaceY) / (float)rows;
+
+        if (alignment == Alignment.Vertical)
         {
-            case Alignment.Horizontal:
+            // Re-calculate total fixed space based on swapped constraint counts
+            totalSpaceX =
+                padding.left
+                + padding.right
+                + (spacing.x * Mathf.Max(0, rows - 1));
+            totalSpaceY =
+                padding.top
+                + padding.bottom
+                + (spacing.y * Mathf.Max(0, columns - 1));
 
-                cellWidth =
-                    (this.rectTransform.rect.width / (float)columns)
-                    - ((spacing.x / (float)columns) * (columns - 1))
-                    - (padding.left / (float)columns)
-                    - (padding.right / (float)columns);
-
-                cellHeight =
-                    (this.rectTransform.rect.height / (float)rows)
-                    - ((spacing.y / (float)rows) * (rows - 1))
-                    - (padding.top / (float)rows)
-                    - (padding.bottom / (float)rows);
-
-                break;
-
-            case Alignment.Vertical:
-
-            default:
-
-                cellHeight =
-                    (this.rectTransform.rect.width / (float)columns)
-                    - ((spacing.x / (float)columns) * (columns - 1))
-                    - (padding.left / (float)columns)
-                    - (padding.right / (float)columns);
-
-                cellWidth =
-                    (this.rectTransform.rect.height / (float)rows)
-                    - ((spacing.y / (float)rows) * (rows - 1))
-                    - (padding.top / (float)rows)
-                    - (padding.bottom / (float)rows);
-
-                break;
+            // calcs cell width
+            cellWidth = (parentHeight - totalSpaceY) / (float)rows;
+            // calcs cell height
+            cellHeight = (parentWidth - totalSpaceX) / (float)columns;
         }
 
-        cellSize.x = fitX
-            ? (cellWidth <= 0 ? cellSize.x : cellWidth)
-            : cellSize.x;
+        return new Vector2(cellWidth, cellHeight);
+    }
 
-        cellSize.y = fitY
-            ? (cellHeight <= 0 ? cellSize.y : cellHeight)
-            : cellSize.y;
+    /// <summary>
+    /// Helper for setting ChildPosition
+    /// </summary>
+    private void SetChildPositions()
+    {
+        float parentWidth = rectTransform.rect.width;
+        float parentHeight = rectTransform.rect.height;
 
-        int columnCount = 0;
+        // Calculate total size consumed by the grid content
+        float contentSizeX =
+            (columns * cellSize.x)
+            + (spacing.x * Mathf.Max(0, columns - 1))
+            + padding.left
+            + padding.right;
+        float contentSizeY =
+            (rows * cellSize.y)
+            + (spacing.y * Mathf.Max(0, rows - 1))
+            + padding.top
+            + padding.bottom;
 
-        int rowCount = 0;
+        float offsetX = 0f;
+        float offsetY = 0f;
 
+        // Horizontal Alignment
+        if (((int)m_ChildAlignment % 3) == 1) // Center (1, 4, 7)
+        {
+            offsetX = (parentWidth - contentSizeX) * 0.5f;
+        }
+        else if (((int)m_ChildAlignment % 3) == 2) // Right (2, 5, 8)
+        {
+            offsetX = parentWidth - contentSizeX;
+        }
+
+        // Vertical Alignment
+        if (((int)m_ChildAlignment / 3) == 1) // Middle (3, 4, 5)
+        {
+            offsetY = (parentHeight - contentSizeY) * 0.5f;
+        }
+        else if (((int)m_ChildAlignment / 3) == 2) // Lower (6, 7, 8)
+        {
+            offsetY = parentHeight - contentSizeY;
+        }
+
+        // Position children now.
         for (int i = 0; i < rectChildren.Count; i++)
         {
-            var item = rectChildren[i];
+            RectTransform item = rectChildren[i];
 
-            float xPos;
+            int columnIdx,
+                rowIdx;
 
-            float yPos;
-
-            float xLastItemOffset = 0;
-
-            switch (alignment)
+            if (alignment == Alignment.Horizontal)
             {
-                case Alignment.Horizontal:
-
-                    rowCount = i / columns;
-
-                    columnCount = i % columns;
-
-                    if (
-                        NudgeLastItemsOver
-                        && rowCount == (rectChildren.Count / columns)
-                    )
-                    {
-                        xLastItemOffset = (cellSize.x + padding.left) / 2;
-                    }
-
-                    break;
-
-                case Alignment.Vertical:
-
-                default:
-
-                    rowCount = i / rows;
-
-                    columnCount = i % rows;
-
-                    if (
-                        NudgeLastItemsOver
-                        && rowCount == (rectChildren.Count / rows)
-                    )
-                    {
-                        xLastItemOffset = (cellSize.x + padding.left) / 2;
-                    }
-
-                    break;
+                rowIdx = i / columns;
+                columnIdx = i % columns;
+            }
+            else // Alignment.Vertical
+            {
+                // In vertical mode, items flow down first, so rows=primary, columns=secondary
+                columnIdx = i / rows;
+                rowIdx = i % rows;
             }
 
-            xPos =
-                (cellSize.x * columnCount)
-                + (spacing.x * columnCount)
-                + padding.left
-                + xLastItemOffset;
-
-            yPos =
-                (cellSize.y * rowCount) + (spacing.y * rowCount) + padding.top;
-
-            switch (m_ChildAlignment)
-            {
-                case TextAnchor.UpperLeft:
-
-                default:
-
-                    //No need to change xPos;
-
-                    //No need to change yPos;
-
-                    break;
-
-                case TextAnchor.UpperCenter:
-
-                    xPos += (
-                        0.5f
-                        * (
-                            this.gameObject.GetComponent<RectTransform>().sizeDelta.x
-                            + (spacing.x + padding.left + padding.left)
-                            - (
-                                columns
-                                * (cellSize.x + spacing.x + padding.left)
-                            )
-                        )
-                    ); //Center xPos
-
-                    //No need to change yPos;
-
-                    break;
-
-                case TextAnchor.UpperRight:
-
-                    xPos =
-                        -xPos
-                        + this.gameObject.GetComponent<RectTransform>().sizeDelta.x
-                        - cellSize.x; //Flip xPos to go bottom-up
-
-                    //No need to change yPos;
-
-                    break;
-
-                case TextAnchor.MiddleLeft:
-
-                    //No need to change xPos;
-
-                    yPos += (
-                        0.5f
-                        * (
-                            this.gameObject.GetComponent<RectTransform>().sizeDelta.y
-                            + (spacing.y + padding.top + padding.top)
-                            - (rows * (cellSize.y + spacing.y + padding.top))
-                        )
-                    ); //Center yPos
-
-                    break;
-
-                case TextAnchor.MiddleCenter:
-
-                    xPos += (
-                        0.5f
-                        * (
-                            this.gameObject.GetComponent<RectTransform>().sizeDelta.x
-                            + (spacing.x + padding.left + padding.left)
-                            - (
-                                columns
-                                * (cellSize.x + spacing.x + padding.left)
-                            )
-                        )
-                    ); //Center xPos
-
-                    yPos += (
-                        0.5f
-                        * (
-                            this.gameObject.GetComponent<RectTransform>().sizeDelta.y
-                            + (spacing.y + padding.top + padding.top)
-                            - (rows * (cellSize.y + spacing.y + padding.top))
-                        )
-                    ); //Center yPos
-
-                    break;
-
-                case TextAnchor.MiddleRight:
-
-                    xPos =
-                        -xPos
-                        + this.gameObject.GetComponent<RectTransform>().sizeDelta.x
-                        - cellSize.x; //Flip xPos to go bottom-up
-
-                    yPos += (
-                        0.5f
-                        * (
-                            this.gameObject.GetComponent<RectTransform>().sizeDelta.y
-                            + (spacing.y + padding.top + padding.top)
-                            - (rows * (cellSize.y + spacing.y + padding.top))
-                        )
-                    ); //Center yPos
-
-                    break;
-
-                case TextAnchor.LowerLeft:
-
-                    //No need to change xPos;
-
-                    yPos =
-                        -yPos
-                        + this.gameObject.GetComponent<RectTransform>().sizeDelta.y
-                        - cellSize.y; //Flip yPos to go Right to Left
-
-                    break;
-
-                case TextAnchor.LowerCenter:
-
-                    xPos += (
-                        0.5f
-                        * (
-                            this.gameObject.GetComponent<RectTransform>().sizeDelta.x
-                            + (spacing.x + padding.left + padding.left)
-                            - (
-                                columns
-                                * (cellSize.x + spacing.x + padding.left)
-                            )
-                        )
-                    ); //Center xPos
-
-                    yPos =
-                        -yPos
-                        + this.gameObject.GetComponent<RectTransform>().sizeDelta.y
-                        - cellSize.y; //Flip yPos to go Right to Left
-
-                    break;
-
-                case TextAnchor.LowerRight:
-
-                    xPos =
-                        -xPos
-                        + this.gameObject.GetComponent<RectTransform>().sizeDelta.x
-                        - cellSize.x; //Flip xPos to go bottom-up
-
-                    yPos =
-                        -yPos
-                        + this.gameObject.GetComponent<RectTransform>().sizeDelta.y
-                        - cellSize.y; //Flip yPos to go Right to Left
-
-                    break;
-            }
-
+            float xPos =
+                padding.left + (cellSize.x + spacing.x) * columnIdx + offsetX;
+            float yPos =
+                padding.top + (cellSize.y + spacing.y) * rowIdx + offsetY;
             SetChildAlongAxis(item, 0, xPos, cellSize.x);
-
             SetChildAlongAxis(item, 1, yPos, cellSize.y);
         }
     }
