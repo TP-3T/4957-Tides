@@ -26,6 +26,12 @@ namespace TTT.UI
         public Vector2 StartPosition { get; set; }
 
         [field: SerializeField]
+        public AnimationCurve MovementCurve { get; set; }
+
+        [field: SerializeField]
+        public float MovementSeconds { get; set; }
+
+        [field: SerializeField]
         public ShiftType ShiftDirection { get; set; }
 
         [field: SerializeField]
