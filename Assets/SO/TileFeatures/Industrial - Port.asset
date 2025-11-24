@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Industrial - Port
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: port
+  <Category>k__BackingField: 0
+  <DisplayName>k__BackingField: Port
   <PollutionEmission>k__BackingField: 30
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 20

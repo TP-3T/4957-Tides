@@ -15,8 +15,20 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: e7e5ee7318adfcd448829a3590075345
   m_SerializeEntries:
-  - m_GUID: 04d62943a9ba38d41a50517e4ea6a4bf
-    m_Address: B_INDLumberMill
+  - m_GUID: 103a7d1f410edce409d794f05545db82
+    m_Address: B_Factory
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12245387bffda01459316d70473ddaee
+    m_Address: B_Coal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12f703e2ef9f9ff4ab52f1043d2b2641
+    m_Address: B_Lumber
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
@@ -26,31 +38,31 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 308b7c9e68e889748b60115f0907a8fd
-    m_Address: B_POWNuclear
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - building
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 354fe57acf6514341a5aadb7dfc8cc52
     m_Address: UI_Game
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 41b3622f0f526dd49979692beb304dfe
-    m_Address: B_INDFactory
+  - m_GUID: 7417ca1842386a94d8af4ef0ca724c26
+    m_Address: B_Forest
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 66f83e618533dc84aa1410fce3525506
-    m_Address: B_INDPort
+  - m_GUID: 99b41a5ca691c9243b9e7320655dcc8a
+    m_Address: B_House
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8fbc040397b1362419688808a67eee03
-    m_Address: B_HOUHouse
+  - m_GUID: 9ec92f758ff487646a696d209047790d
+    m_Address: B_Mine
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a5572e0a8737808428960f59e282a810
+    m_Address: B_Port
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
@@ -59,6 +71,18 @@ MonoBehaviour:
     m_Address: P_HexMesh
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2fc9cdc2eae8f04181273b343e0526f
+    m_Address: B_Nuclear
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5d9312cc2bc86247ba1cd8b25efa927
+    m_Address: B_Wind
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: dc847a122f093dc4080e470c320f582d, type: 2}

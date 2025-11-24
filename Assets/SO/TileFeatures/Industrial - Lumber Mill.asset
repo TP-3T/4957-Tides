@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Industrial - Lumber Mill
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: lumber
+  <Category>k__BackingField: 0
+  <DisplayName>k__BackingField: Lumber Mill
   <PollutionEmission>k__BackingField: 60
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 1000
@@ -38,4 +40,4 @@ MonoBehaviour:
     <Count>k__BackingField: 1
   - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
     <Count>k__BackingField: 2
-  <Prefab>k__BackingField: {fileID: 4171653050111575758, guid: 48b57d9da2cb27b4c9c837379b0ff985, type: 3}
+  <Prefab>k__BackingField: {fileID: 263813228123895411, guid: 5e256c173d088554d8f1a6ec03bc32c8, type: 3}
