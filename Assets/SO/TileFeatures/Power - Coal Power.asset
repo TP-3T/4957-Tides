@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Power - Coal Power
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: coal
-  <Category>k__BackingField: 0
+  <Category>k__BackingField: 2
   <DisplayName>k__BackingField: Coal Power
   <PollutionEmission>k__BackingField: 10
   <Constraints>k__BackingField:
