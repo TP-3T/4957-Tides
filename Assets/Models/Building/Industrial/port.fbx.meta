@@ -1,19 +1,9 @@
 fileFormatVersion: 2
-guid: f2847fbe82c745f43aa6e654c18e90ff
+guid: e82edf691c22f6140a58e6ee12078ea0
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: highlight_industrial.png
-    second: {fileID: 2100000, guid: 22b40ff75ddf5f04c911044f935159e4, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: port.png
-    second: {fileID: 2100000, guid: 4e28dce597991b544b829655ec9c318a, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

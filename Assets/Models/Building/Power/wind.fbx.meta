@@ -1,19 +1,9 @@
 fileFormatVersion: 2
-guid: 1362bed0c004e384b8d417f9d671c8d3
+guid: 9a5e79cfab4b5e64f8289b5668759cc5
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: highlight_power.png
-    second: {fileID: 2100000, guid: 0741e5fbd46280d41a7fd5670d1ff21f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: wind.png
-    second: {fileID: 2100000, guid: 41efce19593ac0a4cac1e91b90087600, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

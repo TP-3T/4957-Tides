@@ -1,19 +1,9 @@
 fileFormatVersion: 2
-guid: a6f4efceefc07bb46983a2f84d7e86e4
+guid: a659b12fe27dcd441b73d14772673b3a
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: coal.png
-    second: {fileID: 2100000, guid: e6822da2460ac114a9a1f2b0e090be64, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: highlight_power.png
-    second: {fileID: 2100000, guid: 0741e5fbd46280d41a7fd5670d1ff21f, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
