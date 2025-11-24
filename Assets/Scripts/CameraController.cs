@@ -10,7 +10,6 @@ using UnityEngine.InputSystem;
 /// - Panning
 /// - Dragging
 /// </summary>
-[RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
 {
     const float MAX_SPEED = 20f;
@@ -29,7 +28,8 @@ public class CameraController : MonoBehaviour
     const float SCREEN_EDGE_MAX = 1f;
     const float SCREEN_MIDPOINT_DIVISOR = 2f;
     const float MAGNITUDE_THRESHOLD = 0.001f;
-    const float NO_VELOCITY = 0f;
+    const float NO_VERTICAL_VELOCITY = 0f;
+    const float NO_ZOOM_VELOCITY = 0f;
     const float TILTING_MOVEMENT_FACTOR = 0.7f;
     const float TERRAIN_RAYCAST_HEIGHT_OFFSET = 50f;
     const float TERRAIN_RAYCAST_DISTANCE = 100f;
@@ -37,7 +37,10 @@ public class CameraController : MonoBehaviour
     const float ZOOM_VELOCITY_BENCHMARK = 0.01f;
     const float DRAG_THRESHOLD = 0.1f; // Minimum distance to consider it a drag vs click
 
+    [SerializeField]
     private Transform cameraTransform;
+
+    [SerializeField]
     private Camera playerCamera;
 
     private CameraControlActions cameraActions;
@@ -61,7 +64,6 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
-        playerCamera = this.GetComponent<Camera>();
         cameraActions = new();
         cameraActions.Camera.Enable();
         cameraTransform = playerCamera.transform;
@@ -128,7 +130,7 @@ public class CameraController : MonoBehaviour
         horizontalVelocity =
             (this.transform.position - lastPosition) / Time.deltaTime;
 
-        horizontalVelocity.z = NO_VELOCITY;
+        horizontalVelocity.z = NO_VERTICAL_VELOCITY;
 
         lastPosition = this.transform.position;
     }
@@ -172,7 +174,7 @@ public class CameraController : MonoBehaviour
         Vector3 right;
 
         right = cameraTransform.right;
-        right.y = NO_VELOCITY;
+        right.y = NO_VERTICAL_VELOCITY;
 
         return right;
     }
@@ -186,7 +188,7 @@ public class CameraController : MonoBehaviour
         Vector3 forward;
 
         forward = cameraTransform.forward;
-        forward.y = NO_VELOCITY;
+        forward.y = NO_VERTICAL_VELOCITY;
 
         return forward;
     }
@@ -223,7 +225,11 @@ public class CameraController : MonoBehaviour
     /// <param name="inputVal"></param>
     private void RotateCamera(InputAction.CallbackContext inputVal)
     {
-        if (Mouse.current.rightButton.isPressed)
+        if (!Mouse.current.rightButton.isPressed)
+        {
+            return;
+        }
+        else
         {
             float mouseDeltaX;
             float rotationY;
@@ -273,13 +279,13 @@ public class CameraController : MonoBehaviour
             // MOMENTUM DECAY
             zoomVelocity = Mathf.Lerp(
                 zoomVelocity,
-                NO_VELOCITY,
+                NO_ZOOM_VELOCITY,
                 ZOOM_MOMENTUM_DAMPING * Time.deltaTime
             );
         }
         else
         {
-            zoomVelocity = NO_VELOCITY;
+            zoomVelocity = NO_ZOOM_VELOCITY;
         }
 
         // zoomHeight = Mathf.Clamp(zoomHeight, MIN_HEIGHT, MAX_HEIGHT);
@@ -326,25 +332,24 @@ public class CameraController : MonoBehaviour
 
             screenDelta = (mousePos - screenCenter) / screenCenter;
 
-            if (NextToScreenEdge(screenDelta))
+            moveDirection = Vector3.zero;
+
+            if (
+                Mathf.Abs(screenDelta.x)
+                    > SCREEN_EDGE_MAX - SCREEN_EDGE_TOLERANCE
+                || Mathf.Abs(screenDelta.y)
+                    > SCREEN_EDGE_MAX - SCREEN_EDGE_TOLERANCE
+            )
             {
                 moveDirection =
                     GetCameraRight() * screenDelta.x
                     + GetCameraForward() * screenDelta.y;
 
-                moveDirection.y = NO_VELOCITY;
+                moveDirection.y = NO_VERTICAL_VELOCITY;
 
                 targetPosition += moveDirection.normalized;
             }
         }
-    }
-
-    private static bool NextToScreenEdge(Vector2 screenDelta)
-    {
-        return Mathf.Abs(screenDelta.x)
-                > SCREEN_EDGE_MAX - SCREEN_EDGE_TOLERANCE
-            || Mathf.Abs(screenDelta.y)
-                > SCREEN_EDGE_MAX - SCREEN_EDGE_TOLERANCE;
     }
 
     /// <summary>
@@ -371,6 +376,7 @@ public class CameraController : MonoBehaviour
             Vector3 hitPoint;
 
             hitPoint = ray.GetPoint(distance);
+
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 startDrag = hitPoint;
