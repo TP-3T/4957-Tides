@@ -57,12 +57,19 @@ namespace TTT.UI
                 selectedTab.Deselect();
             }
 
+            Debug.Log("Selected Tab: " + SettingsTabButton.name);
+
             selectedTab = SettingsTabButton;
 
             selectedTab.Select();
 
             ResetTabs();
+
+            Debug.Log("BG Color: " + SettingsTabButton.background.color);
+            Debug.Log("Active Color: " + tabActiveColor);
             SettingsTabButton.background.color = tabActiveColor;
+            Debug.Log("BG Color: " + SettingsTabButton.background.color);
+
             int index = SettingsTabButton.transform.GetSiblingIndex();
             for (int i = 0; i < tabPages.Count; i++)
             {
