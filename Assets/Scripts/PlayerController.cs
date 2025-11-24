@@ -1,5 +1,6 @@
 using TTT.GameEvents;
 using TTT.Hex;
+using TTT.Managers;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,6 +28,17 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField]
     private GameEvent _mapMeshClicked;
+
+    [SerializeField] private int maxC02 = 500;
+    [SerializeField] private int maxTemperature = 50;
+    [SerializeField] private GameEvent _PlayerLoseEvent;
+
+    void Start()
+    {
+        GameManager = FindAnyObjectByType<GameManager>();
+    }
+
+    private GameManager GameManager;
 
     //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
     //*  We should look into the Unity Input System Package
@@ -159,5 +171,20 @@ public class PlayerController : NetworkBehaviour
     private bool IsMouseOverUI()
     {
         return EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public void CheckIfPlayerHasLost()
+    {
+        if (GameManager.GetCO2() > maxC02)
+        {
+            _PlayerLoseEvent.Raise();
+            return;
+        }
+
+        if (GameManager.GetTemperature() > maxTemperature)
+        {
+            _PlayerLoseEvent.Raise();
+            return;
+        }
     }
 }
