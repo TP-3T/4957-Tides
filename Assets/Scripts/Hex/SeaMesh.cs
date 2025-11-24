@@ -1,14 +1,18 @@
 using System.Collections.Generic;
+using TTT.DataClasses.HexData;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Rendering;
-using TTT.DataClasses.HexData;
-using Unity.Netcode.Components;
 
 namespace TTT.Hex
 {
-    [RequireComponent(typeof(MeshFilter), typeof(MeshCollider), typeof(MeshRenderer)),
-    RequireComponent(typeof(NetworkObject))]
+    [
+        RequireComponent(typeof(MeshFilter)),
+        RequireComponent(typeof(MeshRenderer)),
+        RequireComponent(typeof(MeshCollider)),
+        RequireComponent(typeof(NetworkObject))
+    ]
     public class SeaMesh : NetworkBehaviour
     {
         private Mesh _seaMesh;
@@ -16,9 +20,6 @@ namespace TTT.Hex
         private MeshCollider _meshCollider;
         private List<Vector3> _vertices = new();
         private List<int> _triangles = new();
-        // private List<Color> _colors = new();
-        // private Vector3[] _cvertices = new Vector3[0];
-        // private Color[] _ccolors = new Color[0];
 
         private void InitializeMesh()
         {
@@ -42,7 +43,7 @@ namespace TTT.Hex
         {
             InitializeMesh();
         }
-        
+
         /// <summary>
         /// Adds of the HexCell.
         /// </summary>
@@ -55,7 +56,12 @@ namespace TTT.Hex
             _triangles.Add(triVertexStart + i + 1);
         }
 
-        public void Triangulate(NetworkList<HexCell> hexCells, float seaLevel, float hexSize, HexOrientation hexOrientation)
+        public void Triangulate(
+            NetworkList<HexCell> hexCells,
+            float seaLevel,
+            float hexSize,
+            HexOrientation hexOrientation
+        )
         {
             for (int i = 0; i < hexCells.Count; i++)
             {
@@ -67,7 +73,10 @@ namespace TTT.Hex
 
                 _vertices.Add(seaCellPosition);
 
-                Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
+                Vector3[] corners = HexMath.GetHexCorners(
+                    hexSize,
+                    hexOrientation
+                );
 
                 // Regular triangle vertices
                 foreach (Vector3 corner in corners)
@@ -79,7 +88,9 @@ namespace TTT.Hex
                 foreach (Vector3 corner in corners)
                 {
                     _vertices.Add(
-                        seaCellPosition + corner - new Vector3(0, seaCellPosition.y, 0)
+                        seaCellPosition
+                            + corner
+                            - new Vector3(0, seaCellPosition.y, 0)
                     );
                 }
 
@@ -93,7 +104,7 @@ namespace TTT.Hex
                 }
             }
 
-            _seaMesh.vertices = /*_cvertices =*/ _vertices.ToArray();
+            _seaMesh.vertices = _vertices.ToArray();
             _seaMesh.SetTriangles(_triangles, 0);
 
             _seaMesh.RecalculateBounds();
@@ -106,10 +117,9 @@ namespace TTT.Hex
         public void TriangulateCell(
             HexCell hexCell,
             float hexSize,
-            HexOrientation hexOrientation)
-        {
-        }
-        
+            HexOrientation hexOrientation
+        ) { }
+
         public void TriangulateCells(
             HexCell[] hexCells,
             float seaLevel,
@@ -123,7 +133,10 @@ namespace TTT.Hex
             {
                 int count = c.CenterVertexIndex; // c = counter, 😉
 
-                Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
+                Vector3[] corners = HexMath.GetHexCorners(
+                    hexSize,
+                    hexOrientation
+                );
 
                 // Populate triangle and color arrays
                 for (int k = 0; k < corners.Length; k++)

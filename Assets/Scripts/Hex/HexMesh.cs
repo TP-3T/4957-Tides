@@ -7,9 +7,13 @@ using UnityEngine.Rendering;
 
 namespace TTT.Hex
 {
-    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider)),
-    RequireComponent(typeof(NetworkObject)),
-    RequireComponent(typeof(NetworkTransform))]
+    [
+        RequireComponent(typeof(MeshFilter)),
+        RequireComponent(typeof(MeshRenderer)),
+        RequireComponent(typeof(MeshCollider)),
+        RequireComponent(typeof(NetworkObject)),
+        RequireComponent(typeof(NetworkTransform))
+    ]
     public class HexMesh : NetworkBehaviour
     {
         public static LayerMask LayerMask = 1 << 10;
@@ -20,8 +24,8 @@ namespace TTT.Hex
         private List<Vector3> vertices = new();
         private List<int> triangles = new();
         private List<Color> colors = new();
-        private Vector3[] cvertices = new Vector3[0];
-        private Color[] ccolors = new Color[0];
+        private Vector3[] cell_vertices = new Vector3[0];
+        private Color[] cell_colors = new Color[0];
 
         void InitializeMesh()
         {
@@ -88,7 +92,11 @@ namespace TTT.Hex
             triangles.Add(triVertexStart + i + 1);
         }
 
-        public void Triangulate(NetworkList<HexCell> hexCells, float hexSize, HexOrientation hexOrientation)
+        public void Triangulate(
+            NetworkList<HexCell> hexCells,
+            float hexSize,
+            HexOrientation hexOrientation
+        )
         {
             ClearMesh();
 
@@ -103,7 +111,10 @@ namespace TTT.Hex
                 vertices.Add(hexCell.CellPosition);
                 colors.Add(hexCell.CellColor);
 
-                Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
+                Vector3[] corners = HexMath.GetHexCorners(
+                    hexSize,
+                    hexOrientation
+                );
 
                 // Regular triangle vertices
                 foreach (Vector3 corner in corners)
@@ -118,7 +129,9 @@ namespace TTT.Hex
                 foreach (Vector3 corner in corners)
                 {
                     vertices.Add(
-                        hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0)
+                        hexCell.CellPosition
+                            + corner
+                            - new Vector3(0, hexCell.CellPosition.y, 0)
                     );
                     colors.Add(hexCell.CellColor);
                 }
@@ -134,8 +147,8 @@ namespace TTT.Hex
                     hexCells[i] = hexCell;
             }
 
-            mesh.vertices = cvertices = vertices.ToArray();
-            mesh.colors = ccolors = colors.ToArray();
+            mesh.vertices = cell_vertices = vertices.ToArray();
+            mesh.colors = cell_colors = colors.ToArray();
             mesh.triangles = triangles.ToArray();
 
             mesh.RecalculateNormals();
@@ -146,44 +159,50 @@ namespace TTT.Hex
         }
 
         /// <summary>
-        /// Retriangulates a single cell in the mesh.
+        /// Retriangulate a single cell in the mesh.
         /// </summary>
         /// <param name="hexCell"></param>
         /// <param name="hexSize"></param>
         /// <param name="hexOrientation"></param>
-        public void ReTriangulateCell(HexCell hexCell, float hexSize, HexOrientation hexOrientation)
+        public void ReTriangulateCell(
+            HexCell hexCell,
+            float hexSize,
+            HexOrientation hexOrientation
+        )
         {
             // Debug.Log(hexCell.CenterVertexIndex);
             // Debug.Log(hexCell.CellColor);
 
             int count = hexCell.CenterVertexIndex; // c = counter, 😉
 
-            cvertices[count] = hexCell.CellPosition;
-            ccolors[count++] = (hexCell.CellColor);
+            cell_vertices[count] = hexCell.CellPosition;
+            cell_colors[count++] = (hexCell.CellColor);
 
             Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
 
             // Regular triangle vertices
             foreach (Vector3 corner in corners)
             {
-                cvertices[count] = hexCell.CellPosition + corner;
-                ccolors[count++] = hexCell.CellColor;
+                cell_vertices[count] = hexCell.CellPosition + corner;
+                cell_colors[count++] = hexCell.CellColor;
             }
 
             // Vertices that will be used to draw the side faces
             foreach (Vector3 corner in corners)
             {
-                cvertices[count] =
-                    hexCell.CellPosition + corner - new Vector3(0, hexCell.CellPosition.y, 0);
-                ccolors[count++] = hexCell.CellColor;
+                cell_vertices[count] =
+                    hexCell.CellPosition
+                    + corner
+                    - new Vector3(0, hexCell.CellPosition.y, 0);
+                cell_colors[count++] = hexCell.CellColor;
             }
 
-            mesh.SetVertices(cvertices);
-            mesh.SetColors(ccolors);
+            mesh.SetVertices(cell_vertices);
+            mesh.SetColors(cell_colors);
         }
 
         /// <summary>
-        /// Retriangualtes a subset of the mesh.
+        /// Retriangulate a subset of the mesh.
         /// </summary>
         /// <param name="hexCells"></param>
         /// <param name="hexSize"></param>
@@ -198,29 +217,34 @@ namespace TTT.Hex
             {
                 int count = c.CenterVertexIndex; // c = counter, 😉
 
-                cvertices[count] = c.CellPosition;
-                ccolors[count++] = (c.CellColor);
+                cell_vertices[count] = c.CellPosition;
+                cell_colors[count++] = (c.CellColor);
 
-                Vector3[] corners = HexMath.GetHexCorners(hexSize, hexOrientation);
+                Vector3[] corners = HexMath.GetHexCorners(
+                    hexSize,
+                    hexOrientation
+                );
 
                 // Regular triangle vertices
                 foreach (Vector3 corner in corners)
                 {
-                    cvertices[count] = c.CellPosition + corner;
-                    ccolors[count++] = c.CellColor;
+                    cell_vertices[count] = c.CellPosition + corner;
+                    cell_colors[count++] = c.CellColor;
                 }
 
                 // Vertices that will be used to draw the side faces
                 foreach (Vector3 corner in corners)
                 {
-                    cvertices[count] =
-                        c.CellPosition + corner - new Vector3(0, c.CellPosition.y, 0);
-                    ccolors[count++] = c.CellColor;
+                    cell_vertices[count] =
+                        c.CellPosition
+                        + corner
+                        - new Vector3(0, c.CellPosition.y, 0);
+                    cell_colors[count++] = c.CellColor;
                 }
             }
 
-            mesh.SetVertices(cvertices);
-            mesh.SetColors(ccolors);
+            mesh.SetVertices(cell_vertices);
+            mesh.SetColors(cell_colors);
         }
 
         public void ClearMesh()
