@@ -178,11 +178,11 @@ namespace TTT.UI
                 //Add to Buildings dictionary
                 Buildings[feature.Category][feature.UniqueID] = feature;
 
-                AddToTabSlots(feature);
+                AddToTabContentSlots(feature);
             }
         }
 
-        private void AddToTabSlots(FeatureType feature)
+        private void AddToTabContentSlots(FeatureType feature)
         {
             var tab = tabSlots.Keys.First(key =>
                 key.name.Equals(feature.Category.ToString())

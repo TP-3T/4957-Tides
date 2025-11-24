@@ -3,13 +3,27 @@ using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.UI;
 
 public class BuildingShopSlot : MonoBehaviour
 {
     public FeatureType feature;
 
+    [Header("UI References")]
     [SerializeField]
-    private TextMeshProUGUI textField;
+    private TextMeshProUGUI nameText;
+
+    [SerializeField]
+    private TextMeshProUGUI costText;
+
+    [SerializeField]
+    private TextMeshProUGUI productionText;
+
+    [SerializeField]
+    private TextMeshProUGUI energyText;
+
+    [SerializeField]
+    private Feature[] featureData;
 
     public GameEvent BuildModeStartingEvent;
 
@@ -25,8 +39,8 @@ public class BuildingShopSlot : MonoBehaviour
 
     public void UpdateText()
     {
-        textField = GetComponentInChildren<TextMeshProUGUI>();
+        nameText = GetComponentInChildren<TextMeshProUGUI>();
 
-        textField.text = feature.DisplayName;
+        nameText.text = feature.DisplayName;
     }
 }
