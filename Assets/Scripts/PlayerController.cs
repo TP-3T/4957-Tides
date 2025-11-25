@@ -140,7 +140,7 @@ public class PlayerController : NetworkBehaviour
             {
                 // Raise some event will deal with this later
                 // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
-
+                Debug.Log("Map mesh clicked at: " + raycastHit.point);
                 _mapMeshClicked.Raise(
                     new MapMeshClickedEventArgs
                     {

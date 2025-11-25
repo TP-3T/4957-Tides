@@ -27,7 +27,7 @@ public class FeatureInfo : MonoBehaviour, IOpenable
     private Coroutine CurrentShift {get; set;}
 
     /* #endregion*/
-    void Awake()
+    private void Awake()
     {
         (this as IOpenable).SetupPositions();
     }
@@ -53,6 +53,7 @@ public class FeatureInfo : MonoBehaviour, IOpenable
     public void OnTileClicked()
     {
         //Need to add logic if this is already out it needs to only change the info and not animate and move the panel again
+        Debug.Log("Tile Clicked - Feature Info Panel Toggle");
         Toggle();
     }
-}   
+}       
