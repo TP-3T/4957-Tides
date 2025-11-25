@@ -77,29 +77,6 @@ public class CameraController : MonoBehaviour
         cameraActions.Camera.ZoomCamera.performed += ZoomCamera;
     }
 
-    // /// <summary>
-    // /// OnEnable is called when the object becomes enabled and active.
-    // /// </summary>
-    // private void OnEnable()
-    // {
-    //     // The name of the action map is "Camera". Enables the action map.
-    //     cameraActions.Camera.Enable();
-    // }
-
-    // /// <summary>
-    // /// OnDisable is called when the object becomes disabled.
-    // ///
-    // /// Turns off action map if object is disabled to not have unwanted behaviour.
-    // /// </summary>
-    // private void OnDisable()
-    // {
-    //     // Unsubscribe from the performed events of the camera actions.
-    //     cameraActions.Camera.RotateCamera.performed -= RotateCamera;
-    //     cameraActions.Camera.ZoomCamera.performed -= ZoomCamera;
-
-    //     cameraActions.Disable();
-    // }
-
     /// <summary>
     /// Called once per frame to update.
     /// </summary>
