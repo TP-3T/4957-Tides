@@ -17,7 +17,7 @@ namespace TTT.Managers
     public partial class MapManager
     {
         [SerializeField]
-        public GameEvent _OnFloodEnded;
+        private GameEvent onFloodEnded;
 
         private void FloodCell(ref HexCell hc)
         {
@@ -160,8 +160,9 @@ namespace TTT.Managers
                     while (FloodQueue2.Count > 0)
                         FloodQueue.Enqueue(FloodQueue2.Dequeue());
 
+                    // currently, this is also where we raise TurnEnded
                     Debug.Log("Flood fill cycle complete");
-                    _OnFloodEnded.Raise();
+                    onFloodEnded.Raise();
 
                     yield break;
                 }
