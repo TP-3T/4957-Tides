@@ -193,12 +193,13 @@ namespace TTT.UI
                 .transform.GetComponent<RectTransform>()
                 .rect.width;
             Vector3 parentPosition = ShopSlotArea.transform.position;
+            var parentRect = ShopSlotArea.GetComponent<RectTransform>().rect;
 
             GameObject slotObject = Instantiate(
                 ShopSlotPrefab,
                 new Vector3(
                     parentPosition.x,
-                    parentPosition.y,
+                    parentPosition.y + parentRect.height,
                     parentPosition.z
                 ),
                 Quaternion.identity,

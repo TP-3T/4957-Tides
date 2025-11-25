@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 7227047647059873641}
   - component: {fileID: 5925874576535686948}
   - component: {fileID: 9158636743349474806}
-  - component: {fileID: 3764150141886477968}
   - component: {fileID: 6838036057446226880}
   m_Layer: 0
   m_Name: MapManager
@@ -84,7 +83,7 @@ MonoBehaviour:
   RisingRate:
     m_InternalValue: 1
   DrawDebugLabels: 0
-  _OnLastPlayerTurnEvent: {fileID: 11400000, guid: 0f6684a922f3e8d45b032f0e51c747bc, type: 2}
+  _OnFloodEnded: {fileID: 11400000, guid: ae781f782e86038429c1d06bcfccf3ac, type: 2}
 --- !u!114 &7227047647059873641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,34 +168,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
---- !u!114 &3764150141886477968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1065302472941044375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: a8d0fdbaf27ed27499b9b3d43051c0e6, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4501877893874324670}
-        m_TargetAssemblyTypeName: TTT.Managers.MapManager, TTT.Managers
-        m_MethodName: OnNextTurnClick
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!120 &6838036057446226880
 LineRenderer:
   serializedVersion: 2

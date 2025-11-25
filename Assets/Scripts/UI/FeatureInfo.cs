@@ -1,7 +1,7 @@
 using TTT.UI;
 using UnityEngine;
 
-public class Tileinfo : MonoBehaviour, IOpenable
+public class FeatureInfo : MonoBehaviour, IOpenable
 {
     /* #region IOpenable requirements */
     [field: SerializeField]
