@@ -21,8 +21,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Sea
-  m_Shader: {fileID: 4800000, guid: f24809d953f26f64b9c352c89807da80, type: 3}
-  m_Parent: {fileID: 2100000, guid: c9629fc814eff314e8ed5af7e75e9895, type: 2}
+  m_Shader: {fileID: -6465566751694194690, guid: 139ee7774d91b094d973a252daa40ced, type: 3}
+  m_Parent: {fileID: -876546973899608171, guid: 139ee7774d91b094d973a252daa40ced, type: 3}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -48,6 +48,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _DepthMaxDistance: 1
+    - _QueueControl: 0
     - _SurfaceNoiseCutoff: 0.777
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
