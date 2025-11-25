@@ -37,7 +37,7 @@ public class CameraController : MonoBehaviour
     const float ZOOM_VELOCITY_BENCHMARK = 0.01f;
     const float DRAG_THRESHOLD = 0.1f; // Minimum distance to consider it a drag vs click
 
-    [SerializeField]
+    // [SerializeField]
     private Transform cameraTransform;
 
     [SerializeField]
