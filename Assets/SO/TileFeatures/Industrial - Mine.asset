@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Industrial - Mine
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: mine
+  <Category>k__BackingField: 0
+  <DisplayName>k__BackingField: Mine
   <PollutionEmission>k__BackingField: 200
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
@@ -33,4 +35,4 @@ MonoBehaviour:
     <Count>k__BackingField: 4
   - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
     <Count>k__BackingField: 30
-  <Prefab>k__BackingField: {fileID: 2791723485344083059, guid: 542455b289423ca408fbabf17238a865, type: 3}
+  <Prefab>k__BackingField: {fileID: 4054625045962737327, guid: b7971870b85cc9744a41461852030951, type: 3}

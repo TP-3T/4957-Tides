@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Industrial - Port
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: port
+  <Category>k__BackingField: 0
+  <DisplayName>k__BackingField: Port
   <PollutionEmission>k__BackingField: 30
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 20
@@ -34,4 +36,4 @@ MonoBehaviour:
     <Count>k__BackingField: 30
   - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
     <Count>k__BackingField: 2
-  <Prefab>k__BackingField: {fileID: 8506843664173545344, guid: 6280a125f160edd4a87b99e065d60309, type: 3}
+  <Prefab>k__BackingField: {fileID: 1896010477726661462, guid: 6e8ef4e7efd3aab4dada1ebc33e17654, type: 3}

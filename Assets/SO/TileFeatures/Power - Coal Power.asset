@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Power - Coal Power
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: coal
+  <Category>k__BackingField: 2
+  <DisplayName>k__BackingField: Coal Power
   <PollutionEmission>k__BackingField: 10
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 750
@@ -30,4 +32,4 @@ MonoBehaviour:
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
     <Count>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 198060925423072921, guid: 9a945f8b7db6f584a9bdd97462abd733, type: 3}
+  <Prefab>k__BackingField: {fileID: 7069087375812076879, guid: 42520394676cf744991b826d095ff4bd, type: 3}

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Power - Wind Power
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: wind
+  <Category>k__BackingField: 2
+  <DisplayName>k__BackingField: Wind Power
   <PollutionEmission>k__BackingField: 10
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 750
@@ -30,4 +32,4 @@ MonoBehaviour:
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
     <Count>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 836672763463250318, guid: 969dac68bd3816442a70a90555778e97, type: 3}
+  <Prefab>k__BackingField: {fileID: 4962228977703815173, guid: 3ae42615d19662345b681ac379648983, type: 3}
