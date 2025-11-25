@@ -189,19 +189,10 @@ namespace TTT.UI
             );
             // Create the slot and insert into dictionary
             List<GameObject> slotList = tabSlots[tab];
-            float slotWidth = ShopSlotPrefab
-                .transform.GetComponent<RectTransform>()
-                .rect.width;
-            Vector3 parentPosition = ShopSlotArea.transform.position;
-            var parentRect = ShopSlotArea.GetComponent<RectTransform>().rect;
 
             GameObject slotObject = Instantiate(
                 ShopSlotPrefab,
-                new Vector3(
-                    parentPosition.x,
-                    parentPosition.y + parentRect.height,
-                    parentPosition.z
-                ),
+                Vector3.zero,
                 Quaternion.identity,
                 ShopSlotArea.transform
             );
