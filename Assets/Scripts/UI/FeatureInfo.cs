@@ -9,6 +9,8 @@ public class FeatureInfo : MonoBehaviour, IOpenable
 
     [field: SerializeField]
     public bool IsOpen { get; set; }
+
+    [field: SerializeField]
     public Vector2 EndPosition { get; set; }
     public Vector2 StartPosition { get; set; }
 

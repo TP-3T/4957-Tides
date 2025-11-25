@@ -1269,33 +1269,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ToOpen>k__BackingField: {fileID: 1772840256}
   <IsOpen>k__BackingField: 0
+  <EndPosition>k__BackingField: {x: -300, y: 0}
   <MovementCurve>k__BackingField:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  <MovementSeconds>k__BackingField: 0
+  <MovementSeconds>k__BackingField: 1
   <ShiftDirection>k__BackingField: 2
-  <ShiftPadding>k__BackingField: {x: 20, y: 0}
+  <ShiftPadding>k__BackingField: {x: 30, y: 0}
 --- !u!114 &1772840265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1314,7 +1315,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1772840260}
         m_TargetAssemblyTypeName: FeatureInfo, UI
-        m_MethodName: Toggle
+        m_MethodName: OnTileClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
