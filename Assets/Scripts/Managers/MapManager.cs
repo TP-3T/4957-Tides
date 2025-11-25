@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using TTT.DataClasses.HexData;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.Terrain;
 using TTT.GameEvents;
@@ -9,8 +11,6 @@ using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using Newtonsoft.Json;
-using TTT.DataClasses.HexData;
 
 namespace TTT.Managers
 {
@@ -270,8 +270,10 @@ namespace TTT.Managers
             try
             {
                 // Deserialized data (cringe)
-                _gameMapData = JsonConvert.DeserializeObject<MapData>(args.DataFile.text);
-                
+                _gameMapData = JsonConvert.DeserializeObject<MapData>(
+                    args.DataFile.text
+                );
+
                 int width = _gameMapData.MapTile.Count;
                 int height = _gameMapData.MapTile["0"].Count;
 
@@ -288,31 +290,30 @@ namespace TTT.Managers
                     {
                         int z = int.Parse(zGroup.Key);
                         TileData tileData = zGroup.Value;
-                        
-                        if(tileData.Elevation < 0)
+
+                        if (tileData.Elevation < 0)
                         {
                             tileData.Elevation = 0;
                         }
 
                         OffsetCoordinates offset = new(x, z);
 
-                        Vector3 hexCenter = 
-                            HexMath.GetHexCenter(
-                                HexSize,
-                                tileData.Elevation + 1,
-                                offset,
-                                HexOrientation
-                            );
+                        Vector3 hexCenter = HexMath.GetHexCenter(
+                            HexSize,
+                            tileData.Elevation + 1,
+                            offset,
+                            HexOrientation
+                        );
 
-                        CubeCoordinates cubeCoords = 
-                            HexMath.OddOffsetToCube(
-                                offset,
-                                HexOrientation
-                            );
+                        CubeCoordinates cubeCoords = HexMath.OddOffsetToCube(
+                            offset,
+                            HexOrientation
+                        );
 
-                        Color cellColor = 
-                            _allowedTerrains.Get(tileData.TileType).Color;
-                        
+                        Color cellColor = _allowedTerrains
+                            .Get(tileData.TileType)
+                            .Color;
+
                         HexCell hexCell = new HexCell()
                         {
                             CellCubeCoordinates = cubeCoords,
@@ -320,7 +321,7 @@ namespace TTT.Managers
                             CellColor = cellColor,
                             TerrainTypeId = tileData.TileType,
                         };
-                        
+
                         int index = x + z * width;
 
                         hexCells[index] = hexCell;
@@ -344,7 +345,7 @@ namespace TTT.Managers
             catch (Exception e)
             {
                 Debug.LogException(e);
-                
+
                 _mapLoadFinishEvent.Raise(
                     new NewMapFinishedEventArgs() { WasSuccessful = false }
                 );
