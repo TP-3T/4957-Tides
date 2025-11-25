@@ -16,4 +16,4 @@ MonoBehaviour:
     UseConstant: 1
     Constant: {r: 0.40287971, g: 0.5660378, b: 0.24296905, a: 0}
     Variable: {fileID: 0}
-  uid: 0
+  uid: 3

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edfba43e484fc17418585fa87cd85427, type: 3}
-  m_Name: Barren
+  m_Name: Agriculture
   m_EditorClassIdentifier: 
   TileColor:
     UseConstant: 1
-    Constant: {r: 0.4056604, g: 0.36561534, b: 0.3272072, a: 0}
+    Constant: {r: 0.9245283, g: 0.78047377, b: 0.2660199, a: 0}
     Variable: {fileID: 0}
-  uid: 1
+  uid: 10
