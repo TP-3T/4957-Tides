@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edfba43e484fc17418585fa87cd85427, type: 3}
-  m_Name: Coastal
+  m_Name: Forest
   m_EditorClassIdentifier: 
   TileColor:
     UseConstant: 1
-    Constant: {r: 0, g: 0.5943396, b: 0.54306316, a: 0}
+    Constant: {r: 0.115521535, g: 0.41509432, b: 0.12010223, a: 0}
     Variable: {fileID: 0}
-  uid: 2
+  uid: 6
