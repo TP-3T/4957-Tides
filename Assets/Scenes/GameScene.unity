@@ -460,6 +460,10 @@ PrefabInstance:
       propertyPath: m_PreferredWidth
       value: 222.06
       objectReference: {fileID: 0}
+    - target: {fileID: 3034285830398233426, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 120.00061
+      objectReference: {fileID: 0}
     - target: {fileID: 3588933447207156260, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_Name
       value: PlayerManager

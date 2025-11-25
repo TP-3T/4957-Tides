@@ -49,6 +49,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - building
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd6d90409f7c7794fba168c476fe98d8
+    m_Address: Assets/SO/MenuUI/LobbyEntry.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2ffd29714beea942bb4d985d389ee17
     m_Address: B_NuclearReactor
     m_ReadOnly: 0
