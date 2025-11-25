@@ -508,10 +508,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5183240043876369613, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
-      propertyPath: statusText
-      value: 
-      objectReference: {fileID: 1875234272}
     - target: {fileID: 5248143721908876236, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -636,9 +632,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3588933447207156260, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 753488448}
     - targetCorrespondingSourceObject: {fileID: 3680144694594883984, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1772840260}
@@ -704,50 +697,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 897fad17376beb44da7e5f8638f4b74d, type: 3}
---- !u!1 &753488442 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3588933447207156260, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
-  m_PrefabInstance: {fileID: 378512690}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &753488444 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5183240043876369613, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
-  m_PrefabInstance: {fileID: 378512690}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 753488442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc0aef145ea80cb4ea4cd8d97e9512a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &753488448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 753488442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: ae18fced95a4b6749b1a727654516355, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 753488444}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: CheckIfPlayerHasLost
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1001 &876277448
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1332,17 +1281,6 @@ MonoBehaviour:
   <MovementSeconds>k__BackingField: 0
   <ShiftDirection>k__BackingField: 2
   <ShiftPadding>k__BackingField: {x: 20, y: 0}
---- !u!114 &1875234272 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4449539532493813523, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
-  m_PrefabInstance: {fileID: 378512690}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1879802089 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5329708062545644470, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
