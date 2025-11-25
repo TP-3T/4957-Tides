@@ -1,10 +1,14 @@
+using TMPro;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
 using TTT.Managers;
+using TTT.ModularData;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 // [RequireComponent(typeof(Camera))]
 
@@ -29,9 +33,23 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private GameEvent _mapMeshClicked;
 
-    [SerializeField] private int maxC02 = 500;
-    [SerializeField] private int maxTemperature = 50;
-    [SerializeField] private GameEvent _PlayerLoseEvent;
+    [SerializeField]
+    private GameEvent inspectModeEvent;
+
+    [SerializeField]
+    private FeatureRuntimeSet playerBuildings;
+
+    [SerializeField]
+    private TextMeshProUGUI statusText;
+
+    [SerializeField]
+    private int maxC02 = 500;
+
+    [SerializeField]
+    private int maxTemperature = 50;
+
+    [SerializeField]
+    private GameEvent _PlayerLoseEvent;
 
     void Start()
     {
@@ -175,16 +193,50 @@ public class PlayerController : NetworkBehaviour
 
     public void CheckIfPlayerHasLost()
     {
-        if (GameManager.GetCO2() > maxC02)
+        bool playerLost = false;
+
+        if (
+            GameManager.GetCO2() > maxC02
+            || GameManager.GetTemperature() > maxTemperature
+            || playerBuildings.Count() <= 0
+        )
         {
-            _PlayerLoseEvent.Raise();
-            return;
+            playerLost = true;
         }
 
-        if (GameManager.GetTemperature() > maxTemperature)
+        if (playerLost)
         {
             _PlayerLoseEvent.Raise();
+            OnLose();
             return;
+        }
+    }
+
+    public void OnLose()
+    {
+        DisableUI();
+
+        statusText.gameObject.SetActive(true);
+        statusText.text = "Spectating";
+
+        // feel free to remove this if needed, not important
+        GameObject cube = GameObject.Find("Cube");
+        cube.SetActive(false);
+    }
+
+    public void DisableUI()
+    {
+        inspectModeEvent.Raise();
+
+        GameObject uiCanvas = GameObject.Find("GameUI");
+        if (uiCanvas != null)
+        {
+            // disabling the parent would prevent the status text from appearing
+            // so we enable all children individually instead
+            foreach (Transform child in uiCanvas.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
         }
     }
 }

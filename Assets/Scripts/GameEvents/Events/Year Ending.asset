@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 365eee90f5d7bf744a7cfb62c139b74d, type: 3}
-  m_Name: NextTurnClickedEvent
+  m_Name: Year Ending
   m_EditorClassIdentifier: 
-  defaultEventArgs: {fileID: 11500000, guid: d8bde86170f9a154982b0685a7b9ec79, type: 3}
+  defaultEventArgs: {fileID: 11500000, guid: 3da40b63e1525bc448cb6733db0e488e, type: 3}
