@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d8a447a0febedb24e8cd2e631a1f15d7, type: 3}
-  m_Name: Residential - House 1
+  m_Name: Residential - HighDensity
   m_EditorClassIdentifier: 
-  <UniqueID>k__BackingField: LowDensity
+  <UniqueID>k__BackingField: HighDensity
   <Category>k__BackingField: 1
-  <DisplayName>k__BackingField: Low Density
-  <PollutionEmission>k__BackingField: 5
+  <DisplayName>k__BackingField: High Density
+  <PollutionEmission>k__BackingField: 10
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
     <TerrainConstraints>k__BackingField:
@@ -34,4 +34,4 @@ MonoBehaviour:
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
     <Count>k__BackingField: 0
-  <Prefab>k__BackingField: {fileID: 3324483096473709864, guid: 85e79d951eeefd4498be55214a912f0d, type: 3}
+  <Prefab>k__BackingField: {fileID: 4885409563839771395, guid: e8f4f83c0075de84c9221902f4d68650, type: 3}
