@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TTT.ModularData
+namespace TTT.DataClasses.ModularData
 {
     [CreateAssetMenu(
         fileName = "IntVariable",

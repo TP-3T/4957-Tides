@@ -1,9 +1,8 @@
 using System;
-using System.Linq;
-using TTT.DataClasses.TileFeatures;
+using TTT.DataClasses.ModularData;
 using UnityEngine;
 
-namespace TTT.ModularData
+namespace TTT.DataClasses.TileFeatures
 {
     /// <summary>
     /// It's possible to optimize this class by having it build a dictionary if we want.

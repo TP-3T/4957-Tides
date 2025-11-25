@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TTT.ModularData
+namespace TTT.DataClasses.ModularData
 {
     public abstract class RuntimeSet<T> : ScriptableObject
     {

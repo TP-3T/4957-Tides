@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-
 // using TTT.Features;
 // using TTT.Terrain;
 using Unity.Netcode;
@@ -25,12 +24,12 @@ namespace TTT.DataClasses.HexData
         )
         {
             CellCubeCoordinates = cellCubeCoordinates;
-            CellPosition        = cellPosition;
+            CellPosition = cellPosition;
             CellColor = cellColor;
             TerrainTypeId = terrainTypeId;
 
-            CenterVertexIndex = -1;     // To let everyone know that this is not set
-            Flooded = false;            // default flooded state of the cell
+            CenterVertexIndex = -1; // To let everyone know that this is not set
+            Flooded = false; // default flooded state of the cell
         }
 
         /// <summary>
@@ -72,7 +71,13 @@ namespace TTT.DataClasses.HexData
                 && TerrainTypeId == ((HexCell)other).TerrainTypeId;
         }
 
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer)
+            where T : IReaderWriter
         {
             CellCubeCoordinates.NetworkSerialize(serializer);
 

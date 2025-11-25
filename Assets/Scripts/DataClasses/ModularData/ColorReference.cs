@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace TTT.ModularData
+namespace TTT.DataClasses.ModularData
 {
     [Serializable]
     public class ColorReference

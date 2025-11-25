@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
-namespace TTT.ModularData
+namespace TTT.DataClasses.ModularData
 {
     [Serializable]
-    public class FloatReference
+    public class IntReference
     {
         [Tooltip("Whether to use an inline (constant) value or an injected SO")]
         public bool UseConstant = true;
@@ -12,16 +12,16 @@ namespace TTT.ModularData
         /// <summary>
         /// Defined by a constant/inline value from the inspector
         /// </summary>
-        public float Constant;
+        public int Constant;
 
         /// <summary>
         /// Defined by a scriptable object injected by the inspector
         /// </summary>
-        public FloatVariable Variable;
+        public IntVariable Variable;
 
-        public FloatReference() { }
+        public IntReference() { }
 
-        public FloatReference(float value)
+        public IntReference(int value)
         {
             UseConstant = true;
             Constant = value;
@@ -30,6 +30,6 @@ namespace TTT.ModularData
         /// <summary>
         /// The actual float value held by this object
         /// </summary>
-        public float Value => UseConstant ? Constant : Variable.Value;
+        public int Value => UseConstant ? Constant : Variable.Value;
     }
 }
