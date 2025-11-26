@@ -3,8 +3,8 @@
   <Project Path="TTT.Managers.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="TTT.DataClasses.TileFeatures.csproj" />
-  <Project Path="TTT.Hex.csproj" />
   <Project Path="TTT.GameEvents.csproj" />
+  <Project Path="TTT.Hex.csproj" />
   <Project Path="SFB.csproj" />
   <Project Path="UI.csproj" />
   <Project Path="TTT.Editors.csproj" />
