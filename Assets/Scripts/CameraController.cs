@@ -37,6 +37,7 @@ public class CameraController : MonoBehaviour
     const float ZOOM_VELOCITY_BENCHMARK = 0.01f;
     const float DRAG_THRESHOLD = 0.1f; // Minimum distance to consider it a drag vs click
 
+    // [SerializeField]
     private Transform cameraTransform;
 
     [SerializeField]
@@ -64,6 +65,7 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         cameraActions = new();
+        cameraActions.Camera.Enable();
         cameraTransform = playerCamera.transform;
         zoomHeight = cameraTransform.localPosition.y;
         cameraTransform.LookAt(this.transform);
@@ -73,29 +75,6 @@ public class CameraController : MonoBehaviour
         // Subscribe to the performed events of the camera actions.
         cameraActions.Camera.RotateCamera.performed += RotateCamera;
         cameraActions.Camera.ZoomCamera.performed += ZoomCamera;
-    }
-
-    /// <summary>
-    /// OnEnable is called when the object becomes enabled and active.
-    /// </summary>
-    private void OnEnable()
-    {
-        // The name of the action map is "Camera". Enables the action map.
-        cameraActions.Camera.Enable();
-    }
-
-    /// <summary>
-    /// OnDisable is called when the object becomes disabled.
-    ///
-    /// Turns off action map if object is disabled to not have unwanted behaviour.
-    /// </summary>
-    private void OnDisable()
-    {
-        // Unsubscribe from the performed events of the camera actions.
-        cameraActions.Camera.RotateCamera.performed -= RotateCamera;
-        cameraActions.Camera.ZoomCamera.performed -= ZoomCamera;
-
-        cameraActions.Disable();
     }
 
     /// <summary>

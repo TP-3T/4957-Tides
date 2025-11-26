@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8a447a0febedb24e8cd2e631a1f15d7, type: 3}
+  m_Name: Residential - LowDenity
+  m_EditorClassIdentifier: 
+  <UniqueID>k__BackingField: LowDensity
+  <Category>k__BackingField: 1
+  <DisplayName>k__BackingField: Low Density
+  <PollutionEmission>k__BackingField: 5
+  <Constraints>k__BackingField:
+    <MaximumHeight>k__BackingField: 500
+    <TerrainConstraints>k__BackingField:
+      <Mode>k__BackingField: 1
+      <List>k__BackingField:
+      - {fileID: 11400000, guid: bbf1927decf0b83429343952dbf6ea8b, type: 2}
+    <FeatureConstraints>k__BackingField: []
+  <BuildValidator>k__BackingField: {fileID: 11400000, guid: 418d17bf1c05a9c40aff3428a267cd49, type: 2}
+  <ResourceProducers>k__BackingField:
+  - productionSchedule: {fileID: 11400000, guid: edef3b431516b8048a30517cd2383a7b, type: 2}
+    resourceAmounts:
+    - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
+      <Count>k__BackingField: 4
+    - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
+      <Count>k__BackingField: -2
+  <Cost>k__BackingField:
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
+    <Count>k__BackingField: 0
+  <Prefab>k__BackingField: {fileID: 3324483096473709864, guid: 85e79d951eeefd4498be55214a912f0d, type: 3}
