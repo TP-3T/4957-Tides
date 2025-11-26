@@ -26,6 +26,10 @@ public class FeatureInfo : MonoBehaviour, IOpenable
 
     private Coroutine CurrentShift {get; set;}
 
+    //Need to add scriptable object that reads to display currently selected cell info. And parse out the json data to presentable format
+    //Need to create scriptable object that holds the tile data of selected
+
+
     /* #endregion*/
     private void Awake()
     {
@@ -52,8 +56,10 @@ public class FeatureInfo : MonoBehaviour, IOpenable
     /// </summary>
     public void OnTileClicked()
     {
-        //Need to add logic if this is already out it needs to only change the info and not animate and move the panel again
-        Debug.Log("Tile Clicked - Feature Info Panel Toggle");
-        Toggle();
+        if (!IsOpen)
+        {
+            Toggle();
+        }
+        //Need to add a clear selected that toggles this back to closed but will add later
     }
 }       
