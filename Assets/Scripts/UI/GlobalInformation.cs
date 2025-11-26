@@ -19,7 +19,7 @@ public class GlobalInformation : MonoBehaviour
 
     void Start()
     {
-        GameManager = FindAnyObjectByType<GameManager>();
+        GameManager = GameManager.Instance;
         setDateText();
         setCO2Text();
     }
