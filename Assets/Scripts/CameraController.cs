@@ -35,6 +35,7 @@ public class CameraController : MonoBehaviour
     const float TERRAIN_RAYCAST_DISTANCE = 100f;
     const float TERRAIN_HEIGHT_SMOOTH_SPEED = 3f;
     const float ZOOM_VELOCITY_BENCHMARK = 0.01f;
+    const float DRAG_THRESHOLD = 0.1f; // Minimum distance to consider it a drag vs click
 
     private Transform cameraTransform;
 
@@ -53,6 +54,12 @@ public class CameraController : MonoBehaviour
     private Vector3 lastPosition;
     private Vector3 targetPosition;
     private Vector3 startDrag;
+    private bool isDragging = false;
+
+    /// <summary>
+    /// Returns true if the camera is currently being dragged by the user.
+    /// </summary>
+    public bool IsDragging => isDragging;
 
     private void Awake()
     {
@@ -371,16 +378,24 @@ public class CameraController : MonoBehaviour
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 startDrag = hitPoint;
+                isDragging = false; // Reset on new press
             }
             else if (Mouse.current.leftButton.isPressed)
             {
                 Vector3 dragDisplacement = startDrag - hitPoint;
+
+                // Check if movement exceeds threshold to consider it a drag
+                if (dragDisplacement.magnitude > DRAG_THRESHOLD)
+                {
+                    isDragging = true;
+                }
 
                 transform.position += dragDisplacement;
             }
             else if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 startDrag = Vector3.zero;
+                isDragging = false; // Reset when released
             }
         }
     }

@@ -2,12 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TTT.DataClasses.States;
+using TMPro;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
 using TTT.Managers;
+using TTT.ModularData;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 // [RequireComponent(typeof(Camera))]
 
@@ -26,12 +31,41 @@ public class PlayerController : NetworkBehaviour
     const string PAUSED_STR = "paused_ui";
     const string STATE_STR_ERR = "Element is invalid.";
     const int LeftMouseIndex = 0;
+    const float CLICK_THRESHOLD = 5f; // Max pixel movement to still be considered a click
 
     [SerializeField]
     private Camera playerCamera;
 
     [SerializeField]
+    private CameraController cameraController;
+
+    [SerializeField]
     private GameEvent _mapMeshClicked;
+
+    [SerializeField]
+    private GameEvent inspectModeEvent;
+
+    [SerializeField]
+    private FeatureRuntimeSet playerBuildings;
+
+    [SerializeField]
+    private TextMeshProUGUI statusText;
+
+    [SerializeField]
+    private int maxC02 = 500;
+
+    [SerializeField]
+    private int maxTemperature = 50;
+
+    [SerializeField]
+    private GameEvent _PlayerLoseEvent;
+
+    void Start()
+    {
+        GameManager = FindAnyObjectByType<GameManager>();
+    }
+
+    private GameManager GameManager;
 
     //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
     //*  We should look into the Unity Input System Package
@@ -42,51 +76,8 @@ public class PlayerController : NetworkBehaviour
         NetworkVariableWritePermission.Server
     );
     public float DesiredCellHeight = 1.0f;
-    private Dictionary<SystemState, GameObject> UICanvases = new();
 
-    // MainMenu Canvas => UI Group
-    //      - MainMenuButton Component
-    //      - Header Component
-
-    /// <summary>
-    /// Get desired state from element name
-    /// switch statement to check string name of variable, if contains ie "main menu" delete current canvas, create main menu canvas, assign state to main menu with main menu canvas. This will happen ANYTIME STATE IS CHANGED.
-    /// </summary>
-    IEnumerator Start()
-    {
-        yield return AssetLoader<GameObject>.LoadGroup(
-            "ui",
-            (element) =>
-            {
-                String elementName = element.name;
-
-                if (elementName.Contains(MAIN_MENU_STR))
-                {
-                    UICanvases.Clear();
-                    UICanvases.Add(SystemState.MAIN_MENU, element);
-                }
-                else if (elementName.Contains(LOADING_STR))
-                {
-                    UICanvases.Clear();
-                    UICanvases.Add(SystemState.LOADING, element);
-                }
-                else if (elementName.Contains(PAUSED_STR))
-                {
-                    UICanvases.Clear();
-                    UICanvases.Add(SystemState.PAUSED, element);
-                }
-                else if (elementName.Contains(PLAYING_STR))
-                {
-                    UICanvases.Clear();
-                    UICanvases.Add(SystemState.PLAYING, element);
-                }
-                else
-                {
-                    Debug.Log(STATE_STR_ERR);
-                }
-            }
-        );
-    }
+    private Vector3 mouseDownPosition;
 
     /// <summary>
     /// Called when the networked object is spawned on the network.
@@ -148,9 +139,32 @@ public class PlayerController : NetworkBehaviour
     /// </summary>
     void Update()
     {
-        // Left click
+        // Track mouse down position
         if (Input.GetMouseButtonDown(LeftMouseIndex))
         {
+            mouseDownPosition = Input.mousePosition;
+        }
+
+        // Only process tile selection on mouse up, and only if it wasn't a drag
+        if (Input.GetMouseButtonUp(LeftMouseIndex))
+        {
+            // Don't process world clicks when clicking on UI
+            if (IsMouseOverUI())
+            {
+                return;
+            }
+
+            // Check if mouse moved significantly (drag) vs stayed in place (click)
+            float mouseMovement = Vector3.Distance(
+                mouseDownPosition,
+                Input.mousePosition
+            );
+            if (mouseMovement > CLICK_THRESHOLD)
+            {
+                // This was a drag, not a click - don't select tile
+                return;
+            }
+
             Ray mousePositionRay = playerCamera.ScreenPointToRay(
                 Input.mousePosition
             );
@@ -174,6 +188,63 @@ public class PlayerController : NetworkBehaviour
                         PlayerId = OwnerClientId,
                     }
                 );
+            }
+        }
+    }
+
+    /// <summary>
+    /// Check if the pointer is over a UI element.
+    /// </summary>
+    private bool IsMouseOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public void CheckIfPlayerHasLost()
+    {
+        bool playerLost = false;
+
+        if (
+            GameManager.GetCO2() > maxC02
+            || GameManager.GetTemperature() > maxTemperature
+            || playerBuildings.Count() <= 0
+        )
+        {
+            playerLost = true;
+        }
+
+        if (playerLost)
+        {
+            _PlayerLoseEvent.Raise();
+            OnLose();
+            return;
+        }
+    }
+
+    public void OnLose()
+    {
+        DisableUI();
+
+        statusText.gameObject.SetActive(true);
+        statusText.text = "Spectating";
+
+        // feel free to remove this if needed, not important
+        GameObject cube = GameObject.Find("Cube");
+        cube.SetActive(false);
+    }
+
+    public void DisableUI()
+    {
+        inspectModeEvent.Raise();
+
+        GameObject uiCanvas = GameObject.Find("GameUI");
+        if (uiCanvas != null)
+        {
+            // disabling the parent would prevent the status text from appearing
+            // so we enable all children individually instead
+            foreach (Transform child in uiCanvas.transform)
+            {
+                child.gameObject.SetActive(false);
             }
         }
     }
