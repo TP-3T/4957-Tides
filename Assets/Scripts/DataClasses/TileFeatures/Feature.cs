@@ -19,6 +19,11 @@ namespace TTT.DataClasses.TileFeatures
         /// </summary>
         public GameObject PrefabInstance { get; private set; }
 
+        /// <summary>
+        /// Whether the client owns this Feature or not.
+        /// </summary>
+        public bool OwnedByClient { get; private set; }
+
         public Feature(Vector3 location, FeatureType type, GameObject instance)
         {
             CellPosition = location;

@@ -285,6 +285,7 @@ namespace TTT.Managers
                     var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                     args.Location = position;
                     args.FeatureType = featureType;
+                    args.OwnedByClient = false;
                     Debug.Log(args);
                     BuildingFeatureEvent.Raise(args);
                     spawnedCount++;
