@@ -191,6 +191,12 @@ public class FeatureBuilder : MonoBehaviour
         Vector3 displayScale = new(scaleFactor, scaleFactor, scaleFactor);
         parent.transform.localScale = displayScale;
 
+        // Mark as static for occlusion culling (if not in Editor)
+        #if UNITY_EDITOR
+        UnityEditor.GameObjectUtility.SetStaticEditorFlags(parent, 
+            UnityEditor.StaticEditorFlags.OccludeeStatic | UnityEditor.StaticEditorFlags.OccluderStatic);
+        #endif
+
         // register
         Feature feature = new(location, featureType, modelInstance);
         SpawnedFeatures.Add(feature);

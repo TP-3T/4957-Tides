@@ -1,0 +1,733 @@
+{
+  "MapID": 10101,
+  "SteamID": "test_user",
+  "MapName": "Test Map 10x10",
+  "WorldState": {
+    "Pollution": 0,
+    "SeaLevel": 0,
+    "Temp": 15,
+    "Year": 2024
+  },
+  "MapTile": {
+    "0": {
+      "0": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "1": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "2": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "3": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "4": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "5": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "6": {
+        "Feature": "wind",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      },
+      "7": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "8": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "9": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      }
+    },
+    "1": {
+      "0": {
+        "Feature": "lumber",
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "1": {
+        "Feature": "factory",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      },
+      "2": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "3": {
+        "Feature": "wind",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      },
+      "4": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "5": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "6": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "7": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "8": {
+        "Feature": "wind",
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "9": {
+        "Feature": "LowDensity",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      }
+    },
+    "2": {
+      "0": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "1": {
+        "Feature": "wind",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "2": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "3": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "4": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "5": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "6": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "7": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "8": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "9": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      }
+    },
+    "3": {
+      "0": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "1": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "2": {
+        "Feature": "coal",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      },
+      "3": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "4": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "5": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "6": {
+        "Feature": "wind",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "7": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "8": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "9": {
+        "Feature": "LowDensity",
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      }
+    },
+    "4": {
+      "0": {
+        "Feature": "wind",
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "1": {
+        "Feature": "LowDensity",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "2": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "3": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "4": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "5": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "6": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "7": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "8": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "9": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      }
+    },
+    "5": {
+      "0": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "1": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "2": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      },
+      "3": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "4": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "5": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "6": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "7": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "8": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "9": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      }
+    },
+    "6": {
+      "0": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "1": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "2": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      },
+      "3": {
+        "Feature": "LowDensity",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "4": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "5": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "6": {
+        "Feature": "port",
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "7": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "8": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "9": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      }
+    },
+    "7": {
+      "0": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "1": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "2": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "3": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "4": {
+        "Feature": "port",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      },
+      "5": {
+        "Feature": "port",
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "6": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "7": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "8": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "9": {
+        "Feature": "LowDensity",
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      }
+    },
+    "8": {
+      "0": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "1": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "2": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "3": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "4": {
+        "Feature": "wind",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      },
+      "5": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "6": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "7": {
+        "Feature": null,
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 4,
+        "Label": null
+      },
+      "8": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      },
+      "9": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      }
+    },
+    "9": {
+      "0": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "1": {
+        "Feature": "lumber",
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "2": {
+        "Feature": "LowDensity",
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "3": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 3,
+        "Label": null
+      },
+      "4": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      },
+      "5": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 0,
+        "Label": null
+      },
+      "6": {
+        "Feature": "LowDensity",
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "7": {
+        "Feature": "lumber",
+        "TileType": 1,
+        "Owner": 0,
+        "Elevation": 5,
+        "Label": null
+      },
+      "8": {
+        "Feature": null,
+        "TileType": 0,
+        "Owner": 0,
+        "Elevation": 2,
+        "Label": null
+      },
+      "9": {
+        "Feature": null,
+        "TileType": 2,
+        "Owner": 0,
+        "Elevation": 1,
+        "Label": null
+      }
+    }
+  }
+}

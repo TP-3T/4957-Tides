@@ -252,6 +252,14 @@ namespace TTT.Managers
             }
         }
 
+        public void OnExitBuildMode(Object _)
+        {
+            Debug.Log("Exiting build mode.");
+            interactionMode = InteractionMode.INSPECTING;
+            buildingFeatureType = null;
+
+        }
+
         public void OnPlayerLose(Object _)
         {
             Debug.Log("Player has lost the game.");
