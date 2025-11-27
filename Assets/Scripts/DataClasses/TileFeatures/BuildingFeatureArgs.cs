@@ -17,5 +17,10 @@ namespace TTT.DataClasses.TileFeatures
         /// The type of feature being built.
         /// </summary>
         public FeatureType FeatureType;
+
+        /// <summary>
+        /// Whether the feature is owned by the client receiving this event.
+        /// </summary>
+        public bool OwnedByClient;
     }
 }

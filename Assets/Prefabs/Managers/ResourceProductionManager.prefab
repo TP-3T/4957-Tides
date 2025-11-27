@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55c4d52365580fb47808bac13a6cabd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnedFeatures: {fileID: 11400000, guid: 13341c7795559b74d98b04f151a7cf36, type: 2}
+  playerFeatures: {fileID: 11400000, guid: b18489e19391e034ea0d1bdb8cc91ae7, type: 2}
 --- !u!114 &9024654507391001693
 MonoBehaviour:
   m_ObjectHideFlags: 0

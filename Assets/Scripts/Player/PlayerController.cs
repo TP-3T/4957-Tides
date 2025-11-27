@@ -197,6 +197,11 @@ namespace TTT.Player
                     }
                 }
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Mode = InteractionMode.INSPECTING;
+            }
         }
 
         public void OnInteractModeChange(object args)

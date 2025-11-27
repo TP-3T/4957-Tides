@@ -61,7 +61,6 @@ public class PlayerInformation : MonoBehaviour
     private void setMoneyText()
     {
         _moneyText.text = "Money: $" + money.AmountOwned.ToString();
-        
     }
 
     /// <summary>

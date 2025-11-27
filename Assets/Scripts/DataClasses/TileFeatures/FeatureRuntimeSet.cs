@@ -35,7 +35,7 @@ namespace TTT.DataClasses.TileFeatures
 
             if (success)
             {
-                FeatureAdded?.Invoke(feature);
+                FeatureRemoved?.Invoke(feature);
             }
 
             return success;
