@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using static TTT.Helpers.MapDatabaseService;
 
 public class MapBrowser : MonoBehaviour
@@ -27,6 +27,8 @@ public class MapBrowser : MonoBehaviour
 
     private void OnMapListFetched(List<MapInfo> mapInfoList)
     {
+        Debug.Log(mapInfoList.Count);
+
         foreach (var mapInfo in mapInfoList)
         {
             GameObject mapItem = Instantiate(MapListItem, Content.transform);

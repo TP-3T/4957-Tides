@@ -18,10 +18,34 @@ public class MainMenu : MonoBehaviour
     private GameObject MapBrowserMenu;
 
     [SerializeField]
+    private GameObject JoinMenu;
+
+    [SerializeField]
+    private GameObject CreateMenu;
+
+    [SerializeField]
     private GameObject GameUI;
 
     private GameObject CurrentMenu;
     private GameObject previousMenu;
+
+    /// <summary>
+    /// On click to open the join menu
+    /// </summary>
+    public void OpenJoinMenu()
+    {
+        Debug.Log("Clicked join button!");
+        ChangeActiveMenu(JoinMenu);
+    }
+
+    /// <summary>
+    /// On click to open the join menu
+    /// </summary>
+    public void OpenCreateMenu()
+    {
+        Debug.Log("Clicked create button!");
+        ChangeActiveMenu(CreateMenu);
+    }
 
     /// <summary>
     /// On click to open single player menu.
