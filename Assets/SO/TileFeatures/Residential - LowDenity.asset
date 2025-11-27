@@ -15,23 +15,27 @@ MonoBehaviour:
   <UniqueID>k__BackingField: LowDensity
   <Category>k__BackingField: 1
   <DisplayName>k__BackingField: Low Density
-  <PollutionEmission>k__BackingField: 5
+  <PollutionEmission>k__BackingField: 20
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
     <TerrainConstraints>k__BackingField:
-      <Mode>k__BackingField: 1
+      <Mode>k__BackingField: 0
       <List>k__BackingField:
       - {fileID: 11400000, guid: a0bfe455dcde2f348b2a9a88f8d0cb0c, type: 2}
+      - {fileID: 11400000, guid: bbf1927decf0b83429343952dbf6ea8b, type: 2}
+      - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
     <FeatureConstraints>k__BackingField: []
   <BuildValidator>k__BackingField: {fileID: 11400000, guid: 418d17bf1c05a9c40aff3428a267cd49, type: 2}
   <ResourceProducers>k__BackingField:
   - productionSchedule: {fileID: 11400000, guid: edef3b431516b8048a30517cd2383a7b, type: 2}
     resourceAmounts:
     - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
-      <Count>k__BackingField: 4
-    - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-      <Count>k__BackingField: -2
+      <Count>k__BackingField: 7
   <Cost>k__BackingField:
-  - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+    <Count>k__BackingField: 10
+  - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
+    <Count>k__BackingField: 2
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
     <Count>k__BackingField: 0
   <Prefab>k__BackingField: {fileID: 3324483096473709864, guid: 85e79d951eeefd4498be55214a912f0d, type: 3}
