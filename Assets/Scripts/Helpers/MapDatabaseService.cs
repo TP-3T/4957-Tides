@@ -34,11 +34,9 @@ namespace TTT.Helpers
 
             UnityWebRequest request = UnityWebRequest.Get(url);
 
-            var req = request.SendWebRequest();
-            req.completed += _ =>
-                HandleRequestResult(onSuccess, onError, request);
+            yield return request.SendWebRequest();
 
-            yield return req;
+            HandleRequestResult(onSuccess, onError, request);
 
             request.Dispose();
         }
@@ -56,10 +54,9 @@ namespace TTT.Helpers
 
             UnityWebRequest request = UnityWebRequest.Get(url);
 
-            var req = request.SendWebRequest();
-            req.completed += _ =>
-                HandleRequestResult(onSuccess, onError, request);
-            yield return req;
+            yield return request.SendWebRequest();
+
+            HandleRequestResult(onSuccess, onError, request);
 
             request.Dispose();
         }
@@ -76,11 +73,12 @@ namespace TTT.Helpers
             string url = $"{BASE_URL}{MAP_BY_STEAMID_ENDPOINT}/{steamId}";
 
             UnityWebRequest request = UnityWebRequest.Get(url);
-            var req = request.SendWebRequest();
-            req.completed += _ =>
-                HandleRequestResult(onSuccess, onError, request);
 
-            yield return req;
+            yield return request.SendWebRequest();
+
+            HandleRequestResult(onSuccess, onError, request);
+
+            request.Dispose();
         }
 
         /// <summary>
@@ -267,13 +265,14 @@ namespace TTT.Helpers
                 yield break;
             }
 
+            List<MapInfo> mapInfoList;
             try
             {
                 List<ApiMapListItem> apiMaps = JsonConvert.DeserializeObject<
                     List<ApiMapListItem>
                 >(jsonResponse);
 
-                List<MapInfo> mapInfoList = new();
+                mapInfoList = new();
                 foreach (var apiMap in apiMaps)
                 {
                     mapInfoList.Add(
@@ -284,13 +283,14 @@ namespace TTT.Helpers
                         )
                     );
                 }
-
-                onSuccess?.Invoke(mapInfoList);
             }
             catch (Exception e)
             {
                 onError?.Invoke($"Failed to parse map list: {e.Message}");
+                yield break;
             }
+
+            onSuccess?.Invoke(mapInfoList);
         }
 
         /// <summary>
