@@ -1,11 +1,9 @@
-using TTT.Hex;
 using TTT.GameEvents;
+using TTT.Managers;
 using UnityEngine;
 using UnityEngine.UI;
-using TTT.GameEvents;
-using System;
-using TTT.Dispatch;
 
+[RequireComponent(typeof(Button))]
 [RequireComponent(typeof(Image))]
 /// <summary>
 /// Handles the functionality of the "Next Turn" button in the game UI.
@@ -13,19 +11,45 @@ using TTT.Dispatch;
 public class NextTurn : MonoBehaviour
 {
     [SerializeField]
-    private GameEvent _nextTurnEvent;
+    private GameEvent endingTurnEvent;
+
+    /// <summary>
+    /// UI Button component.
+    /// </summary>
+    private Button nextTurnButton;
 
     void Start()
     {
-        this.GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
+        // ! do we really need this? -Rodrigo
+        // GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
+
+        nextTurnButton = GetComponent<Button>();
     }
 
-    /// <summary>
-    /// Handles the button click event to proceed to the next turn.
-    /// </summary>
+    public void Enable(Object _)
+    {
+        nextTurnButton.interactable = true;
+    }
+
+    public void EndTurn()
+    {
+        nextTurnButton.interactable = false;
+
+        endingTurnEvent.Raise();
+    }
+
     public void OnClick()
     {
-        Debug.Log("Next Turn Button Clicked");
-        _nextTurnEvent.Raise();
+        bool canEndTurn = GameManager.Instance.CanEndTurn();
+
+        if (!canEndTurn)
+        {
+            Debug.Log(
+                "Player tried to end the turn, but not all requirements were met."
+            );
+            return;
+        }
+
+        EndTurn();
     }
 }

@@ -1,78 +1,115 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using TTT.DataClasses.PlayerResources;
+using TTT.DataClasses.States;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace TTT.Managers
 {
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
+        [field: SerializeField]
+        public List<PlayerResource> PlayerResources { get; set; }
+
         [SerializeField]
-        private TextAsset LevelFile;
+        private InteractionMode interactionMode;
 
         [SerializeField]
         private GameEvent newMapEvent;
 
-        private string[] Seasons = { "Spring", "Summer", "Fall", "Winter" };
+        private readonly string[] Seasons =
+        {
+            "Spring",
+            "Summer",
+            "Fall",
+            "Winter",
+        };
 
         //serialize for now
-        [SerializeField] private int Year = 1;
-        [SerializeField] private string Season;
+        [field: SerializeField]
+        public int Year { get; private set; } = 1;
 
-        [SerializeField] public GameEvent _OnYearChangeEvent;
+        [SerializeField]
+        private string Season;
 
-        [SerializeField] public GameEvent _FloodEvent;
+        [SerializeField]
+        private int CO2;
 
+        [SerializeField]
+        private int Temperature;
 
-        // private AssetReference SeaPrefab = new("P_Sea");
+        [SerializeField]
+        private GameEvent endTurnEvent;
 
-        // private AssetReference HexGrid = new("P_HexGrid");
+        [SerializeField]
+        private GameEvent endingSeasonEvent;
 
-        // private GameObject sea;
-        // private GameObject hexGrid;
+        [SerializeField]
+        private GameEvent endingYearEvent;
+
+        [SerializeField]
+        private GameEvent _FloodEvent;
+
+        [SerializeField]
+        private GameEvent BuildingFeatureEvent;
+
+        [SerializeField]
+        private FeatureType buildingFeatureType;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            this.Season = Seasons[Year];
+            this.Season = Seasons[0];
+            this.CO2 = 0;
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
-        public void OnStartNetworkEvent(Object eventArgs)
+        public void OnStartNetworkEvent(UnityEngine.Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
-            if (args.IsHost)
+            try
             {
-                Debug.Log("I am being spawned as a host");
-                NetworkManager.Singleton.StartHost();
-
-                newMapEvent.Raise(new NewMapEventArgs()
+                if (args.IsHost)
                 {
-                    DataFile = LevelFile
-                });
+                    StartGameHost();
+                }
+                else
+                {
+                    StartGameClient();
+                }
             }
-            else
+            catch (System.Exception e)
             {
-                Debug.Log("I am being spawned as a client");
-                NetworkManager.Singleton.StartClient();
+                Debug.LogError($"Failed to start host: {e.Message}");
+                return;
             }
         }
 
-        // private void SpawnSea(GameObject obj)
-        // {
-        //     sea = Instantiate(obj);
-        //     sea.GetComponent<NetworkObject>().Spawn();
-        // }
+        private void StartGameClient()
+        {
+            NetworkManager.Singleton.StartClient();
+        }
 
-        // private void SpawnGrid(GameObject obj)
-        // {
-        //     hexGrid = Instantiate(obj);
-        //     hexGrid.GetComponent<NetworkObject>().Spawn();
-        //     newMapEvent.Raise(new NewMapEventArgs() { DataFile = LevelFile });
-        // }
+        private void StartGameHost()
+        {
+            NetworkManager.Singleton.StartHost();
 
-        public void OnNewMapFinish(Object eventArgs)
+            if (LoadExternalJson.TryGetDataJson(out TextAsset newMap))
+            {
+                newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
+            }
+            else
+            {
+                throw new IOException("Could not load file.");
+            }
+        }
+
+        public void OnNewMapFinish(UnityEngine.Object eventArgs)
         {
             NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
 
@@ -88,6 +125,23 @@ namespace TTT.Managers
             }
         }
 
+        public void OnTurnEnding(Object _)
+        {
+            // Placeholder since we don't know who actually is the last player
+            static bool IsLastPlayer() => true;
+
+            if (!IsLastPlayer())
+            {
+                endTurnEvent.Raise();
+            }
+            else
+            {
+                // end the season before saying the turn ended
+                endingSeasonEvent.Raise();
+                IncrementSeason();
+            }
+        }
+
         /// <summary>
         /// Increments the season, and the year if applicable.
         /// </summary>
@@ -96,48 +150,120 @@ namespace TTT.Managers
             int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
 
             // % to wrap around to the beginning after winter
-            int nextSeasonIndex = (currentSeasonIndex + 1) % this.Seasons.Length;
+            int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
+            Season = Seasons[nextSeasonIndex];
 
-            this.Season = this.Seasons[nextSeasonIndex];
-
-            if (this.Season == this.Seasons[0])
+            if (Season != Seasons[0])
             {
-                this.IncrementYear();
-                _OnYearChangeEvent.Raise();
+                endTurnEvent.Raise();
+            }
+            else
+            {
+                // end the year before saying the turn ended
+                endingYearEvent.Raise();
+                IncrementYear();
             }
         }
 
-        /// <summary>
-        /// Increments the year by one.
-        /// </summary>
         public void IncrementYear()
         {
-            this.Year += 1;
-        }
+            Year += 1;
 
-        public void OnLastPlayerTurnEvent(UnityEngine.Object eventArgs)
-        {
-            Debug.Log("Last Player Made Turn, increment season - GameManager line 118");
-            this.IncrementSeason();
-        }
+            Debug.Log(
+                "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
+            );
 
-        public void OnYearChange(UnityEngine.Object eventArgs)
-        {
-            Debug.Log("Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124");
-
+            // do flooding before saying the turn ended
             _FloodEvent.Raise();
-
         }
 
-        // /// <summary>
-        // /// Method from INextTurnListener interface. Called when Next Turn event is dispatched.
-        // /// </summary>
-        // /// <param name="nt">The Next Turn Event</param>
-        // public void OnEventRaised(NextTurn nt)
-        // {
-        //     // increment season here
-        //     Debug.Log("1. Increment Season -GameManager" + nt.ToString());
-        //     this.IncrementSeason();
-        // }
+        public int GetYear()
+        {
+            return this.Year;
+        }
+
+        public string GetSeason()
+        {
+            return this.Season;
+        }
+
+        public int GetCO2()
+        {
+            return this.CO2;
+        }
+
+        /// <summary>
+        /// Gets the current temperature.
+        /// </summary>
+        public int GetTemperature()
+        {
+            return this.Temperature;
+        }
+
+        /// <summary>
+        /// Starts the build mode event, disabling certain features.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void StartBuildMode(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not FeatureType featureType)
+            {
+                return;
+            }
+
+            interactionMode = InteractionMode.BUILDING;
+            buildingFeatureType = featureType;
+        }
+
+        /// <summary>
+        /// Starts the Inspect mode, disabling building.
+        /// </summary>
+        /// <param name="_"></param>
+        public void StartInspectMode(UnityEngine.Object _)
+        {
+            interactionMode = InteractionMode.INSPECTING;
+        }
+
+        /// <summary>
+        /// Handles mesh click logic for BuildMode to raise build event.
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        public void OnMeshClicked(UnityEngine.Object eventArgs)
+        {
+            if (eventArgs is not MapMeshClickedEventArgs clickedArgs)
+            {
+                return;
+            }
+
+            if (interactionMode == InteractionMode.BUILDING)
+            {
+                // raise build event
+                var args =
+                    ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                args.Location = clickedArgs.ClickedPoint;
+                args.FeatureType = buildingFeatureType;
+
+                if (buildingFeatureType == null)
+                {
+                    return;
+                }
+
+                BuildingFeatureEvent.Raise(args);
+            }
+        }
+
+        public void OnPlayerLose(Object _)
+        {
+            Debug.Log("Player has lost the game.");
+        }
+
+        public bool CanEndTurn()
+        {
+            bool hasEnoughResources = PlayerResources.All(resources =>
+                resources.AmountOwned >= 0
+            );
+
+            return hasEnoughResources;
+        }
     }
 }

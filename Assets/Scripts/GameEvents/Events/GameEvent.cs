@@ -6,7 +6,10 @@ namespace TTT.GameEvents
     /// <summary>
     /// A GameEvent can have listeners subscribe to it so that they are called when it's raised.
     /// </summary>
-    [CreateAssetMenu(fileName = "Game Event", menuName = "TTT/Events/Game Event")]
+    [CreateAssetMenu(
+        fileName = "Game Event",
+        menuName = "TTT/Events/Game Event"
+    )]
     public class GameEvent : ScriptableObject
     {
         /// <summary>
@@ -17,6 +20,13 @@ namespace TTT.GameEvents
         [Tooltip("The arguments to pass when raising from the inspector")]
         [SerializeField]
         private Object defaultEventArgs;
+
+        // CB: Trying to find a better way to connect to different events via script. This didn't work :C
+        // public void Awake()
+        // {
+        //     var eventResolver = new EventResolver();
+        //     eventResolver.RegisterInstance(this);
+        // }
 
         /// <summary>
         /// Calls all registered listeners with the event arguments defined in the inspector.
