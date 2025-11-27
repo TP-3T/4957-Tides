@@ -36,7 +36,7 @@ namespace TTT.ModularData
 
             if (success)
             {
-                FeatureAdded?.Invoke(feature);
+                FeatureRemoved?.Invoke(feature);
             }
 
             return success;
