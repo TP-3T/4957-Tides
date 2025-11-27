@@ -1,38 +1,71 @@
-using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
+using TMPro;
+using UnityEngine;
 
 public class LoadingCanvas : MonoBehaviour
 {
-    public GameObject LoadingScreen;
-    public Slider ProgressBar;
+    private string[] LoadingStates =
+    {
+        "Loading ",
+        "Loading .",
+        "Loading . . ",
+        "Loading . . . ",
+    };
+
+    [SerializeField]
+    public TextMeshProUGUI loadingText;
+
+    private Coroutine loadingCoroutine;
+    [SerializeField]
+    private Material waveMaterial;
+
+    [SerializeField]
+    private float waveSpeed = 0.1f;
 
     /// <summary>
-    /// Script for the loading screen canvas. Runs the function for the loading slider bar. 
+    /// Controls 
     /// </summary>
-    public void LoadingMainGame()
+    private void Update()
     {
-        StartCoroutine(LoadingMainGameAsync());
+        if (waveMaterial != null)
+        {
+            float offset = Time.time * waveSpeed;
+            waveMaterial.SetTextureOffset("_MainTex", new Vector2(offset, 0));
+        }
     }
 
     /// <summary>
-    /// Coroutine to handle the loading process.
-    /// Currently just a placeholder, CoreLogic 
-    /// can add whatever elements that will be 
-    /// tracked for progress during loading.
+    /// Called when the loading canvas prefab is enabled.
+    /// </summary>
+    public void OnEnable()
+    {
+        loadingCoroutine = StartCoroutine(UpdateLoadingText());
+    }
+
+    /// <summary>
+    /// Called when the loading canvas prefab is disabled.
+    /// </summary>
+    public void OnDisable()
+    {
+        if (loadingCoroutine != null)
+        {
+            StopCoroutine(loadingCoroutine);
+            loadingCoroutine = null;
+        }
+    }
+
+    /// <summary>
+    /// Cycles through the loading text states.
     /// </summary>
     /// <returns></returns>
-    IEnumerator LoadingMainGameAsync()
+    private IEnumerator UpdateLoadingText()
     {
-        ProgressBar.value = 0f;
-
-        // Simulate loading process
-        float loadProgress = 0f;
-        while (loadProgress < 1f)
+        int index = 0;
+        while (true)
         {
-            loadProgress += 0.1f;
-            ProgressBar.value = loadProgress;
-            yield return new WaitForSeconds(0.2f);
+            loadingText.text = LoadingStates[index];
+            index = (index + 1) % LoadingStates.Length;
+            yield return new WaitForSeconds(0.5f);
         }
     }
 }
