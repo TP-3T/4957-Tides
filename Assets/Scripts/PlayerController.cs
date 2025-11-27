@@ -1,5 +1,8 @@
+using TMPro;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
+using TTT.Managers;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -26,7 +29,25 @@ public class PlayerController : NetworkBehaviour
     private CameraController cameraController;
 
     [SerializeField]
+    private FeatureRuntimeSet playerBuildings;
+
+    [SerializeField]
+    private TextMeshProUGUI statusText;
+
+    [SerializeField]
+    private int maxC02 = 500;
+
+    [SerializeField]
+    private int maxTemperature = 50;
+
+    [SerializeField]
+    private GameEvent inspectModeEvent;
+
+    [SerializeField]
     private GameEvent _mapMeshClicked;
+
+    [SerializeField]
+    private Canvas currentUI;
 
     //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
     //*  We should look into the Unity Input System Package
@@ -159,5 +180,49 @@ public class PlayerController : NetworkBehaviour
     private bool IsMouseOverUI()
     {
         return EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public void CheckIfPlayerHasLost()
+    {
+        GameManager gm = GameManager.Instance;
+
+        if (
+            GameManager.CO2 > maxC02
+            || GameManager.Temperature > maxTemperature
+            || playerBuildings.GetItems().Length <= 0
+        )
+        {
+            // _PlayerLoseEvent.Raise();
+            OnLose();
+        }
+    }
+
+    public void OnLose()
+    {
+        DisableUI();
+
+        statusText.gameObject.SetActive(true);
+        statusText.text = "Spectating";
+
+        // feel free to remove this if needed, not important
+        GameObject cube = GameObject.Find("Cube");
+        cube.SetActive(false);
+    }
+
+    public void DisableUI()
+    {
+        inspectModeEvent.Raise();
+        currentUI.gameObject.SetActive(false);
+
+        // GameObject uiCanvas = GameObject.Find("GameUI");
+        // if (uiCanvas != null)
+        // {
+        //     // disabling the parent would prevent the status text from appearing
+        //     // so we enable all children individually instead
+        //     foreach (Transform child in uiCanvas.transform)
+        //     {
+        //         child.gameObject.SetActive(false);
+        //     }
+        // }
     }
 }

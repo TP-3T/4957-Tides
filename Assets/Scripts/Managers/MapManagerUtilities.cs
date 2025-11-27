@@ -1,12 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TTT.DataClasses.HexData;
 using TTT.GameEvents;
-using TTT.Helpers;
 using TTT.Hex;
-using UnityEditor.Search;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -156,12 +154,16 @@ namespace TTT.Managers
                         else
                             FloodQueue2.Enqueue(test);
                     }
-
-                    while (FloodQueue2.Count > 0)
-                        FloodQueue.Enqueue(FloodQueue2.Dequeue());
+                    foreach (var cell in FloodQueue2)
+                    {
+                        FloodQueue.Enqueue(cell);
+                    }
+                    // while (FloodQueue2.Count > 0)
+                    //     FloodQueue.Enqueue(FloodQueue2.Dequeue());
 
                     Debug.Log("Flood fill cycle complete");
-                    _OnFloodEnded.Raise();
+                    // GameManager.Instance.OnTurnEnd(new());
+                    //onFloodEnded.Raise();
 
                     yield break;
                 }

@@ -1,4 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -10,6 +14,12 @@ namespace TTT.Managers
 {
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
+        [field: SerializeField]
+        public List<PlayerResource> PlayerResources { get; private set; }
+
+        [SerializeField]
+        private InteractionMode interactionMode;
+
         [SerializeField]
         private GameEvent newMapEvent;
 
@@ -23,19 +33,28 @@ namespace TTT.Managers
 
         //serialize for now
         [field: SerializeField]
-        public int Year { get; private set; } = 1;
+        public static int Year { get; private set; } = 1;
+
+        [field: SerializeField]
+        public string Season { get; private set; }
+
+        [field: SerializeField]
+        public static int CO2 { get; private set; } = 0;
+
+        [field: SerializeField]
+        public static int Temperature { get; private set; }
 
         [SerializeField]
-        private string Season;
+        private GameEvent endTurnEvent;
 
         [SerializeField]
-        private int CO2;
+        private GameEvent startTurnEvent;
 
         [SerializeField]
-        private GameEvent SeasonChanging;
+        private GameEvent endingSeasonEvent;
 
         [SerializeField]
-        private GameEvent _OnYearChangeEvent;
+        private GameEvent endingYearEvent;
 
         [SerializeField]
         private GameEvent _FloodEvent;
@@ -44,26 +63,22 @@ namespace TTT.Managers
         private GameEvent _TurnEndedEvent;
 
         [SerializeField]
-        private InteractionMode interactionMode;
-
-        [SerializeField]
         private FeatureType buildingFeatureType;
 
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
-        [SerializeField]
-        private GameEvent _OnLastPlayerTurnEvent;
+        public NetworkClient CurrentPlayer { get; private set; }
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            this.Season = Seasons[0];
-            this.CO2 = 0;
+            Season = Seasons[0];
+            CO2 = 0;
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
-        public void OnStartNetworkEvent(UnityEngine.Object eventArgs)
+        public void OnStartNetworkEvent(Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
             try
@@ -103,7 +118,7 @@ namespace TTT.Managers
             }
         }
 
-        public void OnNewMapFinish(UnityEngine.Object eventArgs)
+        public void OnNewMapFinish(Object eventArgs)
         {
             NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
 
@@ -119,73 +134,79 @@ namespace TTT.Managers
             }
         }
 
-        /// <summary>
-        /// Increments the season, and the year if applicable.
-        /// </summary>
-        public void IncrementSeason()
+        public void OnTurnEnd(object _)
         {
-            int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
+            startTurnEvent.Raise();
+        }
 
-            // % to wrap around to the beginning after winter
-            int nextSeasonIndex =
-                (currentSeasonIndex + 1) % this.Seasons.Length;
+        public void OnTurnEnding(Object _)
+        {
+            StartCoroutine(ProcessEndTurn());
+        }
 
-            this.Season = this.Seasons[nextSeasonIndex];
+        private IEnumerator ProcessEndTurn()
+        {
+            //Get all the connected clients
+            var ConnectedClientsList =
+                NetworkManager.Singleton.ConnectedClientsList.ToList();
+            var self = NetworkManager.Singleton.LocalClient;
 
-            if (this.Season == this.Seasons[0])
+            //If I am not the last connected client
+            if (!ConnectedClientsList.Last().Equals(self))
             {
-                this.IncrementYear();
-                _OnYearChangeEvent.Raise();
+                //Increment the current client
+                var currentIndex = ConnectedClientsList.IndexOf(CurrentPlayer);
+                CurrentPlayer = ConnectedClientsList[currentIndex + 1];
             }
             else
             {
-                _TurnEndedEvent.Raise();
+                CurrentPlayer = ConnectedClientsList.First();
+                // end the season before saying the turn ended
+                EndSeason();
+                if (Season.Equals(Seasons[0]))
+                {
+                    var endYear = EndYear();
+                    while (endYear.MoveNext())
+                    {
+                        yield return null;
+                    }
+                }
             }
+            endTurnEvent.Raise();
+            startTurnEvent.Raise();
         }
 
         /// <summary>
-        /// Increments the year by one.
+        /// Increments the season, and the year if applicable.
         /// </summary>
-        public void IncrementYear()
+        public void EndSeason()
         {
-            this.Year += 1;
+            endingSeasonEvent.Raise();
+            int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
+
+            // % to wrap around to the beginning after winter
+            int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
+            Season = Seasons[nextSeasonIndex];
         }
 
-        public void OnLastPlayerTurnEvent(UnityEngine.Object eventArgs)
-        {
-            SeasonChanging.Raise();
-            this.IncrementSeason();
-        }
-
-        public void OnYearChange(UnityEngine.Object eventArgs)
+        public IEnumerator EndYear()
         {
             Debug.Log(
                 "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
             );
-
-            _FloodEvent.Raise();
-        }
-
-        public int GetYear()
-        {
-            return this.Year;
-        }
-
-        public string GetSeason()
-        {
-            return this.Season;
-        }
-
-        public int GetCO2()
-        {
-            return this.CO2;
+            endingYearEvent.Raise();
+            var seaRaise = MapManager.Instance.RaiseSea();
+            while (seaRaise.MoveNext())
+            {
+                yield return null;
+            }
         }
 
         /// <summary>
         /// Starts the build mode event, disabling certain features.
         /// </summary>
         /// <param name="eventArgs"></param>
-        public void StartBuildMode(UnityEngine.Object eventArgs)
+        public void StartBuildMode(Object eventArgs)
         {
             if (eventArgs is not FeatureType featureType)
             {
@@ -200,7 +221,7 @@ namespace TTT.Managers
         /// Starts the Inspect mode, disabling building.
         /// </summary>
         /// <param name="_"></param>
-        public void StartInspectMode(UnityEngine.Object _)
+        public void StartInspectMode(Object _)
         {
             interactionMode = InteractionMode.INSPECTING;
         }
@@ -209,7 +230,7 @@ namespace TTT.Managers
         /// Handles mesh click logic for BuildMode to raise build event.
         /// </summary>
         /// <param name="eventArgs"></param>
-        public void OnMeshClicked(UnityEngine.Object eventArgs)
+        public void OnMeshClicked(Object eventArgs)
         {
             if (eventArgs is not MapMeshClickedEventArgs clickedArgs)
             {
@@ -218,30 +239,21 @@ namespace TTT.Managers
 
             if (interactionMode == InteractionMode.BUILDING)
             {
+                if (buildingFeatureType == null)
+                {
+                    Debug.LogError(
+                        "Tried to build, but there was no selected building!"
+                    );
+                }
+
                 // raise build event
                 var args =
                     ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                 args.Location = clickedArgs.ClickedPoint;
                 args.FeatureType = buildingFeatureType;
 
-                if (buildingFeatureType == null)
-                {
-                    return;
-                }
-
                 BuildingFeatureEvent.Raise(args);
             }
-        }
-
-        public void OnNextTurnClick(UnityEngine.Object eventArgs)
-        {
-            // needs current player info
-            Debug.Log("Next Turn Clicked - MapManager line 262");
-            // if not last players turn, switch the player context to the next player
-            // next player turn event or something
-
-            //if last player turn then
-            _OnLastPlayerTurnEvent.Raise();
         }
     }
 }

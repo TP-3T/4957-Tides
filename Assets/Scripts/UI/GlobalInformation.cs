@@ -19,18 +19,18 @@ public class GlobalInformation : MonoBehaviour
 
     void Start()
     {
-        GameManager = FindAnyObjectByType<GameManager>();
+        GameManager = GameManager.Instance;
         setDateText();
         setCO2Text();
     }
 
     void Update()
     {
-        if (GameManager.GetYear() != Year || GameManager.GetSeason() != Season)
+        if (GameManager.Year != Year || GameManager.Season != Season)
         {
             setDateText();
         }
-        if (GameManager.GetCO2() != CO2)
+        if (GameManager.CO2 != CO2)
         {
             setCO2Text();
         }
@@ -38,14 +38,14 @@ public class GlobalInformation : MonoBehaviour
 
     private void setDateText()
     {
-        Year = GameManager.GetYear();
-        Season = GameManager.GetSeason();
-        _dateText.text = Season + ", " + Year.ToString();
+        Year = GameManager.Year;
+        Season = GameManager.Season;
+        _dateText.text = $"{Season}, {Year}";
     }
 
     private void setCO2Text()
     {
-        CO2 = GameManager.GetCO2();
-        _CO2Text.text = "CO2: " + CO2.ToString() + " ppm";
+        CO2 = GameManager.CO2;
+        _CO2Text.text = $"CO2: {CO2} ppm";
     }
 }
