@@ -163,7 +163,8 @@ namespace TTT.Managers
                 MapManager.HexOrientation
             );
 
-            SpawnPendingFeatures();
+            // Spawn features asynchronously across multiple frames
+            StartCoroutine(SpawnPendingFeaturesAsync());
 
             _mapLoadFinishEvent.Raise(
                 new NewMapFinishedEventArgs() { WasSuccessful = true }
@@ -277,15 +278,14 @@ namespace TTT.Managers
             }
 
             int spawnedCount = 0;
+            
             foreach (var (position, featureId) in _pendingFeatures)
             {
-
                 if (_featureTypesByUniqueId.TryGetValue(featureId, out FeatureType featureType))
                 {
                     var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                     args.Location = position;
                     args.FeatureType = featureType;
-                    Debug.Log(args);
                     BuildingFeatureEvent.Raise(args);
                     spawnedCount++;
                 }
@@ -297,7 +297,61 @@ namespace TTT.Managers
 
             if (spawnedCount > 0)
             {
-                Debug.Log($"Spawned {spawnedCount} features from map data.");
+                Debug.Log($"Spawned {spawnedCount} features from map data:");
+            }
+
+            _pendingFeatures.Clear();
+        }
+
+        private System.Collections.IEnumerator SpawnPendingFeaturesAsync()
+        {
+            if (!_featuresLoaded)
+            {
+                Debug.LogWarning("feature types didn't load");
+                yield break;
+            }
+
+            int spawnedCount = 0;
+            int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smoothish loading
+            Dictionary<string, int> featureTypeCounts = new Dictionary<string, int>();
+
+            Debug.Log($"Starting async spawn of {_pendingFeatures.Count} features...");
+
+            foreach (var (position, featureId) in _pendingFeatures)
+            {
+                if (_featureTypesByUniqueId.TryGetValue(featureId, out FeatureType featureType))
+                {
+                    var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    args.Location = position;
+                    args.FeatureType = featureType;
+                    BuildingFeatureEvent.Raise(args);
+                    spawnedCount++;
+
+                    // Track counts by type
+                    if (!featureTypeCounts.ContainsKey(featureId))
+                        featureTypeCounts[featureId] = 0;
+                    featureTypeCounts[featureId]++;
+
+                    // Yield every X spawns to maintain framerate
+                    //Kinda dosent work :/
+                    if (spawnedCount % spawnsPerFrame == 0)
+                    {
+                        yield return null; // Wait one frame
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"skipped unknown feature '{featureId}' at {position}");//THis basically never happens but I put this here just incase :/
+                }
+            }
+
+            if (spawnedCount > 0)
+            {
+                Debug.Log($"Finished spawning {spawnedCount} features:");
+                foreach (var kvp in featureTypeCounts)
+                {
+                    Debug.Log($"  {kvp.Key}: {kvp.Value}");
+                }
             }
 
             _pendingFeatures.Clear();
