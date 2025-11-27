@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using static TTT.Helpers.MapDatabaseService;
 
 public class MapBrowser : MonoBehaviour
@@ -30,8 +31,7 @@ public class MapBrowser : MonoBehaviour
         {
             GameObject mapItem = Instantiate(MapListItem, Content.transform);
 
-            mapItem.GetComponentInChildren<UnityEngine.UI.Text>().text =
-                mapInfo.MapName;
+            mapItem.GetComponentInChildren<TMP_Text>().text = mapInfo.MapName;
 
             Debug.Log("Map Info Created.0.001f");
         }
