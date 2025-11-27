@@ -37,6 +37,9 @@ public class PlayerController : NetworkBehaviour
     private GameEvent inspectModeEvent;
 
     [SerializeField]
+    private GameEvent _exitBuildModeEvent;
+
+    [SerializeField]
     private FeatureRuntimeSet playerBuildings;
 
     [SerializeField]
@@ -180,6 +183,11 @@ public class PlayerController : NetworkBehaviour
                     }
                 );
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            _exitBuildModeEvent.Raise();
         }
     }
 
