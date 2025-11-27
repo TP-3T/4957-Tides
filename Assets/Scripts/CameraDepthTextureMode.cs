@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraDepthTextureMode : MonoBehaviour 
+public class CameraDepthTextureMode : MonoBehaviour
 {
     [SerializeField]
     DepthTextureMode depthTextureMode;

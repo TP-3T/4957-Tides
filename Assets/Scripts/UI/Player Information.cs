@@ -1,8 +1,5 @@
-using System.Runtime.Serialization;
 using TMPro;
 using TTT.DataClasses.PlayerResources;
-using TTT.GameEvents;
-using TTT.Managers;
 using UnityEngine;
 
 /// <summary>

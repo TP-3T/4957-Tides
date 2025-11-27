@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TTT.DataClasses.HexData;
 using TTT.GameEvents;
 using TTT.Hex;

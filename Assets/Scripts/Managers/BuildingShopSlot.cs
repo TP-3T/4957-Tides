@@ -2,7 +2,6 @@ using TMPro;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class BuildingShopSlot : MonoBehaviour
 {

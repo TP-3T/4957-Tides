@@ -36,6 +36,8 @@ public class WaterLevel : MonoBehaviour
     }
 
     public void RiseWaterLevel(int amount) => WaterLevelValue += amount;
+
     public void LowerWaterLevel(int amount) => WaterLevelValue -= amount;
+
     public void SetWaterLevel(int amount) => WaterLevelValue = amount;
 }

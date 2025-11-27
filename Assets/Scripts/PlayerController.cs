@@ -5,11 +5,7 @@ using TTT.Hex;
 using TTT.Managers;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
-
-// [RequireComponent(typeof(Camera))]
 
 /// <summary>
 /// Controls the camera for a local player in a multiplayer game.
