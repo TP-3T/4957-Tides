@@ -245,7 +245,7 @@ namespace TTT.Managers
 
         public void OnBuild(object args)
         {
-            if (args is not InteractionModeChangeEventArgs BuildArgs)
+            if (args is not BuildingFeatureEventArgs BuildArgs)
             {
                 Debug.LogError(
                     "Game Manager received invalid interactModeChange args!"
@@ -259,10 +259,10 @@ namespace TTT.Managers
             }
             else
             {
-                var args =
+                var building =
                     ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-                args.Location = clickedArgs.ClickedPoint;
-                args.FeatureType = buildingFeatureType;
+                building.Location = BuildArgs.Location;
+                building.FeatureType = buildingFeatureType;
             }
         }
 

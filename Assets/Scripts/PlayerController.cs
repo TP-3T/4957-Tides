@@ -170,24 +170,27 @@ namespace TTT.UI
                     // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
                     Debug.Log("Map mesh clicked at: " + raycastHit.point);
                     var mode = GameManager.Instance.InteractionMode;
-                    if (mode.Equals(InteractModeChange.BUILDING))
+                    if (mode.Equals(InteractionMode.BUILDING))
                     {
                         BuildingFeatureEvent.Raise(
-                            new()
+                            new BuildingFeatureEventArgs()
                             {
                                 Location = raycastHit.point,
                                 FeatureType = FeatureType,
                             }
                         );
                     }
-                    _mapMeshClicked.Raise(
-                        new MapMeshClickedEventArgs
-                        {
-                            ClickedPoint = raycastHit.point,
-                            PlayerColor = PlayerColor.Value,
-                            PlayerId = OwnerClientId,
-                        }
-                    );
+                    else if (mode.Equals(InteractionMode.INSPECTING))
+                    {
+                        _mapMeshClicked.Raise(
+                            new MapMeshClickedEventArgs
+                            {
+                                ClickedPoint = raycastHit.point,
+                                PlayerColor = PlayerColor.Value,
+                                PlayerId = OwnerClientId,
+                            }
+                        );
+                    }
                 }
             }
         }

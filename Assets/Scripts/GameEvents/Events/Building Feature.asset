@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365eee90f5d7bf744a7cfb62c139b74d, type: 3}
   m_Name: Building Feature
   m_EditorClassIdentifier: 
-  defaultEventArgs: {fileID: 11400000, guid: 3cb4ecc282f795f4982d8fbfcb8e4cc1, type: 2}
+  defaultEventArgs: {fileID: 11500000, guid: 92a07efe10ca949419d866f8681ac531, type: 3}
