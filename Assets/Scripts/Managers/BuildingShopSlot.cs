@@ -9,7 +9,7 @@ public class BuildingShopSlot : MonoBehaviour
     public FeatureType feature;
 
     [SerializeField]
-    private TextMeshProUGUI textField;
+    private TextMeshProUGUI featureNameText;
 
     public GameEvent BuildModeStartingEvent;
 
@@ -25,8 +25,8 @@ public class BuildingShopSlot : MonoBehaviour
 
     public void UpdateText()
     {
-        textField = GetComponentInChildren<TextMeshProUGUI>();
+        featureNameText = GetComponentInChildren<TextMeshProUGUI>();
 
-        textField.text = feature.DisplayName;
+        featureNameText.text = feature.DisplayName;
     }
 }
