@@ -53,7 +53,7 @@ namespace TTT.Managers
         private const int CellsPerFrame = 25;
 
         [SerializeField]
-        private FeatureBuilder _featureBuilder;
+        private GameEvent BuildingFeatureEvent;
 
         private Dictionary<string, FeatureType> _featureTypesByUniqueId = new();
 
@@ -279,12 +279,14 @@ namespace TTT.Managers
             int spawnedCount = 0;
             foreach (var (position, featureId) in _pendingFeatures)
             {
+
                 if (_featureTypesByUniqueId.TryGetValue(featureId, out FeatureType featureType))
                 {
                     var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                     args.Location = position;
                     args.FeatureType = featureType;
-                    _featureBuilder.OnLoadingMapFeature(args);
+                    Debug.Log(args);
+                    BuildingFeatureEvent.Raise(args);
                     spawnedCount++;
                 }
                 else

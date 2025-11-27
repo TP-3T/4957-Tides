@@ -11,7 +11,7 @@
   "MapTile": {
     "0": {
       "0": {
-        "Feature": null,
+        "Feature": "lumber",
         "TileType": 2,
         "Owner": 0,
         "Elevation": 0,
