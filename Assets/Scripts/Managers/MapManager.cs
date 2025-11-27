@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.Terrain;
+using TTT.DataClasses.TileFeatures;
+using TTT.DataClasses.HexData;
 using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
@@ -10,7 +12,6 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Newtonsoft.Json;
-using TTT.DataClasses.HexData;
 
 namespace TTT.Managers
 {
@@ -51,6 +52,11 @@ namespace TTT.Managers
         private MapData _gameMapData;
         private const int CellsPerFrame = 25;
 
+        [SerializeField]
+        private GameEvent BuildingFeatureEvent;
+
+        private Dictionary<string, FeatureType> _featureTypesByUniqueId = new();
+
         public NetworkList<HexCell> HexCells = new(
             default,
             NetworkVariableReadPermission.Everyone,
@@ -65,9 +71,31 @@ namespace TTT.Managers
 
         private LineRenderer lineRenderer;
 
+        private List<(Vector3 position, string featureId)> _pendingFeatures = new();
+        private bool _featuresLoaded = false;
+
         void Start()
         {
             lineRenderer = GetComponent<LineRenderer>();
+            StartCoroutine(LoadFeatureTypes());
+        }
+
+        private IEnumerator LoadFeatureTypes()
+        {
+            yield return AssetLoader<FeatureType>.LoadGroup(
+                "building",
+                CacheFeatureType
+            );
+            _featuresLoaded = true;
+            Debug.Log($"Loaded {_featureTypesByUniqueId.Count} feature types");
+        }
+
+        private void CacheFeatureType(FeatureType featureType)
+        {
+            if (featureType != null && !string.IsNullOrEmpty(featureType.UniqueID))
+            {
+                _featureTypesByUniqueId[featureType.UniqueID] = featureType;
+            }
         }
 
         public override void OnNetworkSpawn()
@@ -134,6 +162,8 @@ namespace TTT.Managers
                 MapManager.HexSize,
                 MapManager.HexOrientation
             );
+
+            SpawnPendingFeatures();
 
             _mapLoadFinishEvent.Raise(
                 new NewMapFinishedEventArgs() { WasSuccessful = true }
@@ -227,6 +257,52 @@ namespace TTT.Managers
             );
         }
 
+        private void SpawnPendingFeatures()
+        {
+            // po: the idea is that 
+            // OnNewMap() parses json
+            // then on each tile with feature != null
+            //   adds (position, featureId) to pending features,
+            // then spawnMapObjects() creates mesh prefabs
+            // then TriangulateWhatever() makes visual mesh
+            // then SpawnPendingFeatures() 
+            //    looks up feature id in feature types by unique id
+            //    creates building feature args
+            //    calls FeatureBuilder.OnLoadingMapFeature(args)
+            //       where BuildAt() instantiates prefab
+
+            if (!_featuresLoaded)
+            {
+                Debug.LogWarning("feature types didn't load");
+            }
+
+            int spawnedCount = 0;
+            foreach (var (position, featureId) in _pendingFeatures)
+            {
+
+                if (_featureTypesByUniqueId.TryGetValue(featureId, out FeatureType featureType))
+                {
+                    var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    args.Location = position;
+                    args.FeatureType = featureType;
+                    Debug.Log(args);
+                    BuildingFeatureEvent.Raise(args);
+                    spawnedCount++;
+                }
+                else
+                {
+                    Debug.LogWarning($"skipped unknown feature '{featureId}' at {position}");
+                }
+            }
+
+            if (spawnedCount > 0)
+            {
+                Debug.Log($"Spawned {spawnedCount} features from map data.");
+            }
+
+            _pendingFeatures.Clear();
+        }
+
         [ServerRpc(RequireOwnership = false)]
         public void StartRaiseSeaServerRpc()
         {
@@ -269,6 +345,8 @@ namespace TTT.Managers
             // Maybe...
             try
             {
+                _pendingFeatures.Clear();
+
                 // Deserialized data (cringe)
                 _gameMapData = JsonConvert.DeserializeObject<MapData>(args.DataFile.text);
                 
@@ -324,6 +402,12 @@ namespace TTT.Managers
                         int index = x + z * width;
 
                         hexCells[index] = hexCell;
+
+                        // po: queue features for spawning after mesh is created
+                        if (!string.IsNullOrEmpty(tileData.Feature))
+                        {
+                            _pendingFeatures.Add((hexCenter, tileData.Feature));
+                        }
                     }
                 }
 
