@@ -1,4 +1,5 @@
 using TMPro;
+using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class BuildingShopSlot : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI textField;
 
-    public GameEvent BuildModeStartingEvent;
+    public GameEvent InteractModeChange;
 
     void Start()
     {
@@ -19,7 +20,12 @@ public class BuildingShopSlot : MonoBehaviour
 
     public void OnClick()
     {
-        BuildModeStartingEvent.Raise(feature);
+        InteractModeChange.Raise(
+            new InteractionModeChangeEventArgs()
+            {
+                NewMode = InteractionMode.BUILDING,
+            }
+        );
     }
 
     public void UpdateText()

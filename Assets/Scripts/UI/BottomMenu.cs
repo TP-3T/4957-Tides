@@ -39,11 +39,8 @@ namespace TTT.UI
 
         /* #endregion*/
 
-        /// <summary>
-        /// Event to be raised when we change to Inspect mode.
-        /// </summary>
         [SerializeField]
-        private GameEvent startInspectMode;
+        private GameEvent InteractModeChange;
 
         [Header("Shop Slots")]
         /// <summary>

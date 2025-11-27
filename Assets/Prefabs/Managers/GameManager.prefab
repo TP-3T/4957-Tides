@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3549664184
+  GlobalObjectIdHash: 1455012885
   InScenePlacedSourceGlobalObjectIdHash: 3549664184
   DeferredDespawnTick: 0
   Ownership: 1
@@ -85,15 +85,14 @@ MonoBehaviour:
   interactionMode: 0
   newMapEvent: {fileID: 11400000, guid: 9438c37d1b6c53b408804b0dce45c597, type: 2}
   <Year>k__BackingField: 1
-  Season: 
-  CO2: 0
-  Temperature: 0
+  <Season>k__BackingField: 
+  <CO2>k__BackingField: 0
+  <Temperature>k__BackingField: 0
   endTurnEvent: {fileID: 11400000, guid: ae18fced95a4b6749b1a727654516355, type: 2}
+  startTurnEvent: {fileID: 11400000, guid: 05610094447874b4fb50121eb5692137, type: 2}
   endingSeasonEvent: {fileID: 11400000, guid: 9972c717c1f0dd14d901eee8e5cd8aa5, type: 2}
   endingYearEvent: {fileID: 11400000, guid: 41e01cdfff1d08a408a8a22cfe7bcc81, type: 2}
-  _FloodEvent: {fileID: 11400000, guid: 944619221b6664749b66a67e05cb4b08, type: 2}
   BuildingFeatureEvent: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
-  buildingFeatureType: {fileID: 0}
 --- !u!114 &716805358515309763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,17 +217,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: a8d0fdbaf27ed27499b9b3d43051c0e6, type: 2}
+  Event: {fileID: 11400000, guid: 430d05d8968fdce498f62567aa054de0, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 5329708062545644470}
+        m_TargetAssemblyTypeName: TTT.Managers.GameManager, TTT.Managers
+        m_MethodName: OnMeshClicked
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

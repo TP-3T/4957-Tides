@@ -228,6 +228,24 @@ namespace TTT.Managers
         }
 
         /// <summary>
+        /// Starts the Inspect mode, disabling building.
+        /// </summary>
+        /// <param name="_"></param>
+        public void OnInteractModeChange(Object args)
+        {
+            if (args is not InteractionModeChangeEventArgs newMode)
+            {
+                Debug.LogError(
+                    "Game Manager received invalid interactModeChange args!"
+                );
+            }
+            else
+            {
+                interactionMode = newMode.NewMode;
+            }
+        }
+
+        /// <summary>
         /// Handles mesh click logic for BuildMode to raise build event.
         /// </summary>
         /// <param name="eventArgs"></param>

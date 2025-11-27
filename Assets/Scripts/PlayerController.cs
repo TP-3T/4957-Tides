@@ -1,4 +1,5 @@
 using TMPro;
+using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
@@ -38,7 +39,7 @@ public class PlayerController : NetworkBehaviour
     private int maxTemperature = 50;
 
     [SerializeField]
-    private GameEvent inspectModeEvent;
+    private GameEvent InteractModeChange;
 
     [SerializeField]
     private GameEvent _mapMeshClicked;
@@ -187,7 +188,6 @@ public class PlayerController : NetworkBehaviour
             || playerBuildings.GetItems().Length <= 0
         )
         {
-            // _PlayerLoseEvent.Raise();
             OnLose();
         }
     }
@@ -206,18 +206,12 @@ public class PlayerController : NetworkBehaviour
 
     public void DisableUI()
     {
-        inspectModeEvent.Raise();
+        InteractModeChange.Raise(
+            new InteractionModeChangeEventArgs()
+            {
+                NewMode = InteractionMode.INSPECTING,
+            }
+        );
         currentUI.gameObject.SetActive(false);
-
-        // GameObject uiCanvas = GameObject.Find("GameUI");
-        // if (uiCanvas != null)
-        // {
-        //     // disabling the parent would prevent the status text from appearing
-        //     // so we enable all children individually instead
-        //     foreach (Transform child in uiCanvas.transform)
-        //     {
-        //         child.gameObject.SetActive(false);
-        //     }
-        // }
     }
 }
