@@ -1582,6 +1582,7 @@ MonoBehaviour:
   energyCostText: {fileID: 4635448033961800217}
   popCostIcon: {fileID: 8028588180810504333}
   popCostText: {fileID: 5315670478024218163}
+  hexConstraintHexContainer: {fileID: 8033875447301748715}
   BuildModeStartingEvent: {fileID: 11400000, guid: e35ecdd7fe7b48348beb53c5ee9a06b6, type: 2}
 --- !u!1 &6028885641320342278
 GameObject:

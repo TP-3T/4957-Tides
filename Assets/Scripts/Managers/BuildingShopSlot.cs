@@ -45,6 +45,12 @@ public class BuildingShopSlot : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI popCostText;
 
+    [SerializeField]
+    private Image hexConstraintIcon;
+
+    [SerializeField]
+    private HorizontalLayoutGroup hexConstraintHexContainer;
+
     public GameEvent BuildModeStartingEvent;
 
     void Start()
@@ -115,6 +121,23 @@ public class BuildingShopSlot : MonoBehaviour
         //This should be a resource producer IMO, but I'm not changing it now
         if (feature.PollutionEmission > 0)
             totalPollutionRevenue += feature.PollutionEmission;
+
+        //Manage constraint icons
+        if (feature.Constraints != null && feature.Constraints.TerrainConstraints != null)
+        {
+            // Clear existing icons
+            foreach (Transform child in hexConstraintHexContainer.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            // Add new icons based on terrain constraints
+            foreach (var terrain in feature.Constraints.TerrainConstraints.List)
+            {
+
+            }
+        }
+
 
         // Display accumulated values
         SetMoneyRevDisplay(totalMoneyRevenue);
