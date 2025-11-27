@@ -16,6 +16,7 @@ public class LoadingCanvas : MonoBehaviour
     public TextMeshProUGUI loadingText;
 
     private Coroutine loadingCoroutine;
+
     [SerializeField]
     private Material waveMaterial;
 
@@ -23,16 +24,16 @@ public class LoadingCanvas : MonoBehaviour
     private float waveSpeed = 0.1f;
 
     /// <summary>
-    /// Controls 
+    ///  Controls The wave movement on the material if someone can figure out how to reapply the texture to the material.
     /// </summary>
-    private void Update()
-    {
-        if (waveMaterial != null)
-        {
-            float offset = Time.time * waveSpeed;
-            waveMaterial.SetTextureOffset("_MainTex", new Vector2(offset, 0));
-        }
-    }
+    // private void Update()
+    // {
+    //     if (waveMaterial != null)
+    //     {
+    //         float offset = Time.time * waveSpeed;
+    //         waveMaterial.SetTextureOffset("_MainTex", new Vector2(offset, 0));
+    //     }
+    // }
 
     /// <summary>
     /// Called when the loading canvas prefab is enabled.
