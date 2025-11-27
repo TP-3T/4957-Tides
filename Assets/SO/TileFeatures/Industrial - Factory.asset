@@ -19,8 +19,10 @@ MonoBehaviour:
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
     <TerrainConstraints>k__BackingField:
-      <Mode>k__BackingField: 0
-      <List>k__BackingField: []
+      <Mode>k__BackingField: 1
+      <List>k__BackingField:
+      - {fileID: 11400000, guid: bbf1927decf0b83429343952dbf6ea8b, type: 2}
+      - {fileID: 11400000, guid: a0bfe455dcde2f348b2a9a88f8d0cb0c, type: 2}
     <FeatureConstraints>k__BackingField: []
   <BuildValidator>k__BackingField: {fileID: 11400000, guid: d4e273d8b77e90742a9605b7146ee4c8, type: 2}
   <ResourceProducers>k__BackingField:
