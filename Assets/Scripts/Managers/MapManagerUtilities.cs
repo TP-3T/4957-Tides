@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
+using TTT.ModularData;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -16,12 +18,56 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent onFloodEnded;
 
+        [SerializeField]
+        private FeatureRuntimeSet spawnedFeatures;
+
         private void FloodCell(ref HexCell hc)
         {
             int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
             hc.Flooded = true;
             // hc.CellColor = Color.blue;
             HexCells[index] = hc;
+
+            // Remove any building on this flooded cell
+            RemoveBuildingOnFloodedCell(hc.CellPosition);
+        }
+
+        /// <summary>
+        /// Removes a building from a cell when it gets flooded.
+        /// </summary>
+        private void RemoveBuildingOnFloodedCell(Vector3 cellPosition)
+        {
+            if (spawnedFeatures == null)
+            {
+                return;
+            }
+
+            Feature feature = spawnedFeatures.GetByLocation(cellPosition);
+
+            if (feature != null)
+            {
+                Debug.Log(
+                    $"Removing building '{feature.Type.name}' at {cellPosition} due to flooding"
+                );
+
+                // Destroy the GameObject
+                if (feature.PrefabInstance != null)
+                {
+                    // Destroy the parent object if it exists
+                    Transform parent = feature.PrefabInstance.transform.parent;
+                    if (parent != null)
+                    {
+                        Destroy(parent.gameObject);
+                    }
+                    else
+                    {
+                        Destroy(feature.PrefabInstance);
+                    }
+                }
+
+                // Remove from the runtime set
+                spawnedFeatures.Remove(feature);
+            }
         }
 
         private void SetCellCenterVertex(HexCell hc, int cv)
