@@ -289,7 +289,6 @@ namespace TTT.Managers
                     BuildingFeatureEvent.Raise(args);
                     spawnedCount++;
                 }
-                //Checker to see if there is 
                 else
                 {
                     Debug.LogWarning($"skipped unknown feature '{featureId}' at {position}");
@@ -313,7 +312,7 @@ namespace TTT.Managers
             }
 
             int spawnedCount = 0;
-            int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smooth loading
+            int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smoothish loading
             Dictionary<string, int> featureTypeCounts = new Dictionary<string, int>();
 
             Debug.Log($"Starting async spawn of {_pendingFeatures.Count} features...");
@@ -334,6 +333,7 @@ namespace TTT.Managers
                     featureTypeCounts[featureId]++;
 
                     // Yield every X spawns to maintain framerate
+                    //Kinda dosent work :/
                     if (spawnedCount % spawnsPerFrame == 0)
                     {
                         yield return null; // Wait one frame
@@ -341,7 +341,7 @@ namespace TTT.Managers
                 }
                 else
                 {
-                    Debug.LogWarning($"skipped unknown feature '{featureId}' at {position}");
+                    Debug.LogWarning($"skipped unknown feature '{featureId}' at {position}");//THis basically never happens but I put this here just incase :/
                 }
             }
 
