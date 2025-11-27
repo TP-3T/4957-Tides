@@ -10,7 +10,7 @@ namespace TTT.Managers
         : GenericSingleton<ResourceProductionManager>
     {
         [SerializeField]
-        private FeatureRuntimeSet spawnedFeatures;
+        private FeatureRuntimeSet playerFeatures;
 
         private event Action turnEnding;
 
@@ -95,24 +95,24 @@ namespace TTT.Managers
         {
             base.Awake();
 
-            spawnedFeatures.FeatureAdded += RegisterStateChangeHandlers;
+            playerFeatures.FeatureAdded += RegisterStateChangeHandlers;
 
-            spawnedFeatures.FeatureAdded += RaiseOnCreated;
+            playerFeatures.FeatureAdded += RaiseOnCreated;
 
-            spawnedFeatures.FeatureRemoved += RaiseOnDestroyed;
+            playerFeatures.FeatureRemoved += RaiseOnDestroyed;
 
-            spawnedFeatures.FeatureRemoved += UnregisterStateChangeHandlers;
+            playerFeatures.FeatureRemoved += UnregisterStateChangeHandlers;
         }
 
         void OnDestroy()
         {
-            spawnedFeatures.FeatureAdded -= RegisterStateChangeHandlers;
+            playerFeatures.FeatureAdded -= RegisterStateChangeHandlers;
 
-            spawnedFeatures.FeatureAdded -= RaiseOnCreated;
+            playerFeatures.FeatureAdded -= RaiseOnCreated;
 
-            spawnedFeatures.FeatureRemoved -= RaiseOnDestroyed;
+            playerFeatures.FeatureRemoved -= RaiseOnDestroyed;
 
-            spawnedFeatures.FeatureRemoved -= UnregisterStateChangeHandlers;
+            playerFeatures.FeatureRemoved -= UnregisterStateChangeHandlers;
         }
     }
 }

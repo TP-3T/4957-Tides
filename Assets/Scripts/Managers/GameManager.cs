@@ -242,6 +242,7 @@ namespace TTT.Managers
                     ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                 args.Location = clickedArgs.ClickedPoint;
                 args.FeatureType = buildingFeatureType;
+                args.OwnedByClient = true;
 
                 if (buildingFeatureType == null)
                 {

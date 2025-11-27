@@ -127,7 +127,8 @@ MonoBehaviour:
   cameraController: {fileID: 486052804758396404}
   _mapMeshClicked: {fileID: 11400000, guid: 430d05d8968fdce498f62567aa054de0, type: 2}
   inspectModeEvent: {fileID: 11400000, guid: d044f0a4c8d4e62419ddfec40a9a4a6b, type: 2}
-  playerBuildings: {fileID: 11400000, guid: 13341c7795559b74d98b04f151a7cf36, type: 2}
+  _exitBuildModeEvent: {fileID: 0}
+  playerBuildings: {fileID: 11400000, guid: b18489e19391e034ea0d1bdb8cc91ae7, type: 2}
   statusText: {fileID: 8344782976077888473}
   maxC02: 500
   maxTemperature: 50
