@@ -112,6 +112,12 @@ public class MainMenu : MonoBehaviour
         CurrentMenu.SetActive(true);
     }
 
+    public void OpenMainMenu()
+    {
+        Debug.Log("Clicked Start Game!");
+        ChangeActiveMenu(Mainmenu);
+    }
+
     public void SillyFunction(string msg)
     {
         Debug.LogWarning(msg);
