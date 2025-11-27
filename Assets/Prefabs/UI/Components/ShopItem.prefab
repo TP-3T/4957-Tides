@@ -362,7 +362,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +100
+  m_text: "\u2014"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -582,7 +582,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +100
+  m_text: "\u2014"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1427,7 +1427,6 @@ GameObject:
   - component: {fileID: 6266292366093410534}
   - component: {fileID: 1849591943704540561}
   - component: {fileID: 8182804029425451958}
-  - component: {fileID: 5003803438977816214}
   m_Layer: 5
   m_Name: ShopItem
   m_TagString: Untagged
@@ -1571,28 +1570,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   feature: {fileID: 0}
-  featureNameText: {fileID: 0}
+  featureNameText: {fileID: 928972232084216365}
+  featureIcon: {fileID: 1333664053168112673}
+  moneyRevIcon: {fileID: 2385944361955309679}
+  moneyRevText: {fileID: 7061080983916450635}
+  pollRevIcon: {fileID: 8883283151172019774}
+  pollRevText: {fileID: 7418583503429646777}
+  moneyCostIcon: {fileID: 1296318533422299027}
+  moneyCostText: {fileID: 9145250736648500463}
+  energyCostIcon: {fileID: 8205688784918416936}
+  energyCostText: {fileID: 4635448033961800217}
+  popCostIcon: {fileID: 8028588180810504333}
+  popCostText: {fileID: 5315670478024218163}
   BuildModeStartingEvent: {fileID: 11400000, guid: e35ecdd7fe7b48348beb53c5ee9a06b6, type: 2}
---- !u!114 &5003803438977816214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5876843518120190640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: 1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!1 &6028885641320342278
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,7 +1712,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +100
+  m_text: "\u2014"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1859,7 +1849,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +100
+  m_text: "\u2014"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2111,7 +2101,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +100
+  m_text: "\u2014"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
