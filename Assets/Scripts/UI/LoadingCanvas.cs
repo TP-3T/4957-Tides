@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class LoadingCanvas : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class LoadingCanvas : MonoBehaviour
     public Slider ProgressBar;
 
     /// <summary>
-    /// Starts loading the main game asynchronously.
+    /// Script for the loading screen canvas. Runs the function for the loading slider bar. 
     /// </summary>
     public void LoadingMainGame()
     {

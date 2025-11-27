@@ -1404,6 +1404,30 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1799810718779532692, guid: f0ad03dd508bf8d45998f2f029e8f751, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1799810718779532692, guid: f0ad03dd508bf8d45998f2f029e8f751, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1799810718779532692, guid: f0ad03dd508bf8d45998f2f029e8f751, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2330848870701588271, guid: f0ad03dd508bf8d45998f2f029e8f751, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2330848870701588271, guid: f0ad03dd508bf8d45998f2f029e8f751, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835652647512691513, guid: f0ad03dd508bf8d45998f2f029e8f751, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 9137328216038302542, guid: f0ad03dd508bf8d45998f2f029e8f751, type: 3}
       propertyPath: m_Name
       value: UI_Loading
