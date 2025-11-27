@@ -34,6 +34,8 @@ public class PlayerInformation : MonoBehaviour
 
     private int cachedPopulationAmount;
 
+    Event onUpdatePlayerInfo;
+
     /// <summary>
     /// Updates the player information display each frame.
     /// </summary>
@@ -62,6 +64,7 @@ public class PlayerInformation : MonoBehaviour
     private void setMoneyText()
     {
         _moneyText.text = "Money: $" + money.AmountOwned.ToString();
+        
     }
 
     /// <summary>
