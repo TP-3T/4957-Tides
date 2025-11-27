@@ -4,7 +4,6 @@ using TTT.GameEvents;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
-using UnityEngine.UI;
 
 public class BuildingShopSlot : MonoBehaviour
 {
@@ -56,6 +55,8 @@ public class BuildingShopSlot : MonoBehaviour
     private HorizontalLayoutGroup hexConstraintHexContainer;
 
     public GameEvent BuildModeStartingEvent;
+
+    private const int IconSize = 50;
 
     void Start()
     {
@@ -171,8 +172,8 @@ public class BuildingShopSlot : MonoBehaviour
                         );
                         LayoutElement iconLayout =
                             containerObj.AddComponent<LayoutElement>();
-                        iconLayout.preferredWidth = 50;
-                        iconLayout.preferredHeight = 50;
+                        iconLayout.preferredWidth = IconSize;
+                        iconLayout.preferredHeight = IconSize;
 
                         GameObject iconObj = new GameObject("Icon");
                         iconObj.transform.SetParent(
@@ -225,8 +226,8 @@ public class BuildingShopSlot : MonoBehaviour
         // Add LayoutElement for HorizontalLayoutGroup sizing
         LayoutElement layoutElement =
             containerObj.AddComponent<LayoutElement>();
-        layoutElement.preferredWidth = 50;
-        layoutElement.preferredHeight = 50;
+        layoutElement.preferredWidth = IconSize;
+        layoutElement.preferredHeight = IconSize;
 
         // Create base layer (colored hexagon)
         GameObject baseLayer = new GameObject("BaseIcon");
@@ -254,7 +255,7 @@ public class BuildingShopSlot : MonoBehaviour
         overlayImage.preserveAspect = true;
         overlayImage.color = Color.white;
 
-        return containerObj;
+        return containerObj; // po: why does this return if we never use the return value
     }
 
     private void SetMoneyRevDisplay(int revenue)
