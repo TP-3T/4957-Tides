@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da465d2e2c65a95488578832a3db6495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerFeatures: {fileID: 11400000, guid: b18489e19391e034ea0d1bdb8cc91ae7, type: 2}
   SpawnedFeatures: {fileID: 11400000, guid: 13341c7795559b74d98b04f151a7cf36, type: 2}
 --- !u!114 &248936995052224105
 MonoBehaviour:

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
@@ -9,6 +10,14 @@ using UnityEngine;
 
 public class FeatureBuilder : MonoBehaviour
 {
+    /// <summary>
+    /// Runtime set of features owned by this client.
+    /// </summary>
+    public FeatureRuntimeSet PlayerFeatures;
+
+    /// <summary>
+    /// Runtime set of all features spawned in the map.
+    /// </summary>
     public FeatureRuntimeSet SpawnedFeatures;
 
     private const float hexCellPadding = 0.05f;
@@ -23,7 +32,11 @@ public class FeatureBuilder : MonoBehaviour
             return;
         }
 
-        TryToBuild(FixLocation(bfArgs.Location), bfArgs.FeatureType);
+        TryToBuild(
+            FixLocation(bfArgs.Location),
+            bfArgs.FeatureType,
+            bfArgs.OwnedByClient
+        );
     }
 
     public void OnDestroyingFeature(Object eventArgs)
@@ -33,17 +46,7 @@ public class FeatureBuilder : MonoBehaviour
             return;
         }
 
-        DestroyAt(FixLocation(bfArgs.Location), wasSold: false);
-    }
-
-    public void OnSellingFeature(Object eventArgs)
-    {
-        if (eventArgs is not BuildingFeatureArgs bfArgs)
-        {
-            return;
-        }
-
-        DestroyAt(bfArgs.Location, wasSold: true);
+        DestroyAt(FixLocation(bfArgs.Location));
     }
 
     private static Vector3 FixLocation(Vector3 location)
@@ -62,25 +65,38 @@ public class FeatureBuilder : MonoBehaviour
         return ((HexCell)exactCell).CellPosition;
     }
 
-    private void TryToBuild(Vector3 location, FeatureType featureType)
+    private void TryToBuild(
+        Vector3 location,
+        FeatureType featureType,
+        bool ownedByClient
+    )
     {
-        if (CheckIfCanBuild(location, featureType))
-        {
-            BuildAt(location, featureType);
-        }
-        else
+        if (!CheckIfCanBuild(location, featureType))
         {
             Debug.Log("Tried to build but failed due to constraints");
+            return;
+        }
+
+        Feature feature = BuildAt(location, featureType);
+
+        if (feature == null)
+        {
+            Debug.LogError("No renderers found in this prefab.");
+            return;
+        }
+
+        SpawnedFeatures.Add(feature);
+        if (ownedByClient)
+        {
+            PlayerFeatures.Add(feature);
         }
     }
 
     private bool CheckIfCanBuild(Vector3 location, FeatureType featureType)
     {
-        if (
-            SpawnedFeatures
-                .GetItems()
-                .Any(feats => feats.CellPosition.Equals(location))
-        )
+        Feature[] allFeatures = SpawnedFeatures.GetItems();
+
+        if (allFeatures.Any(feat => feat.CellPosition.Equals(location)))
         {
             // then there's already something at this location
             return false;
@@ -133,7 +149,7 @@ public class FeatureBuilder : MonoBehaviour
         return true;
     }
 
-    private void BuildAt(Vector3 location, FeatureType featureType)
+    private Feature BuildAt(Vector3 location, FeatureType featureType)
     {
         GameObject modelInstance = Instantiate(featureType.Prefab);
 
@@ -153,8 +169,8 @@ public class FeatureBuilder : MonoBehaviour
 
             if (renderers.Length == 0)
             {
-                Debug.LogError("No renderers found in this prefab.");
-                return;
+                Destroy(modelInstance);
+                return null;
             }
 
             modelBounds = renderers[0].bounds;
@@ -167,7 +183,6 @@ public class FeatureBuilder : MonoBehaviour
             }
             center.x /= renderers.Length; // average center
             center.z /= renderers.Length; // average center
-            // modelBounds.center = center;
         }
 
         Vector3 modelSize = modelBounds.size;
@@ -192,26 +207,20 @@ public class FeatureBuilder : MonoBehaviour
         parent.transform.localScale = displayScale;
 
         // Mark as static for occlusion culling (if not in Editor)
-        #if UNITY_EDITOR
-        UnityEditor.GameObjectUtility.SetStaticEditorFlags(parent, 
-            UnityEditor.StaticEditorFlags.OccludeeStatic | UnityEditor.StaticEditorFlags.OccluderStatic);
-        #endif
+#if UNITY_EDITOR
+        UnityEditor.GameObjectUtility.SetStaticEditorFlags(
+            parent,
+            UnityEditor.StaticEditorFlags.OccludeeStatic
+                | UnityEditor.StaticEditorFlags.OccluderStatic
+        );
+#endif
 
-        // register
+        // encapsulate in feature object
         Feature feature = new(location, featureType, modelInstance);
-        SpawnedFeatures.Add(feature);
-    }
-    public void OnLoadingMapFeature(Object eventArgs)
-    {
-        if (eventArgs is not BuildingFeatureArgs bfArgs)
-        {
-            return;
-        }
-
-        BuildAt(bfArgs.Location, bfArgs.FeatureType);
+        return feature;
     }
 
-    private void DestroyAt(Vector3 location, bool wasSold)
+    private void DestroyAt(Vector3 location)
     {
         Feature feature = SpawnedFeatures.GetByLocation(location);
 
@@ -221,7 +230,9 @@ public class FeatureBuilder : MonoBehaviour
         }
 
         Destroy(feature.PrefabInstance);
+
         SpawnedFeatures.Remove(feature);
+        PlayerFeatures.Remove(feature); // returns quietly if not player owned
     }
 
     private static float Hypotenuse(float x, float y)
