@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
-using UnityEditor;
 using UnityEngine;
 
 namespace TTT.DataClasses.TileFeatures

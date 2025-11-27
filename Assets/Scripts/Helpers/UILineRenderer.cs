@@ -1,5 +1,3 @@
-using UnityEditor.Build.Content;
-using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 // This code found at https://github.com/Radishmouse22/UILineRenderer/blob/main/UILineRenderer.cs
