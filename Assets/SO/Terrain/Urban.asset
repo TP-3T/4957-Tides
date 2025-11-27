@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edfba43e484fc17418585fa87cd85427, type: 3}
-  m_Name: Plains
+  m_Name: Urban
   m_EditorClassIdentifier: 
   TileColor:
     UseConstant: 1
-    Constant: {r: 0.4067496, g: 0.6603774, b: 0.31357536, a: 1}
+    Constant: {r: 0.32704395, g: 0.32447284, b: 0.32190174, a: 1}
     Variable: {fileID: 0}
-  uid: 3
+  uid: 11
