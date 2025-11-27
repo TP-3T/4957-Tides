@@ -15,203 +15,224 @@ using UnityEngine.EventSystems;
 /// It works by ensuring that only the owner of the networked
 /// player object has an active camera, preventing conflicts.
 /// </summary>
-public class PlayerController : NetworkBehaviour
+namespace TTT.UI
 {
-    const int LeftMouseIndex = 0;
-    const float CLICK_THRESHOLD = 5f; // Max pixel movement to still be considered a click
-
-    [SerializeField]
-    private Camera playerCamera;
-
-    [SerializeField]
-    private CameraController cameraController;
-
-    [SerializeField]
-    private FeatureRuntimeSet playerBuildings;
-
-    [SerializeField]
-    private TextMeshProUGUI statusText;
-
-    [SerializeField]
-    private int maxC02 = 500;
-
-    [SerializeField]
-    private int maxTemperature = 50;
-
-    [SerializeField]
-    private GameEvent InteractModeChange;
-
-    [SerializeField]
-    private GameEvent _mapMeshClicked;
-
-    [SerializeField]
-    private Canvas currentUI;
-
-    //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
-    //*  We should look into the Unity Input System Package
-    readonly Vector3 startingPosition = new(0, 10, -10);
-    public NetworkVariable<Color> PlayerColor = new(
-        Color.white,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
-    public float DesiredCellHeight = 1.0f;
-
-    private Vector3 mouseDownPosition;
-
-    /// <summary>
-    /// Called when the networked object is spawned on the network.
-    /// It checks if the object is owned by the local client. If it is,
-    /// it enables the camera for that player and disables the default
-    /// scene camera to avoid conflicts.
-    /// </summary>
-    public override void OnNetworkSpawn()
+    public class PlayerController : NetworkBehaviour
     {
-        // NEW: Server assigns a unique color when the player spawns.
-        if (IsServer)
-        {
-            AssignUniquePlayerColor(OwnerClientId);
-        }
+        const int LeftMouseIndex = 0;
+        const float CLICK_THRESHOLD = 5f; // Max pixel movement to still be considered a click
 
-        if (IsOwner)
+        [SerializeField]
+        private Camera playerCamera;
+
+        [SerializeField]
+        private CameraController cameraController;
+
+        [SerializeField]
+        private FeatureRuntimeSet playerBuildings;
+
+        [SerializeField]
+        private TextMeshProUGUI statusText;
+
+        [SerializeField]
+        private int maxC02 = 500;
+
+        [SerializeField]
+        private int maxTemperature = 50;
+
+        private FeatureType FeatureType { get; set; }
+
+        [SerializeField]
+        private GameEvent InteractModeChange;
+
+        [SerializeField]
+        private GameEvent _mapMeshClicked;
+
+        [SerializeField]
+        private GameEvent BuildingFeatureEvent;
+
+        [SerializeField]
+        private Canvas currentUI;
+
+        //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
+        //*  We should look into the Unity Input System Package
+        readonly Vector3 startingPosition = new(0, 10, -10);
+        public NetworkVariable<Color> PlayerColor = new(
+            Color.white,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server
+        );
+        public float DesiredCellHeight = 1.0f;
+
+        private Vector3 mouseDownPosition;
+
+        /// <summary>
+        /// Called when the networked object is spawned on the network.
+        /// It checks if the object is owned by the local client. If it is,
+        /// it enables the camera for that player and disables the default
+        /// scene camera to avoid conflicts.
+        /// </summary>
+        public override void OnNetworkSpawn()
         {
-            transform.position = startingPosition;
-            //! CB: We don't handle the not-null case. This causes silent errors.
-            if (playerCamera != null)
+            // NEW: Server assigns a unique color when the player spawns.
+            if (IsServer)
             {
-                playerCamera.enabled = true;
-                Debug.Log("Enable camera for local player");
-            }
-        }
-    }
-
-    private void AssignUniquePlayerColor(ulong clientId)
-    {
-        // TODO: Let players pick 4 colors they want to see.
-        Color uniqueColor = (clientId % 4) switch
-        {
-            // Cycle through 4 basic colors
-            0 => Color.red,
-            1 => Color.blue,
-            2 => Color.green,
-            3 => Color.yellow,
-            _ => Color.white,
-        };
-        PlayerColor.Value = uniqueColor;
-        Debug.Log($"Assigned color {PlayerColor.Value} to Player {clientId}");
-    }
-
-    private void FindHexGridAfterConnection(ulong clientId)
-    {
-        // The event fires for *all* clients connecting, but we only care about the local player's logic.
-        if (NetworkManager.Singleton.LocalClientId == clientId)
-        {
-            // Unsubscribe immediately to prevent running again.
-            NetworkManager.Singleton.OnClientConnectedCallback -=
-                FindHexGridAfterConnection;
-        }
-    }
-
-    /// <summary>
-    /// Called once per frame to handle real-time input and camera controls.
-    /// It checks for local ownership before processing movement and rotation
-    /// input from the keyboard (WASD, QE) and mouse.
-    /// </summary>
-    void Update()
-    {
-        // Track mouse down position
-        if (Input.GetMouseButtonDown(LeftMouseIndex))
-        {
-            mouseDownPosition = Input.mousePosition;
-        }
-
-        // Only process tile selection on mouse up, and only if it wasn't a drag
-        if (Input.GetMouseButtonUp(LeftMouseIndex))
-        {
-            // Don't process world clicks when clicking on UI
-            if (IsMouseOverUI())
-            {
-                return;
+                AssignUniquePlayerColor(OwnerClientId);
             }
 
-            // Check if mouse moved significantly (drag) vs stayed in place (click)
-            float mouseMovement = Vector3.Distance(
-                mouseDownPosition,
-                Input.mousePosition
+            if (IsOwner)
+            {
+                transform.position = startingPosition;
+                //! CB: We don't handle the not-null case. This causes silent errors.
+                if (playerCamera != null)
+                {
+                    playerCamera.enabled = true;
+                    Debug.Log("Enable camera for local player");
+                }
+            }
+        }
+
+        private void AssignUniquePlayerColor(ulong clientId)
+        {
+            // TODO: Let players pick 4 colors they want to see.
+            Color uniqueColor = (clientId % 4) switch
+            {
+                // Cycle through 4 basic colors
+                0 => Color.red,
+                1 => Color.blue,
+                2 => Color.green,
+                3 => Color.yellow,
+                _ => Color.white,
+            };
+            PlayerColor.Value = uniqueColor;
+            Debug.Log(
+                $"Assigned color {PlayerColor.Value} to Player {clientId}"
             );
-            if (mouseMovement > CLICK_THRESHOLD)
+        }
+
+        private void FindHexGridAfterConnection(ulong clientId)
+        {
+            // The event fires for *all* clients connecting, but we only care about the local player's logic.
+            if (NetworkManager.Singleton.LocalClientId == clientId)
             {
-                // This was a drag, not a click - don't select tile
-                return;
+                // Unsubscribe immediately to prevent running again.
+                NetworkManager.Singleton.OnClientConnectedCallback -=
+                    FindHexGridAfterConnection;
+            }
+        }
+
+        /// <summary>
+        /// Called once per frame to handle real-time input and camera controls.
+        /// It checks for local ownership before processing movement and rotation
+        /// input from the keyboard (WASD, QE) and mouse.
+        /// </summary>
+        void Update()
+        {
+            // Track mouse down position
+            if (Input.GetMouseButtonDown(LeftMouseIndex))
+            {
+                mouseDownPosition = Input.mousePosition;
             }
 
-            Ray mousePositionRay = playerCamera.ScreenPointToRay(
-                Input.mousePosition
-            );
-            if (
-                Physics.Raycast(
-                    mousePositionRay,
-                    out RaycastHit raycastHit,
-                    Mathf.Infinity,
-                    HexMesh.LayerMask
+            // Only process tile selection on mouse up, and only if it wasn't a drag
+            if (Input.GetMouseButtonUp(LeftMouseIndex))
+            {
+                // Don't process world clicks when clicking on UI
+                if (IsMouseOverUI())
+                {
+                    return;
+                }
+
+                // Check if mouse moved significantly (drag) vs stayed in place (click)
+                float mouseMovement = Vector3.Distance(
+                    mouseDownPosition,
+                    Input.mousePosition
+                );
+                if (mouseMovement > CLICK_THRESHOLD)
+                {
+                    // This was a drag, not a click - don't select tile
+                    return;
+                }
+
+                Ray mousePositionRay = playerCamera.ScreenPointToRay(
+                    Input.mousePosition
+                );
+                if (
+                    Physics.Raycast(
+                        mousePositionRay,
+                        out RaycastHit raycastHit,
+                        Mathf.Infinity,
+                        HexMesh.LayerMask
+                    )
                 )
+                {
+                    // Raise some event will deal with this later
+                    // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
+                    Debug.Log("Map mesh clicked at: " + raycastHit.point);
+                    var mode = GameManager.Instance.InteractionMode;
+                    if (mode.Equals(InteractModeChange.BUILDING))
+                    {
+                        BuildingFeatureEvent.Raise(
+                            new()
+                            {
+                                Location = raycastHit.point,
+                                FeatureType = FeatureType,
+                            }
+                        );
+                    }
+                    _mapMeshClicked.Raise(
+                        new MapMeshClickedEventArgs
+                        {
+                            ClickedPoint = raycastHit.point,
+                            PlayerColor = PlayerColor.Value,
+                            PlayerId = OwnerClientId,
+                        }
+                    );
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check if the pointer is over a UI element.
+        /// </summary>
+        private bool IsMouseOverUI()
+        {
+            return EventSystem.current.IsPointerOverGameObject();
+        }
+
+        public void CheckIfPlayerHasLost()
+        {
+            if (
+                GameManager.Instance.CO2 > maxC02
+                || GameManager.Instance.Temperature > maxTemperature
+                || playerBuildings.GetItems().Length <= 0
             )
             {
-                // Raise some event will deal with this later
-                // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
-
-                _mapMeshClicked.Raise(
-                    new MapMeshClickedEventArgs
-                    {
-                        ClickedPoint = raycastHit.point,
-                        PlayerColor = PlayerColor.Value,
-                        PlayerId = OwnerClientId,
-                    }
-                );
+                OnLose();
             }
         }
-    }
 
-    /// <summary>
-    /// Check if the pointer is over a UI element.
-    /// </summary>
-    private bool IsMouseOverUI()
-    {
-        return EventSystem.current.IsPointerOverGameObject();
-    }
-
-    public void CheckIfPlayerHasLost()
-    {
-        if (
-            GameManager.Instance.CO2 > maxC02
-            || GameManager.Instance.Temperature > maxTemperature
-            || playerBuildings.GetItems().Length <= 0
-        )
+        public void OnLose()
         {
-            OnLose();
+            DisableUI();
+
+            statusText.gameObject.SetActive(true);
+            statusText.text = "Spectating";
+
+            // feel free to remove this if needed, not important
+            GameObject cube = GameObject.Find("Cube");
+            cube.SetActive(false);
         }
-    }
 
-    public void OnLose()
-    {
-        DisableUI();
-
-        statusText.gameObject.SetActive(true);
-        statusText.text = "Spectating";
-
-        // feel free to remove this if needed, not important
-        GameObject cube = GameObject.Find("Cube");
-        cube.SetActive(false);
-    }
-
-    public void DisableUI()
-    {
-        InteractModeChange.Raise(
-            new InteractionModeChangeEventArgs()
-            {
-                NewMode = InteractionMode.INSPECTING,
-            }
-        );
-        currentUI.gameObject.SetActive(false);
+        public void DisableUI()
+        {
+            InteractModeChange.Raise(
+                new InteractionModeChangeEventArgs()
+                {
+                    NewMode = InteractionMode.INSPECTING,
+                }
+            );
+            currentUI.gameObject.SetActive(false);
+        }
     }
 }

@@ -17,8 +17,8 @@ namespace TTT.Managers
         [field: SerializeField]
         public List<PlayerResource> PlayerResources { get; private set; }
 
-        [SerializeField]
-        private InteractionMode interactionMode;
+        [field: SerializeField]
+        public InteractionMode InteractionMode { get; private set; }
 
         [SerializeField]
         private GameEvent newMapEvent;
@@ -196,38 +196,6 @@ namespace TTT.Managers
         }
 
         /// <summary>
-        /// Gets the current temperature.
-        /// </summary>
-        public int GetTemperature()
-        {
-            return this.Temperature;
-        }
-
-        /// <summary>
-        /// Starts the build mode event, disabling certain features.
-        /// </summary>
-        /// <param name="eventArgs"></param>
-        public void StartBuildMode(Object eventArgs)
-        {
-            if (eventArgs is not FeatureType featureType)
-            {
-                return;
-            }
-
-            interactionMode = InteractionMode.BUILDING;
-            buildingFeatureType = featureType;
-        }
-
-        /// <summary>
-        /// Starts the Inspect mode, disabling building.
-        /// </summary>
-        /// <param name="_"></param>
-        public void StartInspectMode(Object _)
-        {
-            interactionMode = InteractionMode.INSPECTING;
-        }
-
-        /// <summary>
         /// Starts the Inspect mode, disabling building.
         /// </summary>
         /// <param name="_"></param>
@@ -241,7 +209,7 @@ namespace TTT.Managers
             }
             else
             {
-                interactionMode = newMode.NewMode;
+                InteractionMode = newMode.NewMode;
             }
         }
 
@@ -256,7 +224,7 @@ namespace TTT.Managers
                 return;
             }
 
-            if (interactionMode == InteractionMode.BUILDING)
+            if (InteractionMode == InteractionMode.BUILDING)
             {
                 if (buildingFeatureType == null)
                 {
@@ -272,6 +240,29 @@ namespace TTT.Managers
                 args.FeatureType = buildingFeatureType;
 
                 BuildingFeatureEvent.Raise(args);
+            }
+        }
+
+        public void OnBuild(object args)
+        {
+            if (args is not InteractionModeChangeEventArgs BuildArgs)
+            {
+                Debug.LogError(
+                    "Game Manager received invalid interactModeChange args!"
+                );
+            }
+            else if (!InteractionMode.Equals(InteractionMode.BUILDING))
+            {
+                Debug.LogError(
+                    "Game Manager received invalid interactModeChange args!"
+                );
+            }
+            else
+            {
+                var args =
+                    ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                args.Location = clickedArgs.ClickedPoint;
+                args.FeatureType = buildingFeatureType;
             }
         }
 

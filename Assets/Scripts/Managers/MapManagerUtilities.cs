@@ -48,7 +48,7 @@ namespace TTT.Managers
             {
                 return (
                     (Mathf.RoundToInt(hc.r / 2) + hc.q)
-                    + (hc.r * _gameMapData.Width)
+                    + (hc.r * _hexGridWidth.Value)
                 );
             }
             else

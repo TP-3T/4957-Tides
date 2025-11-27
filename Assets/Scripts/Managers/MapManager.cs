@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.Terrain;
 using TTT.GameEvents;
@@ -312,56 +313,74 @@ namespace TTT.Managers
             try
             {
                 // Deserialized data (cringe)
-                _gameMapData = JsonUtility.FromJson<MapData>(
+                _gameMapData = JsonConvert.DeserializeObject<MapData>(
                     args.DataFile.text
                 );
-                _hexGridWidth.Value = _gameMapData.Width;
-                _hexGridHeight.Value = _gameMapData.Height;
 
-                HexCell[] hexCells = new HexCell[
-                    _gameMapData.MapTilesData.Count
-                ];
+                int width = _gameMapData.MapTile.Count;
+                int height = _gameMapData.MapTile["0"].Count;
 
-                foreach (MapTileData mapTileData in _gameMapData.MapTilesData)
+                _hexGridWidth.Value = width;
+                _hexGridHeight.Value = height;
+
+                HexCell[] hexCells = new HexCell[width * height];
+
+                foreach (var xGroup in _gameMapData.MapTile)
                 {
-                    if (mapTileData.Height < 0)
-                        mapTileData.SetHeight(0);
+                    int x = int.Parse(xGroup.Key);
 
-                    Vector3 hexCenter =
-                        HexMath.GetHexCenter(
-                            MapManager.HexSize,
-                            mapTileData.Height + 1,
-                            mapTileData.OffsetCoordinates,
-                            MapManager.HexOrientation
-                        ) + Vector3.zero;
-
-                    CubeCoordinates hc = HexMath.OddOffsetToCube(
-                        mapTileData.OffsetCoordinates,
-                        MapManager.HexOrientation
-                    );
-
-                    Color cc = _allowedTerrains.Get(mapTileData.TileType).Color;
-
-                    HexCell hexCell = new()
+                    foreach (var zGroup in xGroup.Value)
                     {
-                        CellCubeCoordinates = hc,
-                        CellPosition = hexCenter,
-                        CellColor = cc,
-                        TerrainTypeId = mapTileData.TileType,
-                    };
+                        int z = int.Parse(zGroup.Key);
+                        TileData tileData = zGroup.Value;
 
-                    int cubeCoordinateIndex = GetCellIndexFromCubeCoordinates(
-                        hc
-                    );
+                        if (tileData.Elevation < 0)
+                        {
+                            tileData.Elevation = 0;
+                        }
 
-                    hexCells[cubeCoordinateIndex] = hexCell;
+                        OffsetCoordinates offset = new(x, z);
+
+                        Vector3 hexCenter = HexMath.GetHexCenter(
+                            HexSize,
+                            tileData.Elevation + 1,
+                            offset,
+                            HexOrientation
+                        );
+
+                        CubeCoordinates cubeCoords = HexMath.OddOffsetToCube(
+                            offset,
+                            HexOrientation
+                        );
+
+                        Color cellColor = _allowedTerrains
+                            .Get(tileData.TileType)
+                            .Color;
+
+                        HexCell hexCell = new HexCell()
+                        {
+                            CellCubeCoordinates = cubeCoords,
+                            CellPosition = hexCenter,
+                            CellColor = cellColor,
+                            TerrainTypeId = tileData.TileType,
+                        };
+
+                        int index = x + z * width;
+
+                        hexCells[index] = hexCell;
+                    }
                 }
+
+                HexCells.Clear();
 
                 foreach (HexCell hc in hexCells)
                 {
                     HexCells.Add(hc);
                 }
 
+                SeaLevel.Value = _gameMapData.WorldState.SeaLevel;
+
+                ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
 
                 StartCoroutine(SpawnMapObjects());
@@ -369,6 +388,7 @@ namespace TTT.Managers
             catch (Exception e)
             {
                 Debug.LogException(e);
+
                 _mapLoadFinishEvent.Raise(
                     new NewMapFinishedEventArgs() { WasSuccessful = false }
                 );
