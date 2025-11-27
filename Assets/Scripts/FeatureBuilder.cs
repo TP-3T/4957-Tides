@@ -216,7 +216,7 @@ public class FeatureBuilder : MonoBehaviour
 #endif
 
         // encapsulate in feature object
-        Feature feature = new(location, featureType, modelInstance);
+        Feature feature = new(location, featureType, parent);
         return feature;
     }
 

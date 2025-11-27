@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
 using UnityEngine;
@@ -16,12 +17,30 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent onFloodEnded;
 
+        [SerializeField]
+        private GameEvent DestroyingFeatureEvent;
+
         private void FloodCell(ref HexCell hc)
         {
             int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
             hc.Flooded = true;
             // hc.CellColor = Color.blue;
             HexCells[index] = hc;
+
+            // Remove any building on this flooded cell
+            RaiseDestroyingFeatureEvent(hc.CellPosition);
+        }
+
+        /// <summary>
+        /// Removes a building from a cell when it gets flooded.
+        /// </summary>
+        private void RaiseDestroyingFeatureEvent(Vector3 cellPosition)
+        {
+            BuildingFeatureArgs bfArgs =
+                ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+            bfArgs.Location = cellPosition;
+
+            DestroyingFeatureEvent.Raise(bfArgs);
         }
 
         private void SetCellCenterVertex(HexCell hc, int cv)

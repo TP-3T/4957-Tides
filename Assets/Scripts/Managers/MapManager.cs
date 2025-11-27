@@ -1,17 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using TTT.DataClasses.HexData;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.Terrain;
 using TTT.DataClasses.TileFeatures;
-using TTT.DataClasses.HexData;
 using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using Newtonsoft.Json;
 
 namespace TTT.Managers
 {
@@ -71,7 +71,8 @@ namespace TTT.Managers
 
         private LineRenderer lineRenderer;
 
-        private List<(Vector3 position, string featureId)> _pendingFeatures = new();
+        private List<(Vector3 position, string featureId)> _pendingFeatures =
+            new();
         private bool _featuresLoaded = false;
 
         void Start()
@@ -92,7 +93,10 @@ namespace TTT.Managers
 
         private void CacheFeatureType(FeatureType featureType)
         {
-            if (featureType != null && !string.IsNullOrEmpty(featureType.UniqueID))
+            if (
+                featureType != null
+                && !string.IsNullOrEmpty(featureType.UniqueID)
+            )
             {
                 _featureTypesByUniqueId[featureType.UniqueID] = featureType;
             }
@@ -260,13 +264,13 @@ namespace TTT.Managers
 
         private void SpawnPendingFeatures()
         {
-            // po: the idea is that 
+            // po: the idea is that
             // OnNewMap() parses json
             // then on each tile with feature != null
             //   adds (position, featureId) to pending features,
             // then spawnMapObjects() creates mesh prefabs
             // then TriangulateWhatever() makes visual mesh
-            // then SpawnPendingFeatures() 
+            // then SpawnPendingFeatures()
             //    looks up feature id in feature types by unique id
             //    creates building feature args
             //    calls FeatureBuilder.OnLoadingMapFeature(args)
@@ -278,12 +282,18 @@ namespace TTT.Managers
             }
 
             int spawnedCount = 0;
-            
+
             foreach (var (position, featureId) in _pendingFeatures)
             {
-                if (_featureTypesByUniqueId.TryGetValue(featureId, out FeatureType featureType))
+                if (
+                    _featureTypesByUniqueId.TryGetValue(
+                        featureId,
+                        out FeatureType featureType
+                    )
+                )
                 {
-                    var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    var args =
+                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                     args.Location = position;
                     args.FeatureType = featureType;
                     args.OwnedByClient = false;
@@ -293,7 +303,9 @@ namespace TTT.Managers
                 }
                 else
                 {
-                    Debug.LogWarning($"skipped unknown feature '{featureId}' at {position}");
+                    Debug.LogWarning(
+                        $"skipped unknown feature '{featureId}' at {position}"
+                    );
                 }
             }
 
@@ -315,15 +327,24 @@ namespace TTT.Managers
 
             int spawnedCount = 0;
             int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smoothish loading
-            Dictionary<string, int> featureTypeCounts = new Dictionary<string, int>();
+            Dictionary<string, int> featureTypeCounts =
+                new Dictionary<string, int>();
 
-            Debug.Log($"Starting async spawn of {_pendingFeatures.Count} features...");
+            Debug.Log(
+                $"Starting async spawn of {_pendingFeatures.Count} features..."
+            );
 
             foreach (var (position, featureId) in _pendingFeatures)
             {
-                if (_featureTypesByUniqueId.TryGetValue(featureId, out FeatureType featureType))
+                if (
+                    _featureTypesByUniqueId.TryGetValue(
+                        featureId,
+                        out FeatureType featureType
+                    )
+                )
                 {
-                    var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    var args =
+                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                     args.Location = position;
                     args.FeatureType = featureType;
                     BuildingFeatureEvent.Raise(args);
@@ -343,7 +364,9 @@ namespace TTT.Managers
                 }
                 else
                 {
-                    Debug.LogWarning($"skipped unknown feature '{featureId}' at {position}");//THis basically never happens but I put this here just incase :/
+                    Debug.LogWarning(
+                        $"skipped unknown feature '{featureId}' at {position}"
+                    ); //THis basically never happens but I put this here just incase :/
                 }
             }
 
@@ -404,8 +427,10 @@ namespace TTT.Managers
                 _pendingFeatures.Clear();
 
                 // Deserialized data (cringe)
-                _gameMapData = JsonConvert.DeserializeObject<MapData>(args.DataFile.text);
-                
+                _gameMapData = JsonConvert.DeserializeObject<MapData>(
+                    args.DataFile.text
+                );
+
                 int width = _gameMapData.MapTile.Count;
                 int height = _gameMapData.MapTile["0"].Count;
 
@@ -422,31 +447,30 @@ namespace TTT.Managers
                     {
                         int z = int.Parse(zGroup.Key);
                         TileData tileData = zGroup.Value;
-                        
-                        if(tileData.Elevation < 0)
+
+                        if (tileData.Elevation < 0)
                         {
                             tileData.Elevation = 0;
                         }
 
                         OffsetCoordinates offset = new(x, z);
 
-                        Vector3 hexCenter = 
-                            HexMath.GetHexCenter(
-                                HexSize,
-                                tileData.Elevation + 1,
-                                offset,
-                                HexOrientation
-                            );
+                        Vector3 hexCenter = HexMath.GetHexCenter(
+                            HexSize,
+                            tileData.Elevation + 1,
+                            offset,
+                            HexOrientation
+                        );
 
-                        CubeCoordinates cubeCoords = 
-                            HexMath.OddOffsetToCube(
-                                offset,
-                                HexOrientation
-                            );
+                        CubeCoordinates cubeCoords = HexMath.OddOffsetToCube(
+                            offset,
+                            HexOrientation
+                        );
 
-                        Color cellColor = 
-                            _allowedTerrains.Get(tileData.TileType).Color;
-                        
+                        Color cellColor = _allowedTerrains
+                            .Get(tileData.TileType)
+                            .Color;
+
                         HexCell hexCell = new HexCell()
                         {
                             CellCubeCoordinates = cubeCoords,
@@ -454,7 +478,7 @@ namespace TTT.Managers
                             CellColor = cellColor,
                             TerrainTypeId = tileData.TileType,
                         };
-                        
+
                         int index = x + z * width;
 
                         hexCells[index] = hexCell;
@@ -484,7 +508,7 @@ namespace TTT.Managers
             catch (Exception e)
             {
                 Debug.LogException(e);
-                
+
                 _mapLoadFinishEvent.Raise(
                     new NewMapFinishedEventArgs() { WasSuccessful = false }
                 );
