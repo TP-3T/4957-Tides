@@ -30,13 +30,18 @@ namespace TTT.ClimateModel
         private static readonly int _NUM_HOURS_IN_DAY = 24;
         private static readonly int _NUM_DAYS_IN_YEAR = 365;
         private static readonly int _NUM_SECONDS_IN_YEAR =
-            _NUM_SECONDS_IN_MIN * _NUM_SECONDS_IN_HOUR * _NUM_HOURS_IN_DAY * _NUM_DAYS_IN_YEAR;
-        private static readonly double _CELSIUS_KELVIN_CONVERSION_VALUE = 273.15;
+            _NUM_SECONDS_IN_MIN
+            * _NUM_SECONDS_IN_HOUR
+            * _NUM_HOURS_IN_DAY
+            * _NUM_DAYS_IN_YEAR;
+        private static readonly double _CELSIUS_KELVIN_CONVERSION_VALUE =
+            273.15;
 
         private static readonly int _NUM_MM_PER_METRE = 1000;
 
         // Empirical constant for CO2 forcing, derived from radiative transfer calculations that is specific to CO2
-        private static readonly double _RADIATIVE_FORCING_EMPIRICAL_CONSTANT = 5.35;
+        private static readonly double _RADIATIVE_FORCING_EMPIRICAL_CONSTANT =
+            5.35;
 
         // Pre-industrial CO2 concentration in ppm
         private static readonly double _PRE_INDUSTRIAL_CO2_PPM = 280.0;
@@ -70,14 +75,20 @@ namespace TTT.ClimateModel
         private static readonly int _ATMOSPHERIC_COL_WEIGHT_Pa = 100000;
 
         // acceleration due to gravity in m/s^2
-        private static readonly double _ACCEL_DUE_TO_GRAVITY_M_PER_S_SQUARED = 9.81;
+        private static readonly double _ACCEL_DUE_TO_GRAVITY_M_PER_S_SQUARED =
+            9.81;
 
         // heat capacity of the atmosphere (J/K)
         private static readonly double C_atm =
-            _c_atmosphere * (_ATMOSPHERIC_COL_WEIGHT_Pa / _ACCEL_DUE_TO_GRAVITY_M_PER_S_SQUARED);
+            _c_atmosphere
+            * (
+                _ATMOSPHERIC_COL_WEIGHT_Pa
+                / _ACCEL_DUE_TO_GRAVITY_M_PER_S_SQUARED
+            );
 
         // total heat capacity of the earth system (J/K)
-        private static readonly double _TOTAL_HEAT_CAPACITY_OF_EARTH_SYSTEM = _C_ocean + C_atm;
+        private static readonly double _TOTAL_HEAT_CAPACITY_OF_EARTH_SYSTEM =
+            _C_ocean + C_atm;
 
         private static readonly double _HOT_TEMP_THRESHOLD_K = 300.0;
         private static readonly double _WARM_TEMP_THRESHOLD_K = 240.0;
@@ -115,14 +126,19 @@ namespace TTT.ClimateModel
 
         private static readonly double _NO_SEA_LEVEL_RISE_VALUE = 0.0;
 
-        public ClimateModelOutputDTO CalculateFutureClimateValues(ClimateModelInputDTO inputDTO)
+        public ClimateModelOutputDTO CalculateFutureClimateValues(
+            ClimateModelInputDTO inputDTO
+        )
         {
             //TODO: add validation of inputDTO values
 
             // Convert to useable units
-            double currTempKelvin = inputDTO.currTemperatureCelsius + _CELSIUS_KELVIN_CONVERSION_VALUE;
+            double currTempKelvin =
+                inputDTO.currTemperatureCelsius
+                + _CELSIUS_KELVIN_CONVERSION_VALUE;
 
-            double changeInTimeSeconds = inputDTO.changeInTimeYears * _NUM_SECONDS_IN_YEAR;
+            double changeInTimeSeconds =
+                inputDTO.changeInTimeYears * _NUM_SECONDS_IN_YEAR;
 
             // Calculate future temperature
             double futureTempKelvin = CalculateFutureTemperature(
@@ -131,9 +147,11 @@ namespace TTT.ClimateModel
                 inputDTO.currAtmosphericCO2ConcentrationPpm
             );
 
-            double futureTempCelsius = futureTempKelvin - _CELSIUS_KELVIN_CONVERSION_VALUE;
+            double futureTempCelsius =
+                futureTempKelvin - _CELSIUS_KELVIN_CONVERSION_VALUE;
 
-            double currSeaLevelMM = inputDTO.currSeaLevelMetres * _NUM_MM_PER_METRE;
+            double currSeaLevelMM =
+                inputDTO.currSeaLevelMetres * _NUM_MM_PER_METRE;
 
             // Calculate future sea level
             double futureSeaLevelMM = CalculateFutureSeaLevel(
@@ -166,9 +184,8 @@ namespace TTT.ClimateModel
             double currAtmosphericCO2ConcentrationPpm
         )
         {
-            double CO2RadiativeForcingWattsPerSquareMetre = CalculateRadiativeForcing(
-                currAtmosphericCO2ConcentrationPpm
-            );
+            double CO2RadiativeForcingWattsPerSquareMetre =
+                CalculateRadiativeForcing(currAtmosphericCO2ConcentrationPpm);
 
             double netRadiativeImbalance = CalculateNetRadiativeImbalance(
                 currTempKelvin,
@@ -176,7 +193,9 @@ namespace TTT.ClimateModel
             );
 
             double changeInTempKelvin =
-                changeInTimeSeconds / _TOTAL_HEAT_CAPACITY_OF_EARTH_SYSTEM * netRadiativeImbalance;
+                changeInTimeSeconds
+                / _TOTAL_HEAT_CAPACITY_OF_EARTH_SYSTEM
+                * netRadiativeImbalance;
 
             double futureTempKelvin = currTempKelvin + changeInTempKelvin;
 
@@ -223,7 +242,8 @@ namespace TTT.ClimateModel
         /// <returns></returns>
         private static double CalculateRadiativeForcing(
             double currCO2ConcentrationPpm
-        ) {
+        )
+        {
             // Calculate CO2 radiative forcing  - the amount of change in Earth's energy balance due to CO2 (W / m^2)
             // if positive value, global warming is occuring
             double CO2RadiativeForcingWattsPerSquareMetre =
@@ -238,9 +258,11 @@ namespace TTT.ClimateModel
             double CO2RadiativeForcingWattsPerSquareMetre
         )
         {
-            double changeInASR = ASR(currTempKelvin) - ASR(_PRE_INDUSTRIAL_TEMP_KELVIN);
+            double changeInASR =
+                ASR(currTempKelvin) - ASR(_PRE_INDUSTRIAL_TEMP_KELVIN);
 
-            double changeInTempFromPreindustrial = currTempKelvin - _PRE_INDUSTRIAL_TEMP_KELVIN;
+            double changeInTempFromPreindustrial =
+                currTempKelvin - _PRE_INDUSTRIAL_TEMP_KELVIN;
 
             double netRadiativeImbalance =
                 changeInASR
@@ -271,7 +293,9 @@ namespace TTT.ClimateModel
         /// <returns>
         /// a double representing an estimate of the total albedo based on  temperature
         /// </returns>
-        private static double EstimateTotalAlbedoFromTemperature(double tempKelvin)
+        private static double EstimateTotalAlbedoFromTemperature(
+            double tempKelvin
+        )
         {
             if (tempKelvin >= _HOT_TEMP_THRESHOLD_K)
             {
