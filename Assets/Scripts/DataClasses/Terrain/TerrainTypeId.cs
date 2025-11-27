@@ -1,6 +1,4 @@
-using UnityEngine;
-
-namespace TTT.DataClasses
+namespace TTT.DataClasses.Terrain
 {
     /// <summary>
     /// The unique IDs of all terrain types

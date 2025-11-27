@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using TTT.DataClasses;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.Terrain;
 using UnityEngine.Networking;
 
 namespace TTT.Helpers

@@ -47,5 +47,10 @@ namespace TTT.DataClasses.ModularData
 
             return false;
         }
+
+        public int Count()
+        {
+            return Items.Count;
+        }
     }
 }

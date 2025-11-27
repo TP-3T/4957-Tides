@@ -7,6 +7,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 // [RequireComponent(typeof(Camera))]
 
@@ -184,11 +185,9 @@ public class PlayerController : NetworkBehaviour
 
     public void CheckIfPlayerHasLost()
     {
-        GameManager gm = GameManager.Instance;
-
         if (
-            GameManager.CO2 > maxC02
-            || GameManager.Temperature > maxTemperature
+            GameManager.Instance.CO2 > maxC02
+            || GameManager.Instance.Temperature > maxTemperature
             || playerBuildings.GetItems().Length <= 0
         )
         {

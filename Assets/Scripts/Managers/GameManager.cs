@@ -33,16 +33,16 @@ namespace TTT.Managers
 
         //serialize for now
         [field: SerializeField]
-        public static int Year { get; private set; } = 1;
+        public int Year { get; private set; } = 1;
 
         [field: SerializeField]
         public string Season { get; private set; }
 
         [field: SerializeField]
-        public static int CO2 { get; private set; } = 0;
+        public int CO2 { get; private set; } = 0;
 
         [field: SerializeField]
-        public static int Temperature { get; private set; }
+        public int Temperature { get; private set; }
 
         [SerializeField]
         private GameEvent endTurnEvent;
@@ -57,17 +57,9 @@ namespace TTT.Managers
         private GameEvent endingYearEvent;
 
         [SerializeField]
-        private GameEvent _FloodEvent;
-
-        [SerializeField]
-        private GameEvent _TurnEndedEvent;
-
-        [SerializeField]
-        private FeatureType buildingFeatureType;
-
-        [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
+        private FeatureType buildingFeatureType;
         public NetworkClient CurrentPlayer { get; private set; }
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -194,12 +186,21 @@ namespace TTT.Managers
             Debug.Log(
                 "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
             );
+            Year += 1;
             endingYearEvent.Raise();
             var seaRaise = MapManager.Instance.RaiseSea();
             while (seaRaise.MoveNext())
             {
                 yield return null;
             }
+        }
+
+        /// <summary>
+        /// Gets the current temperature.
+        /// </summary>
+        public int GetTemperature()
+        {
+            return this.Temperature;
         }
 
         /// <summary>
@@ -254,6 +255,20 @@ namespace TTT.Managers
 
                 BuildingFeatureEvent.Raise(args);
             }
+        }
+
+        public void OnPlayerLose(Object _)
+        {
+            Debug.Log("Player has lost the game.");
+        }
+
+        public bool CanEndTurn()
+        {
+            bool hasEnoughResources = PlayerResources.All(resources =>
+                resources.AmountOwned >= 0
+            );
+
+            return hasEnoughResources;
         }
     }
 }
