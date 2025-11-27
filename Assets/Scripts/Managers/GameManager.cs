@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -10,6 +13,12 @@ namespace TTT.Managers
 {
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
+        [field: SerializeField]
+        public List<PlayerResource> PlayerResources { get; set; }
+
+        [SerializeField]
+        private InteractionMode interactionMode;
+
         [SerializeField]
         private GameEvent newMapEvent;
 
@@ -32,22 +41,25 @@ namespace TTT.Managers
         private int CO2;
 
         [SerializeField]
-        private GameEvent SeasonChanging;
+        private int Temperature;
 
         [SerializeField]
-        private GameEvent _OnYearChangeEvent;
+        private GameEvent endTurnEvent;
+
+        [SerializeField]
+        private GameEvent endingSeasonEvent;
+
+        [SerializeField]
+        private GameEvent endingYearEvent;
 
         [SerializeField]
         private GameEvent _FloodEvent;
 
         [SerializeField]
-        private InteractionMode interactionMode;
+        private GameEvent BuildingFeatureEvent;
 
         [SerializeField]
         private FeatureType buildingFeatureType;
-
-        [SerializeField]
-        private GameEvent BuildingFeatureEvent;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -113,6 +125,23 @@ namespace TTT.Managers
             }
         }
 
+        public void OnTurnEnding(Object _)
+        {
+            // Placeholder since we don't know who actually is the last player
+            static bool IsLastPlayer() => true;
+
+            if (!IsLastPlayer())
+            {
+                endTurnEvent.Raise();
+            }
+            else
+            {
+                // end the season before saying the turn ended
+                endingSeasonEvent.Raise();
+                IncrementSeason();
+            }
+        }
+
         /// <summary>
         /// Increments the season, and the year if applicable.
         /// </summary>
@@ -121,38 +150,30 @@ namespace TTT.Managers
             int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
 
             // % to wrap around to the beginning after winter
-            int nextSeasonIndex =
-                (currentSeasonIndex + 1) % this.Seasons.Length;
+            int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
+            Season = Seasons[nextSeasonIndex];
 
-            this.Season = this.Seasons[nextSeasonIndex];
-
-            if (this.Season == this.Seasons[0])
+            if (Season != Seasons[0])
             {
-                this.IncrementYear();
-                _OnYearChangeEvent.Raise();
+                endTurnEvent.Raise();
+            }
+            else
+            {
+                // end the year before saying the turn ended
+                endingYearEvent.Raise();
+                IncrementYear();
             }
         }
 
-        /// <summary>
-        /// Increments the year by one.
-        /// </summary>
         public void IncrementYear()
         {
-            this.Year += 1;
-        }
+            Year += 1;
 
-        public void OnLastPlayerTurnEvent(UnityEngine.Object eventArgs)
-        {
-            SeasonChanging.Raise();
-            this.IncrementSeason();
-        }
-
-        public void OnYearChange(UnityEngine.Object eventArgs)
-        {
             Debug.Log(
                 "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
             );
 
+            // do flooding before saying the turn ended
             _FloodEvent.Raise();
         }
 
@@ -169,6 +190,14 @@ namespace TTT.Managers
         public int GetCO2()
         {
             return this.CO2;
+        }
+
+        /// <summary>
+        /// Gets the current temperature.
+        /// </summary>
+        public int GetTemperature()
+        {
+            return this.Temperature;
         }
 
         /// <summary>
@@ -221,6 +250,20 @@ namespace TTT.Managers
 
                 BuildingFeatureEvent.Raise(args);
             }
+        }
+
+        public void OnPlayerLose(Object _)
+        {
+            Debug.Log("Player has lost the game.");
+        }
+
+        public bool CanEndTurn()
+        {
+            bool hasEnoughResources = PlayerResources.All(resources =>
+                resources.AmountOwned >= 0
+            );
+
+            return hasEnoughResources;
         }
     }
 }

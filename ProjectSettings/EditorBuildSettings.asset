@@ -5,12 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/Testing/Core_Scene.unity
-    guid: 68882d1099c0b234fb5f6f2b8e4ad7b6
   - enabled: 1
     path: Assets/Scenes/GameScene.unity
     guid: 0d7eba9258e9edf44835c6ad064f6dff
+<<<<<<< HEAD
   - enabled: 0
     path: Assets/Scenes/Core_Scene.unity
     guid: 00000000000000000000000000000000
@@ -26,6 +24,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Testing/Core_EventIntegration_Ro.unity
     guid: 8ca61e373e3d3144a83b0c946c91cc7f
+=======
+>>>>>>> core
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 2cc4e184f0d14234791219624c7af01c, type: 2}
   m_UseUCBPForAssetBundles: 0

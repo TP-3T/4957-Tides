@@ -54,7 +54,7 @@ namespace TTT.UI
         /// Runs either the Open or Close routine based on the IsOpen variable.
         /// </summary>
         /// <returns>An IEnumerator of the shift function. </returns>
-        public virtual IEnumerator ToggleOpenable()
+        public virtual IEnumerator  ToggleOpenable()
         {
             float currentTime = 0f;
             Vector2 start = ToOpen.anchoredPosition;
@@ -92,10 +92,10 @@ namespace TTT.UI
                     openPos.y -= ToOpen.rect.height;
                     break;
                 case ShiftType.Left:
-                    openPos.x += ToOpen.rect.width;
+                    openPos.x -= ToOpen.rect.width;
                     break;
                 case ShiftType.Right:
-                    openPos.x += ToOpen.rect.height;
+                    openPos.x += ToOpen.rect.width;
                     break;
             }
             EndPosition = openPos;
