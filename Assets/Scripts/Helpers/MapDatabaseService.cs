@@ -27,10 +27,12 @@ namespace TTT.Helpers
         /// </summary>
         public static IEnumerator FetchAllMaps(
             Action<string> onSuccess,
-            Action<string> onError
+            Action<string> onError,
+            int? page = null,
+            int? pageSize = null
         )
         {
-            string url = BASE_URL + MAPS_ENDPOINT;
+            string url = BASE_URL + MAPS_ENDPOINT + BuildQueryString(page, pageSize);
 
             UnityWebRequest request = UnityWebRequest.Get(url);
 
@@ -67,10 +69,12 @@ namespace TTT.Helpers
         public static IEnumerator FetchAllMapsBySteamId(
             string steamId,
             Action<string> onSuccess,
-            Action<string> onError
+            Action<string> onError,
+            int? page = null,
+            int? pageSize = null
         )
         {
-            string url = $"{BASE_URL}{MAP_BY_STEAMID_ENDPOINT}/{steamId}";
+            string url = $"{BASE_URL}{MAP_BY_STEAMID_ENDPOINT}/{steamId}" + BuildQueryString(page, pageSize);
 
             UnityWebRequest request = UnityWebRequest.Get(url);
 
@@ -87,16 +91,36 @@ namespace TTT.Helpers
         public static IEnumerator FetchMapByMapName(
             string mapName,
             Action<string> onSuccess,
-            Action<string> onError
+            Action<string> onError,
+            int? page = null,
+            int? pageSize = null
         )
         {
-            string url = $"{BASE_URL}{MAP_BY_NAME_ENDPOINT}/{mapName}";
+            string url = $"{BASE_URL}{MAP_BY_NAME_ENDPOINT}/{mapName}" + BuildQueryString(page, pageSize);
 
             UnityWebRequest request = UnityWebRequest.Get(url);
 
             yield return request.SendWebRequest();
 
             HandleRequestResult(onSuccess, onError, request);
+
+            request.Dispose();
+        }
+
+        /// <summary>
+        /// Builds query string for pagination parameters
+        /// </summary>
+        private static string BuildQueryString(int? page, int? pageSize)
+        {
+            List<string> queryParams = new();
+            
+            if (page.HasValue)
+                queryParams.Add($"page={page.Value}");
+            
+            if (pageSize.HasValue)
+                queryParams.Add($"pageSize={pageSize.Value}");
+            
+            return queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : "";
         }
 
         private static void HandleRequestResult(
@@ -245,10 +269,18 @@ namespace TTT.Helpers
         /// <summary>
         /// Fetches and parses the list of available maps
         /// Returns a list of MapInfo objects ready for UI display
+        /// 
+        /// With pagination:
+        /// StartCoroutine(GetMapList(onSuccess, onError, page: 1, pageSize: 10));
+        /// 
+        /// Without pagination:
+        /// StartCoroutine(GetMapList(onSuccess, onError));
         /// </summary>
         public static IEnumerator GetMapList(
             Action<List<MapInfo>> onSuccess,
-            Action<string> onError
+            Action<string> onError,
+            int? page = null,
+            int? pageSize = null
         )
         {
             string jsonResponse = null;
@@ -256,7 +288,9 @@ namespace TTT.Helpers
 
             yield return FetchAllMaps(
                 json => jsonResponse = json,
-                err => error = err
+                err => error = err,
+                page,
+                pageSize
             );
 
             if (error != null)
