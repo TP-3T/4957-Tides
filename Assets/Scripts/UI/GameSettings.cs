@@ -16,7 +16,7 @@ namespace TTT.UI
         public Color tabHoverColor;
         public Color tabActiveColor;
 
-        public SettingsPage settingsPage;
+        // public SettingsPage settingsPage;
 
         public void Start()
         {

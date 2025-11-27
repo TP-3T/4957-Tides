@@ -38,7 +38,7 @@ namespace TTT.Helpers
             req.completed += _ =>
                 HandleRequestResult(onSuccess, onError, request);
 
-            yield return request.SendWebRequest();
+            yield return req;
 
             request.Dispose();
         }
