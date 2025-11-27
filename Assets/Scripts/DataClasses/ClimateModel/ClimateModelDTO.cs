@@ -1,5 +1,4 @@
 namespace TTT.DataClasses.ClimateModel
-
 {
     public struct ClimateModelInputDTO
     {

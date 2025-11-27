@@ -162,7 +162,7 @@ namespace TTT.ClimateModel
 
             double futureSeaLevelMetres = futureSeaLevelMM / _NUM_MM_PER_METRE;
 
-            ClimateModelOutputDTO outputDTO = new ClimateModelOutputDTO
+            ClimateModelOutputDTO outputDTO = new()
             {
                 futureTemperatureCelsius = futureTempCelsius,
                 futureSeaLevelMetres = futureSeaLevelMetres,
