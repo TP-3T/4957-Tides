@@ -22,14 +22,19 @@ MonoBehaviour:
       <Mode>k__BackingField: 0
       <List>k__BackingField:
       - {fileID: 11400000, guid: bbf1927decf0b83429343952dbf6ea8b, type: 2}
+      - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
     <FeatureConstraints>k__BackingField: []
   <BuildValidator>k__BackingField: {fileID: 11400000, guid: 415d8be488ae7e54388aaea4cfe19dc7, type: 2}
   <ResourceProducers>k__BackingField:
   - productionSchedule: {fileID: 11400000, guid: edef3b431516b8048a30517cd2383a7b, type: 2}
     resourceAmounts:
     - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-      <Count>k__BackingField: 1000
+      <Count>k__BackingField: 35
   <Cost>k__BackingField:
-  - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
-    <Count>k__BackingField: 1
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+    <Count>k__BackingField: 67
+  - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
+    <Count>k__BackingField: 10
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
+    <Count>k__BackingField: 5
   <Prefab>k__BackingField: {fileID: 6439876373585420871, guid: 86744611b8a062c4fbe38b4c44b9028a, type: 3}
