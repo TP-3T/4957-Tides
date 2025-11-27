@@ -15,24 +15,27 @@ MonoBehaviour:
   <UniqueID>k__BackingField: mine
   <Category>k__BackingField: 0
   <DisplayName>k__BackingField: Mine
-  <PollutionEmission>k__BackingField: 200
+  <PollutionEmission>k__BackingField: 250
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
     <TerrainConstraints>k__BackingField:
       <Mode>k__BackingField: 0
-      <List>k__BackingField: []
+      <List>k__BackingField:
+      - {fileID: 11400000, guid: a0bfe455dcde2f348b2a9a88f8d0cb0c, type: 2}
+      - {fileID: 11400000, guid: bbf1927decf0b83429343952dbf6ea8b, type: 2}
+      - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
     <FeatureConstraints>k__BackingField: []
-  <BuildValidator>k__BackingField: {fileID: 11400000, guid: d4e273d8b77e90742a9605b7146ee4c8, type: 2}
+  <BuildValidator>k__BackingField: {fileID: 11400000, guid: 418d17bf1c05a9c40aff3428a267cd49, type: 2}
   <ResourceProducers>k__BackingField:
   - productionSchedule: {fileID: 11400000, guid: 17a0647e21e0cef458dc0b557a3a7cbe, type: 2}
     resourceAmounts:
     - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
-      <Count>k__BackingField: 30
+      <Count>k__BackingField: 40
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-    <Count>k__BackingField: 5
+    <Count>k__BackingField: 6
   - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
     <Count>k__BackingField: 4
-  - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
-    <Count>k__BackingField: 30
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+    <Count>k__BackingField: 50
   <Prefab>k__BackingField: {fileID: 4054625045962737327, guid: b7971870b85cc9744a41461852030951, type: 3}
