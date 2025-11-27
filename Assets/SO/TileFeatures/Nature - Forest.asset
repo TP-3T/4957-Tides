@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: Nature - Forest
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: forest
+  <Category>k__BackingField: 3
+  <DisplayName>k__BackingField: Forest
   <PollutionEmission>k__BackingField: 200
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
     <TerrainConstraints>k__BackingField:
       <Mode>k__BackingField: 0
-      <List>k__BackingField: []
+      <List>k__BackingField:
+      - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
     <FeatureConstraints>k__BackingField: []
   <BuildValidator>k__BackingField: {fileID: 11400000, guid: d4e273d8b77e90742a9605b7146ee4c8, type: 2}
   <ResourceProducers>k__BackingField:
@@ -33,4 +36,4 @@ MonoBehaviour:
     <Count>k__BackingField: 4
   - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
     <Count>k__BackingField: 30
-  <Prefab>k__BackingField: {fileID: 1379389056011696956, guid: cbc6071669b55b442969c7ce8e8f40c2, type: 3}
+  <Prefab>k__BackingField: {fileID: 4211243352007271623, guid: f718a38313240754888016ffa5095b07, type: 3}

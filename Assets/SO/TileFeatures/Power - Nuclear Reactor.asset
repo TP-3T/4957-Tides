@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: Power - Nuclear Reactor
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: nuclear
+  <Category>k__BackingField: 2
+  <DisplayName>k__BackingField: Nuclear Power
   <PollutionEmission>k__BackingField: 10
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 750
     <TerrainConstraints>k__BackingField:
-      <Mode>k__BackingField: 1
+      <Mode>k__BackingField: 0
       <List>k__BackingField:
-      - {fileID: 0}
+      - {fileID: 11400000, guid: bbf1927decf0b83429343952dbf6ea8b, type: 2}
     <FeatureConstraints>k__BackingField: []
   <BuildValidator>k__BackingField: {fileID: 11400000, guid: 415d8be488ae7e54388aaea4cfe19dc7, type: 2}
   <ResourceProducers>k__BackingField:
@@ -30,4 +32,4 @@ MonoBehaviour:
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
     <Count>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 8506843664173545344, guid: 6280a125f160edd4a87b99e065d60309, type: 3}
+  <Prefab>k__BackingField: {fileID: 6439876373585420871, guid: 86744611b8a062c4fbe38b4c44b9028a, type: 3}

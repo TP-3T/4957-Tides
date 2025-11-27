@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.Terrain;
+using TTT.DataClasses.TileFeatures;
+using TTT.DataClasses.HexData;
 using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Newtonsoft.Json;
 
 namespace TTT.Managers
 {
@@ -49,6 +52,11 @@ namespace TTT.Managers
         private MapData _gameMapData;
         private const int CellsPerFrame = 25;
 
+        [SerializeField]
+        private GameEvent BuildingFeatureEvent;
+
+        private Dictionary<string, FeatureType> _featureTypesByUniqueId = new();
+
         public NetworkList<HexCell> HexCells = new(
             default,
             NetworkVariableReadPermission.Everyone,
@@ -63,9 +71,31 @@ namespace TTT.Managers
 
         private LineRenderer lineRenderer;
 
+        private List<(Vector3 position, string featureId)> _pendingFeatures = new();
+        private bool _featuresLoaded = false;
+
         void Start()
         {
             lineRenderer = GetComponent<LineRenderer>();
+            StartCoroutine(LoadFeatureTypes());
+        }
+
+        private IEnumerator LoadFeatureTypes()
+        {
+            yield return AssetLoader<FeatureType>.LoadGroup(
+                "building",
+                CacheFeatureType
+            );
+            _featuresLoaded = true;
+            Debug.Log($"Loaded {_featureTypesByUniqueId.Count} feature types");
+        }
+
+        private void CacheFeatureType(FeatureType featureType)
+        {
+            if (featureType != null && !string.IsNullOrEmpty(featureType.UniqueID))
+            {
+                _featureTypesByUniqueId[featureType.UniqueID] = featureType;
+            }
         }
 
         public override void OnNetworkSpawn()
@@ -132,6 +162,9 @@ namespace TTT.Managers
                 MapManager.HexSize,
                 MapManager.HexOrientation
             );
+
+            // Spawn features asynchronously across multiple frames
+            StartCoroutine(SpawnPendingFeaturesAsync());
 
             _mapLoadFinishEvent.Raise(
                 new NewMapFinishedEventArgs() { WasSuccessful = true }
@@ -225,6 +258,105 @@ namespace TTT.Managers
             );
         }
 
+        private void SpawnPendingFeatures()
+        {
+            // po: the idea is that 
+            // OnNewMap() parses json
+            // then on each tile with feature != null
+            //   adds (position, featureId) to pending features,
+            // then spawnMapObjects() creates mesh prefabs
+            // then TriangulateWhatever() makes visual mesh
+            // then SpawnPendingFeatures() 
+            //    looks up feature id in feature types by unique id
+            //    creates building feature args
+            //    calls FeatureBuilder.OnLoadingMapFeature(args)
+            //       where BuildAt() instantiates prefab
+
+            if (!_featuresLoaded)
+            {
+                Debug.LogWarning("feature types didn't load");
+            }
+
+            int spawnedCount = 0;
+            
+            foreach (var (position, featureId) in _pendingFeatures)
+            {
+                if (_featureTypesByUniqueId.TryGetValue(featureId, out FeatureType featureType))
+                {
+                    var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    args.Location = position;
+                    args.FeatureType = featureType;
+                    BuildingFeatureEvent.Raise(args);
+                    spawnedCount++;
+                }
+                else
+                {
+                    Debug.LogWarning($"skipped unknown feature '{featureId}' at {position}");
+                }
+            }
+
+            if (spawnedCount > 0)
+            {
+                Debug.Log($"Spawned {spawnedCount} features from map data:");
+            }
+
+            _pendingFeatures.Clear();
+        }
+
+        private System.Collections.IEnumerator SpawnPendingFeaturesAsync()
+        {
+            if (!_featuresLoaded)
+            {
+                Debug.LogWarning("feature types didn't load");
+                yield break;
+            }
+
+            int spawnedCount = 0;
+            int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smoothish loading
+            Dictionary<string, int> featureTypeCounts = new Dictionary<string, int>();
+
+            Debug.Log($"Starting async spawn of {_pendingFeatures.Count} features...");
+
+            foreach (var (position, featureId) in _pendingFeatures)
+            {
+                if (_featureTypesByUniqueId.TryGetValue(featureId, out FeatureType featureType))
+                {
+                    var args = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    args.Location = position;
+                    args.FeatureType = featureType;
+                    BuildingFeatureEvent.Raise(args);
+                    spawnedCount++;
+
+                    // Track counts by type
+                    if (!featureTypeCounts.ContainsKey(featureId))
+                        featureTypeCounts[featureId] = 0;
+                    featureTypeCounts[featureId]++;
+
+                    // Yield every X spawns to maintain framerate
+                    //Kinda dosent work :/
+                    if (spawnedCount % spawnsPerFrame == 0)
+                    {
+                        yield return null; // Wait one frame
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"skipped unknown feature '{featureId}' at {position}");//THis basically never happens but I put this here just incase :/
+                }
+            }
+
+            if (spawnedCount > 0)
+            {
+                Debug.Log($"Finished spawning {spawnedCount} features:");
+                foreach (var kvp in featureTypeCounts)
+                {
+                    Debug.Log($"  {kvp.Key}: {kvp.Value}");
+                }
+            }
+
+            _pendingFeatures.Clear();
+        }
+
         [ServerRpc(RequireOwnership = false)]
         public void StartRaiseSeaServerRpc()
         {
@@ -267,57 +399,82 @@ namespace TTT.Managers
             // Maybe...
             try
             {
+                _pendingFeatures.Clear();
+
                 // Deserialized data (cringe)
-                _gameMapData = JsonUtility.FromJson<MapData>(
-                    args.DataFile.text
-                );
-                _hexGridWidth.Value = _gameMapData.Width;
-                _hexGridHeight.Value = _gameMapData.Height;
+                _gameMapData = JsonConvert.DeserializeObject<MapData>(args.DataFile.text);
+                
+                int width = _gameMapData.MapTile.Count;
+                int height = _gameMapData.MapTile["0"].Count;
 
-                HexCell[] hexCells = new HexCell[
-                    _gameMapData.MapTilesData.Count
-                ];
+                _hexGridWidth.Value = width;
+                _hexGridHeight.Value = height;
 
-                foreach (MapTileData mapTileData in _gameMapData.MapTilesData)
+                HexCell[] hexCells = new HexCell[width * height];
+
+                foreach (var xGroup in _gameMapData.MapTile)
                 {
-                    if (mapTileData.Height < 0)
-                        mapTileData.SetHeight(0);
+                    int x = int.Parse(xGroup.Key);
 
-                    Vector3 hexCenter =
-                        HexMath.GetHexCenter(
-                            MapManager.HexSize,
-                            mapTileData.Height + 1,
-                            mapTileData.OffsetCoordinates,
-                            MapManager.HexOrientation
-                        ) + Vector3.zero;
-
-                    CubeCoordinates hc = HexMath.OddOffsetToCube(
-                        mapTileData.OffsetCoordinates,
-                        MapManager.HexOrientation
-                    );
-
-                    Color cc = _allowedTerrains.Get(mapTileData.TileType).Color;
-
-                    HexCell hexCell = new()
+                    foreach (var zGroup in xGroup.Value)
                     {
-                        CellCubeCoordinates = hc,
-                        CellPosition = hexCenter,
-                        CellColor = cc,
-                        TerrainTypeId = mapTileData.TileType,
-                    };
+                        int z = int.Parse(zGroup.Key);
+                        TileData tileData = zGroup.Value;
+                        
+                        if(tileData.Elevation < 0)
+                        {
+                            tileData.Elevation = 0;
+                        }
 
-                    int cubeCoordinateIndex = GetCellIndexFromCubeCoordinates(
-                        hc
-                    );
+                        OffsetCoordinates offset = new(x, z);
 
-                    hexCells[cubeCoordinateIndex] = hexCell;
+                        Vector3 hexCenter = 
+                            HexMath.GetHexCenter(
+                                HexSize,
+                                tileData.Elevation + 1,
+                                offset,
+                                HexOrientation
+                            );
+
+                        CubeCoordinates cubeCoords = 
+                            HexMath.OddOffsetToCube(
+                                offset,
+                                HexOrientation
+                            );
+
+                        Color cellColor = 
+                            _allowedTerrains.Get(tileData.TileType).Color;
+                        
+                        HexCell hexCell = new HexCell()
+                        {
+                            CellCubeCoordinates = cubeCoords,
+                            CellPosition = hexCenter,
+                            CellColor = cellColor,
+                            TerrainTypeId = tileData.TileType,
+                        };
+                        
+                        int index = x + z * width;
+
+                        hexCells[index] = hexCell;
+
+                        // po: queue features for spawning after mesh is created
+                        if (!string.IsNullOrEmpty(tileData.Feature))
+                        {
+                            _pendingFeatures.Add((hexCenter, tileData.Feature));
+                        }
+                    }
                 }
+
+                HexCells.Clear();
 
                 foreach (HexCell hc in hexCells)
                 {
                     HexCells.Add(hc);
                 }
 
+                SeaLevel.Value = _gameMapData.WorldState.SeaLevel;
+
+                ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
 
                 StartCoroutine(SpawnMapObjects());
@@ -325,6 +482,7 @@ namespace TTT.Managers
             catch (Exception e)
             {
                 Debug.LogException(e);
+                
                 _mapLoadFinishEvent.Raise(
                     new NewMapFinishedEventArgs() { WasSuccessful = false }
                 );

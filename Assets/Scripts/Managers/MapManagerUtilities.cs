@@ -3,10 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TTT.DataClasses.HexData;
 using TTT.GameEvents;
-using TTT.Helpers;
 using TTT.Hex;
-using UnityEditor.Search;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -17,7 +14,7 @@ namespace TTT.Managers
     public partial class MapManager
     {
         [SerializeField]
-        public GameEvent _OnFloodEnded;
+        private GameEvent onFloodEnded;
 
         private void FloodCell(ref HexCell hc)
         {
@@ -51,7 +48,7 @@ namespace TTT.Managers
             {
                 return (
                     (Mathf.RoundToInt(hc.r / 2) + hc.q)
-                    + (hc.r * _gameMapData.Width)
+                    + (hc.r * _hexGridWidth.Value)
                 );
             }
             else
@@ -160,8 +157,9 @@ namespace TTT.Managers
                     while (FloodQueue2.Count > 0)
                         FloodQueue.Enqueue(FloodQueue2.Dequeue());
 
+                    // currently, this is also where we raise TurnEnded
                     Debug.Log("Flood fill cycle complete");
-                    _OnFloodEnded.Raise();
+                    onFloodEnded.Raise();
 
                     yield break;
                 }

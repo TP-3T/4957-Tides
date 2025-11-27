@@ -1,9 +1,14 @@
+using TMPro;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
+using TTT.Managers;
+using TTT.ModularData;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 // [RequireComponent(typeof(Camera))]
 
@@ -27,6 +32,31 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField]
     private GameEvent _mapMeshClicked;
+
+    [SerializeField]
+    private GameEvent inspectModeEvent;
+
+    [SerializeField]
+    private FeatureRuntimeSet playerBuildings;
+
+    [SerializeField]
+    private TextMeshProUGUI statusText;
+
+    [SerializeField]
+    private int maxC02 = 500;
+
+    [SerializeField]
+    private int maxTemperature = 50;
+
+    [SerializeField]
+    private GameEvent _PlayerLoseEvent;
+
+    void Start()
+    {
+        GameManager = FindAnyObjectByType<GameManager>();
+    }
+
+    private GameManager GameManager;
 
     //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
     //*  We should look into the Unity Input System Package
@@ -140,7 +170,7 @@ public class PlayerController : NetworkBehaviour
             {
                 // Raise some event will deal with this later
                 // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
-
+                Debug.Log("Map mesh clicked at: " + raycastHit.point);
                 _mapMeshClicked.Raise(
                     new MapMeshClickedEventArgs
                     {
@@ -159,5 +189,54 @@ public class PlayerController : NetworkBehaviour
     private bool IsMouseOverUI()
     {
         return EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public void CheckIfPlayerHasLost()
+    {
+        bool playerLost = false;
+
+        if (
+            GameManager.GetCO2() > maxC02
+            || GameManager.GetTemperature() > maxTemperature
+            || playerBuildings.Count() <= 0
+        )
+        {
+            playerLost = true;
+        }
+
+        if (playerLost)
+        {
+            _PlayerLoseEvent.Raise();
+            OnLose();
+            return;
+        }
+    }
+
+    public void OnLose()
+    {
+        DisableUI();
+
+        statusText.gameObject.SetActive(true);
+        statusText.text = "Spectating";
+
+        // feel free to remove this if needed, not important
+        GameObject cube = GameObject.Find("Cube");
+        cube.SetActive(false);
+    }
+
+    public void DisableUI()
+    {
+        inspectModeEvent.Raise();
+
+        GameObject uiCanvas = GameObject.Find("GameUI");
+        if (uiCanvas != null)
+        {
+            // disabling the parent would prevent the status text from appearing
+            // so we enable all children individually instead
+            foreach (Transform child in uiCanvas.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+        }
     }
 }
