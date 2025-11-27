@@ -96,7 +96,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -225,7 +225,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -354,7 +354,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -483,7 +483,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -657,7 +657,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: feb82add8a556914994556e1641cd52c, type: 2}
   - {fileID: 11400000, guid: df31b030ced5c9a448c3129382a68381, type: 2}
   AmbienceFadingPlayer: {fileID: 2526911699916503797}
-  MusicEntries: []
+  MusicEntries:
+  - {fileID: 11400000, guid: 48ccbea2650d71548a402d7546673a11, type: 2}
   MusicFadingPlayer: {fileID: 7715076949276073071}
 --- !u!1 &8621904314381307518
 GameObject:
