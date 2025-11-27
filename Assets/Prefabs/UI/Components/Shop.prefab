@@ -288,7 +288,8 @@ MonoBehaviour:
   <MovementSeconds>k__BackingField: 0.5
   <ShiftDirection>k__BackingField: 1
   <ShiftPadding>k__BackingField: {x: 0, y: 0}
-  startInspectMode: {fileID: 11400000, guid: d044f0a4c8d4e62419ddfec40a9a4a6b, type: 2}
+  InteractModeChange: {fileID: 11400000, guid: 53831617160b4ed4f9fe4ba754f965d8, type: 2}
+  PlayerController: {fileID: 0}
   ShopSlotArea: {fileID: 937438038014111108}
   ShopSlotPrefab: {fileID: 5876843518120190640, guid: 88b0b282012034e20bde3ab9b99486e7, type: 3}
   SlotSpacing: 20

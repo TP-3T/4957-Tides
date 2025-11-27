@@ -20,9 +20,6 @@ namespace TTT.Managers
         [field: SerializeField]
         public InteractionMode InteractionMode { get; private set; }
 
-        [SerializeField]
-        private GameEvent newMapEvent;
-
         private readonly string[] Seasons =
         {
             "Spring",
@@ -30,6 +27,9 @@ namespace TTT.Managers
             "Fall",
             "Winter",
         };
+
+        private FeatureType buildingFeatureType;
+        public NetworkClient CurrentPlayer { get; private set; }
 
         //serialize for now
         [field: SerializeField]
@@ -45,10 +45,10 @@ namespace TTT.Managers
         public int Temperature { get; private set; }
 
         [SerializeField]
-        private GameEvent endTurnEvent;
+        private GameEvent startTurnEvent;
 
         [SerializeField]
-        private GameEvent startTurnEvent;
+        private GameEvent endTurnEvent;
 
         [SerializeField]
         private GameEvent endingSeasonEvent;
@@ -57,10 +57,10 @@ namespace TTT.Managers
         private GameEvent endingYearEvent;
 
         [SerializeField]
-        private GameEvent BuildingFeatureEvent;
+        private GameEvent newMapEvent;
 
-        private FeatureType buildingFeatureType;
-        public NetworkClient CurrentPlayer { get; private set; }
+        [SerializeField]
+        private GameEvent BuildingFeatureEvent;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -262,7 +262,7 @@ namespace TTT.Managers
                 var building =
                     ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                 building.Location = BuildArgs.Location;
-                building.FeatureType = buildingFeatureType;
+                building.FeatureType = BuildArgs.FeatureType;
             }
         }
 
