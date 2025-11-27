@@ -43,6 +43,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e84268a03dbab44491601f892ff82f0
+    m_Address: B_LowDensity
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - building
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7417ca1842386a94d8af4ef0ca724c26
     m_Address: B_Forest
     m_ReadOnly: 0
@@ -50,7 +56,7 @@ MonoBehaviour:
     - building
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 99b41a5ca691c9243b9e7320655dcc8a
-    m_Address: B_House
+    m_Address: B_HighDensity
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
