@@ -15,7 +15,7 @@ using UnityEngine.EventSystems;
 /// It works by ensuring that only the owner of the networked
 /// player object has an active camera, preventing conflicts.
 /// </summary>
-namespace TTT.UI
+namespace TTT.Player
 {
     public class PlayerController : NetworkBehaviour
     {
@@ -40,7 +40,7 @@ namespace TTT.UI
         [SerializeField]
         private int maxTemperature = 50;
 
-        private FeatureType FeatureType { get; set; }
+        public FeatureType FeatureType;
 
         [SerializeField]
         private GameEvent InteractModeChange;
@@ -53,6 +53,7 @@ namespace TTT.UI
 
         [SerializeField]
         private Canvas currentUI;
+        public InteractionMode Mode;
 
         //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
         //*  We should look into the Unity Input System Package
@@ -121,6 +122,11 @@ namespace TTT.UI
             }
         }
 
+        private void Start()
+        {
+            Mode = InteractionMode.INSPECTING;
+        }
+
         /// <summary>
         /// Called once per frame to handle real-time input and camera controls.
         /// It checks for local ownership before processing movement and rotation
@@ -168,19 +174,17 @@ namespace TTT.UI
                 {
                     // Raise some event will deal with this later
                     // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
-                    Debug.Log("Map mesh clicked at: " + raycastHit.point);
-                    var mode = GameManager.Instance.InteractionMode;
-                    if (mode.Equals(InteractionMode.BUILDING))
+                    // Debug.Log("Map mesh clicked at: " + raycastHit.point);
+                    // var mode = GameManager.Instance.InteractionMode;
+                    if (Mode.Equals(InteractionMode.BUILDING))
                     {
-                        BuildingFeatureEvent.Raise(
-                            new BuildingFeatureEventArgs()
-                            {
-                                Location = raycastHit.point,
-                                FeatureType = FeatureType,
-                            }
-                        );
+                        var building =
+                            ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                        building.Location = raycastHit.point;
+                        building.FeatureType = FeatureType;
+                        BuildingFeatureEvent.Raise(building);
                     }
-                    else if (mode.Equals(InteractionMode.INSPECTING))
+                    else if (Mode.Equals(InteractionMode.INSPECTING))
                     {
                         _mapMeshClicked.Raise(
                             new MapMeshClickedEventArgs
@@ -193,6 +197,12 @@ namespace TTT.UI
                     }
                 }
             }
+        }
+
+        public void OnInteractModeChange(object args)
+        {
+            var newMode = args as InteractionModeChangeEventArgs;
+            Mode = newMode.NewMode;
         }
 
         /// <summary>

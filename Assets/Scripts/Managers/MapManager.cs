@@ -41,12 +41,13 @@ namespace TTT.Managers
         [SerializeField]
         private TerrainDictionary _allowedTerrains;
 
+        [SerializeField]
+        private GameEvent onFloodEnded;
+
         private NetworkVariable<int> _hexGridWidth = new();
         private NetworkVariable<int> _hexGridHeight = new();
         private NetworkVariable<ulong> _hexMeshId = new();
         private NetworkVariable<ulong> _seaMeshId = new();
-        private readonly AssetReference _hexGridMeshAsset = new("P_HexMesh");
-        private readonly AssetReference _seaMeshAsset = new("P_SeaMesh");
         private MapData _gameMapData;
         private const int CellsPerFrame = 25;
 
@@ -77,6 +78,20 @@ namespace TTT.Managers
 
         private IEnumerator SpawnMapObjects()
         {
+            // StartCoroutine(
+            //     AssetLoader<GameObject>.Load(new("P_HexMesh"), SpawnGridMesh)
+            // );
+            // StartCoroutine(
+            //     AssetLoader<GameObject>.Load(new("P_SeaMesh"), SpawnSeaMesh)
+            // );
+            // var meshLoad = AssetLoader<GameObject>.Load(
+            //     new("P_HexMesh"),
+            //     SpawnGridMesh
+            // );
+            // while (meshLoad.MoveNext())
+            // {
+            //     yield return null;
+            // }
             yield return AssetLoader<GameObject>.Load(
                 new("P_HexMesh"),
                 SpawnGridMesh
@@ -136,10 +151,13 @@ namespace TTT.Managers
                     MapManager.HexSize,
                     MapManager.HexOrientation
                 );
-
                 _mapLoadFinishEvent.Raise(
                     new NewMapFinishedEventArgs() { WasSuccessful = true }
                 );
+            }
+            else
+            {
+                Debug.LogError("Invalid mesh spawned in triangulate Mesh");
             }
         }
 
@@ -382,7 +400,6 @@ namespace TTT.Managers
 
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
-
                 StartCoroutine(SpawnMapObjects());
             }
             catch (Exception e)

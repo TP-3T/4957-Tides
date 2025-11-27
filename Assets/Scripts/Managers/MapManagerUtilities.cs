@@ -13,9 +13,6 @@ namespace TTT.Managers
     /// </summary>
     public partial class MapManager
     {
-        [SerializeField]
-        private GameEvent onFloodEnded;
-
         private void FloodCell(ref HexCell hc)
         {
             int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
@@ -162,10 +159,8 @@ namespace TTT.Managers
 
                     // currently, this is also where we raise TurnEnded
                     Debug.Log("Flood fill cycle complete");
-                    // GameManager.Instance.OnTurnEnd(new());
-                    //onFloodEnded.Raise();
 
-                    yield break;
+                    break;
                 }
 
                 // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
@@ -202,6 +197,8 @@ namespace TTT.Managers
 
                 yield return null;
             }
+
+            onFloodEnded.Raise();
             //says unreachable but it is
         }
     }

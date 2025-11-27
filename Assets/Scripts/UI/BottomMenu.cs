@@ -5,6 +5,7 @@ using System.Linq;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Managers;
+using TTT.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,7 +45,7 @@ namespace TTT.UI
         private GameEvent InteractModeChange;
 
         [SerializeField]
-        private GameObject PlayerController;
+        private PlayerController PlayerController;
 
         [Header("Shop Slots")]
         /// <summary>
@@ -87,8 +88,6 @@ namespace TTT.UI
         private Dictionary<GameObject, List<GameObject>> tabSlots = new();
 
         private GameObject currentTab;
-
-        private FeatureType selectedFeature;
 
         /// <summary>
         /// Stores all the SOs we'll need for each category in our shop menu
@@ -202,6 +201,10 @@ namespace TTT.UI
             BuildingShopSlot slot = slotObject.GetComponent<BuildingShopSlot>();
             slot.feature = feature;
             Button slotButton = slotObject.GetComponent<Button>();
+            slotButton.onClick.AddListener(() =>
+            {
+                PlayerController.FeatureType = feature;
+            });
 
             tabSlots[tab].Add(slotObject);
         }

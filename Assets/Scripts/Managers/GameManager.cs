@@ -28,7 +28,6 @@ namespace TTT.Managers
             "Winter",
         };
 
-        private FeatureType buildingFeatureType;
         public NetworkClient CurrentPlayer { get; private set; }
 
         //serialize for now
@@ -120,23 +119,9 @@ namespace TTT.Managers
                     "MAP FAILED TO LOAD! WE SHOULD REVERT TO THE MAIN MENU FROM HERE!"
                 );
             }
-            else
-            {
-                Debug.Log("Wow, map was loaded!");
-            }
-        }
-
-        public void OnTurnEnd(object _)
-        {
-            startTurnEvent.Raise();
         }
 
         public void OnTurnEnding(Object _)
-        {
-            StartCoroutine(ProcessEndTurn());
-        }
-
-        private IEnumerator ProcessEndTurn()
         {
             //Get all the connected clients
             var ConnectedClientsList =
@@ -149,6 +134,7 @@ namespace TTT.Managers
                 //Increment the current client
                 var currentIndex = ConnectedClientsList.IndexOf(CurrentPlayer);
                 CurrentPlayer = ConnectedClientsList[currentIndex + 1];
+                StartNextTurn(new());
             }
             else
             {
@@ -157,21 +143,19 @@ namespace TTT.Managers
                 EndSeason();
                 if (Season.Equals(Seasons[0]))
                 {
-                    var endYear = EndYear();
-                    while (endYear.MoveNext())
-                    {
-                        yield return null;
-                    }
+                    EndYear();
+                }
+                else
+                {
+                    StartNextTurn(new());
                 }
             }
-            endTurnEvent.Raise();
-            startTurnEvent.Raise();
         }
 
         /// <summary>
         /// Increments the season, and the year if applicable.
         /// </summary>
-        public void EndSeason()
+        private void EndSeason()
         {
             endingSeasonEvent.Raise();
             int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
@@ -181,89 +165,19 @@ namespace TTT.Managers
             Season = Seasons[nextSeasonIndex];
         }
 
-        public IEnumerator EndYear()
+        private void EndYear()
         {
             Debug.Log(
                 "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
             );
             Year += 1;
             endingYearEvent.Raise();
-            var seaRaise = MapManager.Instance.RaiseSea();
-            while (seaRaise.MoveNext())
-            {
-                yield return null;
-            }
         }
 
-        /// <summary>
-        /// Starts the Inspect mode, disabling building.
-        /// </summary>
-        /// <param name="_"></param>
-        public void OnInteractModeChange(Object args)
+        public void StartNextTurn(object _)
         {
-            if (args is not InteractionModeChangeEventArgs newMode)
-            {
-                Debug.LogError(
-                    "Game Manager received invalid interactModeChange args!"
-                );
-            }
-            else
-            {
-                InteractionMode = newMode.NewMode;
-            }
-        }
-
-        /// <summary>
-        /// Handles mesh click logic for BuildMode to raise build event.
-        /// </summary>
-        /// <param name="eventArgs"></param>
-        public void OnMeshClicked(Object eventArgs)
-        {
-            if (eventArgs is not MapMeshClickedEventArgs clickedArgs)
-            {
-                return;
-            }
-
-            if (InteractionMode == InteractionMode.BUILDING)
-            {
-                if (buildingFeatureType == null)
-                {
-                    Debug.LogError(
-                        "Tried to build, but there was no selected building!"
-                    );
-                }
-
-                // raise build event
-                var args =
-                    ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-                args.Location = clickedArgs.ClickedPoint;
-                args.FeatureType = buildingFeatureType;
-
-                BuildingFeatureEvent.Raise(args);
-            }
-        }
-
-        public void OnBuild(object args)
-        {
-            if (args is not BuildingFeatureEventArgs BuildArgs)
-            {
-                Debug.LogError(
-                    "Game Manager received invalid interactModeChange args!"
-                );
-            }
-            else if (!InteractionMode.Equals(InteractionMode.BUILDING))
-            {
-                Debug.LogError(
-                    "Game Manager received invalid interactModeChange args!"
-                );
-            }
-            else
-            {
-                var building =
-                    ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-                building.Location = BuildArgs.Location;
-                building.FeatureType = BuildArgs.FeatureType;
-            }
+            endTurnEvent.Raise();
+            startTurnEvent.Raise();
         }
 
         public void OnPlayerLose(Object _)
