@@ -140,6 +140,15 @@ public class FeatureBuilder : MonoBehaviour
         Feature feature = new(location, featureType, gameInstance);
         SpawnedFeatures.Add(feature);
     }
+    public void OnLoadingMapFeature(Object eventArgs)
+    {
+        if (eventArgs is not BuildingFeatureArgs bfArgs)
+        {
+            return;
+        }
+
+        BuildAt(bfArgs.Location, bfArgs.FeatureType);
+    }
 
     private void DestroyAt(Vector3 location, bool wasSold)
     {
