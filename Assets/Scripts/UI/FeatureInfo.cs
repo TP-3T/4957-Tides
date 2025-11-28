@@ -62,8 +62,16 @@ public class FeatureInfo : MonoBehaviour, IOpenable
 
     public void OnTileSelected()
     {
+        StartCoroutine(OnTileSelectedDelayed());
+    }
+
+    private System.Collections.IEnumerator OnTileSelectedDelayed()
+    {
+        // Wait one frame to ensure MapManager has updated playerStats
+        yield return null;
+
         if (playerStats == null)
-            return;
+            yield break;
 
         var selectedCell = playerStats.selectedHexCell;
 
