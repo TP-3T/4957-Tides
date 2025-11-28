@@ -421,7 +421,6 @@ namespace TTT.Managers
         public void OnNewMap(UnityEngine.Object eventArgs)
         {
             NewMapEventArgs args = eventArgs as NewMapEventArgs;
-
             // WO: Deserializer / Serializer class for game data will eventually do the job of this routine
             // Maybe...
             try

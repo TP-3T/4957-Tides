@@ -1,6 +1,7 @@
 using System.IO;
 using Newtonsoft.Json;
 using TTT.GameEvents;
+using TTT.Helpers;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
@@ -117,8 +118,9 @@ public class MainMenu : MonoBehaviour
         // File.ReadAllText("./" + selectedMap + ".txt");
         // var loadedMap =
         //     Resources.Load(selectedMap, typeof(TextAsset)) as TextAsset;
+        LoadExternalJson.TryGetMapJson(selectedMap, out TextAsset loadedMap);
 
-        var loadedMap = Resources.Load<TextAsset>(selectedMap);
+        // var loadedMap = Resources.Load<TextAsset>(selectedMap);
         newMapEvent.Raise(new NewMapEventArgs() { DataFile = loadedMap });
     }
 
