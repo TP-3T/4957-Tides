@@ -1,4 +1,5 @@
 using System;
+using TTT.DataClasses.Terrain;
 using UnityEngine;
 
 namespace TTT.DataClasses.HexData
@@ -6,7 +7,7 @@ namespace TTT.DataClasses.HexData
     [Serializable]
     public class TileData
     {
-        public object Feature;
+        public string Feature;
         public TerrainTypeId TileType;
         public int Owner;
         public int Elevation;

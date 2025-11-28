@@ -12,17 +12,20 @@ namespace TTT.Managers
         [Header("One-Shot Sounds")]
         [Tooltip("Array of one-shot sound effect AudioEntries")]
         public AudioEntry[] OneShotEntries;
+
         [Tooltip("AudioSource used for playing one-shot sound effects")]
         public AudioSource OneShotSource;
 
         [Header("Ambience")]
         public AudioEntry[] AmbienceEntries;
+
         [Tooltip("AudioFadingPlayer used for playing and fading ambience")]
         public AudioFadingPlayer AmbienceFadingPlayer;
 
         [Header("Music")]
         [Tooltip("Array of music AudioEntries")]
         public AudioEntry[] MusicEntries;
+
         [Tooltip("AudioFadingPlayer used for playing and fading music tracks")]
         public AudioFadingPlayer MusicFadingPlayer;
 
@@ -114,7 +117,10 @@ namespace TTT.Managers
         /// <param name="name">The EntryName of the AudioEntry to retrieve</param>
         /// <param name="entries">Array of all AudioEntry objects to search through</param>
         /// <returns>The first AudioEntry with a matching EntryName, or null if nothing's found</returns>
-        private AudioEntry GetAudioEntryByName(string name, AudioEntry[] entries)
+        private AudioEntry GetAudioEntryByName(
+            string name,
+            AudioEntry[] entries
+        )
         {
             foreach (AudioEntry entry in entries)
             {
@@ -123,10 +129,10 @@ namespace TTT.Managers
                     return entry;
                 }
             }
-            Debug.LogWarning($"AudioManager: AudioEntry with name {name} not found.");
+            Debug.LogWarning(
+                $"AudioManager: AudioEntry with name {name} not found."
+            );
             return null;
         }
     }
 }
-
-

@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
-using TTT.Helpers;
 using TTT.Hex;
-using UnityEditor.Search;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -17,7 +15,7 @@ namespace TTT.Managers
     public partial class MapManager
     {
         [SerializeField]
-        private GameEvent onFloodEnded;
+        private GameEvent DestroyingFeatureEvent;
 
         private void FloodCell(ref HexCell hc)
         {
@@ -25,6 +23,24 @@ namespace TTT.Managers
             hc.Flooded = true;
             // hc.CellColor = Color.blue;
             HexCells[index] = hc;
+
+            // Remove any building on this flooded cell
+            RaiseDestroyingFeatureEvent(hc.CellPosition);
+        }
+
+        /// <summary>
+        /// Removes a building from a cell when it gets flooded.
+        /// </summary>
+        private void RaiseDestroyingFeatureEvent(Vector3 cellPosition)
+        {
+            BuildingFeatureArgs bfArgs =
+                ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+            if (bfArgs.FeatureType != null)
+            {
+                bfArgs.Location = cellPosition;
+
+                DestroyingFeatureEvent.Raise(bfArgs);
+            }
         }
 
         private void SetCellCenterVertex(HexCell hc, int cv)
@@ -57,7 +73,7 @@ namespace TTT.Managers
             else
             {
                 throw new Exception(
-                    "This math has lazily not been implemented yet, get on it you git!"
+                    "This math has lazily not been implemented yet, get on it you git!" // po: TODO
                 );
             }
         }
@@ -154,17 +170,15 @@ namespace TTT.Managers
                         )
                             ToFlood.Enqueue(test);
                         else
-                            FloodQueue2.Enqueue(test);
+                            AboveSeaLevelQueue.Enqueue(test);
                     }
 
-                    while (FloodQueue2.Count > 0)
-                        FloodQueue.Enqueue(FloodQueue2.Dequeue());
+                    while (AboveSeaLevelQueue.Count > 0)
+                        FloodQueue.Enqueue(AboveSeaLevelQueue.Dequeue());
 
-                    // currently, this is also where we raise TurnEnded
                     Debug.Log("Flood fill cycle complete");
-                    onFloodEnded.Raise();
 
-                    yield break;
+                    break;
                 }
 
                 // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
@@ -201,6 +215,8 @@ namespace TTT.Managers
 
                 yield return null;
             }
+
+            onFloodEnded.Raise();
             //says unreachable but it is
         }
     }

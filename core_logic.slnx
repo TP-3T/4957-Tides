@@ -1,20 +1,18 @@
 ﻿<Solution>
-  <Project Path="TTT.DataClasses.HexData.csproj" />
+  <Project Path="TTT.DataClasses.csproj" />
   <Project Path="TTT.Managers.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
-  <Project Path="TTT.DataClasses.csproj" />
-  <Project Path="TTT.DataClasses.TileFeatures.csproj" />
   <Project Path="TTT.GameEvents.csproj" />
   <Project Path="TTT.Hex.csproj" />
   <Project Path="SFB.csproj" />
   <Project Path="UI.csproj" />
+<<<<<<< HEAD:core_logic.slnx
   <Project Path="TTT.ClimateModel.csproj" />
+=======
+  <Project Path="TTT.Player.csproj" />
+>>>>>>> 6e513032671f9e37e6250b738e27599aea7d5c7b:4957-Tides.slnx
   <Project Path="TTT.Editors.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
-  <Project Path="TTT.ModularData.csproj" />
-  <Project Path="TTT.DataClasses.Terrain.csproj" />
-  <Project Path="TTT.DataClasses.States.csproj" />
-  <Project Path="TTT.DataClasses.PlayerResources.csproj" />
   <Project Path="TTT.Helpers.csproj" />
   <Project Path="EditMode.csproj" />
   <Project Path="PlayMode.csproj" />

@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using TTT.DataClasses;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.Terrain;
 using UnityEngine.Networking;
 
 namespace TTT.Helpers
@@ -195,12 +195,18 @@ namespace TTT.Helpers
             foreach (var xEntry in apiResponse.MapTile)
             {
                 int x = int.Parse(xEntry.Key);
-                if (x > maxX) { maxX = x; }
+                if (x > maxX)
+                {
+                    maxX = x;
+                }
 
                 foreach (var zEntry in xEntry.Value)
                 {
                     int z = int.Parse(zEntry.Key);
-                    if (z > maxZ) { maxZ = z; }
+                    if (z > maxZ)
+                    {
+                        maxZ = z;
+                    }
                 }
             }
 
@@ -221,10 +227,10 @@ namespace TTT.Helpers
                     MapTileData gameTile = new MapTileData
                     {
                         OffsetCoordinates = new OffsetCoordinates(x, z),
-                        
+
                         TileType = (TerrainTypeId)tileInfo.TileType,
-                        
-                        Height = tileInfo.Elevation
+
+                        Height = tileInfo.Elevation,
                     };
 
                     gameTiles.Add(gameTile);

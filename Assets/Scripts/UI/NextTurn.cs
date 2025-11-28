@@ -20,9 +20,6 @@ public class NextTurn : MonoBehaviour
 
     void Start()
     {
-        // ! do we really need this? -Rodrigo
-        // GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
-
         nextTurnButton = GetComponent<Button>();
     }
 

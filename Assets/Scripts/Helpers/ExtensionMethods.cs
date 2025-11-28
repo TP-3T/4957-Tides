@@ -1,9 +1,12 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 namespace TTT.Helpers
 {
     public static class ExtensionMethods
     {
+#if UNITY_EDITOR
         /// <summary>
         /// Finds a <see cref="SerializedProperty"/> C# property with a [field: SerializedField] attribute, because Unity's <see cref="SerializedProperty.FindPropertyRelative"/> does not work with C# properties.
         /// </summary>
@@ -19,5 +22,6 @@ namespace TTT.Helpers
 
             return serializedProp.FindPropertyRelative(realName);
         }
+#endif
     }
 }
