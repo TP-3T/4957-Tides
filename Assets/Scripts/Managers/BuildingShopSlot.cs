@@ -81,7 +81,7 @@ public class BuildingShopSlot : MonoBehaviour
         // Accumulators for each resource type
         int totalMoneyRevenue = 0;
         int totalPollutionRevenue = 0;
-        int totalMoneyCost = 0;
+        int totalMoneyCost = 0; 
         int totalEnergyCost = 0;
         int totalPopulationCost = 0;
 
@@ -127,83 +127,7 @@ public class BuildingShopSlot : MonoBehaviour
         if (feature.PollutionEmission > 0)
             totalPollutionRevenue += feature.PollutionEmission;
 
-        //Manage constraint icons
-        if (
-            feature.Constraints != null
-            && feature.Constraints.TerrainConstraints != null
-        )
-        {
-            // Clear existing icons
-            foreach (Transform child in hexConstraintHexContainer.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
-            TTT.DataClasses.FilterListMode mode = feature
-                .Constraints
-                .TerrainConstraints
-                .Mode;
-
-            Sprite iconToUse = null;
-
-            if (mode == TTT.DataClasses.FilterListMode.WHITELIST)
-            {
-                iconToUse = hexConstraintIcon;
-            }
-            else if (mode == TTT.DataClasses.FilterListMode.BLACKLIST)
-            {
-                iconToUse = hexConstraintRestrictedIcon;
-            }
-
-            // Add icons based on terrain constraints
-            if (iconToUse != null)
-            {
-                foreach (
-                    var terrain in feature.Constraints.TerrainConstraints.List
-                )
-                {
-                    if (mode == TTT.DataClasses.FilterListMode.WHITELIST)
-                    {
-                        // Single-layer icon
-                        GameObject containerObj = new GameObject("TerrainIcon");
-                        containerObj.transform.SetParent(
-                            hexConstraintHexContainer.transform,
-                            false
-                        );
-                        LayoutElement iconLayout =
-                            containerObj.AddComponent<LayoutElement>();
-                        iconLayout.preferredWidth = IconSize;
-                        iconLayout.preferredHeight = IconSize;
-
-                        GameObject iconObj = new GameObject("Icon");
-                        iconObj.transform.SetParent(
-                            containerObj.transform,
-                            false
-                        );
-                        RectTransform iconRect =
-                            iconObj.AddComponent<RectTransform>();
-                        iconRect.anchorMin = Vector2.zero;
-                        iconRect.anchorMax = Vector2.one;
-                        iconRect.offsetMin = Vector2.zero;
-                        iconRect.offsetMax = Vector2.zero;
-                        Image iconImage = iconObj.AddComponent<Image>();
-                        iconImage.sprite = iconToUse;
-                        iconImage.preserveAspect = true;
-                        iconImage.color = terrain.Color;
-                    }
-                    else if (mode == TTT.DataClasses.FilterListMode.BLACKLIST)
-                    {
-                        // Layered icon with overlay
-                        CreateLayeredTerrainIcon(
-                            terrain,
-                            hexConstraintIcon,
-                            hexConstraintRestrictedIcon,
-                            hexConstraintHexContainer.transform
-                        );
-                    }
-                }
-            }
-        }
+        UpdateConstraintIcons();
 
         // Display accumulated values
         SetMoneyRevDisplay(totalMoneyRevenue);
@@ -212,7 +136,37 @@ public class BuildingShopSlot : MonoBehaviour
         SetPopulationDisplay(totalPopulationCost);
     }
 
-    private GameObject CreateLayeredTerrainIcon(
+    private void UpdateConstraintIcons()
+    {
+        if (feature?.Constraints?.TerrainConstraints == null)
+            return;
+
+        // Clear existing icons
+        foreach (Transform child in hexConstraintHexContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        TTT.DataClasses.FilterListMode mode = feature
+            .Constraints
+            .TerrainConstraints
+            .Mode;
+
+        // Add icons based on terrain constraints
+        foreach (var terrain in feature.Constraints.TerrainConstraints.List)
+        {
+            CreateTerrainIcon(
+                terrain,
+                hexConstraintIcon,
+                mode == TTT.DataClasses.FilterListMode.BLACKLIST
+                    ? hexConstraintRestrictedIcon
+                    : null,
+                hexConstraintHexContainer.transform
+            );
+        }
+    }
+
+    private void CreateTerrainIcon(
         TTT.DataClasses.Terrain.TerrainType terrain,
         Sprite baseSprite,
         Sprite overlaySprite,
@@ -242,20 +196,22 @@ public class BuildingShopSlot : MonoBehaviour
         baseImage.preserveAspect = true;
         baseImage.color = terrain.Color;
 
-        // Create overlay layer (restriction symbol)
-        GameObject overlayLayer = new GameObject("OverlayIcon");
-        overlayLayer.transform.SetParent(containerObj.transform, false);
-        RectTransform overlayRect = overlayLayer.AddComponent<RectTransform>();
-        overlayRect.anchorMin = Vector2.zero;
-        overlayRect.anchorMax = Vector2.one;
-        overlayRect.offsetMin = Vector2.zero;
-        overlayRect.offsetMax = Vector2.zero;
-        Image overlayImage = overlayLayer.AddComponent<Image>();
-        overlayImage.sprite = overlaySprite;
-        overlayImage.preserveAspect = true;
-        overlayImage.color = Color.white;
-
-        return containerObj; // po: why does this return if we never use the return value
+        // Create overlay layer (restriction symbol), only for blacklist
+        if (overlaySprite != null)
+        {
+            GameObject overlayLayer = new GameObject("OverlayIcon");
+            overlayLayer.transform.SetParent(containerObj.transform, false);
+            RectTransform overlayRect =
+                overlayLayer.AddComponent<RectTransform>();
+            overlayRect.anchorMin = Vector2.zero;
+            overlayRect.anchorMax = Vector2.one;
+            overlayRect.offsetMin = Vector2.zero;
+            overlayRect.offsetMax = Vector2.zero;
+            Image overlayImage = overlayLayer.AddComponent<Image>();
+            overlayImage.sprite = overlaySprite;
+            overlayImage.preserveAspect = true;
+            overlayImage.color = Color.white;
+        }
     }
 
     private void SetMoneyRevDisplay(int revenue)
