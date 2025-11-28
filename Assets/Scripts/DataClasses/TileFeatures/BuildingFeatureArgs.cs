@@ -22,5 +22,10 @@ namespace TTT.DataClasses.TileFeatures
         /// Whether the feature is owned by the client receiving this event.
         /// </summary>
         public bool OwnedByClient;
+
+        /// <summary>
+        /// Whether building this feature should subtract the player's resources
+        /// </summary>
+        public bool CheckForCost = true;
     }
 }
