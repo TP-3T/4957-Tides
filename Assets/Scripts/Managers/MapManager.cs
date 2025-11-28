@@ -12,6 +12,8 @@ using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Unity.Collections;
+using TTT.DataClasses.Assets.Scripts.DataClasses.TileFeatures;
 
 namespace TTT.Managers
 {
@@ -21,6 +23,11 @@ namespace TTT.Managers
     /// </summary>
     public partial class MapManager : GenericNetworkSingleton<MapManager>
     {
+        public static readonly Dictionary<string, int> sacred = new()
+        {
+            { "", 10 }
+        };
+
         public static readonly CubeCoordinates[] NeighbourDirections =
         {
             new(1, 0, -1),
@@ -78,7 +85,9 @@ namespace TTT.Managers
 
         private List<(Vector3 position, string featureId)> _pendingFeatures =
             new();
-        
+
+        private NetworkList<FeatureNet> _pendingFeaturesGoated = new();
+
         private bool _featuresLoaded = false;
 
         void Start()
@@ -124,7 +133,7 @@ namespace TTT.Managers
                 new("P_SeaMesh"),
                 SpawnSeaMesh
             );
-            }
+        }
 
         private void SpawnGridMesh(GameObject hm)
         {
@@ -287,27 +296,27 @@ namespace TTT.Managers
                 $"Starting async spawn of {_pendingFeatures.Count} features..."
             );
 
-            foreach (var (position, featureId) in _pendingFeatures)
+            foreach (var featureNet in _pendingFeaturesGoated)
             {
                 if (
                     _featureTypesByUniqueId.TryGetValue(
-                        featureId,
+                        $"{featureNet.FeatureId}",
                         out FeatureType featureType
                     )
                 )
                 {
                     var args =
                         ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-                    args.Location = position;
+                    args.Location = featureNet.FeaturePosition;
                     args.FeatureType = featureType;
                     args.OwnedByClient = true;
                     BuildingFeatureEvent.Raise(args);
                     spawnedCount++;
 
                     // Track counts by type
-                    if (!featureTypeCounts.ContainsKey(featureId))
-                        featureTypeCounts[featureId] = 0;
-                    featureTypeCounts[featureId]++;
+                    if (!featureTypeCounts.ContainsKey($"{featureNet.FeatureId}"))
+                        featureTypeCounts[$"{featureNet.FeatureId}"] = 0;
+                    featureTypeCounts[$"{featureNet.FeatureId}"]++;
 
                     // Yield every X spawns to maintain framerate
                     //Kinda doesn't work :/         😔😔😔😔
@@ -319,7 +328,7 @@ namespace TTT.Managers
                 else
                 {
                     Debug.LogWarning(
-                        $"skipped unknown feature '{featureId}' at {position}"
+                        $"skipped unknown feature '{featureNet.FeatureId}' at {featureNet.FeaturePosition}"
                     ); //THis basically never happens but I put this here just in case :/
                 }
             }
@@ -453,7 +462,12 @@ namespace TTT.Managers
                         // po: queue features for spawning after mesh is created
                         if (!string.IsNullOrEmpty(tileData.Feature))
                         {
-                            _pendingFeatures.Add((hexCenter, tileData.Feature));
+                            // _pendingFeaturesGoated.Add((hexCenter, tileData.Feature));
+                            FeatureNet n = new();
+                            n.FeatureId = tileData.Feature;
+                            n.FeaturePosition = hexCenter;
+
+                            _pendingFeaturesGoated.Add(n);
                         }
                     }
                 }
@@ -464,6 +478,8 @@ namespace TTT.Managers
                 {
                     HexCells.Add(hc);
                 }
+
+                // _pendingFeaturesGoated.Clear();
 
                 SeaLevel.Value = _gameMapData.WorldState.SeaLevel;
 
