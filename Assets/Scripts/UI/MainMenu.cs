@@ -1,3 +1,4 @@
+using PlasticGui.WorkspaceWindow.BrowseRepository;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
@@ -28,6 +29,9 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField]
     private GameObject LoadingScreen;
+
+    [SerializeField]
+    private int MapID;
 
     private GameObject CurrentMenu;
     private GameObject previousMenu;
@@ -145,6 +149,9 @@ public class MainMenu : MonoBehaviour
         CurrentMenu.SetActive(true);
     }
 
+    /// <summary>
+    /// Opens the main menu
+    /// </summary>
     public void OpenMainMenu()
     {
         Debug.Log("Clicked Start Game!");
