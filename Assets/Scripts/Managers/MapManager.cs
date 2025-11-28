@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using TTT.ClimateModel;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.Terrain;
 using TTT.DataClasses.TileFeatures;
@@ -66,7 +67,11 @@ namespace TTT.Managers
         public Queue<HexCell> FloodQueue = new();
         public Queue<HexCell> AboveSeaLevelQueue = new();
         public NetworkVariable<float> SeaLevel = new(0.0f);
+
+        // TODO: remove this
         public NetworkVariable<float> RisingRate = new(1.0f);
+
+
         public bool DrawDebugLabels;
 
         private LineRenderer lineRenderer;

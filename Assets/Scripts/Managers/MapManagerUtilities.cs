@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TTT.DataClasses.ClimateModel;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -148,7 +149,14 @@ namespace TTT.Managers
         /// </summary>
         public IEnumerator RaiseSea()
         {
-            SeaLevel.Value += RisingRate.Value;
+            //TODO: refactor this so that gamemanager does all of this
+            ClimateModelOutputDTO outputDTO =
+                GameManager.Instance.UpdateClimateDataForNextTurn();
+
+            // Update sea level
+            SeaLevel.Value = (float)outputDTO.futureSeaLevelMetres; //TODO: make float types consistent
+
+            // SeaLevel.Value += RisingRate.Value;
 
             while (true)
             {

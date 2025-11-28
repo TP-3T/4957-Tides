@@ -1,3 +1,5 @@
+using System;
+
 namespace TTT.ClimateModel
 {
     // Difference from these input/output objects and the dto is that this contains changeInTimeYears as input param, and sea level is in MM

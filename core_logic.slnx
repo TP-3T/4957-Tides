@@ -6,11 +6,8 @@
   <Project Path="TTT.Hex.csproj" />
   <Project Path="SFB.csproj" />
   <Project Path="UI.csproj" />
-<<<<<<< HEAD:core_logic.slnx
-  <Project Path="TTT.ClimateModel.csproj" />
-=======
   <Project Path="TTT.Player.csproj" />
->>>>>>> 6e513032671f9e37e6250b738e27599aea7d5c7b:4957-Tides.slnx
+  <Project Path="TTT.ClimateModel.csproj" />
   <Project Path="TTT.Editors.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="TTT.Helpers.csproj" />

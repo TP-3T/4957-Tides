@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using TTT.DataClasses.ClimateModel;
+using TTT.DataClasses.HexData;
 
 namespace TTT.ClimateModel
 {
-    public sealed class ClimateModel
+    public sealed class ClimatePredictionModel
     {
         private readonly PhysicsModel physicsModel;
         private readonly MLModel mlModel;
@@ -18,8 +19,9 @@ namespace TTT.ClimateModel
         /// </summary>
         /// <param name="inputDTO"></param>
         /// <returns></returns>
-        public ClimateModelOutput PredictFutureTempAndSeaLevel(
-            ClimateModelInputDTO inputDTO
+        public ClimateModelOutputDTO PredictFutureTempAndSeaLevel(
+            ClimateModelInputDTO inputDTO,
+            Queue<WorldState> climateModelWorldStatesQueue
         )
         {
             // Scale DOWN the sea level from m to mm by the scale factor(sea level doesn't actually rise as much as the game shows)
@@ -62,7 +64,10 @@ namespace TTT.ClimateModel
                 )
             )
             {
-                futureSeaLevelMM = mlModel.PredictFutureSeaLevel(modelInput);
+                futureSeaLevelMM = mlModel.PredictFutureSeaLevel(
+                    modelInput,
+                    climateModelWorldStatesQueue
+                );
             }
             // if sea level is outside of the range of the training dataset, then use the physics model to calculate it
             else
@@ -78,7 +83,118 @@ namespace TTT.ClimateModel
             double futureSeaLevelMetres =
                 futureSeaLevelMM * SEA_LEVEL_SCALE_FACTOR;
 
-            // create ClimateModelOutputDTO
+            ClimateModelOutputDTO outputDTO = new()
+            {
+                futureTemperatureCelsius = futureTemperatureCelsius,
+                futureSeaLevelMetres = futureSeaLevelMetres,
+            };
+
+            return outputDTO;
+        }
+
+        //TODO: move this to the function that creates the map and game
+        // delete this method once the above todo completed
+        private void PopulateClimateModelWorldStatesQueue()
+        {
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 313.18f,
+                    SeaLevel = 14.18079369f,
+                    Temp = -22.64326f,
+                    Year = 1940,
+                }
+            );
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 313.34f,
+                    SeaLevel = 14.35222333f,
+                    Temp = -12.24326f,
+                    Year = 1941,
+                }
+            );
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 313.34f,
+                    SeaLevel = 14.35222333f,
+                    Temp = -12.24326f,
+                    Year = 1942,
+                }
+            );
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 313.84f,
+                    SeaLevel = 14.35732167f,
+                    Temp = -16.94326f,
+                    Year = 1943,
+                }
+            );
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 313.88f,
+                    SeaLevel = 14.18043223f,
+                    Temp = -5.54326f,
+                    Year = 1944,
+                }
+            );
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 314.63f,
+                    SeaLevel = 14.60734743f,
+                    Temp = -5.84326f,
+                    Year = 1945,
+                }
+            );
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 314.63f,
+                    SeaLevel = 14.25638287f,
+                    Temp = -16.84326f,
+                    Year = 1946,
+                }
+            );
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 314.66f,
+                    SeaLevel = 14.4138078f,
+                    Temp = -10.64326f,
+                    Year = 1947,
+                }
+            );
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 314.88f,
+                    SeaLevel = 14.48694413f,
+                    Temp = -8.94326f,
+                    Year = 1948,
+                }
+            );
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 315.95f,
+                    SeaLevel = 14.17366973f,
+                    Temp = -1.94326f,
+                    Year = 1949,
+                }
+            );
+            climateModelWorldStatesQueue.Enqueue(
+                new()
+                {
+                    Pollution = 315.67f,
+                    SeaLevel = 14.36671727f,
+                    Temp = 1.35674f,
+                    Year = 1950,
+                }
+            );
         }
     }
 }

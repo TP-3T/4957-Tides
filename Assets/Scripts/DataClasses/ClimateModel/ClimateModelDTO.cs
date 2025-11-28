@@ -10,7 +10,7 @@ namespace TTT.DataClasses.ClimateModel
         // public int changeInTimeYears;
     }
 
-    public struct ClimateModelOutput
+    public struct ClimateModelOutputDTO
     {
         public double futureTemperatureCelsius;
         public double futureSeaLevelMetres;

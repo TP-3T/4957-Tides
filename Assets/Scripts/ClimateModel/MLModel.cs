@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using TTT.DataClasses.ClimateModel;
+using TTT.DataClasses.HexData;
 using UnityEngine;
 
 // references:
@@ -25,51 +26,25 @@ namespace TTT.ClimateModel
         public static readonly double TRAINING_DATASET_GMSL_UPPER_BOUND =
             165.2076002;
 
-        // // ML model only ready to use once
-        // public static Boolean readyToUse;
-
-        private static readonly List<string> _modelInputFeatureNames = new()
-        {
-            "CO2 (ppm)",
-            "TEMP (deg C)",
-            "Absolute GMSL (mm) relative to Jan 1950",
-            "CO2_12m_ago",
-            "CO2_5y_ago",
-            "CO2_10y_ago",
-            "TEMP_12m_ago",
-            "TEMP_5y_ago",
-            "TEMP_10y_ago",
-            "GMSL_12m_ago",
-            "GMSL_5y_ago",
-            "GMSL_10y_ago",
-        };
-
-        // private static readonly Dictionary<
-        //     string,
-        //     Func<ClimateModelInput, float>
-        // > _featureValueMap = new()
+        // private static readonly List<string> _modelInputFeatureNames = new()
         // {
-        //     {
-        //         "CO2 (ppm)",
-        //         input => (float)input.currAtmosphericCO2ConcentrationPpm
-        //     },
-        //     { "TEMP (deg C)", input => (float)input.currTemperatureCelsius },
-        //     {
-        //         "Absolute GMSL (mm) relative to Jan 1950",
-        //         input => (float)input.currSeaLevelMM
-        //     },
-        //     { "CO2_12m_ago", input => (float)input.CO2_12m_ago },
-        //     { "CO2_5y_ago", input => (float)input.CO2_5y_ago },
-        //     { "CO2_10y_ago", input => (float)input.CO2_10y_ago },
-        //     { "TEMP_12m_ago", input => (float)input.TEMP_12m_ago },
-        //     { "TEMP_5y_ago", input => (float)input.TEMP_5y_ago },
-        //     { "TEMP_10y_ago", input => (float)input.TEMP_10y_ago },
-        //     { "GMSL_12m_ago", input => (float)input.GMSL_12m_ago },
-        //     { "GMSL_5y_ago", input => (float)input.GMSL_5y_ago },
-        //     { "GMSL_10y_ago", input => (float)input.GMSL_10y_ago },
+        //     "CO2 (ppm)",
+        //     "TEMP (deg C)",
+        //     "Absolute GMSL (mm) relative to Jan 1950",
+        //     "CO2_12m_ago",
+        //     "CO2_5y_ago",
+        //     "CO2_10y_ago",
+        //     "TEMP_12m_ago",
+        //     "TEMP_5y_ago",
+        //     "TEMP_10y_ago",
+        //     "GMSL_12m_ago",
+        //     "GMSL_5y_ago",
+        //     "GMSL_10y_ago",
         // };
 
-        private readonly InferenceSession _onnxInferenceSession;
+        private static readonly int ONE_YEAR_WORLD_STATE_INDEX = 1;
+        private static readonly int FIVE_YEAR_WORLD_STATE_INDEX = 5;
+        private static readonly int TEN_YEAR_WORLD_STATE_INDEX = 10;
 
         static MLModel()
         {
@@ -86,38 +61,95 @@ namespace TTT.ClimateModel
             }
         }
 
-        public MLModel()
+        public double PredictFutureSeaLevel(
+            ClimateModelInput input,
+            ref Queue<WorldState> climateModelWorldStatesQueue
+        )
         {
-            _onnxInferenceSession = new InferenceSession(_MODEL_PATH);
+            using InferenceSession onnxInferenceSession = new(_MODEL_PATH);
+
+            float[] modelInputFeatures = CreateModelInputList(
+                input,
+                ref climateModelWorldStatesQueue
+            );
+
+            // Adjust shape & input name to match your exported ONNX model
+            var inputTensor = new DenseTensor<float>(
+                modelInputFeatures,
+                new[] { 1, modelInputFeatures.Length }
+            );
+
+            using var inputs = new List<NamedOnnxValue>
+            {
+                NamedOnnxValue.CreateFromTensor(_inputName, inputTensor),
+            };
         }
 
-        public double PredictFutureSeaLevel(ClimateModelInput input)
+        /// <summary>
+        /// Creates a list of model inputs derived from the inputs from the Unity game.
+        /// </summary>
+        private static float[] CreateModelInputList(
+            ClimateModelInput input,
+            ref Queue<WorldState> climateModelWorldStatesQueue
+        )
         {
-            // Calculate the features used for model inputs
-            Dictionary<string, float> _modelInputFeatures =
-                _modelInputFeatureNames.ToDictionary(
-                    name => name,
-                    name => _featureValueMap[name](input)
+            // 10y ago
+            WorldState worldState10YearsAgo =
+                climateModelWorldStatesQueue.ElementAt(
+                    TEN_YEAR_WORLD_STATE_INDEX
                 );
 
-            //     "CO2 (ppm)": "f0",
-            //     "TEMP (deg C)": "f1",
-            //     "Absolute GMSL (mm) relative to Jan 1950": "f2",
-            //     "CO2_3m_ago": "f3",
-            //     "CO2_6m_ago": "f4",
-            //     "CO2_12m_ago": "f5",
-            //     "CO2_5y_ago": "f6",
-            //     "CO2_10y_ago": "f7",
-            //     "TEMP_3m_ago": "f8",
-            //     "TEMP_6m_ago": "f9",
-            //     "TEMP_12m_ago": "f10",
-            //     "TEMP_5y_ago": "f11",
-            //     "TEMP_10y_ago": "f12",
-            //     "GMSL_3m_ago": "f13",
-            //     "GMSL_6m_ago": "f14",
-            //     "GMSL_12m_ago": "f15",
-            //     "GMSL_5y_ago": "f16",
-            //     "GMSL_10y_ago": "f17"
+            // 5y ago
+            WorldState worldState5YearsAgo =
+                climateModelWorldStatesQueue.ElementAt(
+                    FIVE_YEAR_WORLD_STATE_INDEX
+                );
+
+            // 12m ago
+            WorldState worldState12MonthsAgo =
+                climateModelWorldStatesQueue.ElementAt(
+                    ONE_YEAR_WORLD_STATE_INDEX
+                );
+
+            // this features list has to match the dataset column order
+            // (the csv file is in ai repo, climate-prediction-training branch, training/data/interim folder)
+
+            // For reference - mapping of feature indices
+            /*
+            "CO2 (ppm)": "f0",
+            "TEMP (deg C)": "f1",
+            "Absolute GMSL (mm) relative to Jan 1950": "f2",
+            "CO2_12m_ago": "f3",
+            "CO2_5y_ago": "f4",
+            "CO2_10y_ago": "f5",
+            "TEMP_12m_ago": "f6",
+            "TEMP_5y_ago": "f7",
+            "TEMP_10y_ago": "f8",
+            "GMSL_12m_ago": "f9",
+            "GMSL_5y_ago": "f10",
+            "GMSL_10y_ago": "f11"
+            */
+            float[] features =
+            {
+                // Current year inputs
+                (float)input.currAtmosphericCO2ConcentrationPpm,
+                (float)input.currTemperatureCelsius,
+                (float)input.currSeaLevelMM,
+                // historical CO2 data
+                worldState12MonthsAgo.Pollution,
+                worldState5YearsAgo.Pollution,
+                worldState10YearsAgo.Pollution,
+                // historical temperature data
+                worldState12MonthsAgo.Temp,
+                worldState5YearsAgo.Temp,
+                worldState10YearsAgo.Temp,
+                // historical sea level data
+                worldState12MonthsAgo.SeaLevel,
+                worldState5YearsAgo.SeaLevel,
+                worldState10YearsAgo.SeaLevel,
+            };
+
+            return features;
         }
     }
 }
