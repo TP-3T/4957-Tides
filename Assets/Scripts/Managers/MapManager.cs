@@ -64,7 +64,7 @@ namespace TTT.Managers
         );
         public Queue<HexCell> ToFlood = new();
         public Queue<HexCell> FloodQueue = new();
-        public Queue<HexCell> FloodQueue2 = new();
+        public Queue<HexCell> AboveSeaLevelQueue = new();
         public NetworkVariable<float> SeaLevel = new(0.0f);
         public NetworkVariable<float> RisingRate = new(1.0f);
         public bool DrawDebugLabels;
@@ -169,19 +169,15 @@ namespace TTT.Managers
                     MapManager.HexSize,
                     MapManager.HexOrientation
                 );
-
-                // Spawn features asynchronously across multiple frames
-                StartCoroutine(SpawnPendingFeaturesAsync());
             }
+
+            // Spawn features asynchronously across multiple frames
+            StartCoroutine(SpawnPendingFeaturesAsync());
         }
 
         [ClientRpc]
         private void TriangulateHexMeshClientRpc(HexCell[] cells)
         {
-            // NetworkObject hexMeshNetworkObject = NetworkManager
-            //     .Singleton
-            //     .SpawnManager
-            //     .SpawnedObjects[_hexMeshId.Value];
             if (
                 NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
                     _hexMeshId.Value,
@@ -203,10 +199,6 @@ namespace TTT.Managers
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc()
         {
-            // NetworkObject seaMeshNetworkObject = NetworkManager
-            //     .Singleton
-            //     .SpawnManager
-            //     .SpawnedObjects[_seaMeshId.Value];
             if (
                 NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
                     _seaMeshId.Value,
@@ -229,10 +221,6 @@ namespace TTT.Managers
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc(HexCell cell)
         {
-            // NetworkObject seaMeshNetworkObject = NetworkManager
-            //     .Singleton
-            //     .SpawnManager
-            //     .SpawnedObjects[_seaMeshId.Value];
             if (
                 NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
                     _seaMeshId.Value,
@@ -254,10 +242,6 @@ namespace TTT.Managers
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc(HexCell[] cells)
         {
-            // NetworkObject seaMeshNetworkObject = NetworkManager
-            //     .Singleton
-            //     .SpawnManager
-            //     .SpawnedObjects[_seaMeshId.Value];
             if (
                 NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
                     _seaMeshId.Value,

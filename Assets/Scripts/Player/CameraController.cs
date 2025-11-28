@@ -49,7 +49,9 @@ namespace TTT.Player
         private CameraControlActions cameraActions;
         private InputAction movement;
         private float speed;
-        private readonly bool useScreenEdge = false; // Toggle on and off
+
+        [SerializeField]
+        private bool useScreenEdge = false; // Toggle on and off
         private float zoomHeight;
         private float zoomVelocity;
         private float dynamicMinHeight = MIN_HEIGHT;

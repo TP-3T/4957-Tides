@@ -35,9 +35,12 @@ namespace TTT.Managers
         {
             BuildingFeatureArgs bfArgs =
                 ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-            bfArgs.Location = cellPosition;
+            if (bfArgs.FeatureType != null)
+            {
+                bfArgs.Location = cellPosition;
 
-            DestroyingFeatureEvent.Raise(bfArgs);
+                DestroyingFeatureEvent.Raise(bfArgs);
+            }
         }
 
         private void SetCellCenterVertex(HexCell hc, int cv)
@@ -167,16 +170,12 @@ namespace TTT.Managers
                         )
                             ToFlood.Enqueue(test);
                         else
-                            FloodQueue2.Enqueue(test);
+                            AboveSeaLevelQueue.Enqueue(test);
                     }
-                    foreach (var cell in FloodQueue2)
-                    {
-                        FloodQueue.Enqueue(cell);
-                    }
-                    // while (FloodQueue2.Count > 0)
-                    //     FloodQueue.Enqueue(FloodQueue2.Dequeue());
 
-                    // currently, this is also where we raise TurnEnded
+                    while (AboveSeaLevelQueue.Count > 0)
+                        FloodQueue.Enqueue(AboveSeaLevelQueue.Dequeue());
+
                     Debug.Log("Flood fill cycle complete");
 
                     break;
