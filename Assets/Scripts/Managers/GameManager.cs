@@ -98,15 +98,6 @@ namespace TTT.Managers
         private void StartGameHost()
         {
             NetworkManager.Singleton.StartHost();
-
-            if (LoadExternalJson.TryGetDataJson(out TextAsset newMap))
-            {
-                newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
-            }
-            else
-            {
-                throw new IOException("Could not load file.");
-            }
         }
 
         public void OnNewMapFinish(UnityEngine.Object eventArgs)

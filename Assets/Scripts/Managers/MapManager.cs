@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.Terrain;
 using TTT.GameEvents;
@@ -268,7 +269,7 @@ namespace TTT.Managers
             try
             {
                 // Deserialized data (cringe)
-                _gameMapData = JsonUtility.FromJson<MapData>(
+                _gameMapData = JsonConvert.DeserializeObject<MapData>(
                     args.DataFile.text
                 );
                 _hexGridWidth.Value = _gameMapData.Width;

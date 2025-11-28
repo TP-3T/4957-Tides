@@ -32,7 +32,8 @@ namespace TTT.Helpers
             int? pageSize = null
         )
         {
-            string url = BASE_URL + MAPS_ENDPOINT + BuildQueryString(page, pageSize);
+            string url =
+                BASE_URL + MAPS_ENDPOINT + BuildQueryString(page, pageSize);
 
             UnityWebRequest request = UnityWebRequest.Get(url);
 
@@ -74,7 +75,9 @@ namespace TTT.Helpers
             int? pageSize = null
         )
         {
-            string url = $"{BASE_URL}{MAP_BY_STEAMID_ENDPOINT}/{steamId}" + BuildQueryString(page, pageSize);
+            string url =
+                $"{BASE_URL}{MAP_BY_STEAMID_ENDPOINT}/{steamId}"
+                + BuildQueryString(page, pageSize);
 
             UnityWebRequest request = UnityWebRequest.Get(url);
 
@@ -96,7 +99,9 @@ namespace TTT.Helpers
             int? pageSize = null
         )
         {
-            string url = $"{BASE_URL}{MAP_BY_NAME_ENDPOINT}/{mapName}" + BuildQueryString(page, pageSize);
+            string url =
+                $"{BASE_URL}{MAP_BY_NAME_ENDPOINT}/{mapName}"
+                + BuildQueryString(page, pageSize);
 
             UnityWebRequest request = UnityWebRequest.Get(url);
 
@@ -113,14 +118,16 @@ namespace TTT.Helpers
         private static string BuildQueryString(int? page, int? pageSize)
         {
             List<string> queryParams = new();
-            
+
             if (page.HasValue)
                 queryParams.Add($"page={page.Value}");
-            
+
             if (pageSize.HasValue)
                 queryParams.Add($"pageSize={pageSize.Value}");
-            
-            return queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : "";
+
+            return queryParams.Count > 0
+                ? "?" + string.Join("&", queryParams)
+                : "";
         }
 
         private static void HandleRequestResult(
@@ -217,12 +224,18 @@ namespace TTT.Helpers
             foreach (var xEntry in apiResponse.MapTile)
             {
                 int x = int.Parse(xEntry.Key);
-                if (x > maxX) { maxX = x; }
+                if (x > maxX)
+                {
+                    maxX = x;
+                }
 
                 foreach (var zEntry in xEntry.Value)
                 {
                     int z = int.Parse(zEntry.Key);
-                    if (z > maxZ) { maxZ = z; }
+                    if (z > maxZ)
+                    {
+                        maxZ = z;
+                    }
                 }
             }
 
@@ -243,10 +256,10 @@ namespace TTT.Helpers
                     MapTileData gameTile = new MapTileData
                     {
                         OffsetCoordinates = new OffsetCoordinates(x, z),
-                        
+
                         TileType = (TerrainTypeId)tileInfo.TileType,
-                        
-                        Height = tileInfo.Elevation
+
+                        Height = tileInfo.Elevation,
                     };
 
                     gameTiles.Add(gameTile);
@@ -269,10 +282,10 @@ namespace TTT.Helpers
         /// <summary>
         /// Fetches and parses the list of available maps
         /// Returns a list of MapInfo objects ready for UI display
-        /// 
+        ///
         /// With pagination:
         /// StartCoroutine(GetMapList(onSuccess, onError, page: 1, pageSize: 10));
-        /// 
+        ///
         /// Without pagination:
         /// StartCoroutine(GetMapList(onSuccess, onError));
         /// </summary>

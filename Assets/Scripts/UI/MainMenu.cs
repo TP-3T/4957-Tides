@@ -1,10 +1,14 @@
-using PlasticGui.WorkspaceWindow.BrowseRepository;
+using System.IO;
+using Newtonsoft.Json;
+using TTT.GameEvents;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
     [SerializeField]
     private GameObject Mainmenu;
+
+    public string selectedMap;
 
     [SerializeField]
     private GameObject MultiplayerMenu;
@@ -32,6 +36,9 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField]
     private int MapID;
+
+    [SerializeField]
+    private GameEvent newMapEvent;
 
     private GameObject CurrentMenu;
     private GameObject previousMenu;
@@ -105,6 +112,14 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Clicked Start Game!");
         ChangeActiveMenu(LoadingScreen);
+
+        Debug.Log($"Selected Map: {selectedMap}");
+        // File.ReadAllText("./" + selectedMap + ".txt");
+        // var loadedMap =
+        //     Resources.Load(selectedMap, typeof(TextAsset)) as TextAsset;
+
+        var loadedMap = Resources.Load<TextAsset>(selectedMap);
+        newMapEvent.Raise(new NewMapEventArgs() { DataFile = loadedMap });
     }
 
     public void OpenGameUI()
