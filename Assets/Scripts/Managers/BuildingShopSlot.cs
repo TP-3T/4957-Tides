@@ -13,7 +13,7 @@ public class BuildingShopSlot : MonoBehaviour
     private TextMeshProUGUI featureNameText;
 
     [SerializeField]
-    private Image featureIcon;
+    private Image featureIcon; // po: why unused?
 
     [SerializeField]
     private Image moneyRevIcon;
@@ -75,13 +75,12 @@ public class BuildingShopSlot : MonoBehaviour
             return;
 
         // Set feature name
-        if (featureNameText != null)
-            featureNameText.text = feature.DisplayName;
+        featureNameText?.text = feature.DisplayName;
 
         // Accumulators for each resource type
         int totalMoneyRevenue = 0;
         int totalPollutionRevenue = 0;
-        int totalMoneyCost = 0; 
+        int totalMoneyCost = 0; // po: why everything to do with this unused?
         int totalEnergyCost = 0;
         int totalPopulationCost = 0;
 
@@ -111,7 +110,7 @@ public class BuildingShopSlot : MonoBehaviour
 
             switch (cost.Thing.Name)
             {
-                case "money":
+                case "money": // po: magic strings..?
                     totalMoneyCost += value;
                     break;
                 case "power":
@@ -216,33 +215,25 @@ public class BuildingShopSlot : MonoBehaviour
 
     private void SetMoneyRevDisplay(int revenue)
     {
-        if (revenue > 0 && moneyRevText != null)
-        {
-            moneyRevText.text = revenue.ToString();
-        }
+        if (revenue > 0)
+            moneyRevText?.SetText(revenue.ToString());
     }
 
     private void SetPollutionDisplay(int revenue)
     {
-        if (revenue > 0 && pollRevText != null)
-        {
-            pollRevText.text = revenue.ToString();
-        }
+        if (revenue > 0)
+            pollRevText?.SetText(revenue.ToString());
     }
 
     private void SetEnergyDisplay(int cost)
     {
-        if (cost > 0 && energyCostIcon != null && energyCostText != null)
-        {
-            energyCostText.text = cost.ToString();
-        }
+        if (cost > 0 && energyCostIcon != null)
+            energyCostText?.SetText(cost.ToString());
     }
 
     private void SetPopulationDisplay(int cost)
     {
-        if (cost > 0 && popCostIcon != null && popCostText != null)
-        {
-            popCostText.text = cost.ToString();
-        }
+        if (cost > 0 && popCostIcon != null)
+            popCostText?.SetText(cost.ToString());
     }
 }
