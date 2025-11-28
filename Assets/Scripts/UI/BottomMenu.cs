@@ -48,6 +48,9 @@ namespace TTT.UI
         [SerializeField]
         private PlayerController PlayerController;
 
+        [SerializeField]
+        private GameEvent PlayAudioEvent;
+
         [Header("Shop Slots")]
         /// <summary>
         /// GameObject that will hold the Shop Slots as its children.
@@ -190,6 +193,20 @@ namespace TTT.UI
                 shopTab.Button.onClick.AddListener(() =>
                 {
                     TabClicked(newTab);
+                    PlayAudioEvent.Raise(
+                        new AudioEventArgs()
+                        {
+                            Type = AudioTypes.ONESHOT,
+                            ToPlay = type switch
+                            {
+                                FeatureCategory.INDUSTRY => "ClickIndustry",
+                                FeatureCategory.HOUSING => "ClickHousing",
+                                FeatureCategory.ENERGY => "ClickEnergy",
+                                FeatureCategory.NATURE => "ClickRenewable",
+                                _ => "ClickGeneric",
+                            },
+                        }
+                    );
                 });
                 newTab.transform.SetParent(ShopTabArea.transform);
                 tabSlots[newTab] = new();

@@ -48,4 +48,11 @@ namespace TTT.DataClasses.States
         DESTROYING,
         BUILDING,
     }
+
+    public enum AudioTypes
+    {
+        ONESHOT,
+        AMBIENCE,
+        MUSIC,
+    }
 }

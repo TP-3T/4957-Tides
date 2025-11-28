@@ -8,16 +8,22 @@ namespace TTT.DataClasses
     /// Used by AudioManager.
     /// </summary>
     [Serializable]
-    [CreateAssetMenu(fileName = "New Audio Entry", menuName = "TTT/Data Classes/Audio Entry")]
+    [CreateAssetMenu(
+        fileName = "New Audio Entry",
+        menuName = "TTT/Data Classes/Audio Entry"
+    )]
     public class AudioEntry : ScriptableObject
     {
         /// <summary>
         /// The unique name identifier for this audio entry.
         /// </summary>
-        [SerializeField] public string EntryName;
+        [SerializeField]
+        public string EntryName;
+
         /// <summary>
         /// The audio clip associated with this entry.
         /// </summary>
-        [SerializeField] public AudioClip Clip;
+        [SerializeField]
+        public AudioClip Clip;
     }
 }
