@@ -119,6 +119,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &9407387 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6397391460662783347, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+  m_PrefabInstance: {fileID: 378512690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9407388 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1799127629145147433, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+  m_PrefabInstance: {fileID: 378512690}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9407387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68836ba971555cb4fb1573521aa27d17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9407390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9407387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9407388}
+        m_TargetAssemblyTypeName: WaterLevelControl, UI
+        m_MethodName: OnNewMapFinish
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &131650463
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,11 +442,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 187074380046838774, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.5333476
       objectReference: {fileID: 0}
     - target: {fileID: 187074380046838774, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 187074380046838774, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_Material
@@ -464,6 +508,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 270.03
       objectReference: {fileID: 0}
+    - target: {fileID: 1799127629145147433, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: _mapLoadFinishEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
     - target: {fileID: 1936459664457822305, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -801,7 +849,10 @@ PrefabInstance:
     - {fileID: 6633429741227152748, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
     - {fileID: 3770610158786676996, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6397391460662783347, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9407390}
   m_SourcePrefab: {fileID: 100100000, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
 --- !u!1001 &663475069
 PrefabInstance:
