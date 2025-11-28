@@ -2042,6 +2042,42 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 694371325591416077, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_Size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 694371325591416077, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 838161958106198242, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 838161958106198242, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 838161958106198242, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8571319248650039740}
+    - target: {fileID: 838161958106198242, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 838161958106198242, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GetActiveToggle
+      objectReference: {fileID: 0}
+    - target: {fileID: 838161958106198242, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TTT.UI.MapBrowser, UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 838161958106198242, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1568727674659269578, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2061,6 +2097,18 @@ PrefabInstance:
     - target: {fileID: 1895273827739301167, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_Size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1929264975137934036, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_Value
+      value: 1.000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 1998918912063783338, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.00056641124
+      objectReference: {fileID: 0}
+    - target: {fileID: 1998918912063783338, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00023086253
       objectReference: {fileID: 0}
     - target: {fileID: 2109648924058754350, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2128,11 +2176,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4894195073761674002, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000015884638
+      value: 0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 4894195073761674002, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00040269288
+      value: -0.00019255097
       objectReference: {fileID: 0}
     - target: {fileID: 5263515446824919717, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2324,7 +2372,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7447894206984090900, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_Value
-      value: 1.0000036
+      value: 1.0000015
       objectReference: {fileID: 0}
     - target: {fileID: 7543649969644881060, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: DBContent

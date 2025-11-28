@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data.Common;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Codice.Client.BaseCommands;
 using Newtonsoft.Json;
@@ -27,8 +29,6 @@ namespace TTT.UI
         public int selectedMapId;
 
         public GameObject activeToggle;
-
-        private Dictionary<string, int> DBMapIds = new();
         private MapData localMapData = new();
         private List<MapInfo> localMapInfoList = new();
 
@@ -74,30 +74,52 @@ namespace TTT.UI
             OnMapListFetched(localMapInfoList, LocalContent);
         }
 
-    // OnClick method for select button triggers GetActiveToggle
-    //  IF there is an activeToggle (through isOn), then we get the text (mapName) from the component
-    //  Use it to get the MapID through the dictionary
-    //  query for MapData from brysons stuff using MapID
-    //  
-
-
-
+        // OnClick method for select button triggers GetActiveToggle
+        //  IF there is an activeToggle (through isOn), then we get the text (mapName) from the component
+        //  Use it to get the MapID through the dictionary
+        //  query for MapData from brysons stuff using MapID
+        //
 
         /// <summary>
         /// RUNS
         /// </summary>
         /// <returns></returns>
-        // public string GetActiveToggle()
-        // {
-        //     // Retrieve all the MapListItems (gameobjects)
-        //     // check for if the isOn property is checked
+        public void GetActiveToggle()
+        {
+            // Retrieve all the MapListItems (gameobjects)
+            // check for if the isOn property is checked
+            Toggle[] dbToggles = DBContent.GetComponentsInChildren<Toggle>();
+            Toggle[] localToggles =
+                LocalContent.GetComponentsInChildren<Toggle>();
 
-        //     // need to check select
+            Toggle[] toggles = dbToggles.Concat(localToggles).ToArray();
 
+            Debug.Log($"Toggles found: {toggles.Length}");
+            foreach (var toggle in toggles)
+            {
+                if (toggle.isOn)
+                {
+                    var controller =
+                        toggle.GetComponent<MapListItemController>();
+                    int mapId = controller.MapId;
+                    selectedMapId = mapId;
+                    Debug.Log($"Selected Map ID: {selectedMapId}");
 
-
-        //     // List<GameObject> listItems = DBContent.GetCompo
-        // }
+                    // if (DBMapIds.TryGetValue(mapName, out int mapId))
+                    // {
+                    //     selectedMapId = mapId;
+                    //     Debug.Log($"Selected Map ID: {selectedMapId}");
+                    //     // mapId.ToString();
+                    // }
+                    // else
+                    // {
+                    //     Debug.LogError(
+                    //         $"Map name '{mapName}' not found in DBMapIds dictionary."
+                    //     );
+                    // }
+                }
+            }
+        }
 
         private void OnMapListFetched(
             List<MapInfo> mapInfoList,
@@ -108,12 +130,13 @@ namespace TTT.UI
 
             foreach (var mapInfo in mapInfoList)
             {
-                DBMapIds.Add(mapInfo.MapName, mapInfo.MapId);
-
                 GameObject mapItem = Instantiate(
                     MapListItem,
                     content.transform
                 );
+
+                var controller = mapItem.AddComponent<MapListItemController>();
+                controller.MapId = mapInfo.MapId;
 
                 mapItem.GetComponentInChildren<TMP_Text>().text =
                     mapInfo.MapName;
