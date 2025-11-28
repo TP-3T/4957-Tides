@@ -10,18 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d8a447a0febedb24e8cd2e631a1f15d7, type: 3}
-  m_Name: Residential - HighDensity
+  m_Name: Residential - Farm
   m_EditorClassIdentifier: 
-  <UniqueID>k__BackingField: highdensity
+  <UniqueID>k__BackingField: rural
   <Category>k__BackingField: 1
-  <DisplayName>k__BackingField: High Density
-  <PollutionEmission>k__BackingField: 40
+  <DisplayName>k__BackingField: Farm
+  <PollutionEmission>k__BackingField: 67
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
     <TerrainConstraints>k__BackingField:
-      <Mode>k__BackingField: 0
+      <Mode>k__BackingField: 1
       <List>k__BackingField:
-      - {fileID: 11400000, guid: 642c9db17390d884c842f1eebd96973d, type: 2}
+      - {fileID: 11400000, guid: df18eb8c24270bf468df79b96fb1553c, type: 2}
+      - {fileID: 11400000, guid: 112d508e3d5328640b53bbbf9e6ff1d6, type: 2}
+      - {fileID: 11400000, guid: da73337ffc743494987e98ff083029ef, type: 2}
     <FeatureConstraints>k__BackingField: []
   <BuildValidator>k__BackingField: {fileID: 11400000, guid: 418d17bf1c05a9c40aff3428a267cd49, type: 2}
   <ResourceProducers>k__BackingField:
@@ -30,10 +32,10 @@ MonoBehaviour:
     - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
       <Count>k__BackingField: 1
   <Cost>k__BackingField:
-  - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
-    <Count>k__BackingField: 18
   - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-    <Count>k__BackingField: 4
+    <Count>k__BackingField: 10
   - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
-    <Count>k__BackingField: 0
-  <Prefab>k__BackingField: {fileID: 4885409563839771395, guid: e8f4f83c0075de84c9221902f4d68650, type: 3}
+    <Count>k__BackingField: 4
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+    <Count>k__BackingField: 30
+  <Prefab>k__BackingField: {fileID: 2395858261925545394, guid: e4174bf1d699918459d7ccd5ef3ef40e, type: 3}

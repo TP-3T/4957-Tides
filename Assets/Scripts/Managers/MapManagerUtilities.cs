@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -18,15 +19,33 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent DestroyingFeatureEvent;
 
+        [SerializeField]
+        private FeatureRuntimeSet spawnedFeatures;
+
+        /// <summary>
+        /// The map's own cache of spawned features, updated only on flood.
+        /// Not keeping it always updated is ok as it's currently only accessed during flooding.
+        /// </summary>
+        private Feature[] spawnedFeaturesCache = Array.Empty<Feature>();
+
         private void FloodCell(ref HexCell hc)
         {
             int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
             hc.Flooded = true;
-            // hc.CellColor = Color.blue;
+
             HexCells[index] = hc;
 
             // Remove any building on this flooded cell
-            DestroyFeatureCientRpc(hc.CellPosition);
+            Vector3 cellPosition = hc.CellPosition;
+
+            bool cellHasFeature = spawnedFeaturesCache.Any(feat =>
+                feat.CellPosition == cellPosition
+            );
+
+            if (cellHasFeature)
+            {
+                DestroyFeatureCientRpc(hc.CellPosition);
+            }
         }
 
         /// <summary>
@@ -39,19 +58,16 @@ namespace TTT.Managers
 
             BuildingFeatureArgs bfArgs =
                 ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-
-            Debug.Log($"[MapManagerUtilities] We are going to flood a cell");
-            Debug.Log($"[MapManagerUtilities] Cell is being flooded");
-
             bfArgs.Location = cellPosition;
-            DestroyingFeatureEvent.Raise(bfArgs);
-        }
 
-        private void SetCellCenterVertex(HexCell hc, int cv)
-        {
-            int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
-            hc.CenterVertexIndex = cv;
-            HexCells[index] = hc;
+            if (DestroyingFeatureEvent == null)
+            {
+                Debug.LogError("DestroyingFeatureEvent is not set here");
+                return;
+            }
+
+            DestroyingFeatureEvent.Raise(bfArgs);
+            Debug.Log("destroyed!");
         }
 
         private CubeCoordinates GetCubeCoordinatesFromPosition(Vector3 position)
@@ -70,7 +86,8 @@ namespace TTT.Managers
             if (MapManager.HexOrientation == HexOrientation.pointyTop)
             {
                 return (
-                    (Mathf.RoundToInt(hc.r / 2) + hc.q)
+                    Mathf.RoundToInt(hc.r / 2)
+                    + hc.q
                     + (hc.r * _hexGridWidth.Value)
                 );
             }
@@ -85,8 +102,7 @@ namespace TTT.Managers
         private int GetCellIndexFromPosition(Vector3 position)
         {
             CubeCoordinates cc = GetCubeCoordinatesFromPosition(position);
-            int ci = GetCellIndexFromCubeCoordinates(cc);
-            return ci;
+            return GetCellIndexFromCubeCoordinates(cc);
         }
 
         private HexCell? GetCellFromCubeCoordinates(
@@ -153,6 +169,9 @@ namespace TTT.Managers
         public IEnumerator RaiseSea()
         {
             SeaLevel.Value += RisingRate.Value;   // Function for this perchance
+
+            // update spawned features cache before flooding
+            spawnedFeaturesCache = spawnedFeatures.GetItems();
 
             while (true)
             {
