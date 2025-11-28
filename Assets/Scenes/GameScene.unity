@@ -570,7 +570,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2315601190507965176, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -19.479967
+      value: -19.479916
+      objectReference: {fileID: 0}
+    - target: {fileID: 2408728085975243179, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: <IsOpen>k__BackingField
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2609288784758197636, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -598,7 +602,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3034285830398233426, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 120
+      value: 240
       objectReference: {fileID: 0}
     - target: {fileID: 3158523514017122316, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_Size
@@ -692,6 +696,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4871164678806478813, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: playerStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
     - target: {fileID: 5248143721908876236, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -816,6 +824,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7247585742544391720, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: playerStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
     - target: {fileID: 7644184439523603021, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_SizeDelta.x
       value: 60
@@ -1124,6 +1136,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      propertyPath: _playerStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
     - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
       propertyPath: SpawnedFeatures
       value: 
@@ -1709,6 +1725,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1055470818814381326, guid: 79622ba26d73ebd49937adf9cdc0517f, type: 3}
+      propertyPath: playerStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
     - target: {fileID: 5132940107109000283, guid: 79622ba26d73ebd49937adf9cdc0517f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

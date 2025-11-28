@@ -1,4 +1,5 @@
 using TMPro;
+using TTT.DataClasses.States;
 using TTT.Managers;
 using UnityEngine;
 
@@ -9,6 +10,14 @@ public class GlobalInformation : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI _CO2Text;
+
+    [SerializeField]
+    private PlayerStats playerStats;
+
+
+    [Tooltip("Multiplier to convert pollution units to ppm for display")]
+    [SerializeField]
+    private float pollutionToPpmMultiplier = 0.001f;
 
     private GameManager GameManager;
 
@@ -29,7 +38,7 @@ public class GlobalInformation : MonoBehaviour
         {
             setDateText();
         }
-        if (GameManager.CO2 != CO2)
+        if (playerStats != null && playerStats.pollution != null && playerStats.pollution.AmountOwned != CO2)
         {
             setCO2Text();
         }
@@ -44,7 +53,15 @@ public class GlobalInformation : MonoBehaviour
 
     private void setCO2Text()
     {
-        CO2 = GameManager.CO2;
-        _CO2Text.text = $"CO2: {CO2} ppm";
+        if (playerStats != null && playerStats.pollution != null)
+        {
+            CO2 = playerStats.pollution.AmountOwned;
+            float displayPpm = CO2 * pollutionToPpmMultiplier;
+            _CO2Text.text = $"CO2: {displayPpm:F1} ppm";
+        }
+        else
+        {
+            _CO2Text.text = "CO2: -- ppm";
+        }
     }
 }

@@ -19,6 +19,9 @@ public class FeatureBuilder : MonoBehaviour
     /// </summary>
     public FeatureRuntimeSet SpawnedFeatures;
 
+    [SerializeField]
+    private TTT.DataClasses.States.PlayerStats playerStats;
+
     private const float hexCellPadding = 0.05f;
 
     private readonly float hexCellSize =
@@ -72,10 +75,9 @@ public class FeatureBuilder : MonoBehaviour
         bool checkForCost
     )
     {
-        if (ownedByClient && checkForCost && !CheckCost(featureType))
+        if (ownedByClient && checkForCost && !CheckCost(featureType, out string insufficientResource))
         {
-            // then the player is too poor
-            Debug.Log($"Sorry, you're too poor");
+            Debug.LogWarning($"Cannot afford {featureType.name}. Insufficient {insufficientResource}.");
             return;
         }
 
@@ -95,6 +97,17 @@ public class FeatureBuilder : MonoBehaviour
         {
             Debug.LogError("No renderers found in this prefab.");
             return;
+        }
+
+        if (ownedByClient && checkForCost)
+        {
+            DeductCost(featureType);
+        }
+
+        if (ownedByClient)
+        {
+            // Trigger all resource producers for this feature
+            InitializeResourceProducers(featureType);
         }
 
         SpawnedFeatures.Add(feature);
@@ -144,6 +157,12 @@ public class FeatureBuilder : MonoBehaviour
 
     private bool CheckCost(FeatureType featureType)
     {
+        return CheckCost(featureType, out _);
+    }
+
+    private bool CheckCost(FeatureType featureType, out string insufficientResource)
+    {
+        insufficientResource = string.Empty;
         foreach (var resourceCost in featureType.Cost)
         {
             if (resourceCost.Count <= 0)
@@ -154,10 +173,47 @@ public class FeatureBuilder : MonoBehaviour
             PlayerResource resource = resourceCost.Thing;
             if (resource.AmountOwned < resourceCost.Count)
             {
+                insufficientResource = $"{resource.Name} (Need: {resourceCost.Count}, Have: {resource.AmountOwned})";
                 return false;
             }
         }
         return true;
+    }
+
+    private void DeductCost(FeatureType featureType)
+    {
+        foreach (var resourceCost in featureType.Cost)
+        {
+            if (resourceCost.Count <= 0)
+            {
+                continue;
+            }
+
+            PlayerResource resource = resourceCost.Thing;
+            resource.ApplyChange(-resourceCost.Count);
+        }
+    }
+
+    /// <summary>
+    /// Initialize all resource producers for a feature, including automatic pollution emission.
+    /// This calls OnCreated() for each producer defined in the FeatureType.
+    /// </summary>
+    private void InitializeResourceProducers(FeatureType featureType)
+    {
+        // Trigger OnCreated for all defined resource producers
+        if (featureType.ResourceProducers != null)
+        {
+            foreach (var producer in featureType.ResourceProducers)
+            {
+                producer.OnCreated();
+            }
+        }
+
+        // Automatically handle pollution emission if feature has PollutionEmission
+        if (featureType.PollutionEmission != 0 && playerStats != null && playerStats.pollution != null)
+        {
+            playerStats.pollution.ApplyChange(featureType.PollutionEmission);
+        }
     }
 
     private Feature BuildAt(Vector3 location, FeatureType featureType)

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.States;
 using TTT.DataClasses.Terrain;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -55,6 +56,9 @@ namespace TTT.Managers
 
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
+
+        [SerializeField]
+        private PlayerStats _playerStats;
 
         private Dictionary<string, FeatureType> _featureTypesByUniqueId = new();
 
@@ -262,6 +266,8 @@ namespace TTT.Managers
             }
         }
 
+        private void SpawnPendingFeatures()
+        {
             // po: the idea is that
             // OnNewMap() parses json
             // then on each tile with feature != null
@@ -273,6 +279,48 @@ namespace TTT.Managers
             //    creates building feature args
             //    calls FeatureBuilder.OnLoadingMapFeature(args)
             //       where BuildAt() instantiates prefab
+
+            if (!_featuresLoaded)
+            {
+                Debug.LogWarning("feature types didn't load");
+            }
+
+            int spawnedCount = 0;
+
+            foreach (var (position, featureId) in _pendingFeatures)
+            {
+                if (
+                    _featureTypesByUniqueId.TryGetValue(
+                        featureId,
+                        out FeatureType featureType
+                    )
+                )
+                {
+                    var args =
+                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    args.Location = position;
+                    args.FeatureType = featureType;
+                    args.OwnedByClient = false;
+                    Debug.Log(args);
+                    BuildingFeatureEvent.Raise(args);
+                    spawnedCount++;
+                }
+                else
+                {
+                    Debug.LogWarning(
+                        $"skipped unknown feature '{featureId}' at {position}"
+                    );
+                }
+            }
+
+            if (spawnedCount > 0)
+            {
+                Debug.Log($"spawned {spawnedCount} features from map data:");
+            }
+
+            _pendingFeatures.Clear();
+        }
+
         private IEnumerator SpawnPendingFeaturesAsync()
         {
             if (!_featuresLoaded)
@@ -379,6 +427,7 @@ namespace TTT.Managers
                     hc.CellPosition.z + corners[0].z
                 )
             );
+            _playerStats.SetSelectedTile(hc);
         }
 
         public void OnNewMap(UnityEngine.Object eventArgs)
@@ -469,6 +518,9 @@ namespace TTT.Managers
                 }
 
                 SeaLevel.Value = _gameMapData.WorldState.SeaLevel;
+                
+                // Load pollution from map data into PlayerStats
+                _playerStats?.LoadPollutionFromMapData(_gameMapData.WorldState.Pollution);
 
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
