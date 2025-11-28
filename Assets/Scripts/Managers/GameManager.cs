@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
@@ -14,6 +15,8 @@ namespace TTT.Managers
 {
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
+        private Queue<WorldState> AIDataQueue = new();
+
         [field: SerializeField]
         public List<PlayerResource> PlayerResources { get; private set; }
 
@@ -28,6 +31,7 @@ namespace TTT.Managers
             "Winter",
         };
 
+        [field: SerializeField]
         public NetworkClient CurrentPlayer { get; private set; }
 
         //serialize for now
@@ -61,7 +65,115 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        public override void Awake()
+        {
+            base.Awake();
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 313.18,
+                    SeaLevel = 14.18079369,
+                    Temp = -22.64326,
+                    Year = 1940,
+                }
+            );
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 313.34,
+                    SeaLevel = 14.35222333,
+                    Temp = -12.24326,
+                    Year = 1941,
+                }
+            );
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 313.34,
+                    SeaLevel = 14.35222333,
+                    Temp = -12.24326,
+                    Year = 1942,
+                }
+            );
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 313.84,
+                    SeaLevel = 14.35732167,
+                    Temp = -16.94326,
+                    Year = 1943,
+                }
+            );
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 313.88,
+                    SeaLevel = 14.18043223,
+                    Temp = -5.54326,
+                    Year = 1944,
+                }
+            );
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 314.63,
+                    SeaLevel = 14.60734743,
+                    Temp = -5.84326,
+                    Year = 1945,
+                }
+            );
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 314.63,
+                    SeaLevel = 14.25638287,
+                    Temp = -16.84326,
+                    Year = 1946,
+                }
+            );
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 314.66,
+                    SeaLevel = 14.4138078,
+                    Temp = -10.64326,
+                    Year = 1947,
+                }
+            );
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 314.88,
+                    SeaLevel = 14.48694413,
+                    Temp = -8.94326,
+                    Year = 1948,
+                }
+            );
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 315.95,
+                    SeaLevel = 14.17366973,
+                    Temp = -1.94326,
+                    Year = 1949,
+                }
+            );
+            AIDataQueue.Enqueue(
+                new()
+                {
+                    Pollution = 315.67,
+                    SeaLevel = 14.36671727,
+                    Temp = 1.35674,
+                    Year = 1950,
+                }
+            );
+        }
+
+        // Start
+        //  is called once
+        //  before the first
+        //  execution of
+        //  Update after the MonoBehaviour is created
         void Start()
         {
             Season = Seasons[0];
