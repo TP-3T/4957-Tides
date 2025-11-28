@@ -6,8 +6,13 @@ using UnityEngine.Events;
 
 namespace TTT.DataClasses.States
 {
+    [CreateAssetMenu(
+        fileName = "PlayerStats",
+        menuName = "Scriptable Objects/Player Stats"
+    )]
     public class PlayerStats : ScriptableObject
     {
+        [Header("Player Resources")]
         [SerializeField]
         private PlayerResource money;
 
