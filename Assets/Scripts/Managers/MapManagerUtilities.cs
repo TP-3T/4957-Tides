@@ -198,7 +198,7 @@ namespace TTT.Managers
                             continue;
                         if (
                             ToFlood.Contains(neighbor)
-                            || FloodQueue.Contains(neighbor)
+                            || FloodQueue.Contains(neighbor) //! po: contains iterates over every single item
                         )
                             continue;
                         if (neighbor.CellPosition.y <= SeaLevel.Value)

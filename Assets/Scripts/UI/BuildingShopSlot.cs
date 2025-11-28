@@ -66,6 +66,8 @@ public class BuildingShopSlot : MonoBehaviour
     public void OnClick()
     {
         InteractModeChange.Raise(
+            // po: this raises an event
+            // and PlayerController has a listener to this
             new InteractionModeChangeEventArgs()
             {
                 NewMode = InteractionMode.BUILDING,
@@ -80,10 +82,7 @@ public class BuildingShopSlot : MonoBehaviour
             return;
 
         // Set feature name
-        if (featureNameText != null)
-        {
-            featureNameText.text = feature.DisplayName;
-        }
+        featureNameText?.text = feature.DisplayName;
 
         // Accumulators for each resource type
         int totalMoneyRevenue = 0;
@@ -101,7 +100,7 @@ public class BuildingShopSlot : MonoBehaviour
 
                 switch (amount.Thing.Name)
                 {
-                    case "money":
+                    case "money": // po: magic string
                         totalMoneyRevenue += value;
                         break;
                     case "pollution":
