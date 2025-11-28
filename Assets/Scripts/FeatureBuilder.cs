@@ -19,6 +19,9 @@ public class FeatureBuilder : MonoBehaviour
     /// </summary>
     public FeatureRuntimeSet SpawnedFeatures;
 
+    [SerializeField]
+    private TTT.DataClasses.States.PlayerStats playerStats;
+
     private const float hexCellPadding = 0.05f;
 
     private readonly float hexCellSize =
@@ -99,6 +102,12 @@ public class FeatureBuilder : MonoBehaviour
         if (ownedByClient && checkForCost)
         {
             DeductCost(featureType);
+        }
+
+        if (ownedByClient)
+        {
+            // Trigger all resource producers for this feature
+            InitializeResourceProducers(featureType);
         }
 
         SpawnedFeatures.Add(feature);
@@ -182,6 +191,28 @@ public class FeatureBuilder : MonoBehaviour
 
             PlayerResource resource = resourceCost.Thing;
             resource.ApplyChange(-resourceCost.Count);
+        }
+    }
+
+    /// <summary>
+    /// Initialize all resource producers for a feature, including automatic pollution emission.
+    /// This calls OnCreated() for each producer defined in the FeatureType.
+    /// </summary>
+    private void InitializeResourceProducers(FeatureType featureType)
+    {
+        // Trigger OnCreated for all defined resource producers
+        if (featureType.ResourceProducers != null)
+        {
+            foreach (var producer in featureType.ResourceProducers)
+            {
+                producer.OnCreated();
+            }
+        }
+
+        // Automatically handle pollution emission if feature has PollutionEmission
+        if (featureType.PollutionEmission != 0 && playerStats != null && playerStats.pollution != null)
+        {
+            playerStats.pollution.ApplyChange(featureType.PollutionEmission);
         }
     }
 

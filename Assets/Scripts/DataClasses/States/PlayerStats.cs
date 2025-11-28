@@ -21,6 +21,11 @@ namespace TTT.DataClasses.States
         [field: SerializeField]
         public PlayerResource population { get; set; }
 
+        [Header("World State")]
+        [Tooltip("CO2/Pollution level - affects sea level rise")]
+        [field: SerializeField]
+        public PlayerResource pollution { get; set; }
+
         [Header("Starting Resources")]
         [SerializeField]
         private int startingMoney = 500;
@@ -30,6 +35,18 @@ namespace TTT.DataClasses.States
 
         [SerializeField]
         private int startingPopulation = 0;
+
+        [SerializeField]
+        private int startingPollution = 0;
+
+        [Header("Sea Level Calculation")]
+        [Tooltip("How much pollution contributes to sea level rise (default: 0.001 = 1mm per ppm)")]
+        [SerializeField]
+        private float pollutionToSeaLevelFactor = 0.001f;
+
+        [Tooltip("Base rate of sea level rise per year regardless of pollution (meters)")]
+        [SerializeField]
+        private float baseSeaLevelRiseRate = 0.05f;
 
         public HexCell? selectedHexCell;
         public TileData selectedTileData;
@@ -60,7 +77,7 @@ namespace TTT.DataClasses.States
 
         public List<PlayerResource> GetAllResources()
         {
-            return new List<PlayerResource> { money, power, population };
+            return new List<PlayerResource> { money, power, population, pollution };
         }
 
         public bool CanAfford(Dictionary<PlayerResource, int> costs)
@@ -94,6 +111,7 @@ namespace TTT.DataClasses.States
             money?.Set(startingMoney);
             power?.Set(startingPower);
             population?.Set(startingPopulation);
+            pollution?.Set(startingPollution);
         }
 
         public void InitializeResources()
@@ -101,6 +119,30 @@ namespace TTT.DataClasses.States
             money?.Set(startingMoney);
             power?.Set(startingPower);
             population?.Set(startingPopulation);
+            pollution?.Set(startingPollution);
+        }
+
+        /// <summary>
+        /// Load pollution value from map data WorldState
+        /// </summary>
+        public void LoadPollutionFromMapData(int pollutionValue)
+        {
+            pollution?.Set(pollutionValue);
+        }
+
+        /// <summary>
+        /// Calculate sea level change based on current pollution levels.
+        /// Called at the end of each year.
+        /// Formula: baseRate + (pollution * factor)
+        /// </summary>
+        public float CalculateSeaLevelFromPollution()
+        {
+            if (pollution == null)
+                return 0f;
+
+            float seaLevelIncrease = baseSeaLevelRiseRate + (pollution.AmountOwned * pollutionToSeaLevelFactor);
+
+            return seaLevelIncrease;
         }
     }
 }

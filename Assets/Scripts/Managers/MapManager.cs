@@ -518,6 +518,9 @@ namespace TTT.Managers
                 }
 
                 SeaLevel.Value = _gameMapData.WorldState.SeaLevel;
+                
+                // Load pollution from map data into PlayerStats
+                _playerStats?.LoadPollutionFromMapData(_gameMapData.WorldState.Pollution);
 
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
