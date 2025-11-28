@@ -3,7 +3,6 @@ using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
 using UnityEngine;
 using UnityEngine.Events;
-
 namespace TTT.DataClasses.States
 {
     [CreateAssetMenu(

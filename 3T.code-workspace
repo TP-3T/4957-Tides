@@ -59,7 +59,7 @@
         //  I've disabled it for now, but we can enable it if we feel its warrented.
         //"editor.defaultFormatter": "csharpier.csharpier-vscode",
         "[csharp]": {
-            "editor.defaultFormatter": "csharpier.csharpier-vscode"
+            "editor.defaultFormatter": "ms-dotnettools.csharp"
         },
         "files.exclude": {
             "**/.DS_Store": true,
