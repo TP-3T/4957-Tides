@@ -1,15 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Data.Common;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Codice.Client.BaseCommands;
 using Newtonsoft.Json;
 using TMPro;
 using TTT.DataClasses.MapData;
-using Unity.VisualScripting.YamlDotNet.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 using static TTT.Helpers.MapDatabaseService;
@@ -18,6 +12,9 @@ namespace TTT.UI
 {
     public class MapBrowser : MonoBehaviour
     {
+        [SerializeField]
+        private MainMenu MainMenu;
+
         [SerializeField]
         public GameObject MapListItem;
 
@@ -105,18 +102,55 @@ namespace TTT.UI
                     selectedMapId = mapId;
                     Debug.Log($"Selected Map ID: {selectedMapId}");
 
-                    // if (DBMapIds.TryGetValue(mapName, out int mapId))
-                    // {
-                    //     selectedMapId = mapId;
-                    //     Debug.Log($"Selected Map ID: {selectedMapId}");
-                    //     // mapId.ToString();
-                    // }
-                    // else
-                    // {
-                    //     Debug.LogError(
-                    //         $"Map name '{mapName}' not found in DBMapIds dictionary."
-                    //     );
-                    // }
+                    if (toggle.transform.IsChildOf(DBContent.transform))
+                    {
+                        Debug.Log(
+                            "Map selected from online DB, fetching data..."
+                        );
+                        StartCoroutine(
+                            FetchMapByMapId(
+                                selectedMapId,
+                                onSuccess: (mapData) =>
+                                {
+                                    Debug.Log(
+                                        $"Map Data fetched for Map ID: {selectedMapId}"
+                                    );
+
+                                    MapData mapJson =
+                                        JsonConvert.DeserializeObject<MapData>(
+                                            mapData
+                                        );
+
+                                    string localPath = $"{selectedMapId}";
+
+                                    File.WriteAllText(
+                                        "./Assets/Resources/"
+                                            + localPath
+                                            + ".json",
+                                        JsonConvert.SerializeObject(
+                                            mapJson,
+                                            Formatting.Indented
+                                        )
+                                    );
+                                    MainMenu.selectedMap = localPath;
+
+                                    Debug.Log($"Map data saved to {localPath}");
+                                },
+                                onError: (error) =>
+                                {
+                                    Debug.LogError(
+                                        $"Failed to fetch map data: {error}"
+                                    );
+                                }
+                            )
+                        );
+                    }
+                    else
+                    {
+                        Debug.Log(
+                            "Map selected from local files, no fetch needed."
+                        );
+                    }
                 }
             }
         }
