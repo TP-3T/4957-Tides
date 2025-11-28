@@ -84,11 +84,16 @@ namespace TTT.Player
             if (IsOwner)
             {
                 transform.position = startingPosition;
-                //! CB: We don't handle the not-null case. This causes silent errors.
                 if (playerCamera != null)
                 {
                     playerCamera.enabled = true;
                     Debug.Log("Enable camera for local player");
+                }
+                else
+                {
+                    Debug.LogError(
+                        $"PlayerController on {gameObject.name} playerCamera is not assigned"
+                    );
                 }
             }
         }
@@ -231,6 +236,7 @@ namespace TTT.Player
 
         public void CheckIfPlayerHasLost()
         {
+            //? po: should these check for null?
             if (
                 GameManager.Instance.CO2 > maxCO2
                 || GameManager.Instance.Temperature > maxTemperature
