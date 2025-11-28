@@ -52,6 +52,7 @@ namespace TTT.Managers
         private NetworkVariable<ulong> _seaMeshId = new();
         private MapData _gameMapData;
         private const int CellsPerFrame = 25;
+        private float _hexMaxHeight = 0;
 
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
@@ -384,7 +385,12 @@ namespace TTT.Managers
 
             _pendingFeatures.Clear();
             _mapLoadFinishEvent.Raise(
-                new NewMapFinishedEventArgs() { WasSuccessful = true }
+                new NewMapFinishedEventArgs()
+                {
+                    WasSuccessful = true,
+                    MaxMapHeight = _hexMaxHeight,
+                    SeaLevel = SeaLevel.Value,
+                }
             );
         }
 
@@ -457,6 +463,11 @@ namespace TTT.Managers
                         if (tileData.Elevation < 0)
                         {
                             tileData.Elevation = 0;
+                        }
+
+                        if (tileData.Elevation > _hexMaxHeight)
+                        {
+                            _hexMaxHeight = tileData.Elevation;
                         }
 
                         OffsetCoordinates offset = new(x, z);
