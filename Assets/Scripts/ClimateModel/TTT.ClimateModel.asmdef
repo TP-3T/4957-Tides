@@ -2,7 +2,11 @@
     "name": "TTT.ClimateModel",
     "rootNamespace": "TTT.ClimateModel",
     "references": [
-        "GUID:33fa1a77a93c87a4cae970e1e487bb77"
+        "GUID:33fa1a77a93c87a4cae970e1e487bb77",
+        "GUID:8600c83db57f44fe2aa05f4cf22420bf",
+        "GUID:effe5775fa53c49a39f54ea0433a395b",
+        "GUID:0c2a693589505475cb8d7d2c2778d73c",
+        "GUID:677a846102848427fa0368d4c11dc74a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

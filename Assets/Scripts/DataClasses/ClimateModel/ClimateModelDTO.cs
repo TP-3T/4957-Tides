@@ -5,10 +5,12 @@ namespace TTT.DataClasses.ClimateModel
         public double currTemperatureCelsius;
         public double currSeaLevelMetres;
         public double currAtmosphericCO2ConcentrationPpm;
-        public double changeInTimeYears;
+
+        // currently not adjustable due to the way model was trained (trained to predict values 3 months later)
+        // public int changeInTimeYears;
     }
 
-    public struct ClimateModelOutputDTO
+    public struct ClimateModelOutput
     {
         public double futureTemperatureCelsius;
         public double futureSeaLevelMetres;

@@ -23,7 +23,7 @@ namespace TTT.ClimateModel
     ///
     // Energy balance of Earth is achieved when ASR == OLR, global warming occurs when OLR has to increase to be equal to ASR.
     /// </summary>
-    public sealed class ClimatePredictionModel
+    public sealed class PhysicsModel
     {
         private static readonly int _NUM_SECONDS_IN_MIN = 60;
         private static readonly int _NUM_SECONDS_IN_HOUR = 60;
@@ -126,64 +126,53 @@ namespace TTT.ClimateModel
 
         private static readonly double _NO_SEA_LEVEL_RISE_VALUE = 0.0;
 
-        public ClimateModelOutputDTO CalculateFutureClimateValues(
-            ClimateModelInputDTO inputDTO
-        )
-        {
-            //TODO: add validation of inputDTO values
+        // public ClimateModelOutput CalculateFutureClimateValues(
+        //     ClimateModelInput input
+        // )
+        // {
+        //     double changeInTimeSeconds =
+        //         input.changeInTimeYears * _NUM_SECONDS_IN_YEAR;
 
-            // Convert to useable units
-            double currTempKelvin =
-                inputDTO.currTemperatureCelsius
-                + _CELSIUS_KELVIN_CONVERSION_VALUE;
+        //     // Calculate future temperature
+        //     double futureTempCelsius = CalculateFutureTemperature(
+        //         input.currTemperatureCelsius,
+        //         changeInTimeSeconds,
+        //         input.currAtmosphericCO2ConcentrationPpm
+        //     );
 
-            double changeInTimeSeconds =
-                inputDTO.changeInTimeYears * _NUM_SECONDS_IN_YEAR;
+        //     // Calculate future sea level
+        //     double futureSeaLevelMM = CalculateFutureSeaLevel(
+        //         input.currSeaLevelMM,
+        //         input.currTemperatureCelsius,
+        //         input.changeInTimeYears
+        //     );
 
-            // Calculate future temperature
-            double futureTempKelvin = CalculateFutureTemperature(
-                currTempKelvin,
-                changeInTimeSeconds,
-                inputDTO.currAtmosphericCO2ConcentrationPpm
-            );
+        //     ClimateModelOutput output = new()
+        //     {
+        //         futureTemperatureCelsius = futureTempCelsius,
+        //         futureSeaLevelMM = futureSeaLevelMM,
+        //     };
 
-            double futureTempCelsius =
-                futureTempKelvin - _CELSIUS_KELVIN_CONVERSION_VALUE;
-
-            double currSeaLevelMM =
-                inputDTO.currSeaLevelMetres * _NUM_MM_PER_METRE;
-
-            // Calculate future sea level
-            double futureSeaLevelMM = CalculateFutureSeaLevel(
-                currSeaLevelMM,
-                currTempKelvin,
-                inputDTO.changeInTimeYears
-            );
-
-            double futureSeaLevelMetres = futureSeaLevelMM / _NUM_MM_PER_METRE;
-
-            ClimateModelOutputDTO outputDTO = new()
-            {
-                futureTemperatureCelsius = futureTempCelsius,
-                futureSeaLevelMetres = futureSeaLevelMetres,
-            };
-
-            return outputDTO;
-        }
+        //     return output;
+        // }
 
         /// <summary>
-        /// Calculate the future value of temperature (Kelvin) from the current global average temperature (celcius) and CO2 radiative forcing (Watts / metre^2), as well as the amount of time elapsed in years.
+        /// Calculate the future value of temperature (Celsius) from the current global average temperature (celcius) and CO2 radiative forcing (Watts / metre^2), as well as the amount of time elapsed in years.
         /// </summary>
         /// <param name="currTempKelvin"></param>
         /// <param name="changeInTimeSeconds"></param>
         /// <param name="currAtmosphericCO2ConcentrationPpm"></param>
-        /// <returns></returns>
-        private static double CalculateFutureTemperature(
-            double currTempKelvin,
-            double changeInTimeSeconds,
+        /// <returns>futureTempCelsius a double</returns>
+        public double CalculateFutureTemperature(
+            double currTemperatureCelsius,
+            double changeInTimeYears,
             double currAtmosphericCO2ConcentrationPpm
         )
         {
+            double currTempKelvin = CelsiusToKelvin(currTemperatureCelsius);
+
+            double changeInTimeSeconds = YearsToSeconds(changeInTimeYears);
+
             double CO2RadiativeForcingWattsPerSquareMetre =
                 CalculateRadiativeForcing(currAtmosphericCO2ConcentrationPpm);
 
@@ -199,7 +188,9 @@ namespace TTT.ClimateModel
 
             double futureTempKelvin = currTempKelvin + changeInTempKelvin;
 
-            return futureTempKelvin;
+            double futureTempCelsius = KelvinToCelsius(futureTempKelvin);
+
+            return futureTempCelsius;
         }
 
         /// <summary>
@@ -209,12 +200,14 @@ namespace TTT.ClimateModel
         /// <param name="currTempKelvin"></param>
         /// <param name="changeInTimeYears"></param>
         /// <returns></returns>
-        private static double CalculateFutureSeaLevel(
+        public double CalculateFutureSeaLevel(
             double currSeaLevelMM,
-            double currTempKelvin,
+            double currTemperatureCelsius,
             double changeInTimeYears
         )
         {
+            double currTempKelvin = CelsiusToKelvin(currTemperatureCelsius);
+
             // Calculate temperature anomaly relative to pre-industrial baseline
             double tempAnomaly = currTempKelvin - _PRE_INDUSTRIAL_TEMP_KELVIN;
 
@@ -233,6 +226,40 @@ namespace TTT.ClimateModel
             double futureSeaLevelMM = currSeaLevelMM + totalSeaLevelRiseMM;
 
             return futureSeaLevelMM;
+        }
+
+        private static double YearsToSeconds(double years)
+        {
+            double seconds = years * _NUM_SECONDS_IN_YEAR;
+            return seconds;
+        }
+
+        /// <summary>
+        /// Converts Celsius to Kelvin.
+        /// </summary>
+        /// <param name="currTemperatureCelsius"></param>
+        /// <returns></returns>
+        private static double CelsiusToKelvin(double currTemperatureCelsius)
+        {
+            // Convert C to kelvin
+            double currTempKelvin =
+                currTemperatureCelsius + _CELSIUS_KELVIN_CONVERSION_VALUE;
+
+            return currTempKelvin;
+        }
+
+        /// <summary>
+        /// Converts Kelvin to Celsius.
+        /// </summary>
+        /// <param name="currTemperatureCelsius"></param>
+        /// <returns></returns>
+        private static double KelvinToCelsius(double currTempKelvin)
+        {
+            // Convert C to kelvin
+            double currTemperatureCelsius =
+                currTempKelvin - _CELSIUS_KELVIN_CONVERSION_VALUE;
+
+            return currTemperatureCelsius;
         }
 
         /// <summary>

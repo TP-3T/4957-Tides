@@ -1,0 +1,20 @@
+{
+    "CO2 (ppm)": "f0",
+    "TEMP (deg C)": "f1",
+    "Absolute GMSL (mm) relative to Jan 1950": "f2",
+    "CO2_3m_ago": "f3",
+    "CO2_6m_ago": "f4",
+    "CO2_12m_ago": "f5",
+    "CO2_5y_ago": "f6",
+    "CO2_10y_ago": "f7",
+    "TEMP_3m_ago": "f8",
+    "TEMP_6m_ago": "f9",
+    "TEMP_12m_ago": "f10",
+    "TEMP_5y_ago": "f11",
+    "TEMP_10y_ago": "f12",
+    "GMSL_3m_ago": "f13",
+    "GMSL_6m_ago": "f14",
+    "GMSL_12m_ago": "f15",
+    "GMSL_5y_ago": "f16",
+    "GMSL_10y_ago": "f17"
+}
