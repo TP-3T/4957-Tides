@@ -72,7 +72,8 @@ public class FeatureBuilder : MonoBehaviour
     {
         if (!CheckIfCanBuild(location, featureType))
         {
-            Debug.Log("Tried to build but failed due to constraints");
+            //po: emit event to say build fail??
+            Debug.Log($"Tried to build but failed due to constraints: {featureType.name}");
             return;
         }
 
