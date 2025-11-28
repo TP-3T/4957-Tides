@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3942152717
+  GlobalObjectIdHash: 2492282697
   InScenePlacedSourceGlobalObjectIdHash: 2492282697
   DeferredDespawnTick: 0
   Ownership: 1
@@ -263,7 +263,7 @@ MonoBehaviour:
   cameraController: {fileID: 486052804758396404}
   playerBuildings: {fileID: 11400000, guid: 13341c7795559b74d98b04f151a7cf36, type: 2}
   statusText: {fileID: 3634904318793529691}
-  maxC02: 500
+  maxCO2: 500
   maxTemperature: 50
   FeatureType: {fileID: 0}
   InteractModeChange: {fileID: 11400000, guid: 53831617160b4ed4f9fe4ba754f965d8, type: 2}
