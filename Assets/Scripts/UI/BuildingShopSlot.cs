@@ -82,7 +82,10 @@ public class BuildingShopSlot : MonoBehaviour
             return;
 
         // Set feature name
-        featureNameText?.text = feature.DisplayName;
+        if (featureNameText != null)
+        {
+            featureNameText.text = feature.DisplayName;
+        }
 
         // Accumulators for each resource type
         int totalMoneyRevenue = 0;
