@@ -315,7 +315,7 @@ namespace TTT.Managers
 
             if (spawnedCount > 0)
             {
-                Debug.Log($"Spawned {spawnedCount} features from map data:");
+                Debug.Log($"spawned {spawnedCount} features from map data:");
             }
 
             _pendingFeatures.Clear();
@@ -351,6 +351,7 @@ namespace TTT.Managers
                         ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                     args.Location = position;
                     args.FeatureType = featureType;
+                    args.OwnedByClient = false;
                     BuildingFeatureEvent.Raise(args);
                     spawnedCount++;
 
