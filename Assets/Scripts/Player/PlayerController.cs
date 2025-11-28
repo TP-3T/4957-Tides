@@ -20,7 +20,7 @@ namespace TTT.Player
     public class PlayerController : NetworkBehaviour
     {
         const int LeftMouseIndex = 0;
-        const float CLICK_THRESHOLD = 5f; // Max pixel movement to still be considered a click
+        const float CLICK_THRESHOLD = 50f; // Max pixel movement to still be considered a click
 
         [SerializeField]
         private Camera playerCamera;
@@ -154,6 +154,7 @@ namespace TTT.Player
                 // Don't process world clicks when clicking on UI
                 if (IsMouseOverUI())
                 {
+                    Debug.Log("Mouse over UI, not processing world click");
                     return;
                 }
 
@@ -164,6 +165,7 @@ namespace TTT.Player
                 );
                 if (mouseMovement > CLICK_THRESHOLD)
                 {
+                    Debug.Log(mouseMovement);
                     // This was a drag, not a click - don't select tile
                     return;
                 }

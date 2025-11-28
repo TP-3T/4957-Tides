@@ -119,6 +119,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &9407387 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6397391460662783347, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+  m_PrefabInstance: {fileID: 378512690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9407388 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1799127629145147433, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+  m_PrefabInstance: {fileID: 378512690}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9407387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68836ba971555cb4fb1573521aa27d17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9407390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9407387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9407388}
+        m_TargetAssemblyTypeName: WaterLevelControl, UI
+        m_MethodName: OnNewMapFinish
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &131650463
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,11 +442,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 187074380046838774, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.5333476
       objectReference: {fileID: 0}
     - target: {fileID: 187074380046838774, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 187074380046838774, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_Material
@@ -464,10 +508,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 270.03
       objectReference: {fileID: 0}
-    - target: {fileID: 1694981210338151714, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
-      propertyPath: playerStats
+    - target: {fileID: 1799127629145147433, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: _mapLoadFinishEvent
       value: 
-      objectReference: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
+      objectReference: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
     - target: {fileID: 1936459664457822305, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -526,7 +570,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2315601190507965176, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -19.479998
+      value: -19.479967
       objectReference: {fileID: 0}
     - target: {fileID: 2609288784758197636, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -772,10 +816,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7247585742544391720, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
-      propertyPath: playerStats
-      value: 
-      objectReference: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
+    - target: {fileID: 7644184439523603021, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7644184439523603021, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 720
+      objectReference: {fileID: 0}
+    - target: {fileID: 7644184439523603021, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7644184439523603021, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -40
+      objectReference: {fileID: 0}
     - target: {fileID: 8334036783884920230, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -793,7 +849,10 @@ PrefabInstance:
     - {fileID: 6633429741227152748, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
     - {fileID: 3770610158786676996, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6397391460662783347, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9407390}
   m_SourcePrefab: {fileID: 100100000, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
 --- !u!1001 &663475069
 PrefabInstance:
@@ -1066,29 +1125,9 @@ PrefabInstance:
       value: MapManager
       objectReference: {fileID: 0}
     - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
-      propertyPath: _playerStats
+      propertyPath: SpawnedFeatures
       value: 
-      objectReference: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
-    - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
-      propertyPath: onFloodEnded
-      value: 
-      objectReference: {fileID: 11400000, guid: 8586b1eb5129a444b83130c75a324c08, type: 2}
-    - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
-      propertyPath: BuildingFeatureEvent
-      value: 
-      objectReference: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
-    - target: {fileID: 7227047647059873641, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
-      propertyPath: Event
-      value: 
-      objectReference: {fileID: 11400000, guid: 9438c37d1b6c53b408804b0dce45c597, type: 2}
-    - target: {fileID: 7227047647059873641, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
-      propertyPath: Response.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnNewMap
-      objectReference: {fileID: 0}
-    - target: {fileID: 7227047647059873641, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
-      propertyPath: Response.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TTT.Managers.MapManager, TTT.Managers
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 13341c7795559b74d98b04f151a7cf36, type: 2}
     - target: {fileID: 7330801835676113482, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1524,7 +1563,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1884853060
 MonoBehaviour:
@@ -1783,7 +1822,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2189260201799044924, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
