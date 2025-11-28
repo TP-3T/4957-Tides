@@ -150,34 +150,49 @@ namespace TTT.Managers
         {
             SeaLevel.Value += RisingRate.Value;
 
+            // clear hash sets at the start of each flood cycle
+            _toFloodSet.Clear();
+            _floodQueueSet.Clear();
+
+            // rebuild hash sets from existing queue contents
+            foreach (var cell in ToFlood)
+                _toFloodSet.Add(cell.CellCubeCoordinates);
+            foreach (var cell in FloodQueue)
+                _floodQueueSet.Add(cell.CellCubeCoordinates);
+
             while (true)
             {
-                // string test2 = "";
-                // foreach (var hxc in ToFlood) test2 += $"{hxc}\n";
-                // Debug.Log(test2);
-                // Debug.Log($"{FloodQueue.Count}, {ToFlood.Count}");
-
                 // --- 1. Flood queue is empty, go through neighbours that were not eligible for flooding and see if they will be ---
                 if (ToFlood.Count == 0)
                 {
                     while (FloodQueue.Count > 0)
                     {
                         HexCell test = FloodQueue.Dequeue();
+                        _floodQueueSet.Remove(test.CellCubeCoordinates);
 
                         if (
                             test.CellPosition.y
                             <= (SeaLevel.Value + RisingRate.Value)
                         )
+                        {
                             ToFlood.Enqueue(test);
+                            _toFloodSet.Add(test.CellCubeCoordinates);
+                        }
                         else
-                            AboveSeaLevelQueue.Enqueue(test);
+                        {
+                            FloodQueue2.Enqueue(test);
+                        }
                     }
 
-                    while (AboveSeaLevelQueue.Count > 0)
-                        FloodQueue.Enqueue(AboveSeaLevelQueue.Dequeue());
+                    // transfer FloodQueue2 back to FloodQueue and clear (!) FloodQueue2
+                    while (FloodQueue2.Count > 0)
+                    {
+                        var cell = FloodQueue2.Dequeue();
+                        FloodQueue.Enqueue(cell);
+                        _floodQueueSet.Add(cell.CellCubeCoordinates);
+                    }
 
                     Debug.Log("Flood fill cycle complete");
-
                     break;
                 }
 
@@ -187,6 +202,8 @@ namespace TTT.Managers
                 while (ToFlood.Count > 0 && cellCount < CellsPerFrame)
                 {
                     HexCell cell = ToFlood.Dequeue();
+                    _toFloodSet.Remove(cell.CellCubeCoordinates);
+
                     FloodCell(ref cell);
                     flooded.Add(cell);
 
@@ -195,15 +212,25 @@ namespace TTT.Managers
                     {
                         if (neighbor.Flooded)
                             continue;
+
+                        var coords = neighbor.CellCubeCoordinates;
+                        // po: hash set lookups instead of .Contains() FASTER!!
                         if (
-                            ToFlood.Contains(neighbor)
-                            || FloodQueue.Contains(neighbor) //! po: contains iterates over every single item
+                            _toFloodSet.Contains(coords)
+                            || _floodQueueSet.Contains(coords)
                         )
                             continue;
+
                         if (neighbor.CellPosition.y <= SeaLevel.Value)
+                        {
                             ToFlood.Enqueue(neighbor);
+                            _toFloodSet.Add(coords);
+                        }
                         else
+                        {
                             FloodQueue.Enqueue(neighbor);
+                            _floodQueueSet.Add(coords);
+                        }
                     }
 
                     cellCount++;

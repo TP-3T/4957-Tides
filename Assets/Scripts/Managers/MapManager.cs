@@ -64,6 +64,8 @@ namespace TTT.Managers
         );
         public Queue<HexCell> ToFlood = new();
         public Queue<HexCell> FloodQueue = new();
+        private HashSet<CubeCoordinates> _toFloodSet = new(); // po: hash sets to do .contains() checks during flood fill
+        private HashSet<CubeCoordinates> _floodQueueSet = new();
         public Queue<HexCell> AboveSeaLevelQueue = new();
         public NetworkVariable<float> SeaLevel = new(0.0f);
         public NetworkVariable<float> RisingRate = new(1.0f);
