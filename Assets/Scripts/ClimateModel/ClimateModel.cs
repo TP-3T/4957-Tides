@@ -54,11 +54,11 @@ namespace TTT.ClimateModel
             if (
                 (
                     modelInput.currSeaLevelMM
-                    > MLModel.TRAINING_DATASET_GMSL_LOWER_BOUND
+                    >= MLModel.TRAINING_DATASET_GMSL_LOWER_BOUND
                 )
                 && (
                     modelInput.currSeaLevelMM
-                    < MLModel.TRAINING_DATASET_GMSL_UPPER_BOUND
+                    <= MLModel.TRAINING_DATASET_GMSL_UPPER_BOUND
                 )
             )
             {

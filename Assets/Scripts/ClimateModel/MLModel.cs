@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using TTT.DataClasses.ClimateModel;
@@ -12,7 +15,6 @@ namespace TTT.ClimateModel
 {
     public sealed class MLModel
     {
-        private readonly InferenceSession _onnxInferenceSession;
         private static readonly string _MODEL_FILE_NAME = "xgboost_model.onnx";
 
         private static readonly string _MODEL_PATH;
@@ -22,6 +24,52 @@ namespace TTT.ClimateModel
 
         public static readonly double TRAINING_DATASET_GMSL_UPPER_BOUND =
             165.2076002;
+
+        // // ML model only ready to use once
+        // public static Boolean readyToUse;
+
+        private static readonly List<string> _modelInputFeatureNames = new()
+        {
+            "CO2 (ppm)",
+            "TEMP (deg C)",
+            "Absolute GMSL (mm) relative to Jan 1950",
+            "CO2_12m_ago",
+            "CO2_5y_ago",
+            "CO2_10y_ago",
+            "TEMP_12m_ago",
+            "TEMP_5y_ago",
+            "TEMP_10y_ago",
+            "GMSL_12m_ago",
+            "GMSL_5y_ago",
+            "GMSL_10y_ago",
+        };
+
+        // private static readonly Dictionary<
+        //     string,
+        //     Func<ClimateModelInput, float>
+        // > _featureValueMap = new()
+        // {
+        //     {
+        //         "CO2 (ppm)",
+        //         input => (float)input.currAtmosphericCO2ConcentrationPpm
+        //     },
+        //     { "TEMP (deg C)", input => (float)input.currTemperatureCelsius },
+        //     {
+        //         "Absolute GMSL (mm) relative to Jan 1950",
+        //         input => (float)input.currSeaLevelMM
+        //     },
+        //     { "CO2_12m_ago", input => (float)input.CO2_12m_ago },
+        //     { "CO2_5y_ago", input => (float)input.CO2_5y_ago },
+        //     { "CO2_10y_ago", input => (float)input.CO2_10y_ago },
+        //     { "TEMP_12m_ago", input => (float)input.TEMP_12m_ago },
+        //     { "TEMP_5y_ago", input => (float)input.TEMP_5y_ago },
+        //     { "TEMP_10y_ago", input => (float)input.TEMP_10y_ago },
+        //     { "GMSL_12m_ago", input => (float)input.GMSL_12m_ago },
+        //     { "GMSL_5y_ago", input => (float)input.GMSL_5y_ago },
+        //     { "GMSL_10y_ago", input => (float)input.GMSL_10y_ago },
+        // };
+
+        private readonly InferenceSession _onnxInferenceSession;
 
         static MLModel()
         {
@@ -45,7 +93,13 @@ namespace TTT.ClimateModel
 
         public double PredictFutureSeaLevel(ClimateModelInput input)
         {
-            //             {
+            // Calculate the features used for model inputs
+            Dictionary<string, float> _modelInputFeatures =
+                _modelInputFeatureNames.ToDictionary(
+                    name => name,
+                    name => _featureValueMap[name](input)
+                );
+
             //     "CO2 (ppm)": "f0",
             //     "TEMP (deg C)": "f1",
             //     "Absolute GMSL (mm) relative to Jan 1950": "f2",
@@ -64,7 +118,6 @@ namespace TTT.ClimateModel
             //     "GMSL_12m_ago": "f15",
             //     "GMSL_5y_ago": "f16",
             //     "GMSL_10y_ago": "f17"
-            // }
         }
     }
 }
