@@ -26,10 +26,10 @@ MonoBehaviour:
     <FeatureConstraints>k__BackingField: []
   <BuildValidator>k__BackingField: {fileID: 11400000, guid: 415d8be488ae7e54388aaea4cfe19dc7, type: 2}
   <ResourceProducers>k__BackingField:
-  - productionSchedule: {fileID: 11400000, guid: edef3b431516b8048a30517cd2383a7b, type: 2}
-    resourceAmounts:
-    - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-      <Count>k__BackingField: 35
+  - <ProductionSchedule>k__BackingField: {fileID: 11400000, guid: eef1b438675876e41856cf2125b2b9c9, type: 2}
+    <ResourceAmounts>k__BackingField:
+    - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+      <Count>k__BackingField: 1
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
     <Count>k__BackingField: 67
