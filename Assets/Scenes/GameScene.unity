@@ -237,7 +237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2315601190507965176, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -19.47997
+      value: -19.48003
       objectReference: {fileID: 0}
     - target: {fileID: 2540338663754247135, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: SyncRotAngleX
@@ -808,6 +808,10 @@ PrefabInstance:
     - target: {fileID: 2356306980104920488, guid: 897fad17376beb44da7e5f8638f4b74d, type: 3}
       propertyPath: NetworkConfig.PlayerPrefab
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287792316253268995, guid: 897fad17376beb44da7e5f8638f4b74d, type: 3}
+      propertyPath: ConnectionData.Port
+      value: 6768
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

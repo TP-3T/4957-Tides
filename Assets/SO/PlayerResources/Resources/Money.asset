@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Money
   m_EditorClassIdentifier: 
   resourceName: money
-  amountOwned: 1715
+  amountOwned: 1000000000

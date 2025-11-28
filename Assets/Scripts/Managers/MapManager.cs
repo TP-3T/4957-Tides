@@ -78,6 +78,7 @@ namespace TTT.Managers
 
         private List<(Vector3 position, string featureId)> _pendingFeatures =
             new();
+        
         private bool _featuresLoaded = false;
 
         void Start()
@@ -123,7 +124,7 @@ namespace TTT.Managers
                 new("P_SeaMesh"),
                 SpawnSeaMesh
             );
-        }
+            }
 
         private void SpawnGridMesh(GameObject hm)
         {
@@ -266,63 +267,11 @@ namespace TTT.Managers
             }
         }
 
-        private void SpawnPendingFeatures()
-        {
-            // po: the idea is that
-            // OnNewMap() parses json
-            // then on each tile with feature != null
-            //   adds (position, featureId) to pending features,
-            // then spawnMapObjects() creates mesh prefabs
-            // then TriangulateWhatever() makes visual mesh
-            // then SpawnPendingFeatures()
-            //    looks up feature id in feature types by unique id
-            //    creates building feature args
-            //    calls FeatureBuilder.OnLoadingMapFeature(args)
-            //       where BuildAt() instantiates prefab
-
-            if (!_featuresLoaded)
-            {
-                Debug.LogWarning("feature types didn't load");
-            }
-
-            int spawnedCount = 0;
-
-            foreach (var (position, featureId) in _pendingFeatures)
-            {
-                if (
-                    _featureTypesByUniqueId.TryGetValue(
-                        featureId,
-                        out FeatureType featureType
-                    )
-                )
-                {
-                    var args =
-                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-                    args.Location = position;
-                    args.FeatureType = featureType;
-                    args.OwnedByClient = false;
-                    Debug.Log(args);
-                    BuildingFeatureEvent.Raise(args);
-                    spawnedCount++;
-                }
-                else
-                {
-                    Debug.LogWarning(
-                        $"skipped unknown feature '{featureId}' at {position}"
-                    );
-                }
-            }
-
-            if (spawnedCount > 0)
-            {
-                Debug.Log($"spawned {spawnedCount} features from map data:");
-            }
-
-            _pendingFeatures.Clear();
-        }
-
+        // WO: I am going to krill myself 🦐 🔫
         private IEnumerator SpawnPendingFeaturesAsync()
         {
+            Debug.Log($"{NetworkManager.Singleton.LocalClientId}, {_pendingFeatures.Count}");
+
             if (!_featuresLoaded)
             {
                 Debug.LogWarning("feature types didn't load");
@@ -330,7 +279,7 @@ namespace TTT.Managers
             }
 
             int spawnedCount = 0;
-            int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smooth-ish loading
+            int spawnsPerFrame = 25; // Spawn 50 buildings per frame for smooth-ish loading
             Dictionary<string, int> featureTypeCounts =
                 new Dictionary<string, int>();
 
@@ -351,7 +300,7 @@ namespace TTT.Managers
                         ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                     args.Location = position;
                     args.FeatureType = featureType;
-                    args.OwnedByClient = false;
+                    args.OwnedByClient = true;
                     BuildingFeatureEvent.Raise(args);
                     spawnedCount++;
 
@@ -361,7 +310,7 @@ namespace TTT.Managers
                     featureTypeCounts[featureId]++;
 
                     // Yield every X spawns to maintain framerate
-                    //Kinda doesn't work :/
+                    //Kinda doesn't work :/         😔😔😔😔
                     if (spawnedCount % spawnsPerFrame == 0)
                     {
                         yield return null; // Wait one frame
@@ -384,7 +333,7 @@ namespace TTT.Managers
                 }
             }
 
-            _pendingFeatures.Clear();
+            // _pendingFeatures.Clear();      // POTENTIALLY AN ISSUE, CLIENT 2
             _mapLoadFinishEvent.Raise(
                 new NewMapFinishedEventArgs()
                 {
@@ -395,14 +344,14 @@ namespace TTT.Managers
             );
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void StartRaiseSeaServerRpc()
         {
             StopAllCoroutines();
             StartCoroutine(RaiseSea());
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void OnMapMeshClickedServerRpc(Vector3 point, Color newColor)
         {
             int index = GetCellIndexFromPosition(point);

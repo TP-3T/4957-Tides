@@ -107,7 +107,7 @@ namespace TTT.DataClasses.States
 
         public void ResetResources()
         {
-            money?.Set(0);
+            money?.Set(100000000);
             power?.Set(0);
             population?.Set(0);
             NotifyResourcesChanged();
