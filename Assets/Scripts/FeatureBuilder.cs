@@ -34,7 +34,8 @@ public class FeatureBuilder : MonoBehaviour
         TryToBuild(
             FixLocation(bfArgs.Location),
             bfArgs.FeatureType,
-            bfArgs.OwnedByClient
+            bfArgs.OwnedByClient,
+            bfArgs.CheckForCost
         );
     }
 
@@ -67,13 +68,24 @@ public class FeatureBuilder : MonoBehaviour
     private void TryToBuild(
         Vector3 location,
         FeatureType featureType,
-        bool ownedByClient
+        bool ownedByClient,
+        bool checkForCost
     )
     {
+        if (ownedByClient && checkForCost && !CheckCost(featureType))
+        {
+            // then the player is too poor
+            Debug.Log($"Sorry, you're too poor");
+            return;
+        }
+
         if (!CheckIfCanBuild(location, featureType))
         {
             //po: emit event to say build fail??
-            Debug.Log($"Tried to build but failed due to constraints: {featureType.name}");
+            // ? ro: yes good idea so we can tell the player about it
+            Debug.Log(
+                $"Tried to build but failed due to constraints: {featureType.name}"
+            );
             return;
         }
 
@@ -99,12 +111,6 @@ public class FeatureBuilder : MonoBehaviour
         if (allFeatures.Any(feat => feat.CellPosition.Equals(location)))
         {
             // then there's already something at this location
-            return false;
-        }
-
-        if (!CheckCost(featureType))
-        {
-            // then the player is too poor
             return false;
         }
 
