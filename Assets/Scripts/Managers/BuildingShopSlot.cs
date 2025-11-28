@@ -213,6 +213,7 @@ public class BuildingShopSlot : MonoBehaviour
         }
     }
 
+    // po: do we *need* to check if x > 0 in these methods? do we have anything that costs zero?
     private void SetMoneyRevDisplay(int revenue)
     {
         if (revenue > 0)

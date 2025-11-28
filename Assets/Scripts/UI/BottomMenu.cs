@@ -198,6 +198,7 @@ namespace TTT.UI
             );
             BuildingShopSlot slot = slotObject.GetComponent<BuildingShopSlot>();
             slot.feature = feature;
+            // po: should this call slot.UpdateText(); like in UIManager?
 
             tabSlots[tab].Add(slotObject);
         }
