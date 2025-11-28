@@ -85,8 +85,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - ui
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bb7f629c41bf6934797fb89b6d81cc7b
-    m_Address: B_LumberMill
+  - m_GUID: d2fc9cdc2eae8f04181273b343e0526f
+    m_Address: B_Nuclear
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
@@ -96,8 +96,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e2ffd29714beea942bb4d985d389ee17
-    m_Address: B_NuclearReactor
+  - m_GUID: e5d9312cc2bc86247ba1cd8b25efa927
+    m_Address: B_Wind
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
@@ -106,18 +106,6 @@ MonoBehaviour:
     m_Address: UI_MainMenuButton
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d2fc9cdc2eae8f04181273b343e0526f
-    m_Address: B_Nuclear
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - building
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e5d9312cc2bc86247ba1cd8b25efa927
-    m_Address: B_Wind
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - building
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: dc847a122f093dc4080e470c320f582d, type: 2}

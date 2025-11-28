@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using TMPro;
-using TTT.DataClasses.MapData;
+using TTT.DataClasses.HexData;
 using UnityEngine;
 using UnityEngine.UI;
 using static TTT.Helpers.MapDatabaseService;

@@ -196,8 +196,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 390062815303467513}
   m_HandleRect: {fileID: 8853050869253269371}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.604272
+  m_Value: 1.0000002
+  m_Size: 0.60427195
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -471,10 +471,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f3e26a03b0a6a46807596316013acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MainMenu: {fileID: 0}
   MapListItem: {fileID: 2739810593838222899, guid: 8cf7e7b6af968d24b8944e79276e879a, type: 3}
-  DBContent: {fileID: 0}
-  LocalContent: {fileID: 0}
+  DBContent: {fileID: 319537020150102321}
+  LocalContent: {fileID: 1913778464532924674}
   selectedMapId: 0
+  activeToggle: {fileID: 0}
 --- !u!114 &4882528853705039819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1705,8 +1707,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8586626810414482717}
   m_HandleRect: {fileID: 5263515446824919717}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2730,8 +2732,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2316353623302932894}
   m_HandleRect: {fileID: 2109648924058754350}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.604272
+  m_Value: 1.0000002
+  m_Size: 0.60427195
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2994,8 +2996,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6862335673216250687}
   m_HandleRect: {fileID: 6308478946870963530}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.9999999
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
