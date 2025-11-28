@@ -180,14 +180,14 @@ namespace TTT.Managers
                         }
                         else
                         {
-                            FloodQueue2.Enqueue(test);
+                            AboveSeaLevelQueue.Enqueue(test);
                         }
                     }
 
-                    // transfer FloodQueue2 back to FloodQueue and clear (!) FloodQueue2
-                    while (FloodQueue2.Count > 0)
+                    // transfer AboveSeaLevelQueue back to FloodQueue and clear (!) AboveSeaLevelQueue
+                    while (AboveSeaLevelQueue.Count > 0)
                     {
-                        var cell = FloodQueue2.Dequeue();
+                        var cell = AboveSeaLevelQueue.Dequeue();
                         FloodQueue.Enqueue(cell);
                         _floodQueueSet.Add(cell.CellCubeCoordinates);
                     }
