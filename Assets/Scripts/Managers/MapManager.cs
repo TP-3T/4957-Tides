@@ -261,7 +261,7 @@ namespace TTT.Managers
             }
         }
 
-                    // po: the idea is that
+            // po: the idea is that
             // OnNewMap() parses json
             // then on each tile with feature != null
             //   adds (position, featureId) to pending features,
@@ -302,6 +302,7 @@ namespace TTT.Managers
                         ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                     args.Location = position;
                     args.FeatureType = featureType;
+                    args.OwnedByClient = false;
                     BuildingFeatureEvent.Raise(args);
                     spawnedCount++;
 
