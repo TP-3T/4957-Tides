@@ -26,6 +26,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     private GameObject GameUI;
 
+    [SerializeField]
+    private GameObject LoadingScreen;
+
     private GameObject CurrentMenu;
     private GameObject previousMenu;
 
@@ -97,6 +100,11 @@ public class MainMenu : MonoBehaviour
     public void StartGameMenu()
     {
         Debug.Log("Clicked Start Game!");
+        ChangeActiveMenu(LoadingScreen);
+    }
+
+    public void OpenGameUI()
+    {
         ChangeActiveMenu(GameUI);
     }
 
@@ -132,6 +140,7 @@ public class MainMenu : MonoBehaviour
         SinglePlayerMenu.SetActive(false);
         MapBrowserMenu.SetActive(false);
         GameUI.SetActive(false);
+        LoadingScreen.SetActive(false);
 
         CurrentMenu.SetActive(true);
     }
