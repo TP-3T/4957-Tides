@@ -169,6 +169,8 @@ namespace TTT.UI
             {
                 PlayerController.FeatureType = feature;
                 PlayerController.Mode = InteractionMode.BUILDING;
+                // po: this directly sets mode
+                // but BuildingShopSlot does the same thing via an event
             });
 
             tabSlots[tab].Add(slotObject);

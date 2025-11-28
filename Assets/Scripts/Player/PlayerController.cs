@@ -35,7 +35,7 @@ namespace TTT.Player
         private TextMeshProUGUI statusText;
 
         [SerializeField]
-        private int maxC02 = 500;
+        private int maxCO2 = 500;
 
         [SerializeField]
         private int maxTemperature = 50;
@@ -111,6 +111,7 @@ namespace TTT.Player
             );
         }
 
+        //? po: is this ever used or called anywhere??
         private void FindHexGridAfterConnection(ulong clientId)
         {
             // The event fires for *all* clients connecting, but we only care about the local player's logic.
@@ -205,9 +206,19 @@ namespace TTT.Player
         }
 
         public void OnInteractModeChange(object args)
+        // po: this listens to an event raised by OnClick() in BuildingShopslot
         {
-            var newMode = args as InteractionModeChangeEventArgs;
-            Mode = newMode.NewMode;
+            if (args != null)
+            {
+                var newMode = args as InteractionModeChangeEventArgs;
+                Mode = newMode.NewMode;
+            }
+            else
+            {
+                Debug.Log(
+                    "args passed into OnInteractModeChange are not the expected type"
+                );
+            }
         }
 
         /// <summary>
@@ -221,7 +232,7 @@ namespace TTT.Player
         public void CheckIfPlayerHasLost()
         {
             if (
-                GameManager.Instance.CO2 > maxC02
+                GameManager.Instance.CO2 > maxCO2
                 || GameManager.Instance.Temperature > maxTemperature
                 || playerBuildings.GetItems().Length <= 0
             )
@@ -239,7 +250,7 @@ namespace TTT.Player
 
             // feel free to remove this if needed, not important
             GameObject cube = GameObject.Find("Cube");
-            cube.SetActive(false);
+            cube?.SetActive(false); // would throw if cube not found
         }
 
         public void DisableUI()

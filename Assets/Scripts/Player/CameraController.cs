@@ -49,9 +49,7 @@ namespace TTT.Player
         private CameraControlActions cameraActions;
         private InputAction movement;
         private float speed;
-
-        [SerializeField]
-        private bool useScreenEdge = false; // Toggle on and off
+        private readonly bool useScreenEdge = false; // Toggle on and off //! po: is this not always false
         private float zoomHeight;
         private float zoomVelocity;
         private float dynamicMinHeight = MIN_HEIGHT;
@@ -112,7 +110,7 @@ namespace TTT.Player
             horizontalVelocity =
                 (this.transform.position - lastPosition) / Time.deltaTime;
 
-            horizontalVelocity.z = NO_VERTICAL_VELOCITY;
+            horizontalVelocity.z = NO_VERTICAL_VELOCITY; //! po: z i think is depth not vertical, why is this z not y
 
             lastPosition = this.transform.position;
         }
@@ -304,6 +302,7 @@ namespace TTT.Player
         private void CheckMouseAtScreenEdge()
         {
             if (useScreenEdge)
+            // po: this is for a future toggle in settings, according to rodrigo
             {
                 Vector2 mousePos;
                 Vector2 screenCenter;
