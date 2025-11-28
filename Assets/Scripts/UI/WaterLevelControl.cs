@@ -28,9 +28,15 @@ public class WaterLevelControl : MonoBehaviour
     {
         _initialTopMaskPadding = _mask.padding.w;
         _maxBarHeight = _barRect.rect.height - _initialTopMaskPadding;
-        _waterLevelText.SetText(
-            $"{_waterLevel.WaterLevelValue}/{_waterLevel.MaxWaterLevel}"
-        );
+
+        // TODO: rework this
+        if (_waterLevelText != null)
+        {
+            _waterLevelText.SetText(
+                $"{_waterLevel.WaterLevelValue}/{_waterLevel.MaxWaterLevel}"
+            );
+        }
+
         SetValue(_waterLevel.WaterLevelValue);
     }
 
@@ -53,7 +59,11 @@ public class WaterLevelControl : MonoBehaviour
         padding.w = newTopPadding;
         _mask.padding = padding;
 
-        _waterLevelText.text = $"{newValue}/{_waterLevel.MaxWaterLevel}";
+        // TODO: rework this
+        if (_waterLevelText != null)
+        {
+            _waterLevelText.text = $"{newValue}/{_waterLevel.MaxWaterLevel}";
+        }
     }
 
     void Update()
