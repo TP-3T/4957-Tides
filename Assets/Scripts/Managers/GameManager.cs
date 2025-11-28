@@ -71,99 +71,99 @@ namespace TTT.Managers
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 313.18,
-                    SeaLevel = 14.18079369,
-                    Temp = -22.64326,
+                    Pollution = 313.18f,
+                    SeaLevel = 14.18079369f,
+                    Temp = -22.64326f,
                     Year = 1940,
                 }
             );
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 313.34,
-                    SeaLevel = 14.35222333,
-                    Temp = -12.24326,
+                    Pollution = 313.34f,
+                    SeaLevel = 14.35222333f,
+                    Temp = -12.24326f,
                     Year = 1941,
                 }
             );
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 313.34,
-                    SeaLevel = 14.35222333,
-                    Temp = -12.24326,
+                    Pollution = 313.34f,
+                    SeaLevel = 14.35222333f,
+                    Temp = -12.24326f,
                     Year = 1942,
                 }
             );
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 313.84,
-                    SeaLevel = 14.35732167,
-                    Temp = -16.94326,
+                    Pollution = 313.84f,
+                    SeaLevel = 14.35732167f,
+                    Temp = -16.94326f,
                     Year = 1943,
                 }
             );
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 313.88,
-                    SeaLevel = 14.18043223,
-                    Temp = -5.54326,
+                    Pollution = 313.88f,
+                    SeaLevel = 14.18043223f,
+                    Temp = -5.54326f,
                     Year = 1944,
                 }
             );
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 314.63,
-                    SeaLevel = 14.60734743,
-                    Temp = -5.84326,
+                    Pollution = 314.63f,
+                    SeaLevel = 14.60734743f,
+                    Temp = -5.84326f,
                     Year = 1945,
                 }
             );
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 314.63,
-                    SeaLevel = 14.25638287,
-                    Temp = -16.84326,
+                    Pollution = 314.63f,
+                    SeaLevel = 14.25638287f,
+                    Temp = -16.84326f,
                     Year = 1946,
                 }
             );
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 314.66,
-                    SeaLevel = 14.4138078,
-                    Temp = -10.64326,
+                    Pollution = 314.66f,
+                    SeaLevel = 14.4138078f,
+                    Temp = -10.64326f,
                     Year = 1947,
                 }
             );
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 314.88,
-                    SeaLevel = 14.48694413,
-                    Temp = -8.94326,
+                    Pollution = 314.88f,
+                    SeaLevel = 14.48694413f,
+                    Temp = -8.94326f,
                     Year = 1948,
                 }
             );
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 315.95,
-                    SeaLevel = 14.17366973,
-                    Temp = -1.94326,
+                    Pollution = 315.95f,
+                    SeaLevel = 14.17366973f,
+                    Temp = -1.94326f,
                     Year = 1949,
                 }
             );
             AIDataQueue.Enqueue(
                 new()
                 {
-                    Pollution = 315.67,
-                    SeaLevel = 14.36671727,
-                    Temp = 1.35674,
+                    Pollution = 315.67f,
+                    SeaLevel = 14.36671727f,
+                    Temp = 1.35674f,
                     Year = 1950,
                 }
             );
