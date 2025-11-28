@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+
 // This code found at https://github.com/Radishmouse22/UILineRenderer/blob/main/UILineRenderer.cs
 namespace TTT.Helpers
 {
@@ -46,16 +47,26 @@ namespace TTT.Helpers
         /// <param name="point1">The starting point of the segment</param>
         /// <param name="point2">The endint point of the segment</param>
         /// <param name="vh">The vertex helper that the segment is added to</param>
-        private void CreateLineSegment(Vector3 point1, Vector3 point2, VertexHelper vh)
+        private void CreateLineSegment(
+            Vector3 point1,
+            Vector3 point2,
+            VertexHelper vh
+        )
         {
-            Vector3 offset = center ? (rectTransform.sizeDelta / 2) : Vector2.zero;
+            Vector3 offset = center
+                ? (rectTransform.sizeDelta / 2)
+                : Vector2.zero;
 
             // Create vertex template
             UIVertex vertex = UIVertex.simpleVert;
             vertex.color = color;
 
             // Create the start of the segment
-            Quaternion point1Rotation = Quaternion.Euler(0, 0, RotatePointTowards(point1, point2) + 90);
+            Quaternion point1Rotation = Quaternion.Euler(
+                0,
+                0,
+                RotatePointTowards(point1, point2) + 90
+            );
             vertex.position = point1Rotation * new Vector3(-thickness / 2, 0);
             vertex.position += point1 - offset;
             vh.AddVert(vertex);
@@ -64,7 +75,11 @@ namespace TTT.Helpers
             vh.AddVert(vertex);
 
             // Create the end of the segment
-            Quaternion point2Rotation = Quaternion.Euler(0, 0, RotatePointTowards(point2, point1) - 90);
+            Quaternion point2Rotation = Quaternion.Euler(
+                0,
+                0,
+                RotatePointTowards(point2, point1) - 90
+            );
             vertex.position = point2Rotation * new Vector3(-thickness / 2, 0);
             vertex.position += point2 - offset;
             vh.AddVert(vertex);
@@ -85,7 +100,10 @@ namespace TTT.Helpers
         /// <returns>The angle required to rotate vertex towards target</returns>
         private float RotatePointTowards(Vector2 vertex, Vector2 target)
         {
-            return (float)(Mathf.Atan2(target.y - vertex.y, target.x - vertex.x) * (180 / Mathf.PI));
+            return (float)(
+                Mathf.Atan2(target.y - vertex.y, target.x - vertex.x)
+                * (180 / Mathf.PI)
+            );
         }
     }
 }

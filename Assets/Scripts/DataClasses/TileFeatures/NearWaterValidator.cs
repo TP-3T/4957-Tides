@@ -1,8 +1,8 @@
 using System.Linq;
 using TTT.DataClasses;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.ModularData;
 using TTT.DataClasses.TileFeatures;
-using TTT.ModularData;
 using UnityEngine;
 
 [CreateAssetMenu(
@@ -25,7 +25,14 @@ public class NearWaterValidator : DefaultValidator
     )
     {
         // default validation
-        if (!base.CanBuild(buildLocation, nearbyTiles, spawnedFeatures, constraints))
+        if (
+            !base.CanBuild(
+                buildLocation,
+                nearbyTiles,
+                spawnedFeatures,
+                constraints
+            )
+        )
         {
             return false;
         }

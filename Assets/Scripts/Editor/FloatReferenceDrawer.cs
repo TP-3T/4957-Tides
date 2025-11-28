@@ -1,4 +1,4 @@
-using TTT.ModularData;
+using TTT.DataClasses.ModularData;
 using UnityEditor;
 
 [CustomPropertyDrawer(typeof(FloatReference))]

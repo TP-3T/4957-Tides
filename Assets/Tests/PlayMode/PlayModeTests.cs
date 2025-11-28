@@ -5,12 +5,12 @@ using JetBrains.Annotations;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.ModularData;
 using TTT.DataClasses.Terrain;
 using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
 using TTT.Managers;
-using TTT.ModularData;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -67,7 +67,10 @@ public class PlayModeTests
         var nm = EnsureNetworkManager();
 
         Assert.IsNotNull(nm.NetworkConfig, "NetworkConfig must be assigned");
-        Assert.IsNotNull(nm.NetworkConfig.NetworkTransport, "NetworkTransport must be assigned");
+        Assert.IsNotNull(
+            nm.NetworkConfig.NetworkTransport,
+            "NetworkTransport must be assigned"
+        );
 
         // Start host directly or via your GameManager flow
         var started = nm.StartHost();
@@ -75,7 +78,9 @@ public class PlayModeTests
 
         // Wait up to 5 seconds for host to become active
         yield return WaitForCondition(
-            () => NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost,
+            () =>
+                NetworkManager.Singleton != null
+                && NetworkManager.Singleton.IsHost,
             5f,
             "Host did not start"
         );
@@ -87,7 +92,9 @@ public class PlayModeTests
         if (NetworkManager.Singleton && NetworkManager.Singleton.IsListening)
             NetworkManager.Singleton.Shutdown();
         if (NetworkManager.Singleton)
-            UnityEngine.Object.DestroyImmediate(NetworkManager.Singleton.gameObject);
+            UnityEngine.Object.DestroyImmediate(
+                NetworkManager.Singleton.gameObject
+            );
         yield return null;
     }
 
@@ -105,7 +112,8 @@ public class PlayModeTests
                 var existingTransport =
                     NetworkManager.Singleton.GetComponent<UnityTransport>()
                     ?? NetworkManager.Singleton.gameObject.AddComponent<UnityTransport>();
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport = existingTransport;
+                NetworkManager.Singleton.NetworkConfig.NetworkTransport =
+                    existingTransport;
             }
             return NetworkManager.Singleton;
         }
@@ -143,7 +151,10 @@ public class PlayModeTests
         {
             var testObj = new GameObject("AppRunTest");
             var testComponent = testObj.AddComponent<Camera>();
-            Assert.IsNotNull(testComponent, "Unity component system should be functional");
+            Assert.IsNotNull(
+                testComponent,
+                "Unity component system should be functional"
+            );
 
             UnityEngine.Object.DestroyImmediate(testObj);
             var testScriptableObj = new MapData();
@@ -153,7 +164,10 @@ public class PlayModeTests
             Assert.AreEqual(1, testCoords.q, "Data classes should be usable");
 
             Type mapManagerType = typeof(MapManager);
-            Assert.IsNotNull(mapManagerType, "Manager types should be compiled correctly");
+            Assert.IsNotNull(
+                mapManagerType,
+                "Manager types should be compiled correctly"
+            );
 
             // Assert
             Assert.IsFalse(
@@ -161,11 +175,17 @@ public class PlayModeTests
                 $"Application should run without errors. Error encountered: {errorMessage}"
             );
 
-            Assert.Pass("Application core systems are functional and run without errors");
+            Assert.Pass(
+                "Application core systems are functional and run without errors"
+            );
         }
         finally
         {
-            Application.logMessageReceived -= (condition, stackTrace, type) => { };
+            Application.logMessageReceived -= (
+                condition,
+                stackTrace,
+                type
+            ) => { };
         }
     }
     #endregion

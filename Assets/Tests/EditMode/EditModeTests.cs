@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using NUnit.Framework;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.ModularData;
 using TTT.DataClasses.Terrain;
 using TTT.Helpers;
 using TTT.Hex;
 using TTT.Managers;
-using TTT.ModularData;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -18,7 +18,12 @@ public class EditModeTests
 {
     #region Singleton Tests
 
-    [Test, Description("GameManager singleton returns same instance on repeated access.")]
+    [
+        Test,
+        Description(
+            "GameManager singleton returns same instance on repeated access."
+        )
+    ]
     public void Singleton_GameManager_SameInstance()
     {
         var instance1 = GameManager.Instance;
@@ -38,7 +43,12 @@ public class EditModeTests
         );
     }
 
-    [Test, Description("MapManager singleton returns same instance on repeated access.")]
+    [
+        Test,
+        Description(
+            "MapManager singleton returns same instance on repeated access."
+        )
+    ]
     public void Singleton_MapManager_SameInstance()
     {
         var instance1 = MapManager.Instance;
@@ -62,14 +72,24 @@ public class EditModeTests
 
     #region HexMath Public Methods
 
-    [Test, Description("HexMath.OuterRadius returns positive value for positive hexSize.")]
+    [
+        Test,
+        Description(
+            "HexMath.OuterRadius returns positive value for positive hexSize."
+        )
+    ]
     public void HexMath_OuterRadius_ReturnsPositive()
     {
         float radius = HexMath.OuterRadius(3.0f);
         Assert.Greater(radius, 0, "OuterRadius should return positive value");
     }
 
-    [Test, Description("HexMath.InnerRadius returns positive value for positive hexSize.")]
+    [
+        Test,
+        Description(
+            "HexMath.InnerRadius returns positive value for positive hexSize."
+        )
+    ]
     public void HexMath_InnerRadius_ReturnsPositive()
     {
         float radius = HexMath.InnerRadius(3.0f);
@@ -83,14 +103,28 @@ public class EditModeTests
         float inner = HexMath.InnerRadius(hexSize);
         float outer = HexMath.OuterRadius(hexSize);
 
-        Assert.Less(inner, outer, "InnerRadius should be less than OuterRadius");
+        Assert.Less(
+            inner,
+            outer,
+            "InnerRadius should be less than OuterRadius"
+        );
     }
 
-    [Test, Description("HexMath.GetHexCenter returns valid vector for valid input.")]
+    [
+        Test,
+        Description(
+            "HexMath.GetHexCenter returns valid vector for valid input."
+        )
+    ]
     public void HexMath_GetHexCenter_ValidVector()
     {
         var offset = new OffsetCoordinates(1, 1);
-        var center = HexMath.GetHexCenter(3.0f, 0, offset, HexOrientation.pointyTop);
+        var center = HexMath.GetHexCenter(
+            3.0f,
+            0,
+            offset,
+            HexOrientation.pointyTop
+        );
 
         Assert.IsNotNull(center, "HexCenter should not be null");
         Assert.Greater(
@@ -100,7 +134,12 @@ public class EditModeTests
         );
     }
 
-    [Test, Description("HexMath.GetHexCorners returns array for pointyTop orientation.")]
+    [
+        Test,
+        Description(
+            "HexMath.GetHexCorners returns array for pointyTop orientation."
+        )
+    ]
     public void HexMath_GetHexCorners_ReturnsValidArray()
     {
         var corners = HexMath.GetHexCorners(3.0f, HexOrientation.pointyTop);
@@ -109,7 +148,10 @@ public class EditModeTests
         Assert.AreEqual(6, corners.Length, "Hex should have 6 corners");
     }
 
-    [Test, Description("HexMath.OddOffsetToCube converts coordinates correctly.")]
+    [
+        Test,
+        Description("HexMath.OddOffsetToCube converts coordinates correctly.")
+    ]
     public void HexMath_OddOffsetToCube_ConvertsCorrectly()
     {
         var offset = new OffsetCoordinates(0, 0);
@@ -117,10 +159,17 @@ public class EditModeTests
 
         Assert.IsNotNull(cube, "CubeCoordinates should not be null");
         // (0,0) in odd offset should map to valid cube coordinates
-        Assert.AreEqual(0, cube.q + cube.r + cube.s, "Cube coordinates should sum to 0");
+        Assert.AreEqual(
+            0,
+            cube.q + cube.r + cube.s,
+            "Cube coordinates should sum to 0"
+        );
     }
 
-    [Test, Description("HexMath.CubeToOddOffset converts coordinates correctly.")]
+    [
+        Test,
+        Description("HexMath.CubeToOddOffset converts coordinates correctly.")
+    ]
     public void HexMath_CubeToOddOffset_ConvertsCorrectly()
     {
         var cube = new CubeCoordinates(1, 0, -1);
@@ -131,32 +180,63 @@ public class EditModeTests
         Assert.GreaterOrEqual(offset.z, 0, "Offset z should be non-negative");
     }
 
-    [Test, Description("HexMath.RoundCube rounds float coordinates to nearest cube.")]
+    [
+        Test,
+        Description(
+            "HexMath.RoundCube rounds float coordinates to nearest cube."
+        )
+    ]
     public void HexMath_RoundCube_RoundsCorrectly()
     {
         var cubeF = new CubeCoordinatesF(1.5f, 0.5f, -2.0f);
         var cube = HexMath.RoundCube(cubeF);
 
         Assert.IsNotNull(cube, "Rounded cube should not be null");
-        Assert.AreEqual(0, cube.q + cube.r + cube.s, "Rounded cube should sum to 0");
+        Assert.AreEqual(
+            0,
+            cube.q + cube.r + cube.s,
+            "Rounded cube should sum to 0"
+        );
     }
 
-    [Test, Description("Coordinate round-trip (OffsetToCube to CubeToOddOffset) is reversible.")]
+    [
+        Test,
+        Description(
+            "Coordinate round-trip (OffsetToCube to CubeToOddOffset) is reversible."
+        )
+    ]
     public void HexMath_CoordinateRoundTrip_Reversible()
     {
         var offsetOriginal = new OffsetCoordinates(3, 4);
-        var cube = HexMath.OddOffsetToCube(offsetOriginal, HexOrientation.pointyTop);
-        var offsetConverted = HexMath.CubeToOddOffset(cube, HexOrientation.pointyTop);
+        var cube = HexMath.OddOffsetToCube(
+            offsetOriginal,
+            HexOrientation.pointyTop
+        );
+        var offsetConverted = HexMath.CubeToOddOffset(
+            cube,
+            HexOrientation.pointyTop
+        );
 
-        Assert.AreEqual(offsetOriginal.x, offsetConverted.x, "x should match after round trip");
-        Assert.AreEqual(offsetOriginal.z, offsetConverted.z, "z should match after round trip");
+        Assert.AreEqual(
+            offsetOriginal.x,
+            offsetConverted.x,
+            "x should match after round trip"
+        );
+        Assert.AreEqual(
+            offsetOriginal.z,
+            offsetConverted.z,
+            "z should match after round trip"
+        );
     }
 
     #endregion
 
     #region Coordinate Data Classes
 
-    [Test, Description("CubeCoordinates constructor initializes fields correctly.")]
+    [
+        Test,
+        Description("CubeCoordinates constructor initializes fields correctly.")
+    ]
     public void CubeCoordinates_Constructor_Valid()
     {
         var cube = new CubeCoordinates(1, 2, -3);
@@ -169,10 +249,19 @@ public class EditModeTests
     public void CubeCoordinates_SumToZero()
     {
         var cube = new CubeCoordinates(2, -5, 3);
-        Assert.AreEqual(0, cube.q + cube.r + cube.s, "Cube coordinates should sum to 0");
+        Assert.AreEqual(
+            0,
+            cube.q + cube.r + cube.s,
+            "Cube coordinates should sum to 0"
+        );
     }
 
-    [Test, Description("OffsetCoordinates constructor initializes fields correctly.")]
+    [
+        Test,
+        Description(
+            "OffsetCoordinates constructor initializes fields correctly."
+        )
+    ]
     public void OffsetCoordinates_Constructor_Valid()
     {
         var offset = new OffsetCoordinates(5, 10);
@@ -194,7 +283,11 @@ public class EditModeTests
         hexCell.CellPosition = position;
         hexCell.CellCubeCoordinates = cubeCoords;
 
-        Assert.AreEqual(position, hexCell.CellPosition, "CellPosition should match");
+        Assert.AreEqual(
+            position,
+            hexCell.CellPosition,
+            "CellPosition should match"
+        );
         Assert.AreEqual(
             cubeCoords,
             hexCell.CellCubeCoordinates,
@@ -217,7 +310,10 @@ public class EditModeTests
     public void MapManager_RisingRate_IsAccessible()
     {
         var mapManager = MapManager.Instance;
-        Assert.IsNotNull(mapManager.RisingRate, "RisingRate should not be null");
+        Assert.IsNotNull(
+            mapManager.RisingRate,
+            "RisingRate should not be null"
+        );
     }
 
     [Test, Description("MapManager.HexCells public collection is accessible.")]
@@ -231,14 +327,20 @@ public class EditModeTests
     public void MapManager_ToFlood_IsAccessible()
     {
         var mapManager = MapManager.Instance;
-        Assert.IsNotNull(mapManager.ToFlood, "ToFlood queue should not be null");
+        Assert.IsNotNull(
+            mapManager.ToFlood,
+            "ToFlood queue should not be null"
+        );
     }
 
     [Test, Description("MapManager.FloodQueue public queue is accessible.")]
     public void MapManager_FloodQueue_IsAccessible()
     {
         var mapManager = MapManager.Instance;
-        Assert.IsNotNull(mapManager.FloodQueue, "FloodQueue should not be null");
+        Assert.IsNotNull(
+            mapManager.FloodQueue,
+            "FloodQueue should not be null"
+        );
     }
 
     #endregion
@@ -251,7 +353,11 @@ public class EditModeTests
         var testMap = Resources.Load<TextAsset>("Maps/test_map_1");
         if (testMap != null)
         {
-            Assert.Greater(testMap.text.Length, 0, "Map text should not be empty");
+            Assert.Greater(
+                testMap.text.Length,
+                0,
+                "Map text should not be empty"
+            );
         }
         // If test map doesn't exist, test still passes as it's optional
     }
@@ -261,7 +367,10 @@ public class EditModeTests
     {
         var testGO = new GameObject("UnitTest_Component");
         var camera = testGO.AddComponent<Camera>();
-        Assert.IsNotNull(camera, "Camera component should be added successfully");
+        Assert.IsNotNull(
+            camera,
+            "Camera component should be added successfully"
+        );
         UnityEngine.Object.DestroyImmediate(testGO);
     }
 

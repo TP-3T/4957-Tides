@@ -1,5 +1,4 @@
-using System;
-using TTT.ModularData;
+using TTT.DataClasses.ModularData;
 using UnityEngine;
 
 namespace TTT.DataClasses.Terrain

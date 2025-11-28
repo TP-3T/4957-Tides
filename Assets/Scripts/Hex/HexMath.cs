@@ -9,7 +9,6 @@ namespace TTT.Hex
         pointyTop,
     }
 
-    //! CB: We don't actually use this anywhere. Should we get rid of it?
     public struct AxialCoordinates
     {
         public int q { get; private set; }
@@ -55,7 +54,10 @@ namespace TTT.Hex
             return corner;
         }
 
-        public static Vector3[] GetHexCorners(float hexSize, HexOrientation orientation)
+        public static Vector3[] GetHexCorners(
+            float hexSize,
+            HexOrientation orientation
+        )
         {
             Vector3[] corners = new Vector3[6];
             for (int i = 0; i < corners.Length; i++)
@@ -108,7 +110,12 @@ namespace TTT.Hex
         /// <param name="z"></param>
         /// <param name="orientation"></param>
         /// <returns></returns>
-        public static Vector3 GetHexCenter(float hexSize, int x, int z, HexOrientation orientation)
+        public static Vector3 GetHexCenter(
+            float hexSize,
+            int x,
+            int z,
+            HexOrientation orientation
+        )
         {
             return GetHexCenter(hexSize, x, 0, z, orientation);
         }
@@ -127,7 +134,13 @@ namespace TTT.Hex
             HexOrientation hexOrientation
         )
         {
-            return GetHexCenter(hexSize, position.x, height, position.z, hexOrientation);
+            return GetHexCenter(
+                hexSize,
+                position.x,
+                height,
+                position.z,
+                hexOrientation
+            );
         }
 
         /// <summary>
@@ -207,13 +220,17 @@ namespace TTT.Hex
 
             if (hexOrientation == HexOrientation.pointyTop)
             {
-                x = cubeCoordinates.q + (cubeCoordinates.r - (cubeCoordinates.r & 1)) / 2;
+                x =
+                    cubeCoordinates.q
+                    + (cubeCoordinates.r - (cubeCoordinates.r & 1)) / 2;
                 z = cubeCoordinates.r;
             }
             else
             {
                 x = cubeCoordinates.q;
-                z = cubeCoordinates.r + (cubeCoordinates.q - (cubeCoordinates.q & 1)) / 2;
+                z =
+                    cubeCoordinates.r
+                    + (cubeCoordinates.q - (cubeCoordinates.q & 1)) / 2;
             }
 
             return new OffsetCoordinates(x, z);

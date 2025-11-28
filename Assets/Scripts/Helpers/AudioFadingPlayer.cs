@@ -17,9 +17,12 @@ namespace TTT.Helpers
 
         [Header("Audio Sources")]
         [Tooltip("First AudioSource used for crossfading")]
-        [SerializeField] private AudioSource sourceA;
+        [SerializeField]
+        private AudioSource sourceA;
+
         [Tooltip("Second AudioSource used for crossfading")]
-        [SerializeField] private AudioSource sourceB;
+        [SerializeField]
+        private AudioSource sourceB;
 
         private Coroutine crossfadeCoroutine;
         private bool isUsingSourceA = true;
@@ -67,7 +70,9 @@ namespace TTT.Helpers
                 StopCoroutine(crossfadeCoroutine);
             }
 
-            crossfadeCoroutine = StartCoroutine(FadeRoutine(newClip, fadeDuration));
+            crossfadeCoroutine = StartCoroutine(
+                FadeRoutine(newClip, fadeDuration)
+            );
         }
 
         /// <summary>
@@ -80,7 +85,7 @@ namespace TTT.Helpers
             return crossfadeCoroutine != null;
         }
 
-        private void Awake()    // Ensure both audio sources are set up
+        private void Awake() // Ensure both audio sources are set up
         {
             if (sourceA == null)
             {
@@ -94,7 +99,7 @@ namespace TTT.Helpers
             }
         }
 
-        private IEnumerator FadeRoutine(AudioClip newClip, float fadeDuration)  // Handles the crossfade between two audio sources
+        private IEnumerator FadeRoutine(AudioClip newClip, float fadeDuration) // Handles the crossfade between two audio sources
         {
             AudioSource audioSourceToFadeOut = GetActiveSource();
             AudioSource audioSourceToFadeIn = GetInactiveSource();
@@ -120,7 +125,7 @@ namespace TTT.Helpers
             isUsingSourceA = (audioSourceToFadeIn == sourceA);
         }
 
-        private AudioSource GetActiveSource()   // The audio source currently playing
+        private AudioSource GetActiveSource() // The audio source currently playing
         {
             return isUsingSourceA ? sourceA : sourceB;
         }

@@ -15,9 +15,6 @@ namespace TTT.Managers
     public partial class MapManager
     {
         [SerializeField]
-        private GameEvent onFloodEnded;
-
-        [SerializeField]
         private GameEvent DestroyingFeatureEvent;
 
         private void FloodCell(ref HexCell hc)
@@ -38,9 +35,12 @@ namespace TTT.Managers
         {
             BuildingFeatureArgs bfArgs =
                 ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-            bfArgs.Location = cellPosition;
+            if (bfArgs.FeatureType != null)
+            {
+                bfArgs.Location = cellPosition;
 
-            DestroyingFeatureEvent.Raise(bfArgs);
+                DestroyingFeatureEvent.Raise(bfArgs);
+            }
         }
 
         private void SetCellCenterVertex(HexCell hc, int cv)
@@ -73,7 +73,7 @@ namespace TTT.Managers
             else
             {
                 throw new Exception(
-                    "This math has lazily not been implemented yet, get on it you git!"
+                    "This math has lazily not been implemented yet, get on it you git!" // po: TODO
                 );
             }
         }
@@ -170,17 +170,15 @@ namespace TTT.Managers
                         )
                             ToFlood.Enqueue(test);
                         else
-                            FloodQueue2.Enqueue(test);
+                            AboveSeaLevelQueue.Enqueue(test);
                     }
 
-                    while (FloodQueue2.Count > 0)
-                        FloodQueue.Enqueue(FloodQueue2.Dequeue());
+                    while (AboveSeaLevelQueue.Count > 0)
+                        FloodQueue.Enqueue(AboveSeaLevelQueue.Dequeue());
 
-                    // currently, this is also where we raise TurnEnded
                     Debug.Log("Flood fill cycle complete");
-                    onFloodEnded.Raise();
 
-                    yield break;
+                    break;
                 }
 
                 // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
@@ -199,7 +197,7 @@ namespace TTT.Managers
                             continue;
                         if (
                             ToFlood.Contains(neighbor)
-                            || FloodQueue.Contains(neighbor)
+                            || FloodQueue.Contains(neighbor) //! po: contains iterates over every single item
                         )
                             continue;
                         if (neighbor.CellPosition.y <= SeaLevel.Value)
@@ -217,6 +215,8 @@ namespace TTT.Managers
 
                 yield return null;
             }
+
+            onFloodEnded.Raise();
             //says unreachable but it is
         }
     }

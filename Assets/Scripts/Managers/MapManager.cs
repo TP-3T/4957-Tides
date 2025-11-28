@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using TTT.DataClasses.HexData;
-using TTT.DataClasses.HexData;
 using TTT.DataClasses.Terrain;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -43,12 +42,13 @@ namespace TTT.Managers
         [SerializeField]
         private TerrainDictionary _allowedTerrains;
 
+        [SerializeField]
+        private GameEvent onFloodEnded;
+
         private NetworkVariable<int> _hexGridWidth = new();
         private NetworkVariable<int> _hexGridHeight = new();
         private NetworkVariable<ulong> _hexMeshId = new();
         private NetworkVariable<ulong> _seaMeshId = new();
-        private readonly AssetReference _hexGridMeshAsset = new("P_HexMesh");
-        private readonly AssetReference _seaMeshAsset = new("P_SeaMesh");
         private MapData _gameMapData;
         private const int CellsPerFrame = 25;
 
@@ -64,7 +64,7 @@ namespace TTT.Managers
         );
         public Queue<HexCell> ToFlood = new();
         public Queue<HexCell> FloodQueue = new();
-        public Queue<HexCell> FloodQueue2 = new();
+        public Queue<HexCell> AboveSeaLevelQueue = new();
         public NetworkVariable<float> SeaLevel = new(0.0f);
         public NetworkVariable<float> RisingRate = new(1.0f);
         public bool DrawDebugLabels;
@@ -154,112 +154,111 @@ namespace TTT.Managers
         [ClientRpc]
         private void TriangulateHexMeshClientRpc()
         {
-            NetworkObject hexMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_hexMeshId.Value];
-            HexMesh hexMeshInstance =
-                hexMeshNetworkObject.GetComponent<HexMesh>(); // Get the hex mesh in the scene
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _hexMeshId.Value,
+                    out NetworkObject hexMeshNetworkObject
+                )
+            )
+            {
+                HexMesh hexMeshInstance =
+                    hexMeshNetworkObject.GetComponent<HexMesh>(); // Get the hex mesh in the scene
 
-            hexMeshInstance.Triangulate(
-                HexCells,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
+                hexMeshInstance.Triangulate(
+                    HexCells,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
+            }
 
             // Spawn features asynchronously across multiple frames
             StartCoroutine(SpawnPendingFeaturesAsync());
-
-            _mapLoadFinishEvent.Raise(
-                new NewMapFinishedEventArgs() { WasSuccessful = true }
-            );
-        }
-
-        [ClientRpc]
-        private void TriangulateHexMeshClientRpc(HexCell cell)
-        {
-            NetworkObject hexMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_hexMeshId.Value];
-            HexMesh hexMeshInstance =
-                hexMeshNetworkObject.GetComponent<HexMesh>();
-
-            hexMeshInstance.ReTriangulateCell(
-                cell,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
         }
 
         [ClientRpc]
         private void TriangulateHexMeshClientRpc(HexCell[] cells)
         {
-            NetworkObject hexMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_hexMeshId.Value];
-            HexMesh hexMeshInstance =
-                hexMeshNetworkObject.GetComponent<HexMesh>();
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _hexMeshId.Value,
+                    out NetworkObject hexMeshNetworkObject
+                )
+            )
+            {
+                HexMesh hexMeshInstance =
+                    hexMeshNetworkObject.GetComponent<HexMesh>();
 
-            hexMeshInstance.ReTriangulateCells(
-                cells,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
+                hexMeshInstance.ReTriangulateCells(
+                    cells,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
+            }
         }
 
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc()
         {
-            NetworkObject seaMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_seaMeshId.Value];
-            SeaMesh seaMeshInstance =
-                seaMeshNetworkObject.GetComponent<SeaMesh>();
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _seaMeshId.Value,
+                    out NetworkObject seaMeshNetworkObject
+                )
+            )
+            {
+                SeaMesh seaMeshInstance =
+                    seaMeshNetworkObject.GetComponent<SeaMesh>();
 
-            seaMeshInstance.Triangulate(
-                HexCells,
-                SeaLevel.Value,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
+                seaMeshInstance.Triangulate(
+                    HexCells,
+                    SeaLevel.Value,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
+            }
         }
 
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc(HexCell cell)
         {
-            NetworkObject seaMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_seaMeshId.Value];
-            SeaMesh seaMeshInstance =
-                seaMeshNetworkObject.GetComponent<SeaMesh>();
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _seaMeshId.Value,
+                    out NetworkObject seaMeshNetworkObject
+                )
+            )
+            {
+                SeaMesh seaMeshInstance =
+                    seaMeshNetworkObject.GetComponent<SeaMesh>();
 
-            seaMeshInstance.TriangulateCell(
-                cell,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
+                seaMeshInstance.TriangulateCell(
+                    cell,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
+            }
         }
 
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc(HexCell[] cells)
         {
-            NetworkObject seaMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_seaMeshId.Value];
-            SeaMesh seaMeshInstance =
-                seaMeshNetworkObject.GetComponent<SeaMesh>();
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _seaMeshId.Value,
+                    out NetworkObject seaMeshNetworkObject
+                )
+            )
+            {
+                SeaMesh seaMeshInstance =
+                    seaMeshNetworkObject.GetComponent<SeaMesh>();
 
-            seaMeshInstance.TriangulateCells(
-                cells,
-                SeaLevel.Value,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
+                seaMeshInstance.TriangulateCells(
+                    cells,
+                    SeaLevel.Value,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
+            }
         }
 
         private void SpawnPendingFeatures()
@@ -317,7 +316,7 @@ namespace TTT.Managers
             _pendingFeatures.Clear();
         }
 
-        private System.Collections.IEnumerator SpawnPendingFeaturesAsync()
+        private IEnumerator SpawnPendingFeaturesAsync()
         {
             if (!_featuresLoaded)
             {
@@ -326,7 +325,7 @@ namespace TTT.Managers
             }
 
             int spawnedCount = 0;
-            int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smoothish loading
+            int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smooth-ish loading
             Dictionary<string, int> featureTypeCounts =
                 new Dictionary<string, int>();
 
@@ -356,7 +355,7 @@ namespace TTT.Managers
                     featureTypeCounts[featureId]++;
 
                     // Yield every X spawns to maintain framerate
-                    //Kinda dosent work :/
+                    //Kinda doesn't work :/
                     if (spawnedCount % spawnsPerFrame == 0)
                     {
                         yield return null; // Wait one frame
@@ -366,7 +365,7 @@ namespace TTT.Managers
                 {
                     Debug.LogWarning(
                         $"skipped unknown feature '{featureId}' at {position}"
-                    ); //THis basically never happens but I put this here just incase :/
+                    ); //THis basically never happens but I put this here just in case :/
                 }
             }
 
@@ -380,6 +379,9 @@ namespace TTT.Managers
             }
 
             _pendingFeatures.Clear();
+            _mapLoadFinishEvent.Raise(
+                new NewMapFinishedEventArgs() { WasSuccessful = true }
+            );
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -502,7 +504,6 @@ namespace TTT.Managers
 
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
-
                 StartCoroutine(SpawnMapObjects());
             }
             catch (Exception e)
@@ -531,10 +532,8 @@ namespace TTT.Managers
             OnMapMeshClickedServerRpc(args.ClickedPoint, args.PlayerColor);
         }
 
-        public void OnFlood(UnityEngine.Object eventArgs)
+        public void OnFlood(UnityEngine.Object _)
         {
-            FloodEventArgs args = eventArgs as FloodEventArgs;
-
             Debug.Log("Flood Event Triggered - MapManager line 261");
 
             StartRaiseSeaServerRpc();

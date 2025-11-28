@@ -5,7 +5,6 @@ using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.TileFeatures;
 using TTT.Hex;
 using TTT.Managers;
-using TTT.ModularData;
 using UnityEngine;
 
 public class FeatureBuilder : MonoBehaviour

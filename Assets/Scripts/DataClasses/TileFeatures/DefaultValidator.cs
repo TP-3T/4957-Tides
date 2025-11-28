@@ -1,7 +1,7 @@
 using System.Linq;
 using TTT.DataClasses;
 using TTT.DataClasses.HexData;
-using TTT.ModularData;
+using TTT.DataClasses.ModularData;
 using UnityEngine;
 
 namespace TTT.DataClasses.TileFeatures
@@ -34,8 +34,16 @@ namespace TTT.DataClasses.TileFeatures
                 return false;
             }
 
-            Vector3[] nearbyTilePositions = nearbyTiles.Select(t => t.CellPosition).ToArray();
-            if (NotEnoughNearbyFeatures(nearbyTilePositions, spawnedFeatures, constraints))
+            Vector3[] nearbyTilePositions = nearbyTiles
+                .Select(t => t.CellPosition)
+                .ToArray();
+            if (
+                NotEnoughNearbyFeatures(
+                    nearbyTilePositions,
+                    spawnedFeatures,
+                    constraints
+                )
+            )
             {
                 return false;
             }

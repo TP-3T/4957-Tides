@@ -1,5 +1,5 @@
 using TTT.DataClasses.HexData;
-using TTT.ModularData;
+using TTT.DataClasses.ModularData;
 using UnityEngine;
 
 namespace TTT.DataClasses.TileFeatures

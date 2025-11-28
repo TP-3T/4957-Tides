@@ -1,4 +1,5 @@
 using System;
+using TTT.DataClasses.Terrain;
 using Unity.Netcode;
 
 namespace TTT.DataClasses.HexData
@@ -13,7 +14,8 @@ namespace TTT.DataClasses.HexData
         public int Height;
         public OffsetCoordinates OffsetCoordinates;
 
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer)
+            where T : IReaderWriter
         {
             OffsetCoordinates.NetworkSerialize(serializer);
 

@@ -1,7 +1,9 @@
 {
     "name": "TTT.DataClasses",
     "rootNamespace": "TTT.DataClasses",
-    "references": [],
+    "references": [
+        "GUID:1491147abca9d7d4bb7105af628b223e"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
