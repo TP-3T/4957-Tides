@@ -11,22 +11,16 @@ namespace TTT.DataClasses.PlayerResources
     public class ResourceProducer
     {
         [Tooltip("When and how the resources will be produced/spent.")]
-        [SerializeField]
-        private ProductionSchedule productionSchedule;
+        [field: SerializeField]
+        public ProductionSchedule ProductionSchedule { get; private set; }
 
         [Tooltip("The resources to produce.")]
-        [SerializeField]
-        private List<Amount<PlayerResource>> resourceAmounts;
-
-        /// <summary>
-        /// When and how the resources will be produced/spent.
-        /// </summary>
-        public ProductionSchedule ProductionSchedule => productionSchedule;
-
-        /// <summary>
-        /// The resources being produced and their amounts.
-        /// </summary>
-        public List<Amount<PlayerResource>> ResourceAmounts => resourceAmounts;
+        [field: SerializeField]
+        public List<Amount<PlayerResource>> ResourceAmounts
+        {
+            get;
+            private set;
+        }
 
         private void Produce(int multiplier)
         {
@@ -39,26 +33,27 @@ namespace TTT.DataClasses.PlayerResources
         /// <summary>
         /// This should only be called once per producer.
         /// </summary>
-        public void OnCreated() => Produce(productionSchedule.OnCreated);
+        public void OnCreated() => Produce(ProductionSchedule.OnCreated);
 
         /// <summary>
         /// Produces some resources and adds to the player's resource amount.
         /// Warning: this is called every time a player's turn ends, including players other than the client.
         /// </summary>
-        public void OnTurnEnding() => Produce(productionSchedule.OnTurnEnding);
+        public void OnTurnEnding() => Produce(ProductionSchedule.OnTurnEnding);
 
-        public void OnSeasonEnding() => Produce(productionSchedule.OnSeasonEnding);
+        public void OnSeasonEnding() =>
+            Produce(ProductionSchedule.OnSeasonEnding);
 
-        public void OnYearEnding() => Produce(productionSchedule.OnYearEnding);
-
-        /// <summary>
-        /// This should only be called once per producer.
-        /// </summary>
-        public void OnSold() => Produce(productionSchedule.OnSold);
+        public void OnYearEnding() => Produce(ProductionSchedule.OnYearEnding);
 
         /// <summary>
         /// This should only be called once per producer.
         /// </summary>
-        public void OnDestroyed() => Produce(productionSchedule.OnDestroyed);
+        public void OnSold() => Produce(ProductionSchedule.OnSold);
+
+        /// <summary>
+        /// This should only be called once per producer.
+        /// </summary>
+        public void OnDestroyed() => Produce(ProductionSchedule.OnDestroyed);
     }
 }

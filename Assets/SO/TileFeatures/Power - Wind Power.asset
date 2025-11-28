@@ -13,21 +13,29 @@ MonoBehaviour:
   m_Name: Power - Wind Power
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: wind
-  <PollutionEmission>k__BackingField: 10
+  <Category>k__BackingField: 2
+  <DisplayName>k__BackingField: Wind Power
+  <PollutionEmission>k__BackingField: 50
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 750
     <TerrainConstraints>k__BackingField:
-      <Mode>k__BackingField: 1
+      <Mode>k__BackingField: 0
       <List>k__BackingField:
-      - {fileID: 0}
+      - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
+      - {fileID: 11400000, guid: bbf1927decf0b83429343952dbf6ea8b, type: 2}
+      - {fileID: 11400000, guid: a0bfe455dcde2f348b2a9a88f8d0cb0c, type: 2}
     <FeatureConstraints>k__BackingField: []
-  <BuildValidator>k__BackingField: {fileID: 11400000, guid: 415d8be488ae7e54388aaea4cfe19dc7, type: 2}
+  <BuildValidator>k__BackingField: {fileID: 11400000, guid: 418d17bf1c05a9c40aff3428a267cd49, type: 2}
   <ResourceProducers>k__BackingField:
-  - productionSchedule: {fileID: 11400000, guid: edef3b431516b8048a30517cd2383a7b, type: 2}
-    resourceAmounts:
-    - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-      <Count>k__BackingField: 1000
+  - <ProductionSchedule>k__BackingField: {fileID: 11400000, guid: eef1b438675876e41856cf2125b2b9c9, type: 2}
+    <ResourceAmounts>k__BackingField:
+    - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+      <Count>k__BackingField: 1
   <Cost>k__BackingField:
-  - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
-    <Count>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 836672763463250318, guid: 969dac68bd3816442a70a90555778e97, type: 3}
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+    <Count>k__BackingField: 40
+  - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
+    <Count>k__BackingField: 0
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
+    <Count>k__BackingField: 0
+  <Prefab>k__BackingField: {fileID: 4962228977703815173, guid: 3ae42615d19662345b681ac379648983, type: 3}

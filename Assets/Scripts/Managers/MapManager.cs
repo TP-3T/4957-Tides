@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.Terrain;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
@@ -40,14 +42,20 @@ namespace TTT.Managers
         [SerializeField]
         private TerrainDictionary _allowedTerrains;
 
+        [SerializeField]
+        private GameEvent onFloodEnded;
+
         private NetworkVariable<int> _hexGridWidth = new();
         private NetworkVariable<int> _hexGridHeight = new();
         private NetworkVariable<ulong> _hexMeshId = new();
         private NetworkVariable<ulong> _seaMeshId = new();
-        private readonly AssetReference _hexGridMeshAsset = new("P_HexMesh");
-        private readonly AssetReference _seaMeshAsset = new("P_SeaMesh");
         private MapData _gameMapData;
         private const int CellsPerFrame = 25;
+
+        [SerializeField]
+        private GameEvent BuildingFeatureEvent;
+
+        private Dictionary<string, FeatureType> _featureTypesByUniqueId = new();
 
         public NetworkList<HexCell> HexCells = new(
             default,
@@ -56,16 +64,42 @@ namespace TTT.Managers
         );
         public Queue<HexCell> ToFlood = new();
         public Queue<HexCell> FloodQueue = new();
-        public Queue<HexCell> FloodQueue2 = new();
+        public Queue<HexCell> AboveSeaLevelQueue = new();
         public NetworkVariable<float> SeaLevel = new(0.0f);
         public NetworkVariable<float> RisingRate = new(1.0f);
         public bool DrawDebugLabels;
 
         private LineRenderer lineRenderer;
 
+        private List<(Vector3 position, string featureId)> _pendingFeatures =
+            new();
+        private bool _featuresLoaded = false;
+
         void Start()
         {
             lineRenderer = GetComponent<LineRenderer>();
+            StartCoroutine(LoadFeatureTypes());
+        }
+
+        private IEnumerator LoadFeatureTypes()
+        {
+            yield return AssetLoader<FeatureType>.LoadGroup(
+                "building",
+                CacheFeatureType
+            );
+            _featuresLoaded = true;
+            Debug.Log($"Loaded {_featureTypesByUniqueId.Count} feature types");
+        }
+
+        private void CacheFeatureType(FeatureType featureType)
+        {
+            if (
+                featureType != null
+                && !string.IsNullOrEmpty(featureType.UniqueID)
+            )
+            {
+                _featureTypesByUniqueId[featureType.UniqueID] = featureType;
+            }
         }
 
         public override void OnNetworkSpawn()
@@ -120,108 +154,233 @@ namespace TTT.Managers
         [ClientRpc]
         private void TriangulateHexMeshClientRpc()
         {
-            NetworkObject hexMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_hexMeshId.Value];
-            HexMesh hexMeshInstance =
-                hexMeshNetworkObject.GetComponent<HexMesh>(); // Get the hex mesh in the scene
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _hexMeshId.Value,
+                    out NetworkObject hexMeshNetworkObject
+                )
+            )
+            {
+                HexMesh hexMeshInstance =
+                    hexMeshNetworkObject.GetComponent<HexMesh>(); // Get the hex mesh in the scene
 
-            hexMeshInstance.Triangulate(
-                HexCells,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
+                hexMeshInstance.Triangulate(
+                    HexCells,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
+            }
 
-            _mapLoadFinishEvent.Raise(
-                new NewMapFinishedEventArgs() { WasSuccessful = true }
-            );
-        }
-
-        [ClientRpc]
-        private void TriangulateHexMeshClientRpc(HexCell cell)
-        {
-            NetworkObject hexMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_hexMeshId.Value];
-            HexMesh hexMeshInstance =
-                hexMeshNetworkObject.GetComponent<HexMesh>();
-
-            hexMeshInstance.ReTriangulateCell(
-                cell,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
+            // Spawn features asynchronously across multiple frames
+            StartCoroutine(SpawnPendingFeaturesAsync());
         }
 
         [ClientRpc]
         private void TriangulateHexMeshClientRpc(HexCell[] cells)
         {
-            NetworkObject hexMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_hexMeshId.Value];
-            HexMesh hexMeshInstance =
-                hexMeshNetworkObject.GetComponent<HexMesh>();
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _hexMeshId.Value,
+                    out NetworkObject hexMeshNetworkObject
+                )
+            )
+            {
+                HexMesh hexMeshInstance =
+                    hexMeshNetworkObject.GetComponent<HexMesh>();
 
-            hexMeshInstance.ReTriangulateCells(
-                cells,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
+                hexMeshInstance.ReTriangulateCells(
+                    cells,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
+            }
         }
 
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc()
         {
-            NetworkObject seaMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_seaMeshId.Value];
-            SeaMesh seaMeshInstance =
-                seaMeshNetworkObject.GetComponent<SeaMesh>();
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _seaMeshId.Value,
+                    out NetworkObject seaMeshNetworkObject
+                )
+            )
+            {
+                SeaMesh seaMeshInstance =
+                    seaMeshNetworkObject.GetComponent<SeaMesh>();
 
-            seaMeshInstance.Triangulate(
-                HexCells,
-                SeaLevel.Value,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
+                seaMeshInstance.Triangulate(
+                    HexCells,
+                    SeaLevel.Value,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
+            }
         }
 
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc(HexCell cell)
         {
-            NetworkObject seaMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_seaMeshId.Value];
-            SeaMesh seaMeshInstance =
-                seaMeshNetworkObject.GetComponent<SeaMesh>();
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _seaMeshId.Value,
+                    out NetworkObject seaMeshNetworkObject
+                )
+            )
+            {
+                SeaMesh seaMeshInstance =
+                    seaMeshNetworkObject.GetComponent<SeaMesh>();
 
-            seaMeshInstance.TriangulateCell(
-                cell,
-                MapManager.HexSize,
-                MapManager.HexOrientation
-            );
+                seaMeshInstance.TriangulateCell(
+                    cell,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
+            }
         }
 
         [ClientRpc]
         private void TriangulateSeaMeshClientRpc(HexCell[] cells)
         {
-            NetworkObject seaMeshNetworkObject = NetworkManager
-                .Singleton
-                .SpawnManager
-                .SpawnedObjects[_seaMeshId.Value];
-            SeaMesh seaMeshInstance =
-                seaMeshNetworkObject.GetComponent<SeaMesh>();
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _seaMeshId.Value,
+                    out NetworkObject seaMeshNetworkObject
+                )
+            )
+            {
+                SeaMesh seaMeshInstance =
+                    seaMeshNetworkObject.GetComponent<SeaMesh>();
 
-            seaMeshInstance.TriangulateCells(
-                cells,
-                SeaLevel.Value,
-                MapManager.HexSize,
-                MapManager.HexOrientation
+                seaMeshInstance.TriangulateCells(
+                    cells,
+                    SeaLevel.Value,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
+            }
+        }
+
+        private void SpawnPendingFeatures()
+        {
+            // po: the idea is that
+            // OnNewMap() parses json
+            // then on each tile with feature != null
+            //   adds (position, featureId) to pending features,
+            // then spawnMapObjects() creates mesh prefabs
+            // then TriangulateWhatever() makes visual mesh
+            // then SpawnPendingFeatures()
+            //    looks up feature id in feature types by unique id
+            //    creates building feature args
+            //    calls FeatureBuilder.OnLoadingMapFeature(args)
+            //       where BuildAt() instantiates prefab
+
+            if (!_featuresLoaded)
+            {
+                Debug.LogWarning("feature types didn't load");
+            }
+
+            int spawnedCount = 0;
+
+            foreach (var (position, featureId) in _pendingFeatures)
+            {
+                if (
+                    _featureTypesByUniqueId.TryGetValue(
+                        featureId,
+                        out FeatureType featureType
+                    )
+                )
+                {
+                    var args =
+                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    args.Location = position;
+                    args.FeatureType = featureType;
+                    args.OwnedByClient = false;
+                    Debug.Log(args);
+                    BuildingFeatureEvent.Raise(args);
+                    spawnedCount++;
+                }
+                else
+                {
+                    Debug.LogWarning(
+                        $"skipped unknown feature '{featureId}' at {position}"
+                    );
+                }
+            }
+
+            if (spawnedCount > 0)
+            {
+                Debug.Log($"Spawned {spawnedCount} features from map data:");
+            }
+
+            _pendingFeatures.Clear();
+        }
+
+        private IEnumerator SpawnPendingFeaturesAsync()
+        {
+            if (!_featuresLoaded)
+            {
+                Debug.LogWarning("feature types didn't load");
+                yield break;
+            }
+
+            int spawnedCount = 0;
+            int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smooth-ish loading
+            Dictionary<string, int> featureTypeCounts =
+                new Dictionary<string, int>();
+
+            Debug.Log(
+                $"Starting async spawn of {_pendingFeatures.Count} features..."
+            );
+
+            foreach (var (position, featureId) in _pendingFeatures)
+            {
+                if (
+                    _featureTypesByUniqueId.TryGetValue(
+                        featureId,
+                        out FeatureType featureType
+                    )
+                )
+                {
+                    var args =
+                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    args.Location = position;
+                    args.FeatureType = featureType;
+                    BuildingFeatureEvent.Raise(args);
+                    spawnedCount++;
+
+                    // Track counts by type
+                    if (!featureTypeCounts.ContainsKey(featureId))
+                        featureTypeCounts[featureId] = 0;
+                    featureTypeCounts[featureId]++;
+
+                    // Yield every X spawns to maintain framerate
+                    //Kinda doesn't work :/
+                    if (spawnedCount % spawnsPerFrame == 0)
+                    {
+                        yield return null; // Wait one frame
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning(
+                        $"skipped unknown feature '{featureId}' at {position}"
+                    ); //THis basically never happens but I put this here just in case :/
+                }
+            }
+
+            if (spawnedCount > 0)
+            {
+                Debug.Log($"Finished spawning {spawnedCount} features:");
+                foreach (var kvp in featureTypeCounts)
+                {
+                    Debug.Log($"  {kvp.Key}: {kvp.Value}");
+                }
+            }
+
+            _pendingFeatures.Clear();
+            _mapLoadFinishEvent.Raise(
+                new NewMapFinishedEventArgs() { WasSuccessful = true }
             );
         }
 
@@ -267,64 +426,90 @@ namespace TTT.Managers
             // Maybe...
             try
             {
+                _pendingFeatures.Clear();
+
                 // Deserialized data (cringe)
-                _gameMapData = JsonUtility.FromJson<MapData>(
+                _gameMapData = JsonConvert.DeserializeObject<MapData>(
                     args.DataFile.text
                 );
-                _hexGridWidth.Value = _gameMapData.Width;
-                _hexGridHeight.Value = _gameMapData.Height;
 
-                HexCell[] hexCells = new HexCell[
-                    _gameMapData.MapTilesData.Count
-                ];
+                int width = _gameMapData.MapTile.Count;
+                int height = _gameMapData.MapTile["0"].Count;
 
-                foreach (MapTileData mapTileData in _gameMapData.MapTilesData)
+                _hexGridWidth.Value = width;
+                _hexGridHeight.Value = height;
+
+                HexCell[] hexCells = new HexCell[width * height];
+
+                foreach (var xGroup in _gameMapData.MapTile)
                 {
-                    if (mapTileData.Height < 0)
-                        mapTileData.SetHeight(0);
+                    int x = int.Parse(xGroup.Key);
 
-                    Vector3 hexCenter =
-                        HexMath.GetHexCenter(
-                            MapManager.HexSize,
-                            mapTileData.Height + 1,
-                            mapTileData.OffsetCoordinates,
-                            MapManager.HexOrientation
-                        ) + Vector3.zero;
-
-                    CubeCoordinates hc = HexMath.OddOffsetToCube(
-                        mapTileData.OffsetCoordinates,
-                        MapManager.HexOrientation
-                    );
-
-                    Color cc = _allowedTerrains.Get(mapTileData.TileType).Color;
-
-                    HexCell hexCell = new()
+                    foreach (var zGroup in xGroup.Value)
                     {
-                        CellCubeCoordinates = hc,
-                        CellPosition = hexCenter,
-                        CellColor = cc,
-                        TerrainTypeId = mapTileData.TileType,
-                    };
+                        int z = int.Parse(zGroup.Key);
+                        TileData tileData = zGroup.Value;
 
-                    int cubeCoordinateIndex = GetCellIndexFromCubeCoordinates(
-                        hc
-                    );
+                        if (tileData.Elevation < 0)
+                        {
+                            tileData.Elevation = 0;
+                        }
 
-                    hexCells[cubeCoordinateIndex] = hexCell;
+                        OffsetCoordinates offset = new(x, z);
+
+                        Vector3 hexCenter = HexMath.GetHexCenter(
+                            HexSize,
+                            tileData.Elevation + 1,
+                            offset,
+                            HexOrientation
+                        );
+
+                        CubeCoordinates cubeCoords = HexMath.OddOffsetToCube(
+                            offset,
+                            HexOrientation
+                        );
+
+                        Color cellColor = _allowedTerrains
+                            .Get(tileData.TileType)
+                            .Color;
+
+                        HexCell hexCell = new HexCell()
+                        {
+                            CellCubeCoordinates = cubeCoords,
+                            CellPosition = hexCenter,
+                            CellColor = cellColor,
+                            TerrainTypeId = tileData.TileType,
+                        };
+
+                        int index = x + z * width;
+
+                        hexCells[index] = hexCell;
+
+                        // po: queue features for spawning after mesh is created
+                        if (!string.IsNullOrEmpty(tileData.Feature))
+                        {
+                            _pendingFeatures.Add((hexCenter, tileData.Feature));
+                        }
+                    }
                 }
+
+                HexCells.Clear();
 
                 foreach (HexCell hc in hexCells)
                 {
                     HexCells.Add(hc);
                 }
 
-                ToFlood.Enqueue(HexCells[0]); // There was some idea for this
+                SeaLevel.Value = _gameMapData.WorldState.SeaLevel;
 
+                ToFlood.Clear();
+                ToFlood.Enqueue(HexCells[0]); // There was some idea for this
                 StartCoroutine(SpawnMapObjects());
             }
             catch (Exception e)
             {
                 Debug.LogException(e);
+
                 _mapLoadFinishEvent.Raise(
                     new NewMapFinishedEventArgs() { WasSuccessful = false }
                 );
@@ -347,10 +532,8 @@ namespace TTT.Managers
             OnMapMeshClickedServerRpc(args.ClickedPoint, args.PlayerColor);
         }
 
-        public void OnFlood(UnityEngine.Object eventArgs)
+        public void OnFlood(UnityEngine.Object _)
         {
-            FloodEventArgs args = eventArgs as FloodEventArgs;
-
             Debug.Log("Flood Event Triggered - MapManager line 261");
 
             StartRaiseSeaServerRpc();

@@ -1,8 +1,5 @@
-using System.Runtime.Serialization;
 using TMPro;
 using TTT.DataClasses.PlayerResources;
-using TTT.GameEvents;
-using TTT.Managers;
 using UnityEngine;
 
 /// <summary>
@@ -33,6 +30,8 @@ public class PlayerInformation : MonoBehaviour
     private int cachedPowerAmount;
 
     private int cachedPopulationAmount;
+
+    Event onUpdatePlayerInfo;
 
     /// <summary>
     /// Updates the player information display each frame.

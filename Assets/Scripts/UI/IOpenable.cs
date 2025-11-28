@@ -92,10 +92,10 @@ namespace TTT.UI
                     openPos.y -= ToOpen.rect.height;
                     break;
                 case ShiftType.Left:
-                    openPos.x += ToOpen.rect.width;
+                    openPos.x -= ToOpen.rect.width;
                     break;
                 case ShiftType.Right:
-                    openPos.x += ToOpen.rect.height;
+                    openPos.x += ToOpen.rect.width;
                     break;
             }
             EndPosition = openPos;

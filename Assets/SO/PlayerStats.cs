@@ -1,17 +1,10 @@
 using System;
 using TTT.DataClasses.TileFeatures;
-using TTT.GameEvents;
 using UnityEngine;
 
-//* CB: CLass is basically disabled while we redo the events.
 public class PlayerStats : ScriptableObject
 {
     public Currencies PlayerCurrencies { get; private set; }
-
-    void OnEnable()
-    {
-        // GameEvent.BuildEvent += UpdateResources;
-    }
 
     void UpdateResources(object sender, EventArgs e)
     {

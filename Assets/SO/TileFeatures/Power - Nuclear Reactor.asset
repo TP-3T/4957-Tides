@@ -13,21 +13,29 @@ MonoBehaviour:
   m_Name: Power - Nuclear Reactor
   m_EditorClassIdentifier: 
   <UniqueID>k__BackingField: nuclear
+  <Category>k__BackingField: 2
+  <DisplayName>k__BackingField: Nuclear Power
   <PollutionEmission>k__BackingField: 10
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 750
     <TerrainConstraints>k__BackingField:
       <Mode>k__BackingField: 1
       <List>k__BackingField:
-      - {fileID: 0}
+      - {fileID: 11400000, guid: df18eb8c24270bf468df79b96fb1553c, type: 2}
+      - {fileID: 11400000, guid: 112d508e3d5328640b53bbbf9e6ff1d6, type: 2}
+      - {fileID: 11400000, guid: da73337ffc743494987e98ff083029ef, type: 2}
     <FeatureConstraints>k__BackingField: []
   <BuildValidator>k__BackingField: {fileID: 11400000, guid: 415d8be488ae7e54388aaea4cfe19dc7, type: 2}
   <ResourceProducers>k__BackingField:
-  - productionSchedule: {fileID: 11400000, guid: edef3b431516b8048a30517cd2383a7b, type: 2}
-    resourceAmounts:
-    - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-      <Count>k__BackingField: 1000
+  - <ProductionSchedule>k__BackingField: {fileID: 11400000, guid: eef1b438675876e41856cf2125b2b9c9, type: 2}
+    <ResourceAmounts>k__BackingField:
+    - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+      <Count>k__BackingField: 1
   <Cost>k__BackingField:
-  - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
-    <Count>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 8506843664173545344, guid: 6280a125f160edd4a87b99e065d60309, type: 3}
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+    <Count>k__BackingField: 67
+  - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
+    <Count>k__BackingField: 10
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
+    <Count>k__BackingField: 5
+  <Prefab>k__BackingField: {fileID: 6439876373585420871, guid: 86744611b8a062c4fbe38b4c44b9028a, type: 3}

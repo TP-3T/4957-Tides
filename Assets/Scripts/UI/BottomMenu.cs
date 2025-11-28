@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Managers;
+using TTT.Player;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TTT.UI
 {
@@ -39,11 +42,11 @@ namespace TTT.UI
 
         /* #endregion*/
 
-        /// <summary>
-        /// Event to be raised when we change to Inspect mode.
-        /// </summary>
         [SerializeField]
-        private GameEvent startInspectMode;
+        private GameEvent InteractModeChange;
+
+        [SerializeField]
+        private PlayerController PlayerController;
 
         [Header("Shop Slots")]
         /// <summary>
@@ -134,6 +137,65 @@ namespace TTT.UI
             CurrentShift = StartCoroutine((this as IOpenable).ToggleOpenable());
         }
 
+        private void AddToDictionaries(FeatureType feature)
+        {
+            if (feature != null)
+            {
+                //Add to Buildings dictionary
+                Buildings[feature.Category][feature.UniqueID] = feature;
+
+                AddToTabSlots(feature);
+            }
+        }
+
+        private void AddToTabSlots(FeatureType feature)
+        {
+            var tab = tabSlots.Keys.First(key =>
+                key.name.Equals(feature.Category.ToString())
+            );
+            // Create the slot and insert into dictionary
+            List<GameObject> slotList = tabSlots[tab];
+
+            GameObject slotObject = Instantiate(
+                ShopSlotPrefab,
+                Vector3.zero,
+                Quaternion.identity,
+                ShopSlotArea.transform
+            );
+            BuildingShopSlot slot = slotObject.GetComponent<BuildingShopSlot>();
+            slot.feature = feature;
+            Button slotButton = slotObject.GetComponent<Button>();
+            slotButton.onClick.AddListener(() =>
+            {
+                PlayerController.FeatureType = feature;
+                PlayerController.Mode = InteractionMode.BUILDING;
+                // po: this directly sets mode
+                // but BuildingShopSlot does the same thing via an event
+            });
+
+            tabSlots[tab].Add(slotObject);
+        }
+
+        private void CreateShopTabs()
+        {
+            var types = Enum.GetValues(typeof(FeatureCategory))
+                .Cast<FeatureCategory>();
+            foreach (var type in types)
+            {
+                Buildings[type] = new();
+                var newTab = Instantiate(ShopTabPrefab);
+                var shopTab = newTab.GetComponent<ShopTab>();
+                newTab.name = type.ToString();
+                shopTab.TextArea.text = type.ToString();
+                shopTab.Button.onClick.AddListener(() =>
+                {
+                    TabClicked(newTab);
+                });
+                newTab.transform.SetParent(ShopTabArea.transform);
+                tabSlots[newTab] = new();
+            }
+        }
+
         /// <summary>
         /// Helper function to be run when a Shop tab is clicked.
         /// Checks if its the current tab, running the IOpenable
@@ -168,66 +230,6 @@ namespace TTT.UI
                         slot.SetActive(true);
                     });
                 currentTab = tab;
-            }
-        }
-
-        private void AddToDictionaries(FeatureType feature)
-        {
-            if (feature != null)
-            {
-                //Add to Buildings dictionary
-                Buildings[feature.Category][feature.UniqueID] = feature;
-
-                AddToTabSlots(feature);
-            }
-        }
-
-        private void AddToTabSlots(FeatureType feature)
-        {
-            var tab = tabSlots.Keys.First(key =>
-                key.name.Equals(feature.Category.ToString())
-            );
-            // Create the slot and insert into dictionary
-            List<GameObject> slotList = tabSlots[tab];
-            float slotWidth = ShopSlotPrefab
-                .transform.GetComponent<RectTransform>()
-                .rect.width;
-            Vector3 parentPosition = ShopSlotArea.transform.position;
-            var parentRect = ShopSlotArea.GetComponent<RectTransform>().rect;
-
-            GameObject slotObject = Instantiate(
-                ShopSlotPrefab,
-                new Vector3(
-                    parentPosition.x,
-                    parentPosition.y + parentRect.height,
-                    parentPosition.z
-                ),
-                Quaternion.identity,
-                ShopSlotArea.transform
-            );
-            BuildingShopSlot slot = slotObject.GetComponent<BuildingShopSlot>();
-            slot.feature = feature;
-
-            tabSlots[tab].Add(slotObject);
-        }
-
-        private void CreateShopTabs()
-        {
-            var types = Enum.GetValues(typeof(FeatureCategory))
-                .Cast<FeatureCategory>();
-            foreach (var type in types)
-            {
-                Buildings[type] = new();
-                var newTab = Instantiate(ShopTabPrefab);
-                var shopTab = newTab.GetComponent<ShopTab>();
-                newTab.name = type.ToString();
-                shopTab.TextArea.text = type.ToString();
-                shopTab.Button.onClick.AddListener(() =>
-                {
-                    TabClicked(newTab);
-                });
-                newTab.transform.SetParent(ShopTabArea.transform);
-                tabSlots[newTab] = new();
             }
         }
     }

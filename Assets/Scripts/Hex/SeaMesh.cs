@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using TTT.DataClasses.HexData;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Rendering;
 

@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
-using TTT.Helpers;
 using TTT.Hex;
-using UnityEditor.Search;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -17,14 +16,53 @@ namespace TTT.Managers
     public partial class MapManager
     {
         [SerializeField]
-        private GameEvent onFloodEnded;
+        private GameEvent DestroyingFeatureEvent;
+
+        [SerializeField]
+        private FeatureRuntimeSet spawnedFeatures;
+
+        /// <summary>
+        /// The map's own cache of spawned features, updated only on flood.
+        /// Not keeping it always updated is ok as it's currently only accessed during flooding.
+        /// </summary>
+        private Feature[] spawnedFeaturesCache = Array.Empty<Feature>();
 
         private void FloodCell(ref HexCell hc)
         {
             int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
             hc.Flooded = true;
-            // hc.CellColor = Color.blue;
+
             HexCells[index] = hc;
+
+            Vector3 cellPosition = hc.CellPosition;
+
+            bool cellHasFeature = spawnedFeaturesCache.Any(feat =>
+                feat.CellPosition == cellPosition
+            );
+
+            if (cellHasFeature)
+            {
+                RaiseDestroyingFeatureEvent(hc.CellPosition);
+            }
+        }
+
+        /// <summary>
+        /// Removes a building from a cell when it gets flooded.
+        /// </summary>
+        private void RaiseDestroyingFeatureEvent(Vector3 cellPosition)
+        {
+            BuildingFeatureArgs bfArgs =
+                ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+            bfArgs.Location = cellPosition;
+
+            if (DestroyingFeatureEvent == null)
+            {
+                Debug.LogError("DestroyingFeatureEvent is not set here");
+                return;
+            }
+
+            DestroyingFeatureEvent.Raise(bfArgs);
+            Debug.Log("destroyed!");
         }
 
         private void SetCellCenterVertex(HexCell hc, int cv)
@@ -51,13 +89,13 @@ namespace TTT.Managers
             {
                 return (
                     (Mathf.RoundToInt(hc.r / 2) + hc.q)
-                    + (hc.r * _gameMapData.Width)
+                    + (hc.r * _hexGridWidth.Value)
                 );
             }
             else
             {
                 throw new Exception(
-                    "This math has lazily not been implemented yet, get on it you git!"
+                    "This math has lazily not been implemented yet, get on it you git!" // po: TODO
                 );
             }
         }
@@ -134,6 +172,9 @@ namespace TTT.Managers
         {
             SeaLevel.Value += RisingRate.Value;
 
+            // update spawned features cache before flooding
+            spawnedFeaturesCache = spawnedFeatures.GetItems();
+
             while (true)
             {
                 // string test2 = "";
@@ -154,17 +195,15 @@ namespace TTT.Managers
                         )
                             ToFlood.Enqueue(test);
                         else
-                            FloodQueue2.Enqueue(test);
+                            AboveSeaLevelQueue.Enqueue(test);
                     }
 
-                    while (FloodQueue2.Count > 0)
-                        FloodQueue.Enqueue(FloodQueue2.Dequeue());
+                    while (AboveSeaLevelQueue.Count > 0)
+                        FloodQueue.Enqueue(AboveSeaLevelQueue.Dequeue());
 
-                    // currently, this is also where we raise TurnEnded
                     Debug.Log("Flood fill cycle complete");
-                    onFloodEnded.Raise();
 
-                    yield break;
+                    break;
                 }
 
                 // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
@@ -201,6 +240,8 @@ namespace TTT.Managers
 
                 yield return null;
             }
+
+            onFloodEnded.Raise();
             //says unreachable but it is
         }
     }
