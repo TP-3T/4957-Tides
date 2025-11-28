@@ -43,13 +43,6 @@ namespace TTT.Managers
             }
         }
 
-        private void SetCellCenterVertex(HexCell hc, int cv)
-        {
-            int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
-            hc.CenterVertexIndex = cv;
-            HexCells[index] = hc;
-        }
-
         private CubeCoordinates GetCubeCoordinatesFromPosition(Vector3 position)
         {
             CubeCoordinatesF cf = HexMath.PositionToCubeF(
@@ -66,7 +59,8 @@ namespace TTT.Managers
             if (MapManager.HexOrientation == HexOrientation.pointyTop)
             {
                 return (
-                    (Mathf.RoundToInt(hc.r / 2) + hc.q)
+                    Mathf.RoundToInt(hc.r / 2)
+                    + hc.q
                     + (hc.r * _hexGridWidth.Value)
                 );
             }
@@ -81,8 +75,7 @@ namespace TTT.Managers
         private int GetCellIndexFromPosition(Vector3 position)
         {
             CubeCoordinates cc = GetCubeCoordinatesFromPosition(position);
-            int ci = GetCellIndexFromCubeCoordinates(cc);
-            return ci;
+            return GetCellIndexFromCubeCoordinates(cc);
         }
 
         private HexCell? GetCellFromCubeCoordinates(

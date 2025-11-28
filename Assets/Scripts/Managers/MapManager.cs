@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.States;
 using TTT.DataClasses.Terrain;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -54,6 +55,9 @@ namespace TTT.Managers
 
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
+
+        [SerializeField]
+        private PlayerStats _playerStats;
 
         private Dictionary<string, FeatureType> _featureTypesByUniqueId = new();
 
@@ -530,6 +534,23 @@ namespace TTT.Managers
             MapMeshClickedEventArgs args = eventArgs as MapMeshClickedEventArgs;
 
             OnMapMeshClickedServerRpc(args.ClickedPoint, args.PlayerColor);
+        }
+
+        public void OnMapMeshClickedForTileSelection(
+            UnityEngine.Object eventArgs
+        )
+        {
+            if (eventArgs is MapMeshClickedEventArgs args)
+            {
+                HexCell? cell = GetCellFromPosition(
+                    args.ClickedPoint,
+                    out bool success
+                );
+                if (success && cell.HasValue && _playerStats != null)
+                {
+                    _playerStats.SetSelectedTile(cell.Value);
+                }
+            }
         }
 
         public void OnFlood(UnityEngine.Object _)
