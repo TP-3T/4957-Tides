@@ -55,6 +55,8 @@ namespace TTT.Player
         private Canvas currentUI;
         public InteractionMode Mode;
 
+        public GameEvent playerLoseEvent;
+
         //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
         //*  We should look into the Unity Input System Package
         readonly Vector3 startingPosition = new(0, 10, -10);
@@ -188,6 +190,7 @@ namespace TTT.Player
                             ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                         building.Location = raycastHit.point;
                         building.FeatureType = FeatureType;
+                        building.OwnedByClient = true;
                         BuildingFeatureEvent.Raise(building);
                     }
                     else if (Mode.Equals(InteractionMode.INSPECTING))
@@ -236,13 +239,13 @@ namespace TTT.Player
 
         public void CheckIfPlayerHasLost()
         {
-            //? po: should these check for null?
             if (
                 GameManager.Instance.CO2 > maxCO2
                 || GameManager.Instance.Temperature > maxTemperature
                 || playerBuildings.GetItems().Length <= 0
             )
             {
+                playerLoseEvent.Raise();
                 OnLose();
             }
         }
@@ -252,7 +255,7 @@ namespace TTT.Player
             DisableUI();
 
             statusText.gameObject.SetActive(true);
-            statusText.text = "Spectating";
+            statusText.text = "You lose";
 
             // feel free to remove this if needed, not important
             GameObject cube = GameObject.Find("Cube");
