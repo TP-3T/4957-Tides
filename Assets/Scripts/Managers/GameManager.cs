@@ -47,7 +47,7 @@ namespace TTT.Managers
         public int CO2 { get; private set; } = 0;
 
         [field: SerializeField]
-        public bool FTTaken { get; private set; } = false;
+        public bool FTTaken { get; private set; } = false;  // First turn done
 
         [field: SerializeField]
         public int Temperature { get; private set; }
@@ -180,6 +180,10 @@ namespace TTT.Managers
             //     }
             // }
 
+            Debug.Log($"{Season.Equals(Seasons[0])}");
+            Debug.Log($"[GameManager] server rpc, current season {Season}");
+            Debug.Log($"[GameManager] server rpc, first season {Seasons[0]}");
+
             ulong nextClient = (CurrentPlayerId.Value + 1) % ((ulong)NetworkManager.Singleton.ConnectedClientsList.Count);
 
             if (FTTaken && nextClient == 0)             // The next season
@@ -190,15 +194,10 @@ namespace TTT.Managers
                 && Season.Equals(Seasons[0]))           // The year is over
                 EndYear();
 
-            Debug.Log($"{Season.Equals(Seasons[0])}");
-            Debug.Log($"[GameManager] server rpc, current season {Season}");
-            Debug.Log($"[GameManager] server rpc, first season {Seasons[0]}");
-
-            OnTurnEndingClientRpc();
-
-            CurrentPlayerId.Value = nextClient;
+            CurrentPlayerId.Value = nextClient; 
             FTTaken = true;
 
+            OnTurnEndingClientRpc();
             StartNextTurn(new());
         }
 

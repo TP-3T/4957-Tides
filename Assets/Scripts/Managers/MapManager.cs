@@ -130,7 +130,7 @@ namespace TTT.Managers
             hexMeshInstance.GetComponent<NetworkObject>().Spawn();
             hexMeshInstance.transform.position += new Vector3(
                 0.0f,
-                -0.01f,
+                -0.01f,             // Holy transform
                 0.0f
             );
             _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
@@ -148,7 +148,7 @@ namespace TTT.Managers
             seaMeshInstance.GetComponent<NetworkObject>().Spawn();
             _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
 
-            TriangulateSeaMeshClientRpc(); // for the host, this should eventually not be necessary
+            TriangulateSeaMeshClientRpc();
         }
 
         [ClientRpc]
@@ -534,7 +534,7 @@ namespace TTT.Managers
 
         public void OnFlood(UnityEngine.Object _)
         {
-            Debug.Log("Flood Event Triggered - MapManager line 261");
+            Debug.Log("Flood Event Triggered - MapManager line 261, not quite");
 
             StartRaiseSeaServerRpc();
         }

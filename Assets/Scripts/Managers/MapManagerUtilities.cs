@@ -148,16 +148,10 @@ namespace TTT.Managers
         /// </summary>
         public IEnumerator RaiseSea()
         {
-            SeaLevel.Value += RisingRate.Value;
+            SeaLevel.Value += RisingRate.Value;   // Function for this perchance
 
             while (true)
             {
-                // string test2 = "";
-                // foreach (var hxc in ToFlood) test2 += $"{hxc}\n";
-                // Debug.Log(test2);
-                // Debug.Log($"{FloodQueue.Count}, {ToFlood.Count}");
-
-                // --- 1. Flood queue is empty, go through neighbours that were not eligible for flooding and see if they will be ---
                 if (ToFlood.Count == 0)
                 {
                     while (FloodQueue.Count > 0)
@@ -181,7 +175,6 @@ namespace TTT.Managers
                     break;
                 }
 
-                // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
                 List<HexCell> flooded = new();
                 int cellCount = 0;
                 while (ToFlood.Count > 0 && cellCount < CellsPerFrame)
@@ -209,8 +202,6 @@ namespace TTT.Managers
                     cellCount++;
                 }
 
-                // --- 3. Retriangulate what has been flooded ---
-                // TriangulateMeshInstanceClientRpc(flooded.ToArray());
                 TriangulateSeaMeshClientRpc(flooded.ToArray());
 
                 yield return null;
