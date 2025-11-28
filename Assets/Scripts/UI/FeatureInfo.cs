@@ -91,18 +91,6 @@ public class FeatureInfo : MonoBehaviour, IOpenable
 
         var tile = playerStats.selectedHexCell.Value;
         var tileData = playerStats.selectedTileData;
-        var tileJson = playerStats.selectedTileJson;
-
-        // Debug log the feature ID
-        if (tileData != null && !string.IsNullOrEmpty(tileData.Feature))
-        {
-            Debug.Log($"Feature on current hex: {tileData.Feature}");
-        }
-        else
-        {
-            Debug.Log("No feature on current hex");
-        }
-
 
         // Format tile info for display
         string displayText = $"Position: {tile.CellPosition}\n" +
@@ -111,7 +99,6 @@ public class FeatureInfo : MonoBehaviour, IOpenable
 
         if (tileData != null)
         {
-            displayText += $"\nFeature: {tileData.Feature ?? "None"}";
             displayText += $"\nOwner: {tileData.Owner}";
             displayText += $"\nElevation: {tileData.Elevation}";
             
@@ -119,11 +106,6 @@ public class FeatureInfo : MonoBehaviour, IOpenable
             {
                 displayText += $"\nLabel: {tileData.Label}";
             }
-        }
-
-        if (!string.IsNullOrEmpty(tileJson))
-        {
-            displayText += $"\n\nJSON:\n{tileJson}";
         }
 
         if (featureTileText != null)
