@@ -13,28 +13,20 @@ namespace TTT.DataClasses.States
     {
         [Header("Player Resources")]
         [SerializeField]
-        private PlayerResource money;
+        public PlayerResource money { get; set; }
 
         [SerializeField]
-        private PlayerResource power;
+        public PlayerResource power{ get; set; }
 
         [SerializeField]
-        private PlayerResource population;
+        public PlayerResource population { get; set; }
 
-        private HexCell? selectedHexCell;
-        private TileData selectedTileData;
-        private string selectedTileJson;
+        public HexCell? selectedHexCell;
+        public TileData selectedTileData;
+        public string selectedTileJson;
 
         public UnityEvent OnResourcesChanged;
         public UnityEvent OnTileSelected;
-
-        public PlayerResource Money => money;
-        public PlayerResource Power => power;
-        public PlayerResource Population => population;
-
-        public HexCell? SelectedHexCell => selectedHexCell;
-        public TileData SelectedTileData => selectedTileData;
-        public string SelectedTileJson => selectedTileJson;
 
         private void OnEnable()
         {

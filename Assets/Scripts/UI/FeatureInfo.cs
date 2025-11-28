@@ -1,3 +1,4 @@
+using TMPro;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.States;
 using TTT.UI;
@@ -26,6 +27,10 @@ public class FeatureInfo : MonoBehaviour, IOpenable
     [field: SerializeField]
     public Vector2 ShiftPadding { get; set; }
 
+    [field: SerializeField]
+    private GameObject hexFeature;
+
+    private TextMeshProUGUI featureTileText;
     private Coroutine CurrentShift { get; set; }
 
     /* #endregion*/
@@ -36,22 +41,10 @@ public class FeatureInfo : MonoBehaviour, IOpenable
     private void Awake()
     {
         (this as IOpenable).SetupPositions();
-    }
-
-    private void OnEnable()
-    {
-        if (playerStats != null)
-        {
-            playerStats.OnTileSelected.AddListener(OnTileSelected);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (playerStats != null)
-        {
-            playerStats.OnTileSelected.RemoveListener(OnTileSelected);
-        }
+        if (hexFeature != null)
+            {
+                featureTileText = hexFeature.GetComponent<TextMeshProUGUI>();
+            }
     }
 
     /// <summary>
@@ -72,7 +65,7 @@ public class FeatureInfo : MonoBehaviour, IOpenable
         if (playerStats == null)
             return;
 
-        var selectedCell = playerStats.SelectedHexCell;
+        var selectedCell = playerStats.selectedHexCell;
 
         if (selectedCell.HasValue)
         {
@@ -93,22 +86,49 @@ public class FeatureInfo : MonoBehaviour, IOpenable
 
     private void UpdateTileDisplay()
     {
-        if (playerStats?.SelectedHexCell == null)
+        if (playerStats?.selectedHexCell == null)
             return;
 
-        var tile = playerStats.SelectedHexCell.Value;
-        var tileData = playerStats.SelectedTileData;
+        var tile = playerStats.selectedHexCell.Value;
+        var tileData = playerStats.selectedTileData;
+        var tileJson = playerStats.selectedTileJson;
 
-        // TODO: Update UI elements with tile data
-        Debug.Log(
-            $"Selected tile at position: {tile.CellPosition}, flooded: {tile.Flooded}, terrain: {tile.TerrainTypeId}"
-        );
+        // Debug log the feature ID
+        if (tileData != null && !string.IsNullOrEmpty(tileData.Feature))
+        {
+            Debug.Log($"Feature on current hex: {tileData.Feature}");
+        }
+        else
+        {
+            Debug.Log("No feature on current hex");
+        }
+
+
+        // Format tile info for display
+        string displayText = $"Position: {tile.CellPosition}\n" +
+                            $"Flooded: {tile.Flooded}\n" +
+                            $"Terrain: {tile.TerrainTypeId}";
 
         if (tileData != null)
         {
-            Debug.Log(
-                $"Tile data - Feature: {tileData.Feature}, Owner: {tileData.Owner}"
-            );
+            displayText += $"\nFeature: {tileData.Feature ?? "None"}";
+            displayText += $"\nOwner: {tileData.Owner}";
+            displayText += $"\nElevation: {tileData.Elevation}";
+            
+            if (!string.IsNullOrEmpty(tileData.Label))
+            {
+                displayText += $"\nLabel: {tileData.Label}";
+            }
+        }
+
+        if (!string.IsNullOrEmpty(tileJson))
+        {
+            displayText += $"\n\nJSON:\n{tileJson}";
+        }
+
+        if (featureTileText != null)
+        {
+            featureTileText.text = displayText;
         }
     }
 

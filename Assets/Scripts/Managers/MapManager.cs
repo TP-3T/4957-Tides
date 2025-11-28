@@ -426,6 +426,7 @@ namespace TTT.Managers
                     hc.CellPosition.z + corners[0].z
                 )
             );
+            _playerStats.SetSelectedTile(hc);
         }
 
         public void OnNewMap(UnityEngine.Object eventArgs)
@@ -545,23 +546,6 @@ namespace TTT.Managers
             MapMeshClickedEventArgs args = eventArgs as MapMeshClickedEventArgs;
 
             OnMapMeshClickedServerRpc(args.ClickedPoint, args.PlayerColor);
-        }
-
-        public void OnMapMeshClickedForTileSelection(
-            UnityEngine.Object eventArgs
-        )
-        {
-            if (eventArgs is MapMeshClickedEventArgs args)
-            {
-                HexCell? cell = GetCellFromPosition(
-                    args.ClickedPoint,
-                    out bool success
-                );
-                if (success && cell.HasValue && _playerStats != null)
-                {
-                    _playerStats.SetSelectedTile(cell.Value);
-                }
-            }
         }
 
         public void OnFlood(UnityEngine.Object _)

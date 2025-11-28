@@ -44,9 +44,10 @@ public class PlayerInformation : MonoBehaviour
     {
         if (playerStats != null)
         {
-            SetMoneyText(playerStats.Money?.AmountOwned ?? 0);
-            SetPowerText(playerStats.Power?.AmountOwned ?? 0);
-            SetPopulationText(playerStats.Population?.AmountOwned ?? 0);
+            
+            SetMoneyText(playerStats.money?.AmountOwned ?? 0);
+            SetPowerText(playerStats.power?.AmountOwned ?? 0);
+            SetPopulationText(playerStats.population?.AmountOwned ?? 0);
         }
     }
 

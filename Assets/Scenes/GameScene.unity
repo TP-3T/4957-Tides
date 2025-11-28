@@ -526,7 +526,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2315601190507965176, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -19.479967
+      value: -19.479998
       objectReference: {fileID: 0}
     - target: {fileID: 2609288784758197636, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1080,10 +1080,10 @@ PrefabInstance:
     - target: {fileID: 7227047647059873641, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
       propertyPath: Event
       value: 
-      objectReference: {fileID: 11400000, guid: 430d05d8968fdce498f62567aa054de0, type: 2}
+      objectReference: {fileID: 11400000, guid: 9438c37d1b6c53b408804b0dce45c597, type: 2}
     - target: {fileID: 7227047647059873641, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
       propertyPath: Response.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnMapMeshClickedForTileSelection
+      value: OnNewMap
       objectReference: {fileID: 0}
     - target: {fileID: 7227047647059873641, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
       propertyPath: Response.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1524,7 +1524,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1884853060
 MonoBehaviour:
@@ -1783,8 +1783,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2189260201799044924, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
