@@ -72,10 +72,9 @@ public class FeatureBuilder : MonoBehaviour
         bool checkForCost
     )
     {
-        if (ownedByClient && checkForCost && !CheckCost(featureType))
+        if (ownedByClient && checkForCost && !CheckCost(featureType, out string insufficientResource))
         {
-            // then the player is too poor
-            Debug.Log($"Sorry, you're too poor");
+            Debug.LogWarning($"Cannot afford {featureType.name}. Insufficient {insufficientResource}.");
             return;
         }
 
@@ -95,6 +94,11 @@ public class FeatureBuilder : MonoBehaviour
         {
             Debug.LogError("No renderers found in this prefab.");
             return;
+        }
+
+        if (ownedByClient && checkForCost)
+        {
+            DeductCost(featureType);
         }
 
         SpawnedFeatures.Add(feature);
@@ -144,6 +148,12 @@ public class FeatureBuilder : MonoBehaviour
 
     private bool CheckCost(FeatureType featureType)
     {
+        return CheckCost(featureType, out _);
+    }
+
+    private bool CheckCost(FeatureType featureType, out string insufficientResource)
+    {
+        insufficientResource = string.Empty;
         foreach (var resourceCost in featureType.Cost)
         {
             if (resourceCost.Count <= 0)
@@ -154,10 +164,25 @@ public class FeatureBuilder : MonoBehaviour
             PlayerResource resource = resourceCost.Thing;
             if (resource.AmountOwned < resourceCost.Count)
             {
+                insufficientResource = $"{resource.Name} (Need: {resourceCost.Count}, Have: {resource.AmountOwned})";
                 return false;
             }
         }
         return true;
+    }
+
+    private void DeductCost(FeatureType featureType)
+    {
+        foreach (var resourceCost in featureType.Cost)
+        {
+            if (resourceCost.Count <= 0)
+            {
+                continue;
+            }
+
+            PlayerResource resource = resourceCost.Thing;
+            resource.ApplyChange(-resourceCost.Count);
+        }
     }
 
     private Feature BuildAt(Vector3 location, FeatureType featureType)

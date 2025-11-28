@@ -1,5 +1,6 @@
 using TMPro;
 using TTT.DataClasses.States;
+using TTT.GameEvents;
 using UnityEngine;
 
 /// <summary>
@@ -19,23 +20,13 @@ public class PlayerInformation : MonoBehaviour
     [SerializeField]
     private PlayerStats playerStats;
 
-    private void OnEnable()
-    {
-        if (playerStats != null)
-        {
-            playerStats.OnResourcesChanged.AddListener(UpdateAllText);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (playerStats != null)
-        {
-            playerStats.OnResourcesChanged.RemoveListener(UpdateAllText);
-        }
-    }
-
     private void Start()
+    {
+
+        UpdateAllText();
+        playerStats.ResetResources();
+    }
+    void Update()
     {
         UpdateAllText();
     }

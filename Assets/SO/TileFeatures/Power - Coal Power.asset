@@ -39,7 +39,7 @@ MonoBehaviour:
   - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
     <Count>k__BackingField: 20
   - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
-    <Count>k__BackingField: 0
+    <Count>k__BackingField: 5
   - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
     <Count>k__BackingField: 0
   <Prefab>k__BackingField: {fileID: 7069087375812076879, guid: 42520394676cf744991b826d095ff4bd, type: 3}

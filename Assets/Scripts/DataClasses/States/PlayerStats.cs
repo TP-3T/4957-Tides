@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace TTT.DataClasses.States
 {
@@ -13,34 +12,36 @@ namespace TTT.DataClasses.States
     public class PlayerStats : ScriptableObject
     {
         [Header("Player Resources")]
-        [SerializeField]
+        [field:SerializeField]
         public PlayerResource money { get; set; }
 
-        [SerializeField]
+        [field:SerializeField]
         public PlayerResource power{ get; set; }
 
-        [SerializeField]
+        [field: SerializeField]
         public PlayerResource population { get; set; }
+
+        [Header("Starting Resources")]
+        [SerializeField]
+        private int startingMoney = 500;
+
+        [SerializeField]
+        private int startingPower = 0;
+
+        [SerializeField]
+        private int startingPopulation = 0;
 
         public HexCell? selectedHexCell;
         public TileData selectedTileData;
         public string selectedTileJson;
 
-        public UnityEvent OnResourcesChanged;
-        public UnityEvent OnTileSelected;
 
-        private void OnEnable()
-        {
-            OnResourcesChanged ??= new UnityEvent();
-            OnTileSelected ??= new UnityEvent();
-        }
 
         public void SetSelectedTile(HexCell hexCell, TileData tileData)
         {
             selectedHexCell = hexCell;
             selectedTileData = tileData;
             selectedTileJson = JsonUtility.ToJson(tileData, true);
-            OnTileSelected?.Invoke();
         }
 
         public void SetSelectedTile(HexCell hexCell)
@@ -48,7 +49,6 @@ namespace TTT.DataClasses.States
             selectedHexCell = hexCell;
             selectedTileData = null;
             selectedTileJson = null;
-            OnTileSelected?.Invoke();
         }
 
         public void ClearSelectedTile()
@@ -56,12 +56,6 @@ namespace TTT.DataClasses.States
             selectedHexCell = null;
             selectedTileData = null;
             selectedTileJson = null;
-            OnTileSelected?.Invoke();
-        }
-
-        public void NotifyResourcesChanged()
-        {
-            OnResourcesChanged?.Invoke();
         }
 
         public List<PlayerResource> GetAllResources()
@@ -85,7 +79,6 @@ namespace TTT.DataClasses.States
             {
                 cost.Key.ApplyChange(-cost.Value);
             }
-            NotifyResourcesChanged();
         }
 
         public void AddResources(Dictionary<PlayerResource, int> gains)
@@ -94,15 +87,20 @@ namespace TTT.DataClasses.States
             {
                 gain.Key.ApplyChange(gain.Value);
             }
-            NotifyResourcesChanged();
         }
 
         public void ResetResources()
         {
-            money?.Set(0);
-            power?.Set(0);
-            population?.Set(0);
-            NotifyResourcesChanged();
+            money?.Set(startingMoney);
+            power?.Set(startingPower);
+            population?.Set(startingPopulation);
+        }
+
+        public void InitializeResources()
+        {
+            money?.Set(startingMoney);
+            power?.Set(startingPower);
+            population?.Set(startingPopulation);
         }
     }
 }
