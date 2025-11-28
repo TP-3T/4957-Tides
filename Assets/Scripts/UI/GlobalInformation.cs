@@ -14,6 +14,7 @@ public class GlobalInformation : MonoBehaviour
     [SerializeField]
     private PlayerStats playerStats;
 
+
     [Tooltip("Multiplier to convert pollution units to ppm for display")]
     [SerializeField]
     private float pollutionToPpmMultiplier = 0.001f;
