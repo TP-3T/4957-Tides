@@ -15,24 +15,27 @@ MonoBehaviour:
   <UniqueID>k__BackingField: forest
   <Category>k__BackingField: 3
   <DisplayName>k__BackingField: Forest
-  <PollutionEmission>k__BackingField: 200
+  <PollutionEmission>k__BackingField: -20
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
     <TerrainConstraints>k__BackingField:
       <Mode>k__BackingField: 0
-      <List>k__BackingField: []
+      <List>k__BackingField:
+      - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
+      - {fileID: 11400000, guid: 2120c918288b3bd40a2918ed1b65fe86, type: 2}
+      - {fileID: 11400000, guid: e14599042cb91bf4d93294d8fe23a115, type: 2}
+      - {fileID: 11400000, guid: a0bfe455dcde2f348b2a9a88f8d0cb0c, type: 2}
+      - {fileID: 11400000, guid: 642c9db17390d884c842f1eebd96973d, type: 2}
     <FeatureConstraints>k__BackingField: []
-  <BuildValidator>k__BackingField: {fileID: 11400000, guid: d4e273d8b77e90742a9605b7146ee4c8, type: 2}
+  <BuildValidator>k__BackingField: {fileID: 11400000, guid: 418d17bf1c05a9c40aff3428a267cd49, type: 2}
   <ResourceProducers>k__BackingField:
-  - <ProductionSchedule>k__BackingField: {fileID: 11400000, guid: eef1b438675876e41856cf2125b2b9c9, type: 2}
-    <ResourceAmounts>k__BackingField:
-    - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
-      <Count>k__BackingField: 5
+  - productionSchedule: {fileID: 11400000, guid: 17a0647e21e0cef458dc0b557a3a7cbe, type: 2}
+    resourceAmounts: []
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-    <Count>k__BackingField: 5
+    <Count>k__BackingField: 2
   - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
-    <Count>k__BackingField: 4
+    <Count>k__BackingField: 2
   - <Thing>k__BackingField: {fileID: 11400000, guid: 07faa1c258f019b4f83718cc35413869, type: 2}
-    <Count>k__BackingField: 30
+    <Count>k__BackingField: 20
   <Prefab>k__BackingField: {fileID: 4211243352007271623, guid: f718a38313240754888016ffa5095b07, type: 3}
