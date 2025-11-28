@@ -146,6 +146,11 @@ public class FeatureBuilder : MonoBehaviour
     {
         foreach (var resourceCost in featureType.Cost)
         {
+            if (resourceCost.Count <= 0)
+            {
+                continue;
+            }
+
             PlayerResource resource = resourceCost.Thing;
             if (resource.AmountOwned < resourceCost.Count)
             {
