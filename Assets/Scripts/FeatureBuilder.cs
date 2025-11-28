@@ -45,6 +45,8 @@ public class FeatureBuilder : MonoBehaviour
             return;
         }
 
+        Debug.Log("[FeatureBuilder] I AM NUKING A FEATURE");
+
         DestroyAt(FixLocation(bfArgs.Location));
     }
 

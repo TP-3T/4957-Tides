@@ -237,7 +237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2315601190507965176, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -19.479788
+      value: -19.47997
       objectReference: {fileID: 0}
     - target: {fileID: 2540338663754247135, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: SyncRotAngleX
@@ -401,6 +401,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5551575865207947398, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5551575865207947398, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5725100722420890990, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
@@ -1027,6 +1031,10 @@ PrefabInstance:
       propertyPath: BuildingFeatureEvent
       value: 
       objectReference: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
+    - target: {fileID: 4501877893874324670, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+      propertyPath: DestroyingFeatureEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: be77d2d33c12b1b43b2c40d9edbddf12, type: 2}
     - target: {fileID: 7330801835676113482, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

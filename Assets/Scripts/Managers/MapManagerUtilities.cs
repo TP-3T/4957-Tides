@@ -5,6 +5,7 @@ using TTT.DataClasses.HexData;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -25,22 +26,25 @@ namespace TTT.Managers
             HexCells[index] = hc;
 
             // Remove any building on this flooded cell
-            RaiseDestroyingFeatureEvent(hc.CellPosition);
+            DestroyFeatureCientRpc(hc.CellPosition);
         }
 
         /// <summary>
         /// Removes a building from a cell when it gets flooded.
         /// </summary>
-        private void RaiseDestroyingFeatureEvent(Vector3 cellPosition)
+        [Rpc(SendTo.ClientsAndHost)]
+        private void DestroyFeatureCientRpc(Vector3 cellPosition)
         {
+            Debug.Log("Cient RPC");
+
             BuildingFeatureArgs bfArgs =
                 ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-            if (bfArgs.FeatureType != null)
-            {
-                bfArgs.Location = cellPosition;
 
-                DestroyingFeatureEvent.Raise(bfArgs);
-            }
+            Debug.Log($"[MapManagerUtilities] We are going to flood a cell");
+            Debug.Log($"[MapManagerUtilities] Cell is being flooded");
+
+            bfArgs.Location = cellPosition;
+            DestroyingFeatureEvent.Raise(bfArgs);
         }
 
         private void SetCellCenterVertex(HexCell hc, int cv)
