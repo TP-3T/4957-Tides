@@ -4,9 +4,9 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - money: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
-  - power: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-  - population: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
+  - money: {instanceID: 0}
+  - power: {instanceID: 0}
+  - population: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

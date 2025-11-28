@@ -5,7 +5,7 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - <ToOpen>k__BackingField: {instanceID: 0}
-  - playerStats: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
+  - playerStats: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
