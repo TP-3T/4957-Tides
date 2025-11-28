@@ -38,8 +38,6 @@ MonoBehaviour:
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
     <Count>k__BackingField: 10
-  - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
-    <Count>k__BackingField: 4
   - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
     <Count>k__BackingField: 30
   <Prefab>k__BackingField: {fileID: 2395858261925545394, guid: e4174bf1d699918459d7ccd5ef3ef40e, type: 3}
