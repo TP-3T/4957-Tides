@@ -42,27 +42,37 @@ namespace TTT.Managers
 
             if (cellHasFeature)
             {
-                RaiseDestroyingFeatureEvent(hc.CellPosition);
+                DestroyFeatureCientRpc(hc.CellPosition);
             }
         }
 
         /// <summary>
         /// Removes a building from a cell when it gets flooded.
         /// </summary>
-        private void RaiseDestroyingFeatureEvent(Vector3 cellPosition)
+        // private void RaiseDestroyingFeatureEvent(Vector3 cellPosition)
+        // {
+        //     BuildingFeatureArgs bfArgs =
+        //         ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+        //     bfArgs.Location = cellPosition;
+
+        //     if (DestroyingFeatureEvent == null)
+        //     {
+        //         Debug.LogError("DestroyingFeatureEvent is not set here");
+        //         return;
+        //     }
+
+        //     DestroyingFeatureEvent.Raise(bfArgs);
+        //     Debug.Log("destroyed!");
+        // }
+        private void DestroyFeatureCientRpc(Vector3 cellPosition)
         {
-            BuildingFeatureArgs bfArgs =
-                ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+            Debug.Log("[MapManagerUtilities] destroy feature CLIENT rpc");
+
+            BuildingFeatureArgs bfArgs = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
             bfArgs.Location = cellPosition;
-
-            if (DestroyingFeatureEvent == null)
-            {
-                Debug.LogError("DestroyingFeatureEvent is not set here");
-                return;
-            }
-
             DestroyingFeatureEvent.Raise(bfArgs);
-            Debug.Log("destroyed!");
+            
+            Debug.Log("[MapManagerUtilities] destroyed");
         }
 
         private void SetCellCenterVertex(HexCell hc, int cv)
@@ -177,12 +187,6 @@ namespace TTT.Managers
 
             while (true)
             {
-                // string test2 = "";
-                // foreach (var hxc in ToFlood) test2 += $"{hxc}\n";
-                // Debug.Log(test2);
-                // Debug.Log($"{FloodQueue.Count}, {ToFlood.Count}");
-
-                // --- 1. Flood queue is empty, go through neighbours that were not eligible for flooding and see if they will be ---
                 if (ToFlood.Count == 0)
                 {
                     while (FloodQueue.Count > 0)
@@ -206,7 +210,6 @@ namespace TTT.Managers
                     break;
                 }
 
-                // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
                 List<HexCell> flooded = new();
                 int cellCount = 0;
                 while (ToFlood.Count > 0 && cellCount < CellsPerFrame)
@@ -234,8 +237,6 @@ namespace TTT.Managers
                     cellCount++;
                 }
 
-                // --- 3. Retriangulate what has been flooded ---
-                // TriangulateMeshInstanceClientRpc(flooded.ToArray());
                 TriangulateSeaMeshClientRpc(flooded.ToArray());
 
                 yield return null;
