@@ -19,9 +19,11 @@ namespace TTT.ClimateModel
 
         private static readonly string _MODEL_PATH;
 
+        // min value in training set for global mean sea level (mm)
         public static readonly double TRAINING_DATASET_GMSL_LOWER_BOUND =
             -1.3122;
 
+        // max value in training set for global mean sea level (mm)
         public static readonly double TRAINING_DATASET_GMSL_UPPER_BOUND =
             165.2076002;
 
@@ -83,7 +85,7 @@ namespace TTT.ClimateModel
                 new[] { 1, modelInputFeatures.Length }
             );
 
-            // creates a description of the tensor for the model to be able intepret (requires memory to be disposed after so added using)
+            // creates a description of the tensor for the model to be able intepret
             var inputs = new List<NamedOnnxValue>
             {
                 NamedOnnxValue.CreateFromTensor(_tensorInputName, inputTensor),
