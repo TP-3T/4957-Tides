@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TTT.DataClasses.ClimateModel;
+using System.Linq;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -18,15 +18,32 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent DestroyingFeatureEvent;
 
+        [SerializeField]
+        private FeatureRuntimeSet spawnedFeatures;
+
+        /// <summary>
+        /// The map's own cache of spawned features, updated only on flood.
+        /// Not keeping it always updated is ok as it's currently only accessed during flooding.
+        /// </summary>
+        private Feature[] spawnedFeaturesCache = Array.Empty<Feature>();
+
         private void FloodCell(ref HexCell hc)
         {
             int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
             hc.Flooded = true;
-            // hc.CellColor = Color.blue;
+
             HexCells[index] = hc;
 
-            // Remove any building on this flooded cell
-            RaiseDestroyingFeatureEvent(hc.CellPosition);
+            Vector3 cellPosition = hc.CellPosition;
+
+            bool cellHasFeature = spawnedFeaturesCache.Any(feat =>
+                feat.CellPosition == cellPosition
+            );
+
+            if (cellHasFeature)
+            {
+                RaiseDestroyingFeatureEvent(hc.CellPosition);
+            }
         }
 
         /// <summary>
@@ -36,12 +53,16 @@ namespace TTT.Managers
         {
             BuildingFeatureArgs bfArgs =
                 ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-            if (bfArgs.FeatureType != null)
-            {
-                bfArgs.Location = cellPosition;
+            bfArgs.Location = cellPosition;
 
-                DestroyingFeatureEvent.Raise(bfArgs);
+            if (DestroyingFeatureEvent == null)
+            {
+                Debug.LogError("DestroyingFeatureEvent is not set here");
+                return;
             }
+
+            DestroyingFeatureEvent.Raise(bfArgs);
+            Debug.Log("destroyed!");
         }
 
         private void SetCellCenterVertex(HexCell hc, int cv)
@@ -149,13 +170,8 @@ namespace TTT.Managers
         /// </summary>
         public IEnumerator RaiseSea()
         {
-            //TODO: refactor this so that gamemanager does all of this
-            ClimateModelOutputDTO outputDTO =
-                GameManager.Instance.UpdateClimateDataForNextTurn();
-
-            // Update sea level
-            SeaLevel.Value = (float)outputDTO.futureSeaLevelMetres; //TODO: make float types consistent
-            // SeaLevel.Value += RisingRate.Value;
+            // update spawned features cache before flooding
+            spawnedFeaturesCache = spawnedFeatures.GetItems();
 
             while (true)
             {
@@ -173,7 +189,7 @@ namespace TTT.Managers
 
                         if (
                             test.CellPosition.y
-                            <= (SeaLevel.Value + RisingRate.Value)
+                            <= GameManager.Instance.SeaLevel.Value
                         )
                             ToFlood.Enqueue(test);
                         else
@@ -207,7 +223,10 @@ namespace TTT.Managers
                             || FloodQueue.Contains(neighbor)
                         )
                             continue;
-                        if (neighbor.CellPosition.y <= SeaLevel.Value)
+                        if (
+                            neighbor.CellPosition.y
+                            <= GameManager.Instance.SeaLevel.Value
+                        )
                             ToFlood.Enqueue(neighbor);
                         else
                             FloodQueue.Enqueue(neighbor);

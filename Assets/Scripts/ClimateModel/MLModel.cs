@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
-using TTT.DataClasses.ClimateModel;
 using TTT.DataClasses.HexData;
 using UnityEngine;
 
@@ -25,23 +24,6 @@ namespace TTT.ClimateModel
 
         public static readonly double TRAINING_DATASET_GMSL_UPPER_BOUND =
             165.2076002;
-
-        // private static readonly List<string> _modelInputFeatureNames = new()
-        // {
-        //     "CO2 (ppm)",
-        //     "TEMP (deg C)",
-        //     "Absolute GMSL (mm) relative to Jan 1950",
-        //     "CO2_12m_ago",
-        //     "CO2_5y_ago",
-        //     "CO2_10y_ago",
-        //     "TEMP_12m_ago",
-        //     "TEMP_5y_ago",
-        //     "TEMP_10y_ago",
-        //     "GMSL_12m_ago",
-        //     "GMSL_5y_ago",
-        //     "GMSL_10y_ago",
-        // };
-
         private static readonly int ONE_YEAR_WORLD_STATE_INDEX = 1;
         private static readonly int FIVE_YEAR_WORLD_STATE_INDEX = 5;
         private static readonly int TEN_YEAR_WORLD_STATE_INDEX = 10;
@@ -61,7 +43,7 @@ namespace TTT.ClimateModel
             }
         }
 
-        public double PredictFutureSeaLevel(
+        public float PredictFutureSeaLevel(
             ClimateModelInput input,
             Queue<WorldState> climateModelWorldStatesQueue
         )
@@ -73,7 +55,7 @@ namespace TTT.ClimateModel
                 climateModelWorldStatesQueue
             );
 
-            return 0.0;
+            return 0.0f;
 
             // // Adjust shape & input name to match your exported ONNX model
             // var inputTensor = new DenseTensor<float>(

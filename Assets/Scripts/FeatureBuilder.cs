@@ -19,6 +19,9 @@ public class FeatureBuilder : MonoBehaviour
     /// </summary>
     public FeatureRuntimeSet SpawnedFeatures;
 
+    [SerializeField]
+    private TTT.DataClasses.States.PlayerStats playerStats;
+
     private const float hexCellPadding = 0.05f;
 
     private readonly float hexCellSize =
@@ -34,7 +37,8 @@ public class FeatureBuilder : MonoBehaviour
         TryToBuild(
             FixLocation(bfArgs.Location),
             bfArgs.FeatureType,
-            bfArgs.OwnedByClient
+            bfArgs.OwnedByClient,
+            bfArgs.CheckForCost
         );
     }
 
@@ -67,12 +71,29 @@ public class FeatureBuilder : MonoBehaviour
     private void TryToBuild(
         Vector3 location,
         FeatureType featureType,
-        bool ownedByClient
+        bool ownedByClient,
+        bool checkForCost
     )
     {
+        if (
+            ownedByClient
+            && checkForCost
+            && !CheckCost(featureType, out string insufficientResource)
+        )
+        {
+            Debug.LogWarning(
+                $"Cannot afford {featureType.name}. Insufficient {insufficientResource}."
+            );
+            return;
+        }
+
         if (!CheckIfCanBuild(location, featureType))
         {
-            Debug.Log("Tried to build but failed due to constraints");
+            //po: emit event to say build fail??
+            // ? ro: yes good idea so we can tell the player about it
+            Debug.Log(
+                $"Tried to build but failed due to constraints: {featureType.name}"
+            );
             return;
         }
 
@@ -82,6 +103,17 @@ public class FeatureBuilder : MonoBehaviour
         {
             Debug.LogError("No renderers found in this prefab.");
             return;
+        }
+
+        if (ownedByClient && checkForCost)
+        {
+            DeductCost(featureType);
+        }
+
+        if (ownedByClient)
+        {
+            // Trigger all resource producers for this feature
+            InitializeResourceProducers(featureType);
         }
 
         SpawnedFeatures.Add(feature);
@@ -98,12 +130,6 @@ public class FeatureBuilder : MonoBehaviour
         if (allFeatures.Any(feat => feat.CellPosition.Equals(location)))
         {
             // then there's already something at this location
-            return false;
-        }
-
-        if (!CheckCost(featureType))
-        {
-            // then the player is too poor
             return false;
         }
 
@@ -137,15 +163,71 @@ public class FeatureBuilder : MonoBehaviour
 
     private bool CheckCost(FeatureType featureType)
     {
+        return CheckCost(featureType, out _);
+    }
+
+    private bool CheckCost(
+        FeatureType featureType,
+        out string insufficientResource
+    )
+    {
+        insufficientResource = string.Empty;
         foreach (var resourceCost in featureType.Cost)
         {
+            if (resourceCost.Count <= 0)
+            {
+                continue;
+            }
+
             PlayerResource resource = resourceCost.Thing;
             if (resource.AmountOwned < resourceCost.Count)
             {
+                insufficientResource =
+                    $"{resource.Name} (Need: {resourceCost.Count}, Have: {resource.AmountOwned})";
                 return false;
             }
         }
         return true;
+    }
+
+    private void DeductCost(FeatureType featureType)
+    {
+        foreach (var resourceCost in featureType.Cost)
+        {
+            if (resourceCost.Count <= 0)
+            {
+                continue;
+            }
+
+            PlayerResource resource = resourceCost.Thing;
+            resource.ApplyChange(-resourceCost.Count);
+        }
+    }
+
+    /// <summary>
+    /// Initialize all resource producers for a feature, including automatic pollution emission.
+    /// This calls OnCreated() for each producer defined in the FeatureType.
+    /// </summary>
+    private void InitializeResourceProducers(FeatureType featureType)
+    {
+        // Trigger OnCreated for all defined resource producers
+        if (featureType.ResourceProducers != null)
+        {
+            foreach (var producer in featureType.ResourceProducers)
+            {
+                producer.OnCreated();
+            }
+        }
+
+        // Automatically handle pollution emission if feature has PollutionEmission
+        if (
+            featureType.PollutionEmission != 0
+            && GameManager.Instance.CO2_Pollution != null
+        )
+        {
+            GameManager.Instance.CO2_Pollution.Value =
+                featureType.PollutionEmission;
+        }
     }
 
     private Feature BuildAt(Vector3 location, FeatureType featureType)

@@ -20,7 +20,7 @@ namespace TTT.Player
     public class PlayerController : NetworkBehaviour
     {
         const int LeftMouseIndex = 0;
-        const float CLICK_THRESHOLD = 5f; // Max pixel movement to still be considered a click
+        const float CLICK_THRESHOLD = 50f; // Max pixel movement to still be considered a click
 
         [SerializeField]
         private Camera playerCamera;
@@ -54,6 +54,8 @@ namespace TTT.Player
         [SerializeField]
         private Canvas currentUI;
         public InteractionMode Mode;
+
+        public GameEvent playerLoseEvent;
 
         //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
         //*  We should look into the Unity Input System Package
@@ -152,6 +154,7 @@ namespace TTT.Player
                 // Don't process world clicks when clicking on UI
                 if (IsMouseOverUI())
                 {
+                    Debug.Log("Mouse over UI, not processing world click");
                     return;
                 }
 
@@ -162,6 +165,7 @@ namespace TTT.Player
                 );
                 if (mouseMovement > CLICK_THRESHOLD)
                 {
+                    Debug.Log(mouseMovement);
                     // This was a drag, not a click - don't select tile
                     return;
                 }
@@ -188,6 +192,7 @@ namespace TTT.Player
                             ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                         building.Location = raycastHit.point;
                         building.FeatureType = FeatureType;
+                        building.OwnedByClient = true;
                         BuildingFeatureEvent.Raise(building);
                     }
                     else if (Mode.Equals(InteractionMode.INSPECTING))
@@ -236,13 +241,13 @@ namespace TTT.Player
 
         public void CheckIfPlayerHasLost()
         {
-            //? po: should these check for null?
             if (
-                GameManager.Instance.CO2 > maxCO2
-                || GameManager.Instance.Temperature > maxTemperature
+                GameManager.Instance.CO2_Pollution.Value > maxCO2
+                || GameManager.Instance.Temperature.Value > maxTemperature
                 || playerBuildings.GetItems().Length <= 0
             )
             {
+                playerLoseEvent.Raise();
                 OnLose();
             }
         }
@@ -252,7 +257,7 @@ namespace TTT.Player
             DisableUI();
 
             statusText.gameObject.SetActive(true);
-            statusText.text = "Spectating";
+            statusText.text = "You lose";
 
             // feel free to remove this if needed, not important
             GameObject cube = GameObject.Find("Cube");

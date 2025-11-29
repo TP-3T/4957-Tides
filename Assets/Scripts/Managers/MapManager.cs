@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using TTT.ClimateModel;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.States;
 using TTT.DataClasses.Terrain;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -52,9 +53,13 @@ namespace TTT.Managers
         private NetworkVariable<ulong> _seaMeshId = new();
         private MapData _gameMapData;
         private const int CellsPerFrame = 25;
+        private float _hexMaxHeight = 0;
 
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
+
+        [SerializeField]
+        private PlayerStats _playerStats;
 
         private Dictionary<string, FeatureType> _featureTypesByUniqueId = new();
 
@@ -66,11 +71,6 @@ namespace TTT.Managers
         public Queue<HexCell> ToFlood = new();
         public Queue<HexCell> FloodQueue = new();
         public Queue<HexCell> AboveSeaLevelQueue = new();
-        public NetworkVariable<float> SeaLevel = new(0.0f);
-
-        // TODO: remove this
-        public NetworkVariable<float> RisingRate = new(1.0f);
-
 
         public bool DrawDebugLabels;
 
@@ -216,7 +216,7 @@ namespace TTT.Managers
 
                 seaMeshInstance.Triangulate(
                     HexCells,
-                    SeaLevel.Value,
+                    GameManager.Instance.SeaLevel.Value,
                     MapManager.HexSize,
                     MapManager.HexOrientation
                 );
@@ -259,7 +259,7 @@ namespace TTT.Managers
 
                 seaMeshInstance.TriangulateCells(
                     cells,
-                    SeaLevel.Value,
+                    GameManager.Instance.SeaLevel.Value,
                     MapManager.HexSize,
                     MapManager.HexOrientation
                 );
@@ -315,7 +315,7 @@ namespace TTT.Managers
 
             if (spawnedCount > 0)
             {
-                Debug.Log($"Spawned {spawnedCount} features from map data:");
+                Debug.Log($"spawned {spawnedCount} features from map data:");
             }
 
             _pendingFeatures.Clear();
@@ -351,6 +351,7 @@ namespace TTT.Managers
                         ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                     args.Location = position;
                     args.FeatureType = featureType;
+                    args.OwnedByClient = false;
                     BuildingFeatureEvent.Raise(args);
                     spawnedCount++;
 
@@ -385,7 +386,12 @@ namespace TTT.Managers
 
             _pendingFeatures.Clear();
             _mapLoadFinishEvent.Raise(
-                new NewMapFinishedEventArgs() { WasSuccessful = true }
+                new NewMapFinishedEventArgs()
+                {
+                    WasSuccessful = true,
+                    MaxMapHeight = _hexMaxHeight,
+                    SeaLevel = GameManager.Instance.SeaLevel.Value,
+                }
             );
         }
 
@@ -421,6 +427,7 @@ namespace TTT.Managers
                     hc.CellPosition.z + corners[0].z
                 )
             );
+            _playerStats.SetSelectedTile(hc);
         }
 
         public void OnNewMap(UnityEngine.Object eventArgs)
@@ -458,6 +465,11 @@ namespace TTT.Managers
                         if (tileData.Elevation < 0)
                         {
                             tileData.Elevation = 0;
+                        }
+
+                        if (tileData.Elevation > _hexMaxHeight)
+                        {
+                            _hexMaxHeight = tileData.Elevation;
                         }
 
                         OffsetCoordinates offset = new(x, z);
@@ -505,7 +517,14 @@ namespace TTT.Managers
                     HexCells.Add(hc);
                 }
 
-                SeaLevel.Value = _gameMapData.WorldState.SeaLevel;
+                GameManager.Instance.SeaLevel.Value = _gameMapData
+                    .WorldState
+                    .SeaLevel;
+
+                // Load pollution from map data into PlayerStats
+                GameManager.Instance.CO2_Pollution.Value = _gameMapData
+                    .WorldState
+                    .Pollution;
 
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this

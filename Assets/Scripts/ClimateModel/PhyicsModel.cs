@@ -1,5 +1,4 @@
 using System;
-using TTT.DataClasses.ClimateModel;
 
 namespace TTT.ClimateModel
 {
@@ -160,8 +159,8 @@ namespace TTT.ClimateModel
         /// <param name="currTempKelvin"></param>
         /// <param name="changeInTimeSeconds"></param>
         /// <param name="currAtmosphericCO2ConcentrationPpm"></param>
-        /// <returns>futureTempCelsius a double</returns>
-        public double CalculateFutureTemperature(
+        /// <returns>futureTempCelsius a float</returns>
+        public float CalculateFutureTemperature(
             double currTemperatureCelsius,
             double changeInTimeYears,
             double currAtmosphericCO2ConcentrationPpm
@@ -188,7 +187,7 @@ namespace TTT.ClimateModel
 
             double futureTempCelsius = KelvinToCelsius(futureTempKelvin);
 
-            return futureTempCelsius;
+            return (float)futureTempCelsius;
         }
 
         /// <summary>

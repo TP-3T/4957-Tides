@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TTT.ClimateModel;
-using TTT.DataClasses.ClimateModel;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.States;
-using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
@@ -21,6 +19,9 @@ namespace TTT.Managers
         public List<PlayerResource> PlayerResources { get; private set; }
 
         [field: SerializeField]
+        public PlayerStats PlayerStats { get; private set; }
+
+        [field: SerializeField]
         public InteractionMode InteractionMode { get; private set; }
 
         private readonly string[] Seasons =
@@ -31,10 +32,7 @@ namespace TTT.Managers
             "Winter",
         };
 
-        private readonly ClimatePredictionModel _climatePredictionModel = new();
-
-        private readonly Queue<WorldState> _climateModelWorldStatesQueue =
-            new();
+        // private readonly ClimatePredictionModel _climatePredictionModel = new();
 
         [field: SerializeField]
         public NetworkClient CurrentPlayer { get; private set; }
@@ -45,12 +43,6 @@ namespace TTT.Managers
 
         [field: SerializeField]
         public string Season { get; private set; }
-
-        [field: SerializeField]
-        public float CO2 { get; private set; } = 0; //TODO: find out where this is being updated and when
-
-        [field: SerializeField]
-        public float Temperature { get; set; }
 
         [SerializeField]
         private GameEvent startTurnEvent;
@@ -70,6 +62,16 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
+        public NetworkVariable<float> SeaLevel = new(
+            ClimatePredictionModel.INITIAL_SEA_LEVEL_M
+        );
+        public NetworkVariable<float> CO2_Pollution = new(
+            ClimatePredictionModel.INITIAL_CO2_PPM
+        );
+        public NetworkVariable<float> Temperature = new(
+            ClimatePredictionModel.INITIAL_TEMPERATURE_DEG_C
+        );
+
         public override void Awake()
         {
             base.Awake();
@@ -83,7 +85,7 @@ namespace TTT.Managers
         void Start()
         {
             Season = Seasons[0];
-            CO2 = 0;
+            CO2_Pollution.Value = 0f;
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
@@ -131,7 +133,12 @@ namespace TTT.Managers
         {
             NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
 
-            if (!args.WasSuccessful)
+            if (args.WasSuccessful)
+            {
+                // Seed the historical climate data into the climate model's internal queue
+                ClimatePredictionModel.ResetWorldQueue();
+            }
+            else
             {
                 Debug.LogWarning(
                     "MAP FAILED TO LOAD! WE SHOULD REVERT TO THE MAIN MENU FROM HERE!"
@@ -189,6 +196,26 @@ namespace TTT.Managers
                 "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
             );
             Year += 1;
+
+            // --- Calculate future climate values ---
+
+            WorldState currentWorldState = new()
+            {
+                Pollution = CO2_Pollution.Value,
+                SeaLevel = SeaLevel.Value,
+                Temp = Temperature.Value,
+                Year = Year,
+            };
+
+            WorldState futureWorldState =
+                ClimatePredictionModel.PredictFutureClimateDataForNextTurn(
+                    currentWorldState
+                );
+
+            Temperature.Value = futureWorldState.Temp;
+            SeaLevel.Value = futureWorldState.SeaLevel;
+            // (CO2 not updated by climate prediction model)
+
             endingYearEvent.Raise();
         }
 
@@ -210,158 +237,6 @@ namespace TTT.Managers
             );
 
             return hasEnoughResources;
-        }
-
-        public ClimateModelOutputDTO UpdateClimateDataForNextTurn()
-        {
-            // If queue is empty (on game start)
-            if (_climateModelWorldStatesQueue.Count == 0)
-            {
-                // Populate queue with historical data (worldstate data before the start of the game the model can use to predict)
-                PopulateClimateModelWorldStatesQueue();
-            }
-
-            // get current turn values
-            ClimateModelInputDTO inputDTO = new()
-            {
-                currAtmosphericCO2ConcentrationPpm = CO2,
-                currSeaLevelMetres = MapManager.Instance.SeaLevel.Value,
-                currTemperatureCelsius = Temperature,
-            };
-
-            // Get new values from climate prediction model
-            ClimateModelOutputDTO outputDTO =
-                _climatePredictionModel.PredictFutureTempAndSeaLevel(
-                    inputDTO,
-                    _climateModelWorldStatesQueue
-                );
-
-            UpdateWorldStatesQueue(outputDTO);
-
-            return outputDTO;
-        }
-
-        private void UpdateWorldStatesQueue(ClimateModelOutputDTO outputDTO)
-        {
-            // Dequeue WorldState from 10 years ago
-            _climateModelWorldStatesQueue.Dequeue();
-
-            // Create a WorldState object using the predicted next year values (values for winter -> spring)
-            WorldState worldStateNextYear = new()
-            {
-                Pollution = 0.0f, //TODO - ask Corey when these are calculated (before or after this method is called)
-                SeaLevel = (float)outputDTO.futureSeaLevelMetres,
-                Temp = (float)outputDTO.futureTemperatureCelsius,
-                Year = 0, //TODO - ask Corey when these are calculated (before or after this method is called)
-            };
-
-            // Enqueue WorldState for the next year
-            _climateModelWorldStatesQueue.Enqueue(worldStateNextYear);
-        }
-
-        //TODO: move this to the function that creates the map and game
-        // delete this method once the above todo completed
-        private void PopulateClimateModelWorldStatesQueue()
-        {
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 313.18f,
-                    SeaLevel = 14.18079369f,
-                    Temp = -22.64326f,
-                    Year = 1940,
-                }
-            );
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 313.34f,
-                    SeaLevel = 14.35222333f,
-                    Temp = -12.24326f,
-                    Year = 1941,
-                }
-            );
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 313.34f,
-                    SeaLevel = 14.35222333f,
-                    Temp = -12.24326f,
-                    Year = 1942,
-                }
-            );
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 313.84f,
-                    SeaLevel = 14.35732167f,
-                    Temp = -16.94326f,
-                    Year = 1943,
-                }
-            );
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 313.88f,
-                    SeaLevel = 14.18043223f,
-                    Temp = -5.54326f,
-                    Year = 1944,
-                }
-            );
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 314.63f,
-                    SeaLevel = 14.60734743f,
-                    Temp = -5.84326f,
-                    Year = 1945,
-                }
-            );
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 314.63f,
-                    SeaLevel = 14.25638287f,
-                    Temp = -16.84326f,
-                    Year = 1946,
-                }
-            );
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 314.66f,
-                    SeaLevel = 14.4138078f,
-                    Temp = -10.64326f,
-                    Year = 1947,
-                }
-            );
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 314.88f,
-                    SeaLevel = 14.48694413f,
-                    Temp = -8.94326f,
-                    Year = 1948,
-                }
-            );
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 315.95f,
-                    SeaLevel = 14.17366973f,
-                    Temp = -1.94326f,
-                    Year = 1949,
-                }
-            );
-            _climateModelWorldStatesQueue.Enqueue(
-                new()
-                {
-                    Pollution = 315.67f,
-                    SeaLevel = 14.36671727f,
-                    Temp = 1.35674f,
-                    Year = 1950,
-                }
-            );
         }
     }
 }
