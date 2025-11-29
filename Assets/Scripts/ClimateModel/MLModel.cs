@@ -33,7 +33,9 @@ namespace TTT.ClimateModel
         private readonly InferenceSession _onnxInferenceSession;
 
         private readonly string _tensorInputName;
-        private readonly string _tensorOutputName;
+
+        // only one tensor output so don't need this for now
+        // private readonly string _tensorOutputName;
 
         static MLModel()
         {
@@ -55,8 +57,7 @@ namespace TTT.ClimateModel
             // Load the model and it's metadata
             _onnxInferenceSession = new InferenceSession(_MODEL_PATH);
             _tensorInputName = _onnxInferenceSession.InputMetadata.Keys.First();
-            _tensorOutputName =
-                _onnxInferenceSession.OutputMetadata.Keys.First();
+            // _tensorOutputName =  _onnxInferenceSession.OutputMetadata.Keys.First();
         }
 
         /// <summary>
