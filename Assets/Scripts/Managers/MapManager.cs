@@ -12,6 +12,7 @@ using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Unity.Collections;
 
 namespace TTT.Managers
 {
@@ -78,6 +79,9 @@ namespace TTT.Managers
 
         private List<(Vector3 position, string featureId)> _pendingFeatures =
             new();
+
+        private NetworkList<FeatureNet> _pendingFeaturesGoated = new();
+
         private bool _featuresLoaded = false;
 
         void Start()
@@ -153,7 +157,7 @@ namespace TTT.Managers
             seaMeshInstance.GetComponent<NetworkObject>().Spawn();
             _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
 
-            TriangulateSeaMeshClientRpc(); // for the host, this should eventually not be necessary
+            TriangulateSeaMeshClientRpc();
         }
 
         [ClientRpc]
@@ -266,61 +270,6 @@ namespace TTT.Managers
             }
         }
 
-        private void SpawnPendingFeatures()
-        {
-            // po: the idea is that
-            // OnNewMap() parses json
-            // then on each tile with feature != null
-            //   adds (position, featureId) to pending features,
-            // then spawnMapObjects() creates mesh prefabs
-            // then TriangulateWhatever() makes visual mesh
-            // then SpawnPendingFeatures()
-            //    looks up feature id in feature types by unique id
-            //    creates building feature args
-            //    calls FeatureBuilder.OnLoadingMapFeature(args)
-            //       where BuildAt() instantiates prefab
-
-            if (!_featuresLoaded)
-            {
-                Debug.LogWarning("feature types didn't load");
-            }
-
-            int spawnedCount = 0;
-
-            foreach (var (position, featureId) in _pendingFeatures)
-            {
-                if (
-                    _featureTypesByUniqueId.TryGetValue(
-                        featureId,
-                        out FeatureType featureType
-                    )
-                )
-                {
-                    var args =
-                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-                    args.Location = position;
-                    args.FeatureType = featureType;
-                    args.OwnedByClient = false;
-                    Debug.Log(args);
-                    BuildingFeatureEvent.Raise(args);
-                    spawnedCount++;
-                }
-                else
-                {
-                    Debug.LogWarning(
-                        $"skipped unknown feature '{featureId}' at {position}"
-                    );
-                }
-            }
-
-            if (spawnedCount > 0)
-            {
-                Debug.Log($"spawned {spawnedCount} features from map data:");
-            }
-
-            _pendingFeatures.Clear();
-        }
-
         private IEnumerator SpawnPendingFeaturesAsync()
         {
             if (!_featuresLoaded)
@@ -330,7 +279,7 @@ namespace TTT.Managers
             }
 
             int spawnedCount = 0;
-            int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smooth-ish loading
+            int spawnsPerFrame = 5; // Spawn 50 buildings per frame for smooth-ish loading
             Dictionary<string, int> featureTypeCounts =
                 new Dictionary<string, int>();
 
@@ -338,27 +287,28 @@ namespace TTT.Managers
                 $"Starting async spawn of {_pendingFeatures.Count} features..."
             );
 
-            foreach (var (position, featureId) in _pendingFeatures)
+            foreach (var featureNet in _pendingFeaturesGoated)
             {
+                var featureIdS = featureNet.FeatureId.ToString();
                 if (
                     _featureTypesByUniqueId.TryGetValue(
-                        featureId,
+                        featureNet.FeatureId.ToString(),
                         out FeatureType featureType
                     )
                 )
                 {
                     var args =
                         ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-                    args.Location = position;
+                    args.Location = featureNet.FeaturePosition;
                     args.FeatureType = featureType;
                     args.OwnedByClient = false;
                     BuildingFeatureEvent.Raise(args);
                     spawnedCount++;
 
                     // Track counts by type
-                    if (!featureTypeCounts.ContainsKey(featureId))
-                        featureTypeCounts[featureId] = 0;
-                    featureTypeCounts[featureId]++;
+                    if (!featureTypeCounts.ContainsKey(featureIdS))
+                        featureTypeCounts[featureIdS] = 0;
+                    featureTypeCounts[featureIdS]++;
 
                     // Yield every X spawns to maintain framerate
                     //Kinda doesn't work :/
@@ -370,7 +320,7 @@ namespace TTT.Managers
                 else
                 {
                     Debug.LogWarning(
-                        $"skipped unknown feature '{featureId}' at {position}"
+                        $"skipped unknown feature '{featureIdS}' at {featureNet.FeaturePosition}"
                     ); //THis basically never happens but I put this here just in case :/
                 }
             }
@@ -384,7 +334,8 @@ namespace TTT.Managers
                 }
             }
 
-            _pendingFeatures.Clear();
+            // _pendingFeatures.Clear();
+
             _mapLoadFinishEvent.Raise(
                 new NewMapFinishedEventArgs()
                 {
@@ -395,14 +346,14 @@ namespace TTT.Managers
             );
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void StartRaiseSeaServerRpc()
         {
             StopAllCoroutines();
             StartCoroutine(RaiseSea());
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void OnMapMeshClickedServerRpc(Vector3 point, Color newColor)
         {
             int index = GetCellIndexFromPosition(point);
@@ -505,7 +456,10 @@ namespace TTT.Managers
                         // po: queue features for spawning after mesh is created
                         if (!string.IsNullOrEmpty(tileData.Feature))
                         {
-                            _pendingFeatures.Add((hexCenter, tileData.Feature));
+                            var n = new FeatureNet();
+                            n.FeatureId = tileData.Feature;
+                            n.FeaturePosition = hexCell.CellPosition;
+                            _pendingFeaturesGoated.Add(n);
                         }
                     }
                 }
@@ -520,7 +474,8 @@ namespace TTT.Managers
                 SeaLevel.Value = _gameMapData.WorldState.SeaLevel;
                 
                 // Load pollution from map data into PlayerStats
-                _playerStats?.LoadPollutionFromMapData(_gameMapData.WorldState.Pollution);
+                if (_playerStats != null)
+                    _playerStats.LoadPollutionFromMapData(_gameMapData.WorldState.Pollution);
 
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
