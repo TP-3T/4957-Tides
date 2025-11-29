@@ -24,9 +24,11 @@ namespace TTT.ClimateModel
 
         public static readonly double TRAINING_DATASET_GMSL_UPPER_BOUND =
             165.2076002;
-        private static readonly int ONE_YEAR_WORLD_STATE_INDEX = 1;
-        private static readonly int FIVE_YEAR_WORLD_STATE_INDEX = 5;
-        private static readonly int TEN_YEAR_WORLD_STATE_INDEX = 10;
+
+        // historical climate data queue should always have length 11
+        private static readonly int WORLD_STATE_ONE_YEAR_AGO_INDEX = 9;
+        private static readonly int WORLD_STATE_FIVE_YEARS_AGO_INDEX = 5;
+        private static readonly int WORLD_STATE_TEN_YEARS_AGO_INDEX = 0;
 
         private readonly InferenceSession _onnxInferenceSession;
 
@@ -74,7 +76,7 @@ namespace TTT.ClimateModel
                 climateModelWorldStatesQueue
             );
 
-            // creates a "tensor" - under the hood its an unmanaged array of information about the input data used by the ml model
+            // creates a "tensor" - information about the input data used by the ml model
             var inputTensor = new DenseTensor<float>(
                 modelInputFeatures,
                 new[] { 1, modelInputFeatures.Length }
@@ -110,19 +112,19 @@ namespace TTT.ClimateModel
             // 10y ago
             WorldState worldState10YearsAgo =
                 climateModelWorldStatesQueue.ElementAt(
-                    TEN_YEAR_WORLD_STATE_INDEX
+                    WORLD_STATE_TEN_YEARS_AGO_INDEX
                 );
 
             // 5y ago
             WorldState worldState5YearsAgo =
                 climateModelWorldStatesQueue.ElementAt(
-                    FIVE_YEAR_WORLD_STATE_INDEX
+                    WORLD_STATE_FIVE_YEARS_AGO_INDEX
                 );
 
             // 12m ago
             WorldState worldState12MonthsAgo =
                 climateModelWorldStatesQueue.ElementAt(
-                    ONE_YEAR_WORLD_STATE_INDEX
+                    WORLD_STATE_ONE_YEAR_AGO_INDEX
                 );
 
             // this features list has to match the dataset column order

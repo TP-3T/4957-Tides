@@ -6,8 +6,8 @@ namespace TTT.ClimateModel
 {
     public sealed class ClimatePredictionModel
     {
-        private static readonly PhysicsModel physicsModel;
-        private static readonly MLModel mlModel;
+        private static readonly PhysicsModel physicsModel = new();
+        private static readonly MLModel mlModel = new();
         private static readonly int SEA_LEVEL_SCALE_FACTOR = 10;
 
         // 3 months
@@ -157,7 +157,7 @@ namespace TTT.ClimateModel
             WorldState worldState
         )
         {
-            // Scale DOWN the sea level from m to mm by the scale factor(sea level doesn't actually rise as much as the game shows)
+            // Scale DOWN the sea level from m to mm by the scale factor (realistic sea level doesn't rise as much as the game shows)
             double currSeaLevelMM =
                 worldState.SeaLevel / SEA_LEVEL_SCALE_FACTOR;
 
