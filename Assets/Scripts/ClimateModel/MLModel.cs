@@ -13,15 +13,17 @@ using UnityEngine;
 //
 namespace TTT.ClimateModel
 {
-    public sealed class MLModel
+    public sealed class MLModel : IDisposable
     {
         private static readonly string _MODEL_FILE_NAME = "xgboost_model.onnx";
 
         private static readonly string _MODEL_PATH;
 
+        // min value in training set for global mean sea level (mm)
         public static readonly double TRAINING_DATASET_GMSL_LOWER_BOUND =
             -1.3122;
 
+        // max value in training set for global mean sea level (mm)
         public static readonly double TRAINING_DATASET_GMSL_UPPER_BOUND =
             165.2076002;
 
@@ -33,7 +35,9 @@ namespace TTT.ClimateModel
         private readonly InferenceSession _onnxInferenceSession;
 
         private readonly string _tensorInputName;
-        private readonly string _tensorOutputName;
+
+        // only one tensor output so don't need this for now
+        // private readonly string _tensorOutputName;
 
         static MLModel()
         {
@@ -55,8 +59,7 @@ namespace TTT.ClimateModel
             // Load the model and it's metadata
             _onnxInferenceSession = new InferenceSession(_MODEL_PATH);
             _tensorInputName = _onnxInferenceSession.InputMetadata.Keys.First();
-            _tensorOutputName =
-                _onnxInferenceSession.OutputMetadata.Keys.First();
+            // _tensorOutputName =  _onnxInferenceSession.OutputMetadata.Keys.First();
         }
 
         /// <summary>
@@ -82,7 +85,7 @@ namespace TTT.ClimateModel
                 new[] { 1, modelInputFeatures.Length }
             );
 
-            // creates a description of the tensor for the model to be able intepret (requires memory to be disposed after so added using)
+            // creates a description of the tensor for the model to be able intepret
             var inputs = new List<NamedOnnxValue>
             {
                 NamedOnnxValue.CreateFromTensor(_tensorInputName, inputTensor),
@@ -166,6 +169,11 @@ namespace TTT.ClimateModel
             };
 
             return features;
+        }
+
+        public void Dispose()
+        {
+            _onnxInferenceSession.Dispose();
         }
     }
 }
