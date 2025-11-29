@@ -13,7 +13,7 @@ using UnityEngine;
 //
 namespace TTT.ClimateModel
 {
-    public sealed class MLModel
+    public sealed class MLModel : IDisposable
     {
         private static readonly string _MODEL_FILE_NAME = "xgboost_model.onnx";
 
@@ -166,6 +166,11 @@ namespace TTT.ClimateModel
             };
 
             return features;
+        }
+
+        public void Dispose()
+        {
+            _onnxInferenceSession.Dispose();
         }
     }
 }
