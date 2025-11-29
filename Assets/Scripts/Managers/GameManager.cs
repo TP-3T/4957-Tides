@@ -7,6 +7,7 @@ using TTT.DataClasses.States;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
+using UnityEditor.SearchService;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -96,6 +97,17 @@ namespace TTT.Managers
             }
         }
 
+        /// <summary>
+        /// Call from a client RPC and get information of clients (multiplayer debugging).
+        /// </summary>
+        private void NetworkingInformationLog()
+        {
+            var self = NetworkManager.Singleton.LocalClient;
+            Debug.Log($"[GameManager] client rpc, connected players {NetworkManager.Singleton.ConnectedClientsList.Count}");
+            Debug.Log($"[GameManager] client rpc, current player id {self.ClientId}");
+            Debug.Log($"[GameManager] client rpc, current turn guy {CurrentPlayerId.Value}");
+        }
+
         private void StartGameClient()
         {
             NetworkManager.Singleton.StartClient();
@@ -130,11 +142,12 @@ namespace TTT.Managers
         }
 
         [Rpc(SendTo.ClientsAndHost)]
-        public void OnTurnEndingClientRpc()
+        public void OnTurnEndingClientRpc(ulong nextClient)
         {
-            var self = NetworkManager.Singleton.LocalClient;
-            Debug.Log($"[GameManager] client rpc, current player id {self.ClientId}");
-            Debug.Log($"[GameManager] client rpc, current turn guy {CurrentPlayerId.Value}");
+            var self = NetworkManager.Singleton.LocalClientId;
+
+            NetworkingInformationLog();
+            Debug.Log($"[GameManager] on client turn ending matches current {self == nextClient}");
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
@@ -156,8 +169,8 @@ namespace TTT.Managers
             CurrentPlayerId.Value = nextClient;
             FTTaken = true;
 
-            OnTurnEndingClientRpc();
-            StartNextTurn(new());
+            OnTurnEndingClientRpc(nextClient);
+            // StartNextTurnClientRpc();                       // Handle it for each clients
         }
 
         /// <summary>
@@ -191,7 +204,8 @@ namespace TTT.Managers
             endingYearEvent.Raise();
         }
 
-        public void StartNextTurn(object _)
+        [Rpc(SendTo.ClientsAndHost)]
+        public void StartNextTurnClientRpc()
         {
             endTurnEvent.Raise();
             startTurnEvent.Raise();
@@ -206,6 +220,15 @@ namespace TTT.Managers
             OnTurnEndingServerRpc();
         }
 
+        /// <summary>
+        /// Appease the SCROBJECT event handler
+        /// </summary>
+        /// <param name="_"></param>
+        public void StartNextTurn(Object _)
+        {
+            StartNextTurnClientRpc();
+        }
+
         public void OnPlayerLose(Object _)
         {
             Debug.Log("Player has lost the game.");
@@ -213,6 +236,8 @@ namespace TTT.Managers
 
         public bool CanEndTurn()
         {
+            NetworkingInformationLog();
+
             bool hasEnoughResources = PlayerResources.All(resources =>
                 resources.AmountOwned >= 0
             );
