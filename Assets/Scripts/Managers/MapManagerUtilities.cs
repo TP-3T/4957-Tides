@@ -155,7 +155,6 @@ namespace TTT.Managers
 
             // Update sea level
             SeaLevel.Value = (float)outputDTO.futureSeaLevelMetres; //TODO: make float types consistent
-
             // SeaLevel.Value += RisingRate.Value;
 
             while (true)

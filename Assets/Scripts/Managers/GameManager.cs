@@ -33,7 +33,8 @@ namespace TTT.Managers
 
         private readonly ClimatePredictionModel _climatePredictionModel = new();
 
-        private readonly Queue<WorldState> _climateModelWorldStatesQueue = new();
+        private readonly Queue<WorldState> _climateModelWorldStatesQueue =
+            new();
 
         [field: SerializeField]
         public NetworkClient CurrentPlayer { get; private set; }
@@ -213,7 +214,6 @@ namespace TTT.Managers
 
         public ClimateModelOutputDTO UpdateClimateDataForNextTurn()
         {
-            //TODO: move this to the function that creates the map and game
             // If queue is empty (on game start)
             if (_climateModelWorldStatesQueue.Count == 0)
             {
@@ -241,22 +241,22 @@ namespace TTT.Managers
             return outputDTO;
         }
 
-        //TODO: refactor once more time
         private void UpdateWorldStatesQueue(ClimateModelOutputDTO outputDTO)
         {
-
-
-            // Dequeue WorldState - which is the value from 10 years ago
+            // Dequeue WorldState from 10 years ago
             _climateModelWorldStatesQueue.Dequeue();
 
-            // Create a WorldState object using the predicted next year (season) values, and enqueue the WorldState object
-            WorldState worldState = new()
+            // Create a WorldState object using the predicted next year values (values for winter -> spring)
+            WorldState worldStateNextYear = new()
             {
-                Pollution = , //TODO - ask Corey when these are calculated (before or after this method is called)
-                SeaLevel = outputDTO.futureSeaLevelMetres,
-                Temp = outputDTO.futureTemperatureCelsius,
-                Year = //TODO - ask Corey when these are calculated (before or after this method is called)
+                Pollution = 0.0f, //TODO - ask Corey when these are calculated (before or after this method is called)
+                SeaLevel = (float)outputDTO.futureSeaLevelMetres,
+                Temp = (float)outputDTO.futureTemperatureCelsius,
+                Year = 0, //TODO - ask Corey when these are calculated (before or after this method is called)
             };
+
+            // Enqueue WorldState for the next year
+            _climateModelWorldStatesQueue.Enqueue(worldStateNextYear);
         }
 
         //TODO: move this to the function that creates the map and game

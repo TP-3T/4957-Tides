@@ -63,26 +63,28 @@ namespace TTT.ClimateModel
 
         public double PredictFutureSeaLevel(
             ClimateModelInput input,
-            ref Queue<WorldState> climateModelWorldStatesQueue
+            Queue<WorldState> climateModelWorldStatesQueue
         )
         {
-            using InferenceSession onnxInferenceSession = new(_MODEL_PATH);
+            // using InferenceSession onnxInferenceSession = new(_MODEL_PATH);
 
             float[] modelInputFeatures = CreateModelInputList(
                 input,
-                ref climateModelWorldStatesQueue
+                climateModelWorldStatesQueue
             );
 
-            // Adjust shape & input name to match your exported ONNX model
-            var inputTensor = new DenseTensor<float>(
-                modelInputFeatures,
-                new[] { 1, modelInputFeatures.Length }
-            );
+            return 0.0;
 
-            using var inputs = new List<NamedOnnxValue>
-            {
-                NamedOnnxValue.CreateFromTensor(_inputName, inputTensor),
-            };
+            // // Adjust shape & input name to match your exported ONNX model
+            // var inputTensor = new DenseTensor<float>(
+            //     modelInputFeatures,
+            //     new[] { 1, modelInputFeatures.Length }
+            // );
+
+            // using var inputs = new List<NamedOnnxValue>
+            // {
+            //     NamedOnnxValue.CreateFromTensor(_inputName, inputTensor),
+            // };
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace TTT.ClimateModel
         /// </summary>
         private static float[] CreateModelInputList(
             ClimateModelInput input,
-            ref Queue<WorldState> climateModelWorldStatesQueue
+            Queue<WorldState> climateModelWorldStatesQueue
         )
         {
             // 10y ago

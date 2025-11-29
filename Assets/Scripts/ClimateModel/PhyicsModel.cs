@@ -37,8 +37,6 @@ namespace TTT.ClimateModel
         private static readonly double _CELSIUS_KELVIN_CONVERSION_VALUE =
             273.15;
 
-        private static readonly int _NUM_MM_PER_METRE = 1000;
-
         // Empirical constant for CO2 forcing, derived from radiative transfer calculations that is specific to CO2
         private static readonly double _RADIATIVE_FORCING_EMPIRICAL_CONSTANT =
             5.35;
