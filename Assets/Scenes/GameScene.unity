@@ -508,6 +508,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 270.03
       objectReference: {fileID: 0}
+    - target: {fileID: 1694981210338151714, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: playerStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
+    - target: {fileID: 1694981210338151714, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: <ToOpen>k__BackingField
+      value: 
+      objectReference: {fileID: 916755312}
     - target: {fileID: 1799127629145147433, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: _mapLoadFinishEvent
       value: 
@@ -570,7 +578,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2315601190507965176, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -19.479916
+      value: -19.479042
       objectReference: {fileID: 0}
     - target: {fileID: 2408728085975243179, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: <IsOpen>k__BackingField
@@ -1193,6 +1201,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68671a7e8dd66d948abd21d3ef8fdf47, type: 3}
+--- !u!224 &916755312 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3282231792433877343, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+  m_PrefabInstance: {fileID: 378512690}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1586668267
 GameObject:
   m_ObjectHideFlags: 0
@@ -1834,6 +1847,10 @@ PrefabInstance:
       propertyPath: Response.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: StartNextTurn
       objectReference: {fileID: 0}
+    - target: {fileID: 5329708062545644470, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
+      propertyPath: <PlayerStats>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
     - target: {fileID: 6828651392784178001, guid: 5eb37f1e30ca4404db27f21e445b041a, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1455012885

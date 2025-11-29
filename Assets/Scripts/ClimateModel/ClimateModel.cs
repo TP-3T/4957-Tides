@@ -16,11 +16,6 @@ namespace TTT.ClimateModel
         private static readonly Queue<WorldState> _climateModelWorldStatesQueue =
             new();
 
-        // Initial climate values
-        public static readonly float INITIAL_SEA_LEVEL_M = 0.0f;
-        public static readonly float INITIAL_CO2_PPM = 309.41f;
-        public static readonly float INITIAL_TEMPERATURE_DEG_C = 14.15561478f;
-
         /// <summary>
         /// Entrypoint method for predicting the future climate values sea level and temperature.
         /// </summary>

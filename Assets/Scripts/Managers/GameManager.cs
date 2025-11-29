@@ -62,19 +62,27 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
-        public NetworkVariable<float> SeaLevel = new(
-            ClimatePredictionModel.INITIAL_SEA_LEVEL_M
-        );
-        public NetworkVariable<float> CO2_Pollution = new(
-            ClimatePredictionModel.INITIAL_CO2_PPM
-        );
-        public NetworkVariable<float> Temperature = new(
-            ClimatePredictionModel.INITIAL_TEMPERATURE_DEG_C
-        );
+        // Initial climate values
+        public static readonly float INITIAL_SEA_LEVEL_M = 0.0f;
+        public static readonly float INITIAL_CO2_PPM = 309.41f;
+        public static readonly float INITIAL_TEMPERATURE_DEG_C = 14.15561478f;
+
+        [field: SerializeField]
+        public NetworkVariable<float> SeaLevel { get; private set; } = new();
+
+        [field: SerializeField]
+        public NetworkVariable<float> CO2_Pollution { get; private set; } =
+            new();
+
+        [field: SerializeField]
+        public NetworkVariable<float> Temperature { get; private set; } = new();
 
         public override void Awake()
         {
             base.Awake();
+            Temperature.Value = INITIAL_TEMPERATURE_DEG_C;
+            CO2_Pollution.Value = INITIAL_CO2_PPM;
+            SeaLevel.Value = INITIAL_SEA_LEVEL_M;
         }
 
         // Start
@@ -85,7 +93,6 @@ namespace TTT.Managers
         void Start()
         {
             Season = Seasons[0];
-            CO2_Pollution.Value = 0f;
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
