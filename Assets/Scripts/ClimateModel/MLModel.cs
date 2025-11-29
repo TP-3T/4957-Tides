@@ -28,6 +28,11 @@ namespace TTT.ClimateModel
         private static readonly int FIVE_YEAR_WORLD_STATE_INDEX = 5;
         private static readonly int TEN_YEAR_WORLD_STATE_INDEX = 10;
 
+        private readonly InferenceSession _onnxInferenceSession;
+
+        private readonly string _tensorInputName;
+        private readonly string _tensorOutputName;
+
         static MLModel()
         {
             _MODEL_PATH = Path.Combine(
@@ -36,37 +41,62 @@ namespace TTT.ClimateModel
                 _MODEL_FILE_NAME
             );
 
-            //todo: remove later
+            //todo: remove later once tested
             if (!File.Exists(_MODEL_PATH))
             {
                 Debug.LogError($"ONNX model not found at path: {_MODEL_PATH}");
             }
         }
 
+        public MLModel()
+        {
+            // Load the model and it's metadata
+            _onnxInferenceSession = new InferenceSession(_MODEL_PATH);
+            _tensorInputName = _onnxInferenceSession.InputMetadata.Keys.First();
+            _tensorOutputName =
+                _onnxInferenceSession.OutputMetadata.Keys.First();
+        }
+
+        /// <summary>
+        /// Uses the ML model to predicts the future sea level given the input vars
+        /// References: https://onnxruntime.ai/docs/get-started/with-csharp.html
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="climateModelWorldStatesQueue"></param>
+        /// <returns></returns>
         public float PredictFutureSeaLevel(
             ClimateModelInput input,
             Queue<WorldState> climateModelWorldStatesQueue
         )
         {
-            // using InferenceSession onnxInferenceSession = new(_MODEL_PATH);
-
             float[] modelInputFeatures = CreateModelInputList(
                 input,
                 climateModelWorldStatesQueue
             );
 
-            return 0.0f;
+            // creates a "tensor" - under the hood its an unmanaged array of information about the input data used by the ml model
+            var inputTensor = new DenseTensor<float>(
+                modelInputFeatures,
+                new[] { 1, modelInputFeatures.Length }
+            );
 
-            // // Adjust shape & input name to match your exported ONNX model
-            // var inputTensor = new DenseTensor<float>(
-            //     modelInputFeatures,
-            //     new[] { 1, modelInputFeatures.Length }
-            // );
+            // creates a description of the tensor for the model to be able intepret (requires memory to be disposed after so added using)
+            var inputs = new List<NamedOnnxValue>
+            {
+                NamedOnnxValue.CreateFromTensor(_tensorInputName, inputTensor),
+            };
 
-            // using var inputs = new List<NamedOnnxValue>
-            // {
-            //     NamedOnnxValue.CreateFromTensor(_inputName, inputTensor),
-            // };
+            // run the model inference (requires memory to be disposed after so added using)
+            using var outputs = _onnxInferenceSession.Run(inputs);
+
+            // outputs contains a sequence of maps, and we only need the first one
+            // get the tensor contained in the NamedOnnxValue element
+            Tensor<float> outputTensor = outputs.First().AsTensor<float>();
+
+            // to access the inference result, need to convert the tensor to normal managed C# array, and then get the first (and only) element in it
+            float futureSeaLevelPrediction = outputTensor.ToArray()[0];
+
+            return futureSeaLevelPrediction;
         }
 
         /// <summary>
