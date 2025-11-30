@@ -689,7 +689,8 @@ MonoBehaviour:
   <MovementSeconds>k__BackingField: 0.3
   <ShiftDirection>k__BackingField: 2
   <ShiftPadding>k__BackingField: {x: 20, y: 0}
-  playerStats: {fileID: 0}
+  hexFeature: {fileID: 0}
+  playerStats: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
 --- !u!1 &6688934136522102278
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,10 +875,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68836ba971555cb4fb1573521aa27d17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waterLevel: {fileID: 0}
   _barRect: {fileID: 7619789540440956843}
   _mask: {fileID: 2429716869974414416}
-  _waterLevelText: {fileID: 5042261939673852166}
 --- !u!1 &7790579101419782641
 GameObject:
   m_ObjectHideFlags: 0
