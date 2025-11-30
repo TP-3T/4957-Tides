@@ -8,7 +8,9 @@ namespace TTT.ClimateModel
     {
         private static readonly PhysicsModel physicsModel = new();
         private static readonly MLModel mlModel = new();
-        private static readonly int SEA_LEVEL_SCALE_FACTOR = 10;
+
+        // Scaling factor for metres to and from millimetres
+        private static readonly int SEA_LEVEL_SCALE_FACTOR = 1000;
 
         // 3 months
         private static readonly double NUM_CHANGE_IN_TIME_YEARS = 0.25;
