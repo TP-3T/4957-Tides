@@ -1,7 +1,6 @@
 using System.Linq;
 using TTT.DataClasses;
 using TTT.DataClasses.HexData;
-using TTT.DataClasses.ModularData;
 using TTT.DataClasses.TileFeatures;
 using UnityEngine;
 

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8a447a0febedb24e8cd2e631a1f15d7, type: 3}
+  m_Name: Residential - Farm
+  m_EditorClassIdentifier: 
+  <UniqueID>k__BackingField: rural
+  <Category>k__BackingField: 1
+  <DisplayName>k__BackingField: Farm
+  <PollutionEmission>k__BackingField: 67
+  <Constraints>k__BackingField:
+    <MaximumHeight>k__BackingField: 500
+    <TerrainConstraints>k__BackingField:
+      <Mode>k__BackingField: 0
+      <List>k__BackingField:
+      - {fileID: 11400000, guid: 539ed2216312ace42a3c815c28c3c855, type: 2}
+      - {fileID: 11400000, guid: 2120c918288b3bd40a2918ed1b65fe86, type: 2}
+      - {fileID: 11400000, guid: e14599042cb91bf4d93294d8fe23a115, type: 2}
+    <FeatureConstraints>k__BackingField: []
+  <BuildValidator>k__BackingField: {fileID: 11400000, guid: 418d17bf1c05a9c40aff3428a267cd49, type: 2}
+  <ResourceProducers>k__BackingField:
+  - <ProductionSchedule>k__BackingField: {fileID: 11400000, guid: edef3b431516b8048a30517cd2383a7b, type: 2}
+    <ResourceAmounts>k__BackingField:
+    - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
+      <Count>k__BackingField: 2
+  <Cost>k__BackingField:
+  - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+    <Count>k__BackingField: 10
+  <Prefab>k__BackingField: {fileID: 2395858261925545394, guid: e4174bf1d699918459d7ccd5ef3ef40e, type: 3}

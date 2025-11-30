@@ -1,3 +1,6 @@
+using TMPro;
+using TTT.DataClasses.HexData;
+using TTT.DataClasses.States;
 using TTT.UI;
 using UnityEngine;
 
@@ -24,19 +27,26 @@ public class FeatureInfo : MonoBehaviour, IOpenable
     [field: SerializeField]
     public Vector2 ShiftPadding { get; set; }
 
-    private Coroutine CurrentShift {get; set;}
+    [field: SerializeField]
+    private GameObject hexFeature;
 
-    //Need to add scriptable object that reads to display currently selected cell info. And parse out the json data to presentable format
-    //Need to create scriptable object that holds the tile data of selected
-
+    private TextMeshProUGUI featureTileText;
+    private Coroutine CurrentShift { get; set; }
 
     /* #endregion*/
+
+    [SerializeField]
+    private PlayerStats playerStats;
+
     private void Awake()
     {
         (this as IOpenable).SetupPositions();
+        if (hexFeature != null)
+            {
+                featureTileText = hexFeature.GetComponent<TextMeshProUGUI>();
+            }
     }
 
-        
     /// <summary>
     /// Cancels the current shift if one is running,
     /// then runs the movement function as per the IOpenable
@@ -49,17 +59,71 @@ public class FeatureInfo : MonoBehaviour, IOpenable
         }
         CurrentShift = StartCoroutine((this as IOpenable).ToggleOpenable());
     }
-    ///<summary>
-    /// Helper function when a tile is clicked
-    /// to open the feature info panel.
-    /// Will need to connect this with tile clicked event
-    /// </summary>
-    public void OnTileClicked()
+
+    public void OnTileSelected()
     {
-        if (!IsOpen)
-        {
-            Toggle();
-        }
-        //Need to add a clear selected that toggles this back to closed but will add later
+        StartCoroutine(OnTileSelectedDelayed());
     }
-}       
+
+    private System.Collections.IEnumerator OnTileSelectedDelayed()
+    {
+        // Wait one frame to ensure MapManager has updated playerStats
+        yield return null;
+
+        if (playerStats == null)
+            yield break;
+
+        var selectedCell = playerStats.selectedHexCell;
+
+        if (selectedCell.HasValue)
+        {
+            if (!IsOpen)
+            {
+                Toggle();
+            }
+            UpdateTileDisplay();
+        }
+        else
+        {
+            if (IsOpen)
+            {
+                Toggle();
+            }
+        }
+    }
+
+    private void UpdateTileDisplay()
+    {
+        if (playerStats?.selectedHexCell == null)
+            return;
+
+        var tile = playerStats.selectedHexCell.Value;
+        var tileData = playerStats.selectedTileData;
+
+        // Format tile info for display
+        string displayText = $"Position: {tile.CellPosition}\n" +
+                            $"Flooded: {tile.Flooded}\n" +
+                            $"Terrain: {tile.TerrainTypeId}";
+
+        if (tileData != null)
+        {
+            displayText += $"\nOwner: {tileData.Owner}";
+            displayText += $"\nElevation: {tileData.Elevation}";
+            
+            if (!string.IsNullOrEmpty(tileData.Label))
+            {
+                displayText += $"\nLabel: {tileData.Label}";
+            }
+        }
+
+        if (featureTileText != null)
+        {
+            featureTileText.text = displayText;
+        }
+    }
+
+    public void ClearSelection()
+    {
+        playerStats?.ClearSelectedTile();
+    }
+}

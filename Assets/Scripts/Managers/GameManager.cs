@@ -5,7 +5,6 @@ using System.Linq;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.States;
-using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Netcode;
@@ -19,6 +18,9 @@ namespace TTT.Managers
 
         [field: SerializeField]
         public List<PlayerResource> PlayerResources { get; private set; }
+
+        [field: SerializeField]
+        public PlayerStats PlayerStats { get; private set; }
 
         [field: SerializeField]
         public InteractionMode InteractionMode { get; private set; }
@@ -283,6 +285,15 @@ namespace TTT.Managers
                 "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
             );
             Year += 1;
+            
+            // Calculate and apply sea level change based on pollution
+            if (PlayerStats != null)
+            {
+                float seaLevelIncrease = PlayerStats.CalculateSeaLevelFromPollution();
+                MapManager.Instance.SeaLevel.Value += seaLevelIncrease;
+                Debug.Log($"Sea level increased by {seaLevelIncrease} due to pollution");
+            }
+            
             endingYearEvent.Raise();
         }
 

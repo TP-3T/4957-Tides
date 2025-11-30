@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 61.7
+  m_fontSize: 26.85
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 61.7
+  m_fontSize: 26.85
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -364,7 +364,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 61.7
+  m_fontSize: 26.85
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -500,7 +500,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 61.7
+  m_fontSize: 26.85
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -582,7 +582,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015259, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 800, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5204872041173924135
@@ -785,7 +785,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 61.7
+  m_fontSize: 26.85
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1065,9 +1065,7 @@ MonoBehaviour:
   _moneyText: {fileID: 2209797149725157349}
   _powerText: {fileID: 4422274328874065183}
   _populationText: {fileID: 757367141697051837}
-  money: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
-  power: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-  population: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
+  playerStats: {fileID: 0}
 --- !u!114 &5959360631651210671
 MonoBehaviour:
   m_ObjectHideFlags: 0
