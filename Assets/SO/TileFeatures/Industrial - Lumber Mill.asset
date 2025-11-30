@@ -15,7 +15,7 @@ MonoBehaviour:
   <UniqueID>k__BackingField: lumber
   <Category>k__BackingField: 0
   <DisplayName>k__BackingField: Lumber Mill
-  <PollutionEmission>k__BackingField: 100
+  <PollutionEmission>k__BackingField: 1
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 1000
     <TerrainConstraints>k__BackingField:

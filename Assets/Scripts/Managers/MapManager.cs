@@ -12,7 +12,7 @@ using TTT.Helpers;
 using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+
 
 namespace TTT.Managers
 {
@@ -266,7 +266,10 @@ namespace TTT.Managers
             }
         }
 
-        private void SpawnPendingFeatures()
+
+
+
+        private IEnumerator SpawnPendingFeaturesAsync()
         {
             // po: the idea is that
             // OnNewMap() parses json
@@ -279,50 +282,6 @@ namespace TTT.Managers
             //    creates building feature args
             //    calls FeatureBuilder.OnLoadingMapFeature(args)
             //       where BuildAt() instantiates prefab
-
-            if (!_featuresLoaded)
-            {
-                Debug.LogWarning("feature types didn't load");
-            }
-
-            int spawnedCount = 0;
-
-            foreach (var (position, featureId) in _pendingFeatures)
-            {
-                if (
-                    _featureTypesByUniqueId.TryGetValue(
-                        featureId,
-                        out FeatureType featureType
-                    )
-                )
-                {
-                    var args =
-                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-                    args.Location = position;
-                    args.FeatureType = featureType;
-                    args.OwnedByClient = false;
-                    Debug.Log(args);
-                    BuildingFeatureEvent.Raise(args);
-                    spawnedCount++;
-                }
-                else
-                {
-                    Debug.LogWarning(
-                        $"skipped unknown feature '{featureId}' at {position}"
-                    );
-                }
-            }
-
-            if (spawnedCount > 0)
-            {
-                Debug.Log($"spawned {spawnedCount} features from map data:");
-            }
-
-            _pendingFeatures.Clear();
-        }
-
-        private IEnumerator SpawnPendingFeaturesAsync()
-        {
             if (!_featuresLoaded)
             {
                 Debug.LogWarning("feature types didn't load");

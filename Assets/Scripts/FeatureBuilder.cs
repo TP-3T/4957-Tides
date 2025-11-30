@@ -225,7 +225,7 @@ public class FeatureBuilder : MonoBehaviour
             && GameManager.Instance.CO2_Pollution != null
         )
         {
-            GameManager.Instance.CO2_Pollution.Value =
+            GameManager.Instance.CO2_Pollution.Value +=
                 featureType.PollutionEmission;
         }
     }

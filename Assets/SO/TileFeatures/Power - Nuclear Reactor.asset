@@ -15,7 +15,7 @@ MonoBehaviour:
   <UniqueID>k__BackingField: nuclear
   <Category>k__BackingField: 2
   <DisplayName>k__BackingField: Nuclear Power
-  <PollutionEmission>k__BackingField: 10
+  <PollutionEmission>k__BackingField: 5
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 750
     <TerrainConstraints>k__BackingField:

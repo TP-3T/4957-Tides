@@ -156,7 +156,7 @@ namespace TTT.ClimateModel
         {
             // Scale DOWN the sea level from m to mm by the scale factor (realistic sea level doesn't rise as much as the game shows)
             double currSeaLevelMM =
-                worldState.SeaLevel / SEA_LEVEL_SCALE_FACTOR;
+                worldState.SeaLevel * SEA_LEVEL_SCALE_FACTOR;
 
             // Separate data class model input in case we add more model inputs in the future
             ClimateModelInput modelInput = new()
@@ -213,7 +213,7 @@ namespace TTT.ClimateModel
 
             // Scale UP the sea level from mm to m by the scale factor(sea level doesn't actually rise as much as the game shows)
             float futureSeaLevelMetres =
-                (float)futureSeaLevelMM * SEA_LEVEL_SCALE_FACTOR;
+                (float)futureSeaLevelMM / SEA_LEVEL_SCALE_FACTOR;
 
             WorldState futureWorldState = new()
             {

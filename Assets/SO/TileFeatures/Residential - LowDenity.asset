@@ -15,7 +15,7 @@ MonoBehaviour:
   <UniqueID>k__BackingField: lowdensity
   <Category>k__BackingField: 1
   <DisplayName>k__BackingField: Low Density
-  <PollutionEmission>k__BackingField: 20
+  <PollutionEmission>k__BackingField: 2
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
     <TerrainConstraints>k__BackingField:
