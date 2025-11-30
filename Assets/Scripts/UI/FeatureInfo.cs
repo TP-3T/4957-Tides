@@ -1,5 +1,5 @@
+using System.Collections;
 using TMPro;
-using TTT.DataClasses.HexData;
 using TTT.DataClasses.States;
 using TTT.UI;
 using UnityEngine;
@@ -42,9 +42,9 @@ public class FeatureInfo : MonoBehaviour, IOpenable
     {
         (this as IOpenable).SetupPositions();
         if (hexFeature != null)
-            {
-                featureTileText = hexFeature.GetComponent<TextMeshProUGUI>();
-            }
+        {
+            featureTileText = hexFeature.GetComponent<TextMeshProUGUI>();
+        }
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public class FeatureInfo : MonoBehaviour, IOpenable
         StartCoroutine(OnTileSelectedDelayed());
     }
 
-    private System.Collections.IEnumerator OnTileSelectedDelayed()
+    private IEnumerator OnTileSelectedDelayed()
     {
         // Wait one frame to ensure MapManager has updated playerStats
         yield return null;
@@ -101,15 +101,16 @@ public class FeatureInfo : MonoBehaviour, IOpenable
         var tileData = playerStats.selectedTileData;
 
         // Format tile info for display
-        string displayText = $"Position: {tile.CellPosition}\n" +
-                            $"Flooded: {tile.Flooded}\n" +
-                            $"Terrain: {tile.TerrainTypeId}";
+        string displayText =
+            $"Position: {tile.CellPosition}\n"
+            + $"Flooded: {tile.Flooded}\n"
+            + $"Terrain: {tile.TerrainTypeId}";
 
         if (tileData != null)
         {
             displayText += $"\nOwner: {tileData.Owner}";
             displayText += $"\nElevation: {tileData.Elevation}";
-            
+
             if (!string.IsNullOrEmpty(tileData.Label))
             {
                 displayText += $"\nLabel: {tileData.Label}";

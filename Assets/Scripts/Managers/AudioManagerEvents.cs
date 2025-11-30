@@ -1,7 +1,7 @@
-using System;
 using TTT.DataClasses.States;
 using TTT.GameEvents;
 using TTT.Helpers;
+using UnityEngine;
 
 namespace TTT.Managers
 {
@@ -12,6 +12,7 @@ namespace TTT.Managers
             var eventArgs = args as AudioEventArgs;
             if (eventArgs.ToPlay != null)
             {
+                Debug.Log($"Playing {eventArgs.Type}");
                 switch (eventArgs.Type)
                 {
                     case AudioTypes.AMBIENCE:

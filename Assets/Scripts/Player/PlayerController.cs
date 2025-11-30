@@ -55,6 +55,9 @@ namespace TTT.Player
         private Canvas currentUI;
         public InteractionMode Mode;
 
+        [SerializeField]
+        public PlayerStats PlayerStats;
+
         public GameEvent playerLoseEvent;
 
         //* CB: Controls should be established within Unity and we should be listening to named key events so we're controller-agnostic.
@@ -135,6 +138,7 @@ namespace TTT.Player
             Mode = InteractionMode.INSPECTING;
         }
 
+        //? CB: There must be an event driven way to handle this.
         /// <summary>
         /// Called once per frame to handle real-time input and camera controls.
         /// It checks for local ownership before processing movement and rotation
@@ -182,10 +186,6 @@ namespace TTT.Player
                     )
                 )
                 {
-                    // Raise some event will deal with this later
-                    // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
-                    // Debug.Log("Map mesh clicked at: " + raycastHit.point);
-                    // var mode = GameManager.Instance.InteractionMode;
                     if (Mode.Equals(InteractionMode.BUILDING))
                     {
                         var building =
@@ -216,7 +216,7 @@ namespace TTT.Player
         }
 
         public void OnInteractModeChange(object args)
-        // po: this listens to an event raised by OnClick() in BuildingShopslot
+        // po: this listens to an event raised by OnClick() in BuildingShopSlot
         {
             if (args != null)
             {

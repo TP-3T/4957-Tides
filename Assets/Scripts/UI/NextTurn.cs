@@ -22,7 +22,6 @@ public class NextTurn : MonoBehaviour
     void Start()
     {
         nextTurnButton = GetComponent<Button>();
-        OnStartTurn(new());
     }
 
     public void Enable(Object _)

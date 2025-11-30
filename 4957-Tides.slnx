@@ -7,7 +7,6 @@
   <Project Path="SFB.csproj" />
   <Project Path="UI.csproj" />
   <Project Path="TTT.Player.csproj" />
-  <Project Path="TTT.ClimateModel.csproj" />
   <Project Path="TTT.Editors.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="TTT.Helpers.csproj" />

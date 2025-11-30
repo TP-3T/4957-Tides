@@ -285,15 +285,18 @@ namespace TTT.Managers
                 "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
             );
             Year += 1;
-            
+
             // Calculate and apply sea level change based on pollution
             if (PlayerStats != null)
             {
-                float seaLevelIncrease = PlayerStats.CalculateSeaLevelFromPollution();
+                float seaLevelIncrease =
+                    PlayerStats.CalculateSeaLevelFromPollution();
                 MapManager.Instance.SeaLevel.Value += seaLevelIncrease;
-                Debug.Log($"Sea level increased by {seaLevelIncrease} due to pollution");
+                Debug.Log(
+                    $"Sea level increased by {seaLevelIncrease} due to pollution"
+                );
             }
-            
+
             endingYearEvent.Raise();
         }
 

@@ -80,6 +80,7 @@ MonoBehaviour:
   _allowedTerrains: {fileID: 11400000, guid: d58def7f9d21b0740bf047b7637efa9e, type: 2}
   onFloodEnded: {fileID: 11400000, guid: 8586b1eb5129a444b83130c75a324c08, type: 2}
   BuildingFeatureEvent: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
+  _playerStats: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
   SeaLevel:
     m_InternalValue: 0
   RisingRate:
@@ -155,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 944619221b6664749b66a67e05cb4b08, type: 2}
+  Event: {fileID: 11400000, guid: 41e01cdfff1d08a408a8a22cfe7bcc81, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
