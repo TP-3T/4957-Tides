@@ -160,6 +160,14 @@ namespace TTT.Managers
             TriangulateSeaMeshClientRpc();
         }
 
+        [Rpc(SendTo.ClientsAndHost)]
+        private void DestroyFeatureClientRpc(Vector3 cellPosition)
+        {
+            BuildingFeatureArgs bfArgs = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+            bfArgs.Location = cellPosition;
+            DestroyingFeatureEvent.Raise(bfArgs);
+        }
+
         [ClientRpc]
         private void TriangulateHexMeshClientRpc()
         {
@@ -353,8 +361,7 @@ namespace TTT.Managers
             StartCoroutine(RaiseSea());
         }
 
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public void OnMapMeshClickedServerRpc(Vector3 point, Color newColor)
+        public void OnMapMeshClicked(Vector3 point, Color newColor)
         {
             int index = GetCellIndexFromPosition(point);
             HexCell hc = HexCells[index];
@@ -504,7 +511,7 @@ namespace TTT.Managers
         {
             MapMeshClickedEventArgs args = eventArgs as MapMeshClickedEventArgs;
 
-            OnMapMeshClickedServerRpc(args.ClickedPoint, args.PlayerColor);
+            OnMapMeshClicked(args.ClickedPoint, args.PlayerColor);
         }
 
         public void OnFlood(UnityEngine.Object _)

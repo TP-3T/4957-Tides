@@ -283,7 +283,7 @@ namespace TTT.Player
                     NewMode = InteractionMode.BUILDING
                 }
             );
-            currentUI.gameObject.SetActive(false);
+            currentUI.gameObject.SetActive(true);
         }
     }
 }

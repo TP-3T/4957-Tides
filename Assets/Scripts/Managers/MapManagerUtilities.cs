@@ -47,14 +47,6 @@ namespace TTT.Managers
             }
         }
 
-        [Rpc(SendTo.ClientsAndHost)]
-        private void DestroyFeatureClientRpc(Vector3 cellPosition)
-        {
-            BuildingFeatureArgs bfArgs = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-            bfArgs.Location = cellPosition;
-            DestroyingFeatureEvent.Raise(bfArgs);
-        }
-
         private void SetCellCenterVertex(HexCell hc, int cv)
         {
             int index = GetCellIndexFromCubeCoordinates(hc.CellCubeCoordinates);
