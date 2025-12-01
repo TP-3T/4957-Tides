@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TTT.DataClasses.HexData;
 
 namespace TTT.ClimateModel
@@ -176,24 +177,32 @@ namespace TTT.ClimateModel
                     modelInput.currAtmosphericCO2ConcentrationPpm
                 );
 
+            UnityEngine.Debug.Log($"Future temp in deg C - {futureTemperatureCelsius}");
+
             // === Future Sea level ===
 
             double futureSeaLevelMM;
 
-            // --- temporary fix - because ml model can't predict values outside of the range of its training set yet ---
+            // --- temporary fix - because ml model can't accurately predict values outside of the range of its training set yet ---
 
             // if current sea level is within the range of the training dataset
             if (
-                (
-                    modelInput.currSeaLevelMM
-                    >= MLModel.TRAINING_DATASET_GMSL_LOWER_BOUND
-                )
-                && (
-                    modelInput.currSeaLevelMM
-                    <= MLModel.TRAINING_DATASET_GMSL_UPPER_BOUND
-                )
-            )
-            {
+                (modelInput.currSeaLevelMM >= MLModel.TRAINING_DATASET_GMSL_LOWER_BOUND) 
+                    && 
+                (modelInput.currTemperatureCelsius >= MLModel.TRAINING_DATASET_TEMP_LOWER_BOUND)
+                    && 
+                (modelInput.currAtmosphericCO2ConcentrationPpm >= MLModel.TRAINING_DATASET_CO2_POL_LOWER_BOUND)
+
+                && 
+
+                (modelInput.currSeaLevelMM <= MLModel.TRAINING_DATASET_GMSL_UPPER_BOUND) 
+                    && 
+                (modelInput.currTemperatureCelsius <= MLModel.TRAINING_DATASET_TEMP_UPPER_BOUND)
+                    && 
+                (modelInput.currAtmosphericCO2ConcentrationPpm <= MLModel.TRAINING_DATASET_CO2_POL_UPPER_BOUND)
+            ) {
+                UnityEngine.Debug.Log("Using ML model for sea level prediction");
+
                 // Predict future sea level using the ml model
                 futureSeaLevelMM = mlModel.PredictFutureSeaLevel(
                     modelInput,
@@ -203,10 +212,13 @@ namespace TTT.ClimateModel
             // if sea level is outside of the range of the training dataset
             else
             {
+                UnityEngine.Debug.Log(
+                    "Using physics model for sea level prediction"
+                );
                 // calculate future sea level use the physics model
                 futureSeaLevelMM = physicsModel.CalculateFutureSeaLevel(
                     modelInput.currSeaLevelMM,
-                    modelInput.currTemperatureCelsius,
+                    futureTemperatureCelsius,
                     modelInput.changeInTimeYears
                 );
             }
@@ -214,6 +226,8 @@ namespace TTT.ClimateModel
             // Scale UP the sea level from mm to m by the scale factor(sea level doesn't actually rise as much as the game shows)
             float futureSeaLevelMetres =
                 (float)futureSeaLevelMM / SEA_LEVEL_SCALE_FACTOR;
+
+            UnityEngine.Debug.Log($"Future sea level in m - {futureSeaLevelMetres}");
 
             WorldState futureWorldState = new()
             {

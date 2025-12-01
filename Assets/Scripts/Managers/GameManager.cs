@@ -39,7 +39,7 @@ namespace TTT.Managers
 
         //serialize for now
         [field: SerializeField]
-        public int Year { get; private set; } = 1;
+        public int Year { get; set; } = 1;
 
         [field: SerializeField]
         public string Season { get; private set; }
@@ -199,9 +199,6 @@ namespace TTT.Managers
 
         private void EndYear()
         {
-            Debug.Log(
-                "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
-            );
             Year += 1;
 
             // --- Calculate future climate values ---

@@ -19,6 +19,10 @@ namespace TTT.ClimateModel
 
         private static readonly string _MODEL_PATH;
 
+        // Temp fix - ml model can't predict well beyond the range of its training set due to limited game features (for now) 
+
+        // --- sea level training set boundaries ---
+
         // min value in training set for global mean sea level (mm)
         public static readonly double TRAINING_DATASET_GMSL_LOWER_BOUND =
             -1.3122;
@@ -26,6 +30,22 @@ namespace TTT.ClimateModel
         // max value in training set for global mean sea level (mm)
         public static readonly double TRAINING_DATASET_GMSL_UPPER_BOUND =
             165.2076002;
+
+        // --- temperature training set boundaries ---
+
+        // min value in training set for temperature (mm)
+        public static readonly double TRAINING_DATASET_TEMP_LOWER_BOUND = 14.00584023;
+
+        // max value in training set for temperature (mm)
+        public static readonly double TRAINING_DATASET_TEMP_UPPER_BOUND = 15.99647993;
+
+        // --- CO2 pollution training set boundaries ---
+
+        // min value in training set for CO2 pollution (mm)
+        public static readonly double TRAINING_DATASET_CO2_POL_LOWER_BOUND = 306.15;
+
+        // max value in training set for CO2 pollution (mm)
+        public static readonly double TRAINING_DATASET_CO2_POL_UPPER_BOUND = 424.07;
 
         // historical climate data queue should always have length 11
         private static readonly int WORLD_STATE_ONE_YEAR_AGO_INDEX = 9;

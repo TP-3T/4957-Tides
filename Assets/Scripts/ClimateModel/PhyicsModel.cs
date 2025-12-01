@@ -178,12 +178,14 @@ namespace TTT.ClimateModel
                 CO2RadiativeForcingWattsPerSquareMetre
             );
 
-            double changeInTempKelvin =
+            double changeInTemp =
                 changeInTimeSeconds
                 / _TOTAL_HEAT_CAPACITY_OF_EARTH_SYSTEM
                 * netRadiativeImbalance;
 
-            double futureTempKelvin = currTempKelvin + changeInTempKelvin;
+            UnityEngine.Debug.Log($"Change in temp (no unit) - {changeInTemp}");
+
+            double futureTempKelvin = currTempKelvin + changeInTemp;
 
             double futureTempCelsius = KelvinToCelsius(futureTempKelvin);
 
@@ -191,19 +193,20 @@ namespace TTT.ClimateModel
         }
 
         /// <summary>
-        /// Calculates the future sea level (mm) from the current temperature (Kelvin).
-        /// It uses current temperature since sea level takes a while to show affects from increases in CO2 or temperature.
+        /// Calculates the future sea level (mm) from the future temperature (Kelvin).
+        /// Not a real calculation, just for the game.
+        /// It uses future temperature since sea level takes a while to show affects from increases in CO2 or temperature.
         /// </summary>
-        /// <param name="currTempKelvin"></param>
+        /// <param name="futureTempKelvin"></param>
         /// <param name="changeInTimeYears"></param>
         /// <returns></returns>
         public double CalculateFutureSeaLevel(
             double currSeaLevelMM,
-            double currTemperatureCelsius,
+            double futureTemperatureCelsius,
             double changeInTimeYears
         )
         {
-            double currTempKelvin = CelsiusToKelvin(currTemperatureCelsius);
+            double currTempKelvin = CelsiusToKelvin(futureTemperatureCelsius);
 
             // Calculate temperature anomaly relative to pre-industrial baseline
             double tempAnomaly = currTempKelvin - _PRE_INDUSTRIAL_TEMP_KELVIN;

@@ -480,11 +480,15 @@ namespace TTT.Managers
                     .WorldState
                     .SeaLevel;
 
-                // Load pollution from map data into PlayerStats
+                // Load pollution from map data into game manager
                 GameManager.Instance.CO2_Pollution.Value = _gameMapData
                     .WorldState
                     .Pollution;
-
+                //load temperature from map data into game manager
+                GameManager.Instance.Temperature.Value = _gameMapData
+                    .WorldState
+                    .Temp;
+                GameManager.Instance.Year = _gameMapData.WorldState.Year;
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
                 StartCoroutine(SpawnMapObjects());
