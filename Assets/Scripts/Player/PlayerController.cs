@@ -23,33 +23,28 @@ namespace TTT.Player
         const float CLICK_THRESHOLD = 50f; // Max pixel movement to still be considered a click
 
         [SerializeField]
-        private Camera playerCamera;
+        private GameEvent InteractModeChange;
+        [SerializeField]
+        private GameEvent _mapMeshClicked;
+        [SerializeField]
+        private GameEvent BuildingFeatureEvent;
+        [SerializeField]
+        private GameEvent _tryBuildFeatureEvent;
 
+        [SerializeField]
+        private Camera playerCamera;
         [SerializeField]
         private CameraController cameraController;
-
         [SerializeField]
         private FeatureRuntimeSet playerBuildings;
-
         [SerializeField]
         private TextMeshProUGUI statusText;
-
         [SerializeField]
         private int maxCO2 = 500;
-
         [SerializeField]
         private int maxTemperature = 50;
 
         public FeatureType FeatureType;
-
-        [SerializeField]
-        private GameEvent InteractModeChange;
-
-        [SerializeField]
-        private GameEvent _mapMeshClicked;
-
-        [SerializeField]
-        private GameEvent BuildingFeatureEvent;
 
         [SerializeField]
         private Canvas currentUI;
@@ -193,7 +188,9 @@ namespace TTT.Player
                         building.Location = raycastHit.point;
                         building.FeatureType = FeatureType;
                         building.OwnedByClient = true;
-                        BuildingFeatureEvent.Raise(building);
+                        // BuildingFeatureEvent.Raise(building);
+
+                        _tryBuildFeatureEvent.Raise(building);
                     }
                     else if (Mode.Equals(InteractionMode.INSPECTING))
                     {

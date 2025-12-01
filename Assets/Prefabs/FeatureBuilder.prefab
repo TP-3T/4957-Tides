@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da465d2e2c65a95488578832a3db6495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onBuildFeature: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
   PlayerFeatures: {fileID: 11400000, guid: b18489e19391e034ea0d1bdb8cc91ae7, type: 2}
   SpawnedFeatures: {fileID: 11400000, guid: 13341c7795559b74d98b04f151a7cf36, type: 2}
   playerStats: {fileID: 0}
@@ -62,13 +63,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
+  Event: {fileID: 11400000, guid: 769a50b7020b8e544954a96711d996fa, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1055470818814381326}
         m_TargetAssemblyTypeName: FeatureBuilder, Assembly-CSharp
-        m_MethodName: OnBuildingFeature
+        m_MethodName: OnTryBuildingFeature
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -10,6 +10,9 @@ using UnityEngine;
 
 public class FeatureBuilder : MonoBehaviour
 {
+    [SerializeField]
+    public GameEvent _onBuildFeature;
+
     /// <summary>
     /// Runtime set of features owned by this client.
     /// </summary>
@@ -30,7 +33,7 @@ public class FeatureBuilder : MonoBehaviour
 
     #region:SCROBJECT Handlers
 
-    public void OnBuildingFeature(Object eventArgs)
+    public void OnTryBuildingFeature(Object eventArgs)
     {
         if (eventArgs is not BuildingFeatureArgs bfArgs)
         {
@@ -45,16 +48,6 @@ public class FeatureBuilder : MonoBehaviour
         );
     }
 
-    public void OnDestroyingFeature(Object eventArgs)
-    {
-        if (eventArgs is not BuildingFeatureArgs bfArgs)
-        {
-            return;
-        }
-
-        DestroyAt(FixLocation(bfArgs.Location));
-    }
-
     public void OnFeaturePlace(Object eventArgs)
     {
         if (eventArgs is not BuildingFeatureArgs bfArgs)
@@ -63,6 +56,16 @@ public class FeatureBuilder : MonoBehaviour
         }
 
         BuildAt(FixLocation(bfArgs.Location), bfArgs.FeatureType);
+    }
+
+    public void OnDestroyingFeature(Object eventArgs)
+    {
+        if (eventArgs is not BuildingFeatureArgs bfArgs)
+        {
+            return;
+        }
+
+        DestroyAt(FixLocation(bfArgs.Location));
     }
 
     #endregion
@@ -105,31 +108,39 @@ public class FeatureBuilder : MonoBehaviour
             );
             return;
         }
+        
+        // WO: Will need to figure out a way to have this logic exist
 
-        Feature feature = BuildAt(location, featureType);
+        // Feature feature = BuildAt(location, featureType);
 
-        if (feature == null)
+        // if (feature == null)
+        // {
+        //     Debug.LogError("No renderers found in this prefab.");
+        //     return;
+        // }
+
+        // if (ownedByClient && checkForCost)
+        // {
+        //     DeductCost(featureType);
+        // }
+
+        // if (ownedByClient)
+        // {
+        //     // Trigger all resource producers for this feature
+        //     InitializeResourceProducers(featureType);
+        // }
+
+        // SpawnedFeatures.Add(feature);
+        // if (ownedByClient)
+        // {
+        //     PlayerFeatures.Add(feature);
+        // }
+
+        _onBuildFeature.Raise(new BuildingFeatureArgs()
         {
-            Debug.LogError("No renderers found in this prefab.");
-            return;
-        }
-
-        if (ownedByClient && checkForCost)
-        {
-            DeductCost(featureType);
-        }
-
-        if (ownedByClient)
-        {
-            // Trigger all resource producers for this feature
-            InitializeResourceProducers(featureType);
-        }
-
-        SpawnedFeatures.Add(feature);
-        if (ownedByClient)
-        {
-            PlayerFeatures.Add(feature);
-        }
+            Location = location,
+            FeatureType = featureType
+        });
     }
 
     private bool CheckIfCanBuild(Vector3 location, FeatureType featureType)
@@ -296,9 +307,9 @@ public class FeatureBuilder : MonoBehaviour
                 | UnityEditor.StaticEditorFlags.OccluderStatic
         );
 #endif
-
         // encapsulate in feature object
         Feature feature = new(location, featureType, parent);
+
         return feature;
     }
 
