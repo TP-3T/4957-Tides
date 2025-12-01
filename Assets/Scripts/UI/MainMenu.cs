@@ -115,13 +115,16 @@ public class MainMenu : MonoBehaviour
         ChangeActiveMenu(LoadingScreen);
 
         Debug.Log($"Selected Map: {selectedMap}");
-        // File.ReadAllText("./" + selectedMap + ".txt");
-        // var loadedMap =
-        //     Resources.Load(selectedMap, typeof(TextAsset)) as TextAsset;
-        LoadExternalJson.TryGetMapJson(selectedMap, out TextAsset loadedMap);
-
-        // var loadedMap = Resources.Load<TextAsset>(selectedMap);
-        newMapEvent.Raise(new NewMapEventArgs() { DataFile = loadedMap });
+        if (
+            LoadExternalJson.TryGetMapJson(selectedMap, out TextAsset loadedMap)
+        )
+        {
+            newMapEvent.Raise(new NewMapEventArgs() { DataFile = loadedMap });
+        }
+        else
+        {
+            Debug.LogError($"Failed to load {selectedMap}");
+        }
     }
 
     public void OpenGameUI()

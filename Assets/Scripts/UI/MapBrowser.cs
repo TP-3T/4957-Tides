@@ -183,8 +183,5 @@ namespace TTT.UI
         {
             Debug.LogError($"Failed to fetch map list: {errorMessage}");
         }
-
-        // Update is called once per frame
-        void Update() { }
     }
 }
