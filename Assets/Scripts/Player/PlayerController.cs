@@ -201,7 +201,6 @@ namespace TTT.Player
                             new MapMeshClickedEventArgs
                             {
                                 ClickedPoint = raycastHit.point,
-                                PlayerColor = PlayerColor.Value,
                                 PlayerId = OwnerClientId,
                             }
                         );
