@@ -322,7 +322,9 @@ namespace TTT.Managers
                     args.Location = featureNet.FeaturePosition;
                     args.FeatureType = featureType;
                     args.OwnedByClient = false;
-                    _onFeatureBuild.Raise(args);
+                    // _onFeatureBuild.Raise(args);
+                    _onFeaturePlace.Raise(args);
+
                     spawnedCount++;
 
                     // Track counts by type

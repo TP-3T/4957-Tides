@@ -81,6 +81,7 @@ MonoBehaviour:
   _allowedTerrains: {fileID: 11400000, guid: d58def7f9d21b0740bf047b7637efa9e, type: 2}
   onFloodEnded: {fileID: 11400000, guid: 8586b1eb5129a444b83130c75a324c08, type: 2}
   _onFeatureBuild: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
+  _onFeaturePlace: {fileID: 11400000, guid: d4ed550f6a4d82e498113aa656ae85e7, type: 2}
   _onFeatureDestroy: {fileID: 11400000, guid: be77d2d33c12b1b43b2c40d9edbddf12, type: 2}
   _playerStats: {fileID: 0}
   SeaLevel:
@@ -88,7 +89,6 @@ MonoBehaviour:
   RisingRate:
     m_InternalValue: 1
   DrawDebugLabels: 0
-  DestroyingFeatureEvent: {fileID: 11400000, guid: be77d2d33c12b1b43b2c40d9edbddf12, type: 2}
   spawnedFeatures: {fileID: 11400000, guid: 13341c7795559b74d98b04f151a7cf36, type: 2}
 --- !u!114 &7227047647059873641
 MonoBehaviour:

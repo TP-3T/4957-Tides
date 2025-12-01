@@ -27,6 +27,8 @@ public class FeatureBuilder : MonoBehaviour
     private readonly float hexCellSize =
         (1 - hexCellPadding) * HexMath.InnerRadius(MapManager.HexSize);
 
+    #region:SCROBJECT Handlers
+
     public void OnBuildingFeature(Object eventArgs)
     {
         if (eventArgs is not BuildingFeatureArgs bfArgs)
@@ -51,6 +53,18 @@ public class FeatureBuilder : MonoBehaviour
 
         DestroyAt(FixLocation(bfArgs.Location));
     }
+
+    public void OnFeaturePlace(Object eventArgs)
+    {
+        if (eventArgs is not BuildingFeatureArgs bfArgs)
+        {
+            return;
+        }
+
+        BuildAt(FixLocation(bfArgs.Location), bfArgs.FeatureType);
+    }
+
+    #endregion
 
     private static Vector3 FixLocation(Vector3 location)
     {

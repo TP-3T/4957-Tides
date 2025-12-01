@@ -52,6 +52,8 @@ namespace TTT.Managers
 
         [SerializeField]
         private GameEvent _onFeatureBuild;
+        [SerializeField]
+        private GameEvent _onFeaturePlace;
 
         [SerializeField]
         private GameEvent _onFeatureDestroy;
@@ -423,7 +425,7 @@ namespace TTT.Managers
             StartRaiseSeaServerRpc();
         }
 
-        public void OnFeatureBuild(UnityEngine.Object args)
+        public void OnFeaturePlace(UnityEngine.Object args)
         {
             if (args is not BuildingFeatureArgs)
             {
