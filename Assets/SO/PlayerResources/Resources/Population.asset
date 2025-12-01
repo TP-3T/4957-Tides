@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Population
   m_EditorClassIdentifier: 
   resourceName: population
-  amountOwned: 100
+  amountOwned: 0

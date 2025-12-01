@@ -1,5 +1,6 @@
 using TMPro;
-using TTT.DataClasses.PlayerResources;
+using TTT.DataClasses.States;
+using TTT.GameEvents;
 using UnityEngine;
 
 /// <summary>
@@ -17,66 +18,42 @@ public class PlayerInformation : MonoBehaviour
     private TextMeshProUGUI _populationText;
 
     [SerializeField]
-    private PlayerResource money;
+    private PlayerStats playerStats;
 
-    [SerializeField]
-    private PlayerResource power;
+    private void Start()
+    {
 
-    [SerializeField]
-    private PlayerResource population;
-
-    private int cachedMoneyAmount;
-
-    private int cachedPowerAmount;
-
-    private int cachedPopulationAmount;
-
-    Event onUpdatePlayerInfo;
-
-    /// <summary>
-    /// Updates the player information display each frame.
-    /// </summary>
+        UpdateAllText();
+        playerStats.ResetResources();
+    }
     void Update()
     {
-        if (cachedMoneyAmount != money.AmountOwned)
+        UpdateAllText();
+    }
+
+    public void UpdateAllText()
+    {
+        if (playerStats != null)
         {
-            cachedMoneyAmount = money.AmountOwned;
-            setMoneyText();
-        }
-        if (cachedPowerAmount != power.AmountOwned)
-        {
-            cachedPowerAmount = power.AmountOwned;
-            setPowerText();
-        }
-        if (cachedPopulationAmount != population.AmountOwned)
-        {
-            cachedPopulationAmount = population.AmountOwned;
-            setPopulationText();
+            
+            SetMoneyText(playerStats.money?.AmountOwned ?? 0);
+            SetPowerText(playerStats.power?.AmountOwned ?? 0);
+            SetPopulationText(playerStats.population?.AmountOwned ?? 0);
         }
     }
 
-    /// <summary>
-    /// Updates the money display text.
-    /// </summary>
-    private void setMoneyText()
+    private void SetMoneyText(int amount)
     {
-        _moneyText.text = "Money: $" + money.AmountOwned.ToString();
+        _moneyText.text = "Money: $" + amount.ToString();
     }
 
-    /// <summary>
-    /// Updates the power display text.
-    /// </summary>
-    private void setPowerText()
+    private void SetPowerText(int amount)
     {
-        _powerText.text = "Power: " + power.AmountOwned.ToString();
+        _powerText.text = "Power: " + amount.ToString();
     }
 
-    /// <summary>
-    /// Updates the population display text.
-    /// </summary>
-    private void setPopulationText()
+    private void SetPopulationText(int amount)
     {
-        _populationText.text =
-            "Population: " + population.AmountOwned.ToString();
+        _populationText.text = "Population: " + amount.ToString();
     }
 }

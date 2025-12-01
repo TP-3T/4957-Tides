@@ -1,2 +1,18 @@
 fileFormatVersion: 2
 guid: 0f602876cc3bd104e9d93287e1b4ea48
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _jsonMap: {instanceID: 0}
+  - _mapLoadFinishEvent: {instanceID: 0}
+  - _allowedTerrains: {instanceID: 0}
+  - onFloodEnded: {instanceID: 0}
+  - BuildingFeatureEvent: {instanceID: 0}
+  - _playerStats: {instanceID: 0}
+  - DestroyingFeatureEvent: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
