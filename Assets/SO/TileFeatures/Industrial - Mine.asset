@@ -15,7 +15,7 @@ MonoBehaviour:
   <UniqueID>k__BackingField: mine
   <Category>k__BackingField: 0
   <DisplayName>k__BackingField: Mine
-  <PollutionEmission>k__BackingField: 250
+  <PollutionEmission>k__BackingField: 3
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
     <TerrainConstraints>k__BackingField:

@@ -6,9 +6,14 @@ namespace TTT.DataClasses.HexData
     [Serializable]
     public struct WorldState
     {
-        public float Pollution { get; set; }
-        public float SeaLevel { get; set; }
-        public float Temp { get; set; }
-        public int Year { get; set; }
+        // ppm
+        public float Pollution;
+
+        // Metres
+        public float SeaLevel;
+
+        // Deg C
+        public float Temp;
+        public int Year;
     }
 }

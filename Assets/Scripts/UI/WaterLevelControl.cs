@@ -36,12 +36,12 @@ public class WaterLevelControl : MonoBehaviour
 
     void OnEnable()
     {
-        MapManager.Instance.SeaLevel.OnValueChanged += OnSeaLevelChanged;
+        GameManager.Instance.SeaLevel.OnValueChanged += OnSeaLevelChanged;
     }
 
     void OnDisable()
     {
-        MapManager.Instance.SeaLevel.OnValueChanged -= OnSeaLevelChanged;
+        GameManager.Instance.SeaLevel.OnValueChanged -= OnSeaLevelChanged;
     }
 
     private void OnSeaLevelChanged(float previousValue, float newValue)

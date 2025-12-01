@@ -7,15 +7,6 @@
       "dependencies": {},
       "url": "https://registry.npmjs.com"
     },
-    "com.github.asus4.onnxruntime-extensions": {
-      "version": "0.4.2",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.github.asus4.onnxruntime": "0.4.2"
-      },
-      "url": "https://registry.npmjs.com"
-    },
     "com.github.asus4.onnxruntime.unity": {
       "version": "0.4.2",
       "depth": 0,

@@ -13,18 +13,13 @@ namespace TTT.DataClasses.States
     {
         [Header("Player Resources")]
         [field: SerializeField]
-        public PlayerResource Money { get; set; }
+        public PlayerResource money { get; set; }
 
         [field: SerializeField]
-        public PlayerResource Power { get; set; }
+        public PlayerResource power { get; set; }
 
         [field: SerializeField]
-        public PlayerResource Population { get; set; }
-
-        [Header("World State")]
-        [Tooltip("CO2/Pollution level - affects sea level rise")]
-        [field: SerializeField]
-        public PlayerResource Pollution { get; set; }
+        public PlayerResource population { get; set; }
 
         [Header("Starting Resources")]
         [SerializeField]
@@ -36,21 +31,18 @@ namespace TTT.DataClasses.States
         [SerializeField]
         private static readonly int startingPopulation = 0;
 
-        [SerializeField]
-        private static readonly float startingPollution = 0f;
+        // [Header("Sea Level Calculation")]
+        // [Tooltip(
+        //     "How much pollution contributes to sea level rise (default: 0.001 = 1mm per ppm)"
+        // )]
+        // [SerializeField]
+        // private float pollutionToSeaLevelFactor = 0.001f;
 
-        [Header("Sea Level Calculation")]
-        [Tooltip(
-            "How much pollution contributes to sea level rise (default: 0.001 = 1mm per ppm)"
-        )]
-        [SerializeField]
-        private float pollutionToSeaLevelFactor = 0.001f;
-
-        [Tooltip(
-            "Base rate of sea level rise per year regardless of pollution (meters)"
-        )]
-        [SerializeField]
-        private float baseSeaLevelRiseRate = 0.05f;
+        // [Tooltip(
+        //     "Base rate of sea level rise per year regardless of pollution (meters)"
+        // )]
+        // [SerializeField]
+        // private float baseSeaLevelRiseRate = 0.05f;
 
         public HexCell? selectedHexCell;
         public TileData selectedTileData;
@@ -79,13 +71,7 @@ namespace TTT.DataClasses.States
 
         public List<PlayerResource> GetAllResources()
         {
-            return new List<PlayerResource>
-            {
-                Money,
-                Power,
-                Population,
-                Pollution,
-            };
+            return new List<PlayerResource> { money, power, population };
         }
 
         public bool CanAfford(Dictionary<PlayerResource, int> costs)
@@ -116,43 +102,16 @@ namespace TTT.DataClasses.States
 
         public void ResetResources()
         {
-            Money?.Set(startingMoney);
-            Power?.Set(startingPower);
-            Population?.Set(startingPopulation);
-            Pollution?.Set(startingPollution);
+            money?.Set(startingMoney);
+            power?.Set(startingPower);
+            population?.Set(startingPopulation);
         }
 
         public void InitializeResources()
         {
-            Money?.Set(startingMoney);
-            Power?.Set(startingPower);
-            Population?.Set(startingPopulation);
-            Pollution?.Set(startingPollution);
-        }
-
-        /// <summary>
-        /// Load pollution value from map data WorldState
-        /// </summary>
-        public void LoadPollutionFromMapData(float pollutionValue)
-        {
-            Pollution?.Set(pollutionValue);
-        }
-
-        /// <summary>
-        /// Calculate sea level change based on current pollution levels.
-        /// Called at the end of each year.
-        /// Formula: baseRate + (pollution * factor)
-        /// </summary>
-        public float CalculateSeaLevelFromPollution()
-        {
-            if (Pollution == null)
-                return 0f;
-
-            float seaLevelIncrease =
-                baseSeaLevelRiseRate
-                + (Pollution.AmountOwned * pollutionToSeaLevelFactor);
-
-            return seaLevelIncrease;
+            money?.Set(startingMoney);
+            power?.Set(startingPower);
+            population?.Set(startingPopulation);
         }
     }
 }

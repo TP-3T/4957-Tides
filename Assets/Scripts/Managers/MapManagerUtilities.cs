@@ -170,8 +170,6 @@ namespace TTT.Managers
         /// </summary>
         public IEnumerator RaiseSea()
         {
-            SeaLevel.Value += RisingRate.Value;
-
             // update spawned features cache before flooding
             spawnedFeaturesCache = spawnedFeatures.GetItems();
 
@@ -191,7 +189,7 @@ namespace TTT.Managers
 
                         if (
                             test.CellPosition.y
-                            <= (SeaLevel.Value + RisingRate.Value)
+                            <= GameManager.Instance.SeaLevel.Value
                         )
                             ToFlood.Enqueue(test);
                         else
@@ -225,7 +223,10 @@ namespace TTT.Managers
                             || FloodQueue.Contains(neighbor)
                         )
                             continue;
-                        if (neighbor.CellPosition.y <= SeaLevel.Value)
+                        if (
+                            neighbor.CellPosition.y
+                            <= GameManager.Instance.SeaLevel.Value
+                        )
                             ToFlood.Enqueue(neighbor);
                         else
                             FloodQueue.Enqueue(neighbor);

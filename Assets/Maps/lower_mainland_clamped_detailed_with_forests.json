@@ -3,9 +3,9 @@
   "SteamID": "bread",
   "MapName": "Lower Mainland",
   "WorldState": {
-    "Pollution": 0,
+    "Pollution": 309.41,
     "SeaLevel": 0,
-    "Temp": 15,
+    "Temp": 5,
     "Year": 2024
   },
   "MapTile": {

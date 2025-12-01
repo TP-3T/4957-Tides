@@ -222,11 +222,11 @@ public class FeatureBuilder : MonoBehaviour
         // Automatically handle pollution emission if feature has PollutionEmission
         if (
             featureType.PollutionEmission != 0
-            && playerStats != null
-            && playerStats.Pollution != null
+            && GameManager.Instance.CO2_Pollution != null
         )
         {
-            playerStats.Pollution.ApplyChange(featureType.PollutionEmission);
+            GameManager.Instance.CO2_Pollution.Value +=
+                featureType.PollutionEmission;
         }
     }
 

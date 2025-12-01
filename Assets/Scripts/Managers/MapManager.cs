@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using TTT.ClimateModel;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.States;
 using TTT.DataClasses.Terrain;
@@ -11,7 +12,7 @@ using TTT.Helpers;
 using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+
 
 namespace TTT.Managers
 {
@@ -70,8 +71,7 @@ namespace TTT.Managers
         public Queue<HexCell> ToFlood = new();
         public Queue<HexCell> FloodQueue = new();
         public Queue<HexCell> AboveSeaLevelQueue = new();
-        public NetworkVariable<float> SeaLevel = new(0.0f);
-        public NetworkVariable<float> RisingRate = new(1.0f);
+
         public bool DrawDebugLabels;
 
         private LineRenderer lineRenderer;
@@ -216,7 +216,7 @@ namespace TTT.Managers
 
                 seaMeshInstance.Triangulate(
                     HexCells,
-                    SeaLevel.Value,
+                    GameManager.Instance.SeaLevel.Value,
                     MapManager.HexSize,
                     MapManager.HexOrientation
                 );
@@ -259,14 +259,17 @@ namespace TTT.Managers
 
                 seaMeshInstance.TriangulateCells(
                     cells,
-                    SeaLevel.Value,
+                    GameManager.Instance.SeaLevel.Value,
                     MapManager.HexSize,
                     MapManager.HexOrientation
                 );
             }
         }
 
-        private void SpawnPendingFeatures()
+
+
+
+        private IEnumerator SpawnPendingFeaturesAsync()
         {
             // po: the idea is that
             // OnNewMap() parses json
@@ -279,50 +282,6 @@ namespace TTT.Managers
             //    creates building feature args
             //    calls FeatureBuilder.OnLoadingMapFeature(args)
             //       where BuildAt() instantiates prefab
-
-            if (!_featuresLoaded)
-            {
-                Debug.LogWarning("feature types didn't load");
-            }
-
-            int spawnedCount = 0;
-
-            foreach (var (position, featureId) in _pendingFeatures)
-            {
-                if (
-                    _featureTypesByUniqueId.TryGetValue(
-                        featureId,
-                        out FeatureType featureType
-                    )
-                )
-                {
-                    var args =
-                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-                    args.Location = position;
-                    args.FeatureType = featureType;
-                    args.OwnedByClient = false;
-                    Debug.Log(args);
-                    BuildingFeatureEvent.Raise(args);
-                    spawnedCount++;
-                }
-                else
-                {
-                    Debug.LogWarning(
-                        $"skipped unknown feature '{featureId}' at {position}"
-                    );
-                }
-            }
-
-            if (spawnedCount > 0)
-            {
-                Debug.Log($"spawned {spawnedCount} features from map data:");
-            }
-
-            _pendingFeatures.Clear();
-        }
-
-        private IEnumerator SpawnPendingFeaturesAsync()
-        {
             if (!_featuresLoaded)
             {
                 Debug.LogWarning("feature types didn't load");
@@ -390,7 +349,7 @@ namespace TTT.Managers
                 {
                     WasSuccessful = true,
                     MaxMapHeight = _hexMaxHeight,
-                    SeaLevel = SeaLevel.Value,
+                    SeaLevel = GameManager.Instance.SeaLevel.Value,
                 }
             );
         }
@@ -517,13 +476,19 @@ namespace TTT.Managers
                     HexCells.Add(hc);
                 }
 
-                SeaLevel.Value = _gameMapData.WorldState.SeaLevel;
+                GameManager.Instance.SeaLevel.Value = _gameMapData
+                    .WorldState
+                    .SeaLevel;
 
-                // Load pollution from map data into PlayerStats
-                _playerStats?.LoadPollutionFromMapData(
-                    _gameMapData.WorldState.Pollution
-                );
-
+                // Load pollution from map data into game manager
+                GameManager.Instance.CO2_Pollution.Value = _gameMapData
+                    .WorldState
+                    .Pollution;
+                //load temperature from map data into game manager
+                GameManager.Instance.Temperature.Value = _gameMapData
+                    .WorldState
+                    .Temp;
+                GameManager.Instance.Year = _gameMapData.WorldState.Year;
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
                 StartCoroutine(SpawnMapObjects());
