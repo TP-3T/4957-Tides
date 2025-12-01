@@ -76,26 +76,7 @@ namespace TTT.Managers
             // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
         }
 
-        public void OnStartNetworkEvent(Object eventArgs)
-        {
-            StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
-            try
-            {
-                if (args.IsHost)
-                {
-                    StartGameHost();
-                }
-                else
-                {
-                    StartGameClient();
-                }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Failed to start host: {e.Message}");
-                return;
-            }
-        }
+        #region:Utility
 
         /// <summary>
         /// Call from a client RPC and get information of clients (multiplayer debugging).
@@ -129,17 +110,40 @@ namespace TTT.Managers
             CurrentPlayer = NetworkManager.Singleton.LocalClient;
         }
 
-        public void OnNewMapFinish(Object eventArgs)
+        /// <summary>
+        /// Increments the season, and the year if applicable.
+        /// </summary>
+        private void EndSeason()
         {
-            NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
+            endingSeasonEvent.Raise();
+            int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
 
-            if (!args.WasSuccessful)
-            {
-                Debug.LogWarning(
-                    "MAP FAILED TO LOAD! WE SHOULD REVERT TO THE MAIN MENU FROM HERE!"
-                );
-            }
+            // % to wrap around to the beginning after winter
+            int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
+            Season = Seasons[nextSeasonIndex];
         }
+
+        private void EndYear()
+        {
+            Debug.Log(
+                "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
+            );
+            Year += 1;
+
+            // Calculate and apply sea level change based on pollution
+            if (PlayerStats != null)
+            {
+                float seaLevelIncrease = PlayerStats.CalculateSeaLevelFromPollution();
+                MapManager.Instance.SeaLevel.Value += seaLevelIncrease;
+                Debug.Log($"Sea level increased by {seaLevelIncrease} due to pollution");
+            }
+
+            endingYearEvent.Raise();
+        }
+
+        #endregion
+
+        #region:RPC Definitions
 
         [Rpc(SendTo.ClientsAndHost)]
         public void OnTurnEndingClientRpc(ulong nextClient)
@@ -184,35 +188,29 @@ namespace TTT.Managers
             // StartNextTurnClientRpc();                       // Handle it for each clients
         }
 
-        /// <summary>
-        /// Increments the season, and the year if applicable.
-        /// </summary>
-        private void EndSeason()
+        #endregion
+
+        #region: SCROBJECT Handlers
+
+        public void OnStartNetworkEvent(Object eventArgs)
         {
-            endingSeasonEvent.Raise();
-            int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
-
-            // % to wrap around to the beginning after winter
-            int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
-            Season = Seasons[nextSeasonIndex];
-        }
-
-        private void EndYear()
-        {
-            Debug.Log(
-                "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
-            );
-            Year += 1;
-
-            // Calculate and apply sea level change based on pollution
-            if (PlayerStats != null)
+            StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
+            try
             {
-                float seaLevelIncrease = PlayerStats.CalculateSeaLevelFromPollution();
-                MapManager.Instance.SeaLevel.Value += seaLevelIncrease;
-                Debug.Log($"Sea level increased by {seaLevelIncrease} due to pollution");
+                if (args.IsHost)
+                {
+                    StartGameHost();
+                }
+                else
+                {
+                    StartGameClient();
+                }
             }
-
-            endingYearEvent.Raise();
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to start host: {e.Message}");
+                return;
+            }
         }
 
         /// <summary>
@@ -248,5 +246,19 @@ namespace TTT.Managers
 
             return hasEnoughResources;
         }
+
+        public void OnNewMapFinish(Object eventArgs)
+        {
+            NewMapFinishedEventArgs args = eventArgs as NewMapFinishedEventArgs;
+
+            if (!args.WasSuccessful)
+            {
+                Debug.LogWarning(
+                    "MAP FAILED TO LOAD! WE SHOULD REVERT TO THE MAIN MENU FROM HERE!"
+                );
+            }
+        }
+
+        #endregion
     }
 }
