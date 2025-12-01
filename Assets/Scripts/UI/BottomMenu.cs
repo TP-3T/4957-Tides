@@ -199,11 +199,11 @@ namespace TTT.UI
                             Type = AudioTypes.ONESHOT,
                             ToPlay = type switch
                             {
-                                FeatureCategory.INDUSTRY => "ClickIndustry",
-                                FeatureCategory.HOUSING => "ClickHousing",
-                                FeatureCategory.ENERGY => "ClickEnergy",
-                                FeatureCategory.NATURE => "ClickRenewable",
-                                _ => "ClickGeneric",
+                                FeatureCategory.INDUSTRY => "click_industry",
+                                FeatureCategory.HOUSING => "click_home",
+                                FeatureCategory.ENERGY => "click_energy",
+                                FeatureCategory.NATURE => "click_renewable",
+                                _ => "click_generic",
                             },
                         }
                     );
