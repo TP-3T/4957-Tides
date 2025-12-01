@@ -302,21 +302,25 @@ public class EditModeTests
     [Test, Description("MapManager.SeaLevel public property is accessible.")]
     public void MapManager_SeaLevel_IsAccessible()
     {
-        var mapManager = MapManager.Instance;
-        Assert.IsNotNull(mapManager.SeaLevel, "SeaLevel should not be null");
+        var gameManager = GameManager.Instance;
+        Assert.IsNotNull(gameManager.SeaLevel, "SeaLevel should not be null");
     }
 
-    [Test, Description("MapManager.RisingRate public property is accessible.")]
-    public void MapManager_RisingRate_IsAccessible()
-    {
-        var mapManager = MapManager.Instance;
-        Assert.IsNotNull(
-            mapManager.RisingRate,
-            "RisingRate should not be null"
-        );
-    }
+    // Removed RisingRate
+    // [Test, Description("MapManager.RisingRate public property is accessible.")]
+    // public void MapManager_RisingRate_IsAccessible()
+    // {
+    //     var gameManager = MapManager.Instance;
+    //     Assert.IsNotNull(
+    //         gameManager.RisingRate,
+    //         "RisingRate should not be null"
+    //     );
+    // }
 
-    [Test, Description("MapManager.HexCells public collection is accessible.")]
+    [
+        Test,
+        Description("MapManager.HexCells public collection is accessible.")
+    ]
     public void MapManager_HexCells_IsAccessible()
     {
         var mapManager = MapManager.Instance;
