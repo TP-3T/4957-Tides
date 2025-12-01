@@ -13,7 +13,6 @@ using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 
-
 namespace TTT.Managers
 {
     [RequireComponent(typeof(LineRenderer))]
@@ -265,9 +264,6 @@ namespace TTT.Managers
                 );
             }
         }
-
-
-
 
         private IEnumerator SpawnPendingFeaturesAsync()
         {
