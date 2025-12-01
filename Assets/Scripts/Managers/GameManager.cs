@@ -68,21 +68,21 @@ namespace TTT.Managers
         public static readonly float INITIAL_TEMPERATURE_DEG_C = 14.15561478f;
 
         [field: SerializeField]
-        public NetworkVariable<float> SeaLevel { get; private set; } = new();
+        public NetworkVariable<float> SeaLevel { get; private set; } = new(INITIAL_TEMPERATURE_DEG_C);
 
         [field: SerializeField]
         public NetworkVariable<float> CO2_Pollution { get; private set; } =
-            new();
+            new(INITIAL_CO2_PPM);
 
         [field: SerializeField]
-        public NetworkVariable<float> Temperature { get; private set; } = new();
+        public NetworkVariable<float> Temperature { get; private set; } = new(INITIAL_SEA_LEVEL_M);
 
         public override void Awake()
         {
             base.Awake();
-            Temperature.Value = INITIAL_TEMPERATURE_DEG_C;
-            CO2_Pollution.Value = INITIAL_CO2_PPM;
-            SeaLevel.Value = INITIAL_SEA_LEVEL_M;
+            // Temperature.Value = INITIAL_TEMPERATURE_DEG_C;
+            // CO2_Pollution.Value = INITIAL_CO2_PPM;
+            // SeaLevel.Value = INITIAL_SEA_LEVEL_M;
         }
 
         // Start

@@ -70,7 +70,7 @@ namespace TTT.ClimateModel
             //todo: remove later once tested
             if (!File.Exists(_MODEL_PATH))
             {
-                Debug.LogError($"ONNX model not found at path: {_MODEL_PATH}");
+                UnityEngine.Debug.Log($"ONNX model not found at path: {_MODEL_PATH}");
             }
         }
 

@@ -40,8 +40,8 @@ namespace TTT.ClimateModel
         private static readonly double _RADIATIVE_FORCING_EMPIRICAL_CONSTANT =
             5.35;
 
-        // Pre-industrial CO2 concentration in ppm
-        private static readonly double _PRE_INDUSTRIAL_CO2_PPM = 280.0;
+        // 1950 (our pre-industrial) CO2 concentration in ppm
+        private static readonly double _1950_CO2_PPM = 309.41f;
 
         // Pre-industrial temperature in Kelvin
         private static readonly double _PRE_INDUSTRIAL_TEMP_KELVIN = 288.0;
@@ -183,8 +183,6 @@ namespace TTT.ClimateModel
                 / _TOTAL_HEAT_CAPACITY_OF_EARTH_SYSTEM
                 * netRadiativeImbalance;
 
-            UnityEngine.Debug.Log($"Change in temp (no unit) - {changeInTemp}");
-
             double futureTempKelvin = currTempKelvin + changeInTemp;
 
             double futureTempCelsius = KelvinToCelsius(futureTempKelvin);
@@ -275,7 +273,7 @@ namespace TTT.ClimateModel
             // if positive value, global warming is occuring
             double CO2RadiativeForcingWattsPerSquareMetre =
                 _RADIATIVE_FORCING_EMPIRICAL_CONSTANT
-                * Math.Log(currCO2ConcentrationPpm / _PRE_INDUSTRIAL_CO2_PPM);
+                * Math.Log(currCO2ConcentrationPpm / _1950_CO2_PPM);
 
             return CO2RadiativeForcingWattsPerSquareMetre;
         }
