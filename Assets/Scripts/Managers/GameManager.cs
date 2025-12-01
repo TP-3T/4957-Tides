@@ -147,7 +147,18 @@ namespace TTT.Managers
             var self = NetworkManager.Singleton.LocalClientId;
 
             NetworkingInformationLog();
+
             Debug.Log($"[GameManager] on client turn ending matches current {self == nextClient}");
+            Debug.Log($"[GameManager] on client turn ending client rpc {NetworkManager.Singleton.LocalClientId}, start turn");
+
+            startTurnEvent.Raise();
+        }
+
+        [Rpc(SendTo.ClientsAndHost)]
+        public void StartNextTurnClientRpc()
+        {
+            Debug.Log($"[GameManager] client rpc {NetworkManager.Singleton.LocalClientId}, start turn");
+            // startTurnEvent.Raise();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
@@ -204,13 +215,6 @@ namespace TTT.Managers
             endingYearEvent.Raise();
         }
 
-        [Rpc(SendTo.ClientsAndHost)]
-        public void StartNextTurnClientRpc()
-        {
-            endTurnEvent.Raise();
-            startTurnEvent.Raise();
-        }
-
         /// <summary>
         /// Appease the SCROBJECT event handler 👌😉
         /// </summary>
@@ -236,7 +240,7 @@ namespace TTT.Managers
 
         public bool CanEndTurn()
         {
-            NetworkingInformationLog();
+            // NetworkingInformationLog();
 
             bool hasEnoughResources = PlayerResources.All(resources =>
                 resources.AmountOwned >= 0

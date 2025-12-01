@@ -6,6 +6,7 @@ using TTT.DataClasses.HexData;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -42,37 +43,16 @@ namespace TTT.Managers
 
             if (cellHasFeature)
             {
-                DestroyFeatureCientRpc(hc.CellPosition);
+                DestroyFeatureClientRpc(hc.CellPosition);
             }
         }
 
-        /// <summary>
-        /// Removes a building from a cell when it gets flooded.
-        /// </summary>
-        // private void RaiseDestroyingFeatureEvent(Vector3 cellPosition)
-        // {
-        //     BuildingFeatureArgs bfArgs =
-        //         ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-        //     bfArgs.Location = cellPosition;
-
-        //     if (DestroyingFeatureEvent == null)
-        //     {
-        //         Debug.LogError("DestroyingFeatureEvent is not set here");
-        //         return;
-        //     }
-
-        //     DestroyingFeatureEvent.Raise(bfArgs);
-        //     Debug.Log("destroyed!");
-        // }
-        private void DestroyFeatureCientRpc(Vector3 cellPosition)
+        [Rpc(SendTo.ClientsAndHost)]
+        private void DestroyFeatureClientRpc(Vector3 cellPosition)
         {
-            Debug.Log("[MapManagerUtilities] destroy feature CLIENT rpc");
-
             BuildingFeatureArgs bfArgs = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
             bfArgs.Location = cellPosition;
             DestroyingFeatureEvent.Raise(bfArgs);
-            
-            Debug.Log("[MapManagerUtilities] destroyed");
         }
 
         private void SetCellCenterVertex(HexCell hc, int cv)

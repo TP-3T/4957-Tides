@@ -241,15 +241,15 @@ namespace TTT.Player
 
         public void CheckIfPlayerHasLost()
         {
-            if (
-                GameManager.Instance.CO2 > maxCO2
-                || GameManager.Instance.Temperature > maxTemperature
-                || playerBuildings.GetItems().Length <= 0
-            )
-            {
-                playerLoseEvent.Raise();
-                OnLose();
-            }
+            // if (
+            //     GameManager.Instance.CO2 > maxCO2
+            //     || GameManager.Instance.Temperature > maxTemperature
+            //     || playerBuildings.GetItems().Length <= 0
+            // )
+            // {
+            //     playerLoseEvent.Raise();
+            //     OnLose();
+            // }
         }
 
         public void OnLose()
@@ -270,6 +270,17 @@ namespace TTT.Player
                 new InteractionModeChangeEventArgs()
                 {
                     NewMode = InteractionMode.INSPECTING,
+                }
+            );
+            currentUI.gameObject.SetActive(false);
+        }
+
+        public void EnableUI()
+        {
+            InteractModeChange.Raise(
+                new InteractionModeChangeEventArgs()
+                {
+                    NewMode = InteractionMode.BUILDING
                 }
             );
             currentUI.gameObject.SetActive(false);
