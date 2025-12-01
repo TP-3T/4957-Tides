@@ -75,9 +75,15 @@ public class FeatureBuilder : MonoBehaviour
         bool checkForCost
     )
     {
-        if (ownedByClient && checkForCost && !CheckCost(featureType, out string insufficientResource))
+        if (
+            ownedByClient
+            && checkForCost
+            && !CheckCost(featureType, out string insufficientResource)
+        )
         {
-            Debug.LogWarning($"Cannot afford {featureType.name}. Insufficient {insufficientResource}.");
+            Debug.LogWarning(
+                $"Cannot afford {featureType.name}. Insufficient {insufficientResource}."
+            );
             return;
         }
 
@@ -160,7 +166,10 @@ public class FeatureBuilder : MonoBehaviour
         return CheckCost(featureType, out _);
     }
 
-    private bool CheckCost(FeatureType featureType, out string insufficientResource)
+    private bool CheckCost(
+        FeatureType featureType,
+        out string insufficientResource
+    )
     {
         insufficientResource = string.Empty;
         foreach (var resourceCost in featureType.Cost)
@@ -173,7 +182,8 @@ public class FeatureBuilder : MonoBehaviour
             PlayerResource resource = resourceCost.Thing;
             if (resource.AmountOwned < resourceCost.Count)
             {
-                insufficientResource = $"{resource.Name} (Need: {resourceCost.Count}, Have: {resource.AmountOwned})";
+                insufficientResource =
+                    $"{resource.Name} (Need: {resourceCost.Count}, Have: {resource.AmountOwned})";
                 return false;
             }
         }
@@ -210,9 +220,13 @@ public class FeatureBuilder : MonoBehaviour
         }
 
         // Automatically handle pollution emission if feature has PollutionEmission
-        if (featureType.PollutionEmission != 0 && playerStats != null && playerStats.pollution != null)
+        if (
+            featureType.PollutionEmission != 0
+            && GameManager.Instance.CO2_Pollution != null
+        )
         {
-            playerStats.pollution.ApplyChange(featureType.PollutionEmission);
+            GameManager.Instance.CO2_Pollution.Value +=
+                featureType.PollutionEmission;
         }
     }
 

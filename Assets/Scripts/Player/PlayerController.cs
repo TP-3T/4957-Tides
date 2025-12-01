@@ -242,8 +242,8 @@ namespace TTT.Player
         public void CheckIfPlayerHasLost()
         {
             if (
-                GameManager.Instance.CO2 > maxCO2
-                || GameManager.Instance.Temperature > maxTemperature
+                GameManager.Instance.CO2_Pollution.Value > maxCO2
+                || GameManager.Instance.Temperature.Value > maxTemperature
                 || playerBuildings.GetItems().Length <= 0
             )
             {

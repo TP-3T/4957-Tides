@@ -15,7 +15,7 @@ MonoBehaviour:
   <UniqueID>k__BackingField: rural
   <Category>k__BackingField: 1
   <DisplayName>k__BackingField: Farm
-  <PollutionEmission>k__BackingField: 67
+  <PollutionEmission>k__BackingField: 3
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 500
     <TerrainConstraints>k__BackingField:

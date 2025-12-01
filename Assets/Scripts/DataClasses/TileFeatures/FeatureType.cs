@@ -39,7 +39,7 @@ namespace TTT.DataClasses.TileFeatures
         /// </summary>
         [field: Tooltip("The amount of pollution emitted per turn.")]
         [field: SerializeField]
-        public int PollutionEmission { get; private set; }
+        public float PollutionEmission { get; private set; }
 
         /// <summary>
         /// The constraints for building this feature.
