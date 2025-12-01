@@ -17,9 +17,6 @@ namespace TTT.Managers
     public partial class MapManager
     {
         [SerializeField]
-        private GameEvent DestroyingFeatureEvent;
-
-        [SerializeField]
         private FeatureRuntimeSet spawnedFeatures;
 
         /// <summary>
@@ -46,6 +43,8 @@ namespace TTT.Managers
                 DestroyFeatureClientRpc(hc.CellPosition);
             }
         }
+
+        #region:Cell Management
 
         private void SetCellCenterVertex(HexCell hc, int cv)
         {
@@ -147,6 +146,75 @@ namespace TTT.Managers
             return neighbours;
         }
 
+        #region: Game OBJ Management
+
+        private void SpawnGridMesh(GameObject hm)
+        {
+            // Get reference to HexMesh prefab
+            GameObject hexMeshGameObject = Instantiate(hm);
+            HexMesh hexMeshInstance = hexMeshGameObject.GetComponent<HexMesh>();
+
+            // Instance HexMesh prefab based off of the build data
+            hexMeshInstance.GetComponent<NetworkObject>().Spawn();
+            hexMeshInstance.transform.position += new Vector3(
+                0.0f,
+                -0.01f,
+                0.0f
+            );
+            _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
+
+            TriangulateHexMeshClientRpc();
+        }
+
+        private void SpawnSeaMesh(GameObject sm)
+        {
+            // Get reference to SeaMesh prefab
+            GameObject seaMeshGameObject = Instantiate(sm);
+            SeaMesh seaMeshInstance = seaMeshGameObject.GetComponent<SeaMesh>();
+
+            // Instance SeaMesh prefab based off of the
+            seaMeshInstance.GetComponent<NetworkObject>().Spawn();
+            _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
+
+            TriangulateSeaMeshClientRpc();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region: Coroutines
+
+        /// <summary>
+        /// Spawns the map objects.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator SpawnMapObjects()
+        {
+            yield return AssetLoader<GameObject>.Load(
+                new("P_HexMesh"),
+                SpawnGridMesh
+            );
+            yield return AssetLoader<GameObject>.Load(
+                new("P_SeaMesh"),
+                SpawnSeaMesh
+            );
+        }
+
+        /// <summary>
+        /// Spawns features onto the map.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator LoadFeatureTypes()
+        {
+            yield return AssetLoader<FeatureType>.LoadGroup(
+                "building",
+                CacheFeatureType
+            );
+            _featuresLoaded = true;
+            Debug.Log($"Loaded {_featureTypesByUniqueId.Count} feature types");
+        }
+
         /// <summary>
         /// Simulate rising on a per turn basis, not per frame.
         /// </summary>
@@ -217,5 +285,86 @@ namespace TTT.Managers
             onFloodEnded.Raise();
             //says unreachable but it is
         }
+
+        /// <summary>
+        /// Coroutine to asynchronously spawn features onto the map.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator SpawnPendingFeaturesAsync()
+        {
+            if (!_featuresLoaded)
+            {
+                Debug.LogWarning("feature types didn't load");
+                yield break;
+            }
+
+            int spawnedCount = 0;
+            int spawnsPerFrame = 5; // Spawn 50 buildings per frame for smooth-ish loading
+            Dictionary<string, int> featureTypeCounts =
+                new Dictionary<string, int>();
+
+            Debug.Log(
+                $"Starting async spawn of {_pendingFeatures.Count} features..."
+            );
+
+            foreach (var featureNet in _pendingFeaturesGoated)
+            {
+                var featureIdS = featureNet.FeatureId.ToString();
+                if (
+                    _featureTypesByUniqueId.TryGetValue(
+                        featureNet.FeatureId.ToString(),
+                        out FeatureType featureType
+                    )
+                )
+                {
+                    var args =
+                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    args.Location = featureNet.FeaturePosition;
+                    args.FeatureType = featureType;
+                    args.OwnedByClient = false;
+                    _onFeatureBuild.Raise(args);
+                    spawnedCount++;
+
+                    // Track counts by type
+                    if (!featureTypeCounts.ContainsKey(featureIdS))
+                        featureTypeCounts[featureIdS] = 0;
+                    featureTypeCounts[featureIdS]++;
+
+                    // Yield every X spawns to maintain framerate
+                    //Kinda doesn't work :/
+                    if (spawnedCount % spawnsPerFrame == 0)
+                    {
+                        yield return null; // Wait one frame
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning(
+                        $"skipped unknown feature '{featureIdS}' at {featureNet.FeaturePosition}"
+                    ); //THis basically never happens but I put this here just in case :/
+                }
+            }
+
+            if (spawnedCount > 0)
+            {
+                Debug.Log($"Finished spawning {spawnedCount} features:");
+                foreach (var kvp in featureTypeCounts)
+                {
+                    Debug.Log($"  {kvp.Key}: {kvp.Value}");
+                }
+            }
+
+            // _pendingFeatures.Clear();
+
+            _mapLoadFinishEvent.Raise(
+                new NewMapFinishedEventArgs()
+                {
+                    WasSuccessful = true,
+                    MaxMapHeight = _hexMaxHeight,
+                    SeaLevel = SeaLevel.Value,
+                }
+            );
+        }
+        #endregion
     }
 }
