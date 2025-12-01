@@ -128,7 +128,7 @@ namespace TTT.Managers
         }
 
         [Rpc(SendTo.ClientsAndHost)]
-        private void BuildFeatureClientRpc(ulong builder, FixedString32Bytes featureId, Vector3 cellPosition)
+        private void PlaceFeatureClientRpc(ulong builder, FixedString32Bytes featureId, Vector3 cellPosition)
         {
             BuildingFeatureArgs bfArgs = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
 
@@ -141,7 +141,7 @@ namespace TTT.Managers
             bfArgs.FeatureType = featureType;
             bfArgs.OwnedByClient = (builder == NetworkManager.Singleton.LocalClientId);
 
-            _onFeatureBuild.Raise(bfArgs);
+            _onFeaturePlace.Raise(bfArgs);
         }
 
         [ClientRpc]
@@ -425,7 +425,7 @@ namespace TTT.Managers
             StartRaiseSeaServerRpc();
         }
 
-        public void OnFeaturePlace(UnityEngine.Object args)
+        public void OnFeatureBuild(UnityEngine.Object args)
         {
             if (args is not BuildingFeatureArgs)
             {
@@ -434,7 +434,7 @@ namespace TTT.Managers
             }
             BuildingFeatureArgs eventArgs = args as BuildingFeatureArgs;
 
-            BuildFeatureClientRpc(
+            PlaceFeatureClientRpc(
                 NetworkManager.Singleton.LocalClientId,
                 eventArgs.FeatureType.UniqueID,
                 eventArgs.Location

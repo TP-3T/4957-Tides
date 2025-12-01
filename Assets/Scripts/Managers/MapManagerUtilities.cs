@@ -323,6 +323,7 @@ namespace TTT.Managers
                     args.FeatureType = featureType;
                     args.OwnedByClient = false;
                     // _onFeatureBuild.Raise(args);
+
                     _onFeaturePlace.Raise(args);
 
                     spawnedCount++;

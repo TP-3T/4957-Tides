@@ -165,7 +165,7 @@ namespace TTT.Player
                 );
                 if (mouseMovement > CLICK_THRESHOLD)
                 {
-                    Debug.Log(mouseMovement);
+                    // Debug.Log(mouseMovement);
                     // This was a drag, not a click - don't select tile
                     return;
                 }
