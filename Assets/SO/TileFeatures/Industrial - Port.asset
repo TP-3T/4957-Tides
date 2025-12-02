@@ -19,9 +19,11 @@ MonoBehaviour:
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 20
     <TerrainConstraints>k__BackingField:
-      <Mode>k__BackingField: 0
+      <Mode>k__BackingField: 1
       <List>k__BackingField:
-      - {fileID: 11400000, guid: a0bfe455dcde2f348b2a9a88f8d0cb0c, type: 2}
+      - {fileID: 11400000, guid: df18eb8c24270bf468df79b96fb1553c, type: 2}
+      - {fileID: 11400000, guid: e14599042cb91bf4d93294d8fe23a115, type: 2}
+      - {fileID: 11400000, guid: 2120c918288b3bd40a2918ed1b65fe86, type: 2}
       - {fileID: 11400000, guid: da73337ffc743494987e98ff083029ef, type: 2}
     <FeatureConstraints>k__BackingField: []
   <BuildValidator>k__BackingField: {fileID: 11400000, guid: 415d8be488ae7e54388aaea4cfe19dc7, type: 2}
@@ -29,12 +31,12 @@ MonoBehaviour:
   - <ProductionSchedule>k__BackingField: {fileID: 11400000, guid: 17a0647e21e0cef458dc0b557a3a7cbe, type: 2}
     <ResourceAmounts>k__BackingField:
     - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
-      <Count>k__BackingField: 500
+      <Count>k__BackingField: 300
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
-    <Count>k__BackingField: 25
+    <Count>k__BackingField: 20
   - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
-    <Count>k__BackingField: 2000
+    <Count>k__BackingField: 1000
   - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-    <Count>k__BackingField: 50
+    <Count>k__BackingField: 5
   <Prefab>k__BackingField: {fileID: 1896010477726661462, guid: 6e8ef4e7efd3aab4dada1ebc33e17654, type: 3}
