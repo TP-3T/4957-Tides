@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
+using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.Hex;
 using TTT.Managers;
@@ -20,7 +21,7 @@ public class FeatureBuilder : MonoBehaviour
     public FeatureRuntimeSet SpawnedFeatures;
 
     [SerializeField]
-    private TTT.DataClasses.States.PlayerStats playerStats;
+    private PlayerStats playerStats;
 
     private const float hexCellPadding = 0.05f;
 
@@ -282,6 +283,7 @@ public class FeatureBuilder : MonoBehaviour
         GameObject parent = new($"{modelInstance.name} (Parent)");
         parent.transform.position = location;
         modelInstance.transform.SetParent(parent.transform);
+        parent.transform.parent = this.transform;
 
         // scale (the parent, not the model)
         Vector3 displayScale = new(scaleFactor, scaleFactor, scaleFactor);

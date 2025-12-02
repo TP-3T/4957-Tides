@@ -1,5 +1,4 @@
 using TTT.DataClasses;
-using TTT.DataClasses.TileFeatures;
 using TTT.Helpers;
 using UnityEngine;
 
@@ -140,9 +139,6 @@ namespace TTT.Managers
         {
             foreach (AudioEntry entry in entries)
             {
-                Debug.Log(
-                    $"{entry.EntryName} equals {name}? {entry.EntryName.Equals(name)}!"
-                );
                 if (entry.EntryName == name)
                 {
                     return entry;
