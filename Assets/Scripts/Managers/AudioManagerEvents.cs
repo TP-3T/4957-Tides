@@ -2,6 +2,7 @@ using TTT.DataClasses.States;
 using TTT.GameEvents;
 using TTT.Helpers;
 using UnityEngine;
+using WebSocketSharp;
 
 namespace TTT.Managers
 {
@@ -31,6 +32,22 @@ namespace TTT.Managers
                         break;
                     }
                 }
+            }
+        }
+
+        public void OnSystemStateChange(object args)
+        {
+            var eventArgs = args as StateSystemChangeEventArgs;
+            string track = eventArgs.NewState switch
+            {
+                SystemState.MAIN_MENU => "main_menu",
+                SystemState.PLAYING => "new_game",
+                _ => "",
+            };
+
+            if (!track.IsNullOrEmpty())
+            {
+                PlayAmbience(track);
             }
         }
     }

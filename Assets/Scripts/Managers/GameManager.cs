@@ -24,17 +24,6 @@ namespace TTT.Managers
         public PlayerStats PlayerStats { get; private set; }
 
         [field: SerializeField]
-        public InteractionMode InteractionMode { get; private set; }
-
-        private readonly string[] Seasons =
-        {
-            "Spring",
-            "Summer",
-            "Fall",
-            "Winter",
-        };
-
-        [field: SerializeField]
         public NetworkClient CurrentPlayer { get; private set; }
 
         //serialize for now
@@ -42,7 +31,7 @@ namespace TTT.Managers
         public int Year { get; set; } = 1;
 
         [field: SerializeField]
-        public string Season { get; private set; }
+        public Seasons Season { get; private set; }
 
         [SerializeField]
         private GameEvent startTurnEvent;
@@ -62,6 +51,9 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
+        [SerializeField]
+        private GameEvent SystemStateChange;
+
         // Initial climate values
         public static readonly float INITIAL_SEA_LEVEL_M = 0.0f;
         public static readonly float INITIAL_CO2_PPM = 309.41f;
@@ -79,23 +71,9 @@ namespace TTT.Managers
         public NetworkVariable<float> Temperature { get; private set; } =
             new(INITIAL_SEA_LEVEL_M);
 
-        public override void Awake()
-        {
-            base.Awake();
-            // Temperature.Value = INITIAL_TEMPERATURE_DEG_C;
-            // CO2_Pollution.Value = INITIAL_CO2_PPM;
-            // SeaLevel.Value = INITIAL_SEA_LEVEL_M;
-        }
-
-        // Start
-        //  is called once
-        //  before the first
-        //  execution of
-        //  Update after the MonoBehaviour is created
         void Start()
         {
-            Season = Seasons[0];
-            // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
+            Season = Seasons.Spring;
         }
 
         public void OnStartNetworkEvent(Object eventArgs)
@@ -146,11 +124,21 @@ namespace TTT.Managers
             {
                 // Seed the historical climate data into the climate model's internal queue
                 ClimatePredictionModel.ResetWorldQueue();
+                SystemStateChange.Raise(
+                    new StateSystemChangeEventArgs()
+                    {
+                        NewState = SystemState.PLAYING,
+                    }
+                );
             }
             else
             {
-                Debug.LogWarning(
-                    "MAP FAILED TO LOAD! WE SHOULD REVERT TO THE MAIN MENU FROM HERE!"
+                Debug.LogWarning("MAP FAILED TO LOAD! RETURNING TO MAIN MENU!");
+                SystemStateChange.Raise(
+                    new StateSystemChangeEventArgs()
+                    {
+                        NewState = SystemState.MAIN_MENU,
+                    }
                 );
             }
         }
@@ -175,7 +163,7 @@ namespace TTT.Managers
                 CurrentPlayer = ConnectedClientsList.First();
                 // end the season before saying the turn ended
                 EndSeason();
-                if (Season.Equals(Seasons[0]))
+                if (Season.Equals(Seasons.Spring))
                 {
                     EndYear();
                 }
@@ -192,11 +180,12 @@ namespace TTT.Managers
         private void EndSeason()
         {
             endingSeasonEvent.Raise();
-            int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
+            Season = Season.NextEnumValue();
+            // int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
 
-            // % to wrap around to the beginning after winter
-            int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
-            Season = Seasons[nextSeasonIndex];
+            // // % to wrap around to the beginning after winter
+            // int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
+            // Season = Seasons[nextSeasonIndex];
         }
 
         private void EndYear()

@@ -33,17 +33,17 @@ namespace TTT.UI
         {
             if (
                 GameManager.Instance.Year != Year
-                || GameManager.Instance.Season != Season
+                || GameManager.Instance.Season.ToString() != Season
             )
             {
-                setDateText();
+                SetDateText();
             }
         }
 
-        private void setDateText()
+        private void SetDateText()
         {
             Year = GameManager.Instance.Year;
-            Season = GameManager.Instance.Season;
+            Season = GameManager.Instance.Season.ToString();
             _dateText.text = $"{Season}, {Year}";
         }
 
@@ -53,39 +53,3 @@ namespace TTT.UI
         }
     }
 }
-
-// void Update()
-// {
-//     if (GameManager.Year != Year || GameManager.Season != Season)
-//     {
-//         setDateText();
-//     }
-//     if (GameManager.CO2_Pollution != null
-//     // && playerStats.pollution.AmountOwned != CO2
-//     )
-//     {
-//         setCO2Text();
-//     }
-// }
-
-// private void setDateText()
-// {
-//     Year = GameManager.Year;
-//     Season = GameManager.Season;
-//     _dateText.text = $"{Season}, {Year}";
-// }
-
-// private void setCO2Text(float old, float new)
-// {
-//     _CO2Text.text = $"CO2: {new:F1} ppm";
-//     if (GameManager.CO2_Pollution != null)
-//     {
-//         // CO2 = GameManager.CO2_Pollution.Value;
-//         // float displayPpm = CO2;
-//         _CO2Text.text = $"CO2: {GameManager.CO2_Pollution.Value:F1} ppm";
-//     }
-//     else
-//     {
-//         _CO2Text.text = "CO2: -- ppm";
-//     }
-// }

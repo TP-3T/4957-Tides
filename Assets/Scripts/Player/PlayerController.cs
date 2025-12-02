@@ -2,6 +2,7 @@ using TMPro;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
+using TTT.Helpers;
 using TTT.Hex;
 using TTT.Managers;
 using Unity.Netcode;
@@ -51,12 +52,24 @@ namespace TTT.Player
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
-        [SerializeField]
-        private Canvas currentUI;
+        // [SerializeField]
+        // private Canvas currentUI;
         public InteractionMode Mode;
 
         [SerializeField]
         public PlayerStats PlayerStats;
+
+        [SerializeField]
+        private GameObject GameUI;
+
+        [SerializeField]
+        private GameObject MainMenu;
+
+        [SerializeField]
+        private GameObject LoseUI;
+
+        [SerializeField]
+        private GameObject CurrentUI;
 
         public GameEvent playerLoseEvent;
 
@@ -135,7 +148,18 @@ namespace TTT.Player
 
         private void Start()
         {
+            CurrentUI = Instantiate(MainMenu);
             Mode = InteractionMode.INSPECTING;
+        }
+
+        private void SetCurrentUI(GameObject newUI)
+        {
+            if (CurrentUI != null)
+            {
+                Extensions.SmartDestroy(CurrentUI);
+            }
+            CurrentUI = Instantiate(newUI);
+            CurrentUI.transform.parent = this.transform;
         }
 
         //? CB: There must be an event driven way to handle this.
@@ -254,25 +278,7 @@ namespace TTT.Player
 
         public void OnLose()
         {
-            DisableUI();
-
-            statusText.gameObject.SetActive(true);
-            statusText.text = "You lose";
-
-            // feel free to remove this if needed, not important
-            GameObject cube = GameObject.Find("Cube");
-            cube?.SetActive(false); // would throw if cube not found
-        }
-
-        public void DisableUI()
-        {
-            InteractModeChange.Raise(
-                new InteractionModeChangeEventArgs()
-                {
-                    NewMode = InteractionMode.INSPECTING,
-                }
-            );
-            currentUI.gameObject.SetActive(false);
+            SetCurrentUI(LoseUI);
         }
     }
 }

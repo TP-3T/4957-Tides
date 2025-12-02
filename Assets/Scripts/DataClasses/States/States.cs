@@ -55,4 +55,12 @@ namespace TTT.DataClasses.States
         AMBIENCE,
         MUSIC,
     }
+
+    public enum Seasons
+    {
+        Spring,
+        Summer,
+        Fall,
+        Winter,
+    }
 }
