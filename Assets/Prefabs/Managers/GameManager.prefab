@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 716805358515309763}
   - component: {fileID: 5757304008040878310}
   - component: {fileID: 3592747517484452573}
-  - component: {fileID: 2189260201799044924}
   - component: {fileID: 3582332377859791208}
   m_Layer: 0
   m_Name: GameManager
@@ -81,17 +80,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
   - {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
   - {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
+  <PlayerStats>k__BackingField: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
   <InteractionMode>k__BackingField: 0
   <Year>k__BackingField: 1
   <Season>k__BackingField: 
-  <CO2>k__BackingField: 0
-  <Temperature>k__BackingField: 0
   startTurnEvent: {fileID: 11400000, guid: 05610094447874b4fb50121eb5692137, type: 2}
   endTurnEvent: {fileID: 11400000, guid: ae18fced95a4b6749b1a727654516355, type: 2}
   endingSeasonEvent: {fileID: 11400000, guid: 9972c717c1f0dd14d901eee8e5cd8aa5, type: 2}
   endingYearEvent: {fileID: 11400000, guid: 41e01cdfff1d08a408a8a22cfe7bcc81, type: 2}
   newMapEvent: {fileID: 11400000, guid: 9438c37d1b6c53b408804b0dce45c597, type: 2}
   BuildingFeatureEvent: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
+  <SeaLevel>k__BackingField:
+    m_InternalValue: 0
+  <CO2_Pollution>k__BackingField:
+    m_InternalValue: 0
+  <Temperature>k__BackingField:
+    m_InternalValue: 0
 --- !u!114 &5187776261887005836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,34 +208,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2189260201799044924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7464951282491960735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 53831617160b4ed4f9fe4ba754f965d8, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5329708062545644470}
-        m_TargetAssemblyTypeName: TTT.Managers.GameManager, TTT.Managers
-        m_MethodName: OnInteractModeChange
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &3582332377859791208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,7 +226,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5329708062545644470}
         m_TargetAssemblyTypeName: TTT.Managers.GameManager, TTT.Managers
-        m_MethodName: OnFloodEnded
+        m_MethodName: StartNextTurn
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

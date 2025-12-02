@@ -236,13 +236,13 @@ public class FeatureBuilder : MonoBehaviour
 
         Bounds modelBounds;
         Vector3 center;
-        try
+        if (modelInstance.TryGetComponent(out Renderer meshRenderer))
         {
             // prefab with one renderer at the top level
-            modelBounds = modelInstance.GetComponent<Renderer>().bounds;
+            modelBounds = meshRenderer.bounds;
             center = modelBounds.center;
         }
-        catch (MissingComponentException)
+        else
         {
             // prefab with many child renderers
             MeshRenderer[] renderers =
@@ -268,6 +268,7 @@ public class FeatureBuilder : MonoBehaviour
 
         Vector3 modelSize = modelBounds.size;
         float modelLength = Hypotenuse(modelSize.x, modelSize.y);
+        //! CB: Scale Factor becomes Infinity because divide by zero issue.
         float scaleFactor = 2 * hexCellSize / modelLength;
 
         // move

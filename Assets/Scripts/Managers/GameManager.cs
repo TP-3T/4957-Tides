@@ -63,27 +63,21 @@ namespace TTT.Managers
         private GameEvent BuildingFeatureEvent;
 
         // Initial climate values
-        public static readonly float INITIAL_SEA_LEVEL_M = 0.0f;
+        public static readonly float INITIAL_SEA_LEVEL_M = 1.0f;
         public static readonly float INITIAL_CO2_PPM = 309.41f;
         public static readonly float INITIAL_TEMPERATURE_DEG_C = 14.15561478f;
 
         [field: SerializeField]
-        public NetworkVariable<float> SeaLevel { get; private set; } = new(INITIAL_TEMPERATURE_DEG_C);
+        public NetworkVariable<float> SeaLevel { get; private set; } =
+            new(INITIAL_TEMPERATURE_DEG_C);
 
         [field: SerializeField]
         public NetworkVariable<float> CO2_Pollution { get; private set; } =
             new(INITIAL_CO2_PPM);
 
         [field: SerializeField]
-        public NetworkVariable<float> Temperature { get; private set; } = new(INITIAL_SEA_LEVEL_M);
-
-        public override void Awake()
-        {
-            base.Awake();
-            // Temperature.Value = INITIAL_TEMPERATURE_DEG_C;
-            // CO2_Pollution.Value = INITIAL_CO2_PPM;
-            // SeaLevel.Value = INITIAL_SEA_LEVEL_M;
-        }
+        public NetworkVariable<float> Temperature { get; private set; } =
+            new(INITIAL_SEA_LEVEL_M);
 
         // Start
         //  is called once
@@ -99,10 +93,13 @@ namespace TTT.Managers
         public void OnStartNetworkEvent(Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
+            Debug.Log("Starting network...");
+            Debug.Log($"IsHost: {args.IsHost}");
             try
             {
                 if (args.IsHost)
                 {
+                    Debug.Log("me host :))");
                     StartGameHost();
                 }
                 else
@@ -125,15 +122,6 @@ namespace TTT.Managers
         private void StartGameHost()
         {
             NetworkManager.Singleton.StartHost();
-
-            if (LoadExternalJson.TryGetDataJson(out TextAsset newMap))
-            {
-                newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
-            }
-            else
-            {
-                throw new IOException("Could not load file.");
-            }
         }
 
         public void OnNewMapFinish(Object eventArgs)

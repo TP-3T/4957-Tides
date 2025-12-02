@@ -3,17 +3,19 @@ using UnityEngine;
 
 public class NetworkButton : MonoBehaviour
 {
+    [SerializeField]
     public GameEvent startEvent;
+
+    
 
     public void OnStartServer()
     {
-        Debug.Log("I am being clicked");
+        Debug.Log("me host start button click :))");
         startEvent.Raise(new StartNetworkEventArgs() { IsHost = true });
     }
 
     public void OnStartClient()
     {
-        Debug.Log("I am being clicked");
         startEvent.Raise(new StartNetworkEventArgs() { IsHost = false });
     }
 

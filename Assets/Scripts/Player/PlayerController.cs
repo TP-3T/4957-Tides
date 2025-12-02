@@ -165,7 +165,6 @@ namespace TTT.Player
                 );
                 if (mouseMovement > CLICK_THRESHOLD)
                 {
-                    Debug.Log(mouseMovement);
                     // This was a drag, not a click - don't select tile
                     return;
                 }
@@ -201,7 +200,6 @@ namespace TTT.Player
                             new MapMeshClickedEventArgs
                             {
                                 ClickedPoint = raycastHit.point,
-                                PlayerColor = PlayerColor.Value,
                                 PlayerId = OwnerClientId,
                             }
                         );
