@@ -206,15 +206,15 @@ namespace TTT.Player
 
         public void CheckIfPlayerHasLost()
         {
-            // if (
-            //     GameManager.Instance.CO2 > maxCO2
-            //     || GameManager.Instance.Temperature > maxTemperature
-            //     || playerBuildings.GetItems().Length <= 0
-            // )
-            // {
-            //     playerLoseEvent.Raise();
-            //     OnLose();
-            // }
+            if (
+                GameManager.Instance.CO2 > maxCO2
+                || GameManager.Instance.Temperature > maxTemperature
+                || playerBuildings.GetItems().Length <= 0
+            )
+            {
+                playerLoseEvent.Raise();
+                OnLose();
+            }
         }
 
         public void OnLose()
