@@ -78,20 +78,14 @@ namespace TTT.Managers
             new();
         private bool _featuresLoaded = false;
 
-        void Start()
+        IEnumerator Start()
         {
             lineRenderer = GetComponent<LineRenderer>();
-            StartCoroutine(LoadFeatureTypes());
-        }
-
-        private IEnumerator LoadFeatureTypes()
-        {
-            yield return AssetLoader<FeatureType>.LoadGroup(
+            var buildingRoutine = AssetLoader<FeatureType>.LoadGroup(
                 "building",
                 CacheFeatureType
             );
-            _featuresLoaded = true;
-            Debug.Log($"Loaded {_featureTypesByUniqueId.Count} feature types");
+            yield return buildingRoutine;
         }
 
         private void CacheFeatureType(FeatureType featureType)
@@ -101,7 +95,7 @@ namespace TTT.Managers
                 && !string.IsNullOrEmpty(featureType.UniqueID)
             )
             {
-                //  in our Addressables.
+                _featureTypesByUniqueId.Add(featureType.UniqueID, featureType);
             }
         }
 
