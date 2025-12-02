@@ -1,3 +1,4 @@
+using log4net.DateFormatter;
 using TMPro;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
@@ -30,6 +31,8 @@ namespace TTT.Player
         private GameEvent BuildingFeatureEvent;
         [SerializeField]
         private GameEvent _tryBuildFeatureEvent;
+        [SerializeField]
+        private GameEvent _tryDestroyFeatureEvent;
 
         [SerializeField]
         private Camera playerCamera;
@@ -147,6 +150,15 @@ namespace TTT.Player
                         // BuildingFeatureEvent.Raise(building)
 
                         _tryBuildFeatureEvent.Raise(building);
+                    }
+                    else if (Mode.Equals(InteractionMode.DESTROYING))
+                    {
+                        var destroying = new FeatureDestroyArgs()
+                        {
+                            Location = raycastHit.point,
+                            DestroyerId = NetworkManager.Singleton.LocalClientId
+                        };
+                        _tryDestroyFeatureEvent.Raise(destroying);
                     }
                     else if (Mode.Equals(InteractionMode.INSPECTING))
                     {

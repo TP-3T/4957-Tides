@@ -40,7 +40,7 @@ namespace TTT.Managers
 
             if (cellHasFeature)
             {
-                DestroyFeatureClientRpc(hc.CellPosition);
+                RemoveFeatureClientRpc(hc.CellPosition);
             }
         }
 

@@ -15,6 +15,9 @@ public class FeatureBuilder : MonoBehaviour
     [SerializeField]
     public GameEvent _onBuildFeature;
 
+    [SerializeField]
+    public GameEvent _onDestroyFeature;
+
     /// <summary>
     /// Runtime set of features owned by this client.
     /// </summary>
@@ -51,6 +54,20 @@ public class FeatureBuilder : MonoBehaviour
         );
     }
 
+    public void OnTryDestroyFeature(Object eventArgs)
+    {
+        if (eventArgs is not FeatureDestroyArgs dtrArgs)
+        {
+            Debug.LogWarning("[FeatureBuilder] cannot invoke this event with parameter type not FeatureDestroyArgs");
+            return;
+        }
+
+        TryToDestroy(
+            FixLocation(dtrArgs.Location),
+            dtrArgs.DestroyerId
+        );
+    }
+
     public void OnFeaturePlace(Object eventArgs)
     {
         if (eventArgs is not BuildingFeatureArgs bfArgs)
@@ -65,7 +82,7 @@ public class FeatureBuilder : MonoBehaviour
         }
     }
 
-    public void OnDestroyingFeature(Object eventArgs)
+    public void OnRemoveFeature(Object eventArgs)
     {
         if (eventArgs is not BuildingFeatureArgs bfArgs)
         {
@@ -133,6 +150,20 @@ public class FeatureBuilder : MonoBehaviour
             FeatureType = featureType
         });
     }
+
+    private void TryToDestroy(Vector3 location, ulong destroyerId)
+    {
+        Feature[] allfA = PlayerFeatures.GetItems();
+        if (allfA.Any(f => f.CellPosition.Equals(location)))
+        {
+            _onDestroyFeature.Raise(new FeatureDestroyArgs()
+            {
+                Location = location
+            });
+        }
+    }
+
+    #region:BL 👍
 
     private bool CheckIfCanBuild(Vector3 location, FeatureType featureType)
     {
@@ -234,6 +265,10 @@ public class FeatureBuilder : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region: Utility
+
     private Feature BuildAt(ulong ownerId, Vector3 location, FeatureType featureType)
     {
         GameObject modelInstance = Instantiate(featureType.Prefab);
@@ -334,10 +369,13 @@ public class FeatureBuilder : MonoBehaviour
         PlayerFeatures.Remove(feature); // returns quietly if not player owned
     }
 
+
     private static float Hypotenuse(float x, float y)
     {
         double zSquared = System.Math.Pow(x, 2) + System.Math.Pow(y, 2);
         double z = System.Math.Sqrt(zSquared);
         return (float)z;
     }
+
+    #endregion
 }

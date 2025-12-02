@@ -234,6 +234,14 @@ namespace TTT.UI
             }
         }
 
+        public void DestroyModeEngaged()
+        {
+            InteractModeChange.Raise(new InteractionModeChangeEventArgs()
+            {
+                NewMode = InteractionMode.DESTROYING
+            });
+        }
+
         #region:SCROBJECT handlers
 
         public void OnTurnEnding(UnityEngine.Object _)

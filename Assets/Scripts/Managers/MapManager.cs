@@ -54,9 +54,10 @@ namespace TTT.Managers
         private GameEvent _onFeatureBuild;
         [SerializeField]
         private GameEvent _onFeaturePlace;
-
         [SerializeField]
         private GameEvent _onFeatureDestroy;
+        [SerializeField]
+        private GameEvent _onFeatureRemoved;
 
         #endregion
 
@@ -119,15 +120,6 @@ namespace TTT.Managers
         #region:RPC Definitions
 
         [Rpc(SendTo.ClientsAndHost)]
-        private void DestroyFeatureClientRpc(Vector3 cellPosition)
-        {
-            BuildingFeatureArgs bfArgs = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-            bfArgs.Location = cellPosition;
-
-            _onFeatureDestroy.Raise(bfArgs);
-        }
-
-        [Rpc(SendTo.ClientsAndHost)]
         private void PlaceFeatureClientRpc(ulong builder, FixedString32Bytes featureId, Vector3 cellPosition)
         {
             BuildingFeatureArgs bfArgs = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
@@ -142,6 +134,16 @@ namespace TTT.Managers
             bfArgs.OwnerId = builder;
 
             _onFeaturePlace.Raise(bfArgs);
+        }
+
+        [Rpc(SendTo.ClientsAndHost)]
+        private void RemoveFeatureClientRpc(Vector3 cellPosition)
+        {
+            FeatureRemoveArgs rmArgs = new FeatureRemoveArgs()
+            {
+                Location = cellPosition
+            };
+            _onFeatureRemoved.Raise(rmArgs);
         }
 
         [ClientRpc]
@@ -427,18 +429,28 @@ namespace TTT.Managers
 
         public void OnFeatureBuild(UnityEngine.Object args)
         {
-            if (args is not BuildingFeatureArgs)
+            if (args is not BuildingFeatureArgs bldArgs)
             {
-                Debug.LogError("[MapManager] could not build feature");
+                Debug.LogWarning("[MapManager] could not build feature");
                 return;
             }
-            BuildingFeatureArgs eventArgs = args as BuildingFeatureArgs;
 
             PlaceFeatureClientRpc(
-                eventArgs.OwnerId,
-                eventArgs.FeatureType.UniqueID,
-                eventArgs.Location
+                bldArgs.OwnerId,
+                bldArgs.FeatureType.UniqueID,
+                bldArgs.Location
             );
+        }
+
+        public void OnFeatureDestroy(UnityEngine.Object args)
+        {
+            if (args is not FeatureDestroyArgs dtrArgs)
+            {
+                Debug.LogWarning("[MapManager] could not destroy feature");
+                return;
+            }
+
+            RemoveFeatureClientRpc(dtrArgs.Location);
         }
 
         #endregion
