@@ -13,23 +13,23 @@ namespace TTT.DataClasses.States
     {
         [Header("Player Resources")]
         [field: SerializeField]
-        public PlayerResource money { get; set; }
+        public PlayerResource Money { get; set; }
 
         [field: SerializeField]
-        public PlayerResource power { get; set; }
+        public PlayerResource Power { get; set; }
 
         [field: SerializeField]
-        public PlayerResource population { get; set; }
+        public PlayerResource Population { get; set; }
 
         [Header("Starting Resources")]
         [SerializeField]
-        private int startingMoney = 500;
+        private static readonly int startingMoney = 500;
 
         [SerializeField]
-        private int startingPower = 0;
+        private static readonly int startingPower = 0;
 
         [SerializeField]
-        private int startingPopulation = 0;
+        private static readonly int startingPopulation = 0;
 
         // [Header("Sea Level Calculation")]
         // [Tooltip(
@@ -71,7 +71,7 @@ namespace TTT.DataClasses.States
 
         public List<PlayerResource> GetAllResources()
         {
-            return new List<PlayerResource> { money, power, population };
+            return new List<PlayerResource> { Money, Power, Population };
         }
 
         public bool CanAfford(Dictionary<PlayerResource, int> costs)
@@ -102,16 +102,16 @@ namespace TTT.DataClasses.States
 
         public void ResetResources()
         {
-            money?.Set(startingMoney);
-            power?.Set(startingPower);
-            population?.Set(startingPopulation);
+            Money?.Set(startingMoney);
+            Power?.Set(startingPower);
+            Population?.Set(startingPopulation);
         }
 
         public void InitializeResources()
         {
-            money?.Set(startingMoney);
-            power?.Set(startingPower);
-            population?.Set(startingPopulation);
+            Money?.Set(startingMoney);
+            Power?.Set(startingPower);
+            Population?.Set(startingPopulation);
         }
     }
 }

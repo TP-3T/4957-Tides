@@ -78,20 +78,14 @@ namespace TTT.Managers
             new();
         private bool _featuresLoaded = false;
 
-        void Start()
+        IEnumerator Start()
         {
             lineRenderer = GetComponent<LineRenderer>();
-            StartCoroutine(LoadFeatureTypes());
-        }
-
-        private IEnumerator LoadFeatureTypes()
-        {
-            yield return AssetLoader<FeatureType>.LoadGroup(
+            var buildingRoutine = AssetLoader<FeatureType>.LoadGroup(
                 "building",
                 CacheFeatureType
             );
-            _featuresLoaded = true;
-            Debug.Log($"Loaded {_featureTypesByUniqueId.Count} feature types");
+            yield return buildingRoutine;
         }
 
         private void CacheFeatureType(FeatureType featureType)
@@ -101,7 +95,7 @@ namespace TTT.Managers
                 && !string.IsNullOrEmpty(featureType.UniqueID)
             )
             {
-                _featureTypesByUniqueId[featureType.UniqueID] = featureType;
+                _featureTypesByUniqueId.Add(featureType.UniqueID, featureType);
             }
         }
 
@@ -118,7 +112,7 @@ namespace TTT.Managers
                 NetworkManager.Singleton.OnClientConnectedCallback -=
                     OnClientConnect;
             }
-            
+
             // Release all loaded Addressable assets to prevent memory leaks
             AssetLoader<GameObject>.ReleaseAll();
             AssetLoader<FeatureType>.ReleaseAll();
@@ -299,16 +293,14 @@ namespace TTT.Managers
             //    creates building feature args
             //    calls FeatureBuilder.OnLoadingMapFeature(args)
             //       where BuildAt() instantiates prefab
-            if (!_featuresLoaded)
+            if (_featureTypesByUniqueId.Keys.Count <= 0)
             {
-                Debug.LogWarning("feature types didn't load");
-                yield break;
+                throw new UnityException("Feature types didn't load!");
             }
 
             int spawnedCount = 0;
             int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smooth-ish loading
-            Dictionary<string, int> featureTypeCounts =
-                new Dictionary<string, int>();
+            Dictionary<string, int> featureTypeCounts = new();
 
             Debug.Log(
                 $"Starting async spawn of {_pendingFeatures.Count} features..."
@@ -345,9 +337,10 @@ namespace TTT.Managers
                 }
                 else
                 {
+                    //This basically never happens but I put this here just in case :/
                     Debug.LogWarning(
                         $"skipped unknown feature '{featureId}' at {position}"
-                    ); //THis basically never happens but I put this here just in case :/
+                    );
                 }
             }
 

@@ -2,6 +2,7 @@ using TMPro;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
+using TTT.Helpers;
 using TTT.Hex;
 using TTT.Managers;
 using Unity.Netcode;
@@ -51,9 +52,24 @@ namespace TTT.Player
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
-        [SerializeField]
-        private Canvas currentUI;
+        // [SerializeField]
+        // private Canvas currentUI;
         public InteractionMode Mode;
+
+        [SerializeField]
+        public PlayerStats PlayerStats;
+
+        [SerializeField]
+        private GameObject GameUI;
+
+        [SerializeField]
+        private GameObject MainMenu;
+
+        [SerializeField]
+        private GameObject LoseUI;
+
+        [SerializeField]
+        private GameObject CurrentUI;
 
         public GameEvent playerLoseEvent;
 
@@ -89,7 +105,7 @@ namespace TTT.Player
                 if (playerCamera != null)
                 {
                     playerCamera.enabled = true;
-                    Debug.Log("Enable camera for local player");
+                    // Debug.Log("Enable camera for local player");
                 }
                 else
                 {
@@ -132,9 +148,21 @@ namespace TTT.Player
 
         private void Start()
         {
+            CurrentUI = Instantiate(MainMenu);
             Mode = InteractionMode.INSPECTING;
         }
 
+        private void SetCurrentUI(GameObject newUI)
+        {
+            if (CurrentUI != null)
+            {
+                Extensions.SmartDestroy(CurrentUI);
+            }
+            CurrentUI = Instantiate(newUI);
+            CurrentUI.transform.parent = this.transform;
+        }
+
+        //? CB: There must be an event driven way to handle this.
         /// <summary>
         /// Called once per frame to handle real-time input and camera controls.
         /// It checks for local ownership before processing movement and rotation
@@ -154,7 +182,7 @@ namespace TTT.Player
                 // Don't process world clicks when clicking on UI
                 if (IsMouseOverUI())
                 {
-                    Debug.Log("Mouse over UI, not processing world click");
+                    // Debug.Log("Mouse over UI, not processing world click");
                     return;
                 }
 
@@ -165,6 +193,7 @@ namespace TTT.Player
                 );
                 if (mouseMovement > CLICK_THRESHOLD)
                 {
+                    // Debug.Log(mouseMovement);
                     // This was a drag, not a click - don't select tile
                     return;
                 }
@@ -181,10 +210,6 @@ namespace TTT.Player
                     )
                 )
                 {
-                    // Raise some event will deal with this later
-                    // Debug.DrawLine(transform.position, raycastHit.point, Color.red);
-                    // Debug.Log("Map mesh clicked at: " + raycastHit.point);
-                    // var mode = GameManager.Instance.InteractionMode;
                     if (Mode.Equals(InteractionMode.BUILDING))
                     {
                         var building =
@@ -214,7 +239,7 @@ namespace TTT.Player
         }
 
         public void OnInteractModeChange(object args)
-        // po: this listens to an event raised by OnClick() in BuildingShopslot
+        // po: this listens to an event raised by OnClick() in BuildingShopSlot
         {
             if (args != null)
             {
@@ -252,25 +277,7 @@ namespace TTT.Player
 
         public void OnLose()
         {
-            DisableUI();
-
-            statusText.gameObject.SetActive(true);
-            statusText.text = "You lose";
-
-            // feel free to remove this if needed, not important
-            GameObject cube = GameObject.Find("Cube");
-            cube?.SetActive(false); // would throw if cube not found
-        }
-
-        public void DisableUI()
-        {
-            InteractModeChange.Raise(
-                new InteractionModeChangeEventArgs()
-                {
-                    NewMode = InteractionMode.INSPECTING,
-                }
-            );
-            currentUI.gameObject.SetActive(false);
+            SetCurrentUI(LoseUI);
         }
     }
 }

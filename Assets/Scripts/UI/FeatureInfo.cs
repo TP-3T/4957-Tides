@@ -1,6 +1,7 @@
+using System.Collections;
 using TMPro;
-using TTT.DataClasses.HexData;
 using TTT.DataClasses.States;
+using TTT.GameEvents;
 using TTT.UI;
 using UnityEngine;
 
@@ -30,6 +31,9 @@ public class FeatureInfo : MonoBehaviour, IOpenable
     [field: SerializeField]
     private GameObject hexFeature;
 
+    [SerializeField]
+    private GameEvent AudioEvent;
+
     private TextMeshProUGUI featureTileText;
     private Coroutine CurrentShift { get; set; }
 
@@ -42,9 +46,9 @@ public class FeatureInfo : MonoBehaviour, IOpenable
     {
         (this as IOpenable).SetupPositions();
         if (hexFeature != null)
-            {
-                featureTileText = hexFeature.GetComponent<TextMeshProUGUI>();
-            }
+        {
+            featureTileText = hexFeature.GetComponent<TextMeshProUGUI>();
+        }
     }
 
     /// <summary>
@@ -57,6 +61,17 @@ public class FeatureInfo : MonoBehaviour, IOpenable
         {
             StopCoroutine(CurrentShift);
         }
+
+        AudioEvent.Raise(
+            new AudioEventArgs()
+            {
+                Type = AudioTypes.ONESHOT,
+                ToPlay = (this as IOpenable).IsOpen
+                    ? "drawer_close"
+                    : "drawer_open",
+            }
+        );
+
         CurrentShift = StartCoroutine((this as IOpenable).ToggleOpenable());
     }
 
@@ -65,7 +80,7 @@ public class FeatureInfo : MonoBehaviour, IOpenable
         StartCoroutine(OnTileSelectedDelayed());
     }
 
-    private System.Collections.IEnumerator OnTileSelectedDelayed()
+    private IEnumerator OnTileSelectedDelayed()
     {
         // Wait one frame to ensure MapManager has updated playerStats
         yield return null;
@@ -101,15 +116,16 @@ public class FeatureInfo : MonoBehaviour, IOpenable
         var tileData = playerStats.selectedTileData;
 
         // Format tile info for display
-        string displayText = $"Position: {tile.CellPosition}\n" +
-                            $"Flooded: {tile.Flooded}\n" +
-                            $"Terrain: {tile.TerrainTypeId}";
+        string displayText =
+            $"Position: {tile.CellPosition}\n"
+            + $"Flooded: {tile.Flooded}\n"
+            + $"Terrain: {tile.TerrainTypeId}";
 
         if (tileData != null)
         {
             displayText += $"\nOwner: {tileData.Owner}";
             displayText += $"\nElevation: {tileData.Elevation}";
-            
+
             if (!string.IsNullOrEmpty(tileData.Label))
             {
                 displayText += $"\nLabel: {tileData.Label}";

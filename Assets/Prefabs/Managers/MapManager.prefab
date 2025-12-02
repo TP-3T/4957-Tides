@@ -83,6 +83,7 @@ MonoBehaviour:
   _playerStats: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
   DrawDebugLabels: 0
   DestroyingFeatureEvent: {fileID: 11400000, guid: be77d2d33c12b1b43b2c40d9edbddf12, type: 2}
+  AudioEvent: {fileID: 11400000, guid: 495e94ea5e938534bb5d3fdc6bfc2083, type: 2}
   spawnedFeatures: {fileID: 11400000, guid: 13341c7795559b74d98b04f151a7cf36, type: 2}
 --- !u!114 &7227047647059873641
 MonoBehaviour:
@@ -101,7 +102,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4501877893874324670}
-        m_TargetAssemblyTypeName: MapManager, TTT.Managers
+        m_TargetAssemblyTypeName: TTT.Managers.MapManager, TTT.Managers
         m_MethodName: OnNewMap
         m_Mode: 0
         m_Arguments:

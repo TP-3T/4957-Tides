@@ -1,166 +1,165 @@
 {
-    "folders": [
-        {
-            "path": "."
-        }
-    ],
-    "settings": {
-        "cSpell.ignorePaths": [
-            "package-lock.json",
-            "node_modules",
-            "vscode-extension",
-            ".git/{info,lfs,logs,refs,objects}/**",
-            ".git/{index,*refs,*HEAD}",
-            ".gitattributes",
-            ".vscode",
-            ".vscode-insiders",
-            "3T.code-workspace",
-            ".gitattributes",
-            "*.slnx"
-        ],
-        "cSpell.words": [
-            "Addressables",
-            "Behaviour",
-            "Despawn",
-            "Dont",
-            "ifndef",
-            "interactable",
-            "lerp",
-            "MAPDATA",
-            "Mathf",
-            "neighbour",
-            "neighbours",
-            "Newtonsoft",
-            "Retriangulate",
-            "Scriptable",
-            "slnx",
-            "STEAMID",
-            "UGUI",
-            "Unflooded",
-            "WASD"
-        ],
-        "dotnet.defaultSolution": "4957-Tides.slnx",
-        "files.autoSave": "afterDelay",
-        "editor.detectIndentation": false,
-        "editor.insertSpaces": true,
-        "editor.tabSize": 4,
-        "editor.wordWrap": "wordWrapColumn",
-        "editor.wordWrapColumn": 80,
-        "editor.rulers": [
-            80
-        ],
-        "editor.autoClosingBrackets": "always",
-        "editor.autoClosingComments": "always",
-        "editor.autoClosingOvertype": "auto",
-        "editor.autoClosingQuotes": "always",
-        "editor.formatOnPaste": true,
-        "editor.formatOnSave": true,
-        //CB: This allows us to set a default formatter for **all** files
-        //  I've disabled it for now, but we can enable it if we feel its warrented.
-        //"editor.defaultFormatter": "csharpier.csharpier-vscode",
-        "[csharp]": {
-            "editor.defaultFormatter": "csharpier.csharpier-vscode"
-        },
-        "files.exclude": {
-            "**/.DS_Store": true,
-            "**/.git": true,
-            "**/.vs": true,
-            "**/.gitmodules": true,
-            "**/.vsconfig": true,
-            "**/*.booproj": true,
-            "**/*.pidb": true,
-            "**/*.suo": true,
-            "**/*.user": true,
-            "**/*.userprefs": true,
-            "**/*.unityproj": true,
-            "**/*.dll": true,
-            "**/*.exe": true,
-            "**/*.pdf": true,
-            "**/*.mid": true,
-            "**/*.midi": true,
-            "**/*.wav": true,
-            "**/*.gif": true,
-            "**/*.ico": true,
-            "**/*.jpg": true,
-            "**/*.jpeg": true,
-            "**/*.png": true,
-            "**/*.psd": true,
-            "**/*.tga": true,
-            "**/*.tif": true,
-            "**/*.tiff": true,
-            "**/*.3ds": true,
-            "**/*.3DS": true,
-            "**/*.fbx": true,
-            "**/*.FBX": true,
-            "**/*.lxo": true,
-            "**/*.LXO": true,
-            "**/*.ma": true,
-            "**/*.MA": true,
-            "**/*.obj": true,
-            "**/*.OBJ": true,
-            "**/*.asset": true,
-            "**/*.cubemap": true,
-            "**/*.flare": true,
-            "**/*.mat": true,
-            "**/*.meta": true,
-            "**/*.prefab": false,
-            "**/*.unity": true,
-            "build/": true,
-            "Build/": true,
-            "Library/": true,
-            "library/": true,
-            "obj/": true,
-            "Obj/": true,
-            "Logs/": true,
-            "logs/": true,
-            "ProjectSettings/": true,
-            "UserSettings/": true,
-            "temp/": true,
-            "Temp/": true
-        },
-        "files.associations": {
-            "*.asset": "yaml",
-            "*.meta": "yaml",
-            "*.prefab": "yaml",
-            "*.unity": "yaml"
-        },
-        "explorer.fileNesting.enabled": true,
-        "explorer.fileNesting.patterns": {
-            "*.sln": "*.csproj",
-            "*.slnx": "*.csproj"
-        }
-    },
-    "launch": {
-        "version": "0.2.0",
-        "configurations": [
-            {
-                "name": "Attach to Unity",
-                "type": "vstuc",
-                "request": "attach"
-            }
-        ]
-    },
-    "extensions": {
-        "recommendations": [
-            //Csharp requirements
-            "ms-dotnettools.csdevkit",
-            "visualstudiotoolsforunity.vstuc",
-            //Intellicode autocomplete
-            //   "visualstudioexptteam.vscodeintellicode",
-            //   "visualstudioexptteam.intellicode-api-usage-examples",
-            //Style
-            "sdras.night-owl",
-            "aaron-bond.better-comments",
-            //In-Editor git support
-            "eamodio.gitlens",
-            "mhutchie.git-graph",
-            "donjayamanne.githistory",
-            //Utilities
-            "maptz.regionfolder",
-            "ms-vsliveshare.vsliveshare",
-            "usernamehw.errorlens",
-            "csharpier.csharpier-vscode"
-            //Unsorted
-        ]
+  "folders": [
+    {
+      "path": "."
     }
+  ],
+  "settings": {
+    "cSpell.ignorePaths": [
+      "package-lock.json",
+      "node_modules",
+      "vscode-extension",
+      ".git/{info,lfs,logs,refs,objects}/**",
+      ".git/{index,*refs,*HEAD}",
+      ".gitattributes",
+      ".vscode",
+      ".vscode-insiders",
+      "3T.code-workspace",
+      ".gitattributes",
+      "*.slnx"
+    ],
+    "cSpell.words": [
+      "Addressables",
+      "Behaviour",
+      "Despawn",
+      "Dont",
+      "ifndef",
+      "interactable",
+      "lerp",
+      "MAPDATA",
+      "Mathf",
+      "neighbour",
+      "neighbours",
+      "Newtonsoft",
+      "ONESHOT",
+      "Retriangulate",
+      "Scriptable",
+      "slnx",
+      "STEAMID",
+      "UGUI",
+      "Unflooded",
+      "WASD"
+    ],
+    "dotnet.defaultSolution": "4957-Tides.slnx",
+    "files.autoSave": "afterDelay",
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80,
+    "editor.rulers": [80],
+    "editor.autoClosingBrackets": "always",
+    "editor.autoClosingComments": "always",
+    "editor.autoClosingOvertype": "auto",
+    "editor.autoClosingQuotes": "always",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    //CB: This allows us to set a default formatter for **all** files
+    //  I've disabled it for now, but we can enable it if we feel its warrented.
+    //"editor.defaultFormatter": "csharpier.csharpier-vscode",
+    "[csharp]": {
+      "editor.defaultFormatter": "csharpier.csharpier-vscode"
+    },
+    "files.exclude": {
+      "**/.DS_Store": true,
+      "**/.git": true,
+      "**/.vs": true,
+      "**/.gitmodules": true,
+      "**/.vsconfig": true,
+      "**/*.booproj": true,
+      "**/*.pidb": true,
+      "**/*.suo": true,
+      "**/*.user": true,
+      "**/*.userprefs": true,
+      "**/*.unityproj": true,
+      "**/*.dll": true,
+      "**/*.exe": true,
+      "**/*.pdf": true,
+      "**/*.mid": true,
+      "**/*.midi": true,
+      "**/*.wav": true,
+      "**/*.gif": true,
+      "**/*.ico": true,
+      "**/*.jpg": true,
+      "**/*.jpeg": true,
+      "**/*.png": true,
+      "**/*.psd": true,
+      "**/*.tga": true,
+      "**/*.tif": true,
+      "**/*.tiff": true,
+      "**/*.3ds": true,
+      "**/*.3DS": true,
+      "**/*.fbx": true,
+      "**/*.FBX": true,
+      "**/*.lxo": true,
+      "**/*.LXO": true,
+      "**/*.ma": true,
+      "**/*.MA": true,
+      "**/*.obj": true,
+      "**/*.OBJ": true,
+      "**/*.asset": true,
+      "**/*.cubemap": true,
+      "**/*.flare": true,
+      "**/*.mat": true,
+      "**/*.meta": true,
+      "**/*.prefab": false,
+      "**/*.unity": true,
+      "build/": true,
+      "Build/": true,
+      "Library/": true,
+      "library/": true,
+      "obj/": true,
+      "Obj/": true,
+      "Logs/": true,
+      "logs/": true,
+      "ProjectSettings/": true,
+      "UserSettings/": true,
+      "temp/": true,
+      "Temp/": true
+    },
+    "files.associations": {
+      "*.asset": "yaml",
+      "*.meta": "yaml",
+      "*.prefab": "yaml",
+      "*.unity": "yaml"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+      "*.sln": "*.csproj",
+      "*.slnx": "*.csproj"
+    }
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Attach to Unity",
+        "type": "vstuc",
+        "request": "attach"
+      }
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      //Csharp requirements
+      "ms-dotnettools.csdevkit",
+      "visualstudiotoolsforunity.vstuc",
+      //Intellicode autocomplete
+      //   "visualstudioexptteam.vscodeintellicode",
+      //   "visualstudioexptteam.intellicode-api-usage-examples",
+      //Style
+      "sdras.night-owl",
+      "aaron-bond.better-comments",
+      //In-Editor git support
+      "eamodio.gitlens",
+      "mhutchie.git-graph",
+      "donjayamanne.githistory",
+      //Utilities
+      "maptz.regionfolder",
+      "ms-vsliveshare.vsliveshare",
+      "usernamehw.errorlens",
+      "csharpier.csharpier-vscode"
+      //Unsorted
+    ]
+  }
 }

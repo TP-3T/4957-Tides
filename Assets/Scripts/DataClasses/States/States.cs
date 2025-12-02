@@ -49,4 +49,19 @@ namespace TTT.DataClasses.States
         DESTROYING,
         BUILDING,
     }
+
+    public enum AudioTypes
+    {
+        ONESHOT,
+        AMBIENCE,
+        MUSIC,
+    }
+
+    public enum Seasons
+    {
+        Spring,
+        Summer,
+        Fall,
+        Winter,
+    }
 }

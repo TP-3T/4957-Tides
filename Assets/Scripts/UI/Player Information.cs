@@ -1,6 +1,5 @@
 using TMPro;
 using TTT.DataClasses.States;
-using TTT.GameEvents;
 using UnityEngine;
 
 /// <summary>
@@ -22,10 +21,10 @@ public class PlayerInformation : MonoBehaviour
 
     private void Start()
     {
-
         UpdateAllText();
         playerStats.ResetResources();
     }
+
     void Update()
     {
         UpdateAllText();
@@ -35,10 +34,9 @@ public class PlayerInformation : MonoBehaviour
     {
         if (playerStats != null)
         {
-            
-            SetMoneyText(playerStats.money?.AmountOwned ?? 0);
-            SetPowerText(playerStats.power?.AmountOwned ?? 0);
-            SetPopulationText(playerStats.population?.AmountOwned ?? 0);
+            SetMoneyText((int)playerStats.Money.AmountOwned);
+            SetPowerText((int)playerStats.Power.AmountOwned);
+            SetPopulationText((int)playerStats.Population.AmountOwned);
         }
     }
 

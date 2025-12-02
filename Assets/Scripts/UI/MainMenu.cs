@@ -116,7 +116,7 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Clicked Start Game!");
         ChangeActiveMenu(LoadingScreen);
-        MenuBackground.SetActive(false);
+        MenuBackground.SetActive(true);
         if (
             LoadExternalJson.TryGetMapJson(selectedMap, out TextAsset loadedMap)
         )

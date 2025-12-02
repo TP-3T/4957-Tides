@@ -7,7 +7,7 @@ namespace TTT.Managers
     /// <summary>
     /// Singleton class for managing audio related to the game including music and SFX
     /// </summary>
-    public class AudioManager : GenericSingleton<AudioManager>
+    public partial class AudioManager : GenericSingleton<AudioManager>
     {
         [Header("One-Shot Sounds")]
         [Tooltip("Array of one-shot sound effect AudioEntries")]
@@ -38,8 +38,13 @@ namespace TTT.Managers
             AudioEntry entry = GetAudioEntryByName(name, OneShotEntries);
             if (entry != null && entry.Clip != null)
             {
-                OneShotSource.PlayOneShot(entry.Clip);
+                PlayOneShotSound(entry);
             }
+        }
+
+        public void PlayOneShotSound(AudioEntry entry)
+        {
+            OneShotSource.PlayOneShot(entry.Clip);
         }
 
         /// <summary>
@@ -50,6 +55,11 @@ namespace TTT.Managers
         public void PlayAmbience(string name, bool fade = true)
         {
             AudioEntry entry = GetAudioEntryByName(name, AmbienceEntries);
+            PlayAmbience(entry, fade);
+        }
+
+        public void PlayAmbience(AudioEntry entry, bool fade = true)
+        {
             if (entry != null && entry.Clip != null)
             {
                 if (fade)
@@ -91,14 +101,19 @@ namespace TTT.Managers
             AudioEntry entry = GetAudioEntryByName(name, MusicEntries);
             if (entry != null && entry.Clip != null)
             {
-                if (fade)
-                {
-                    MusicFadingPlayer.FadeToClip(entry.Clip);
-                }
-                else
-                {
-                    MusicFadingPlayer.PlayClipInstant(entry.Clip);
-                }
+                PlayMusic(entry, fade);
+            }
+        }
+
+        public void PlayMusic(AudioEntry entry, bool fade = true)
+        {
+            if (fade)
+            {
+                MusicFadingPlayer.FadeToClip(entry.Clip);
+            }
+            else
+            {
+                MusicFadingPlayer.PlayClipInstant(entry.Clip);
             }
         }
 

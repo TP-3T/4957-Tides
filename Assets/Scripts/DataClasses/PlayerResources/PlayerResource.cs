@@ -12,39 +12,32 @@ namespace TTT.DataClasses.PlayerResources
     public class PlayerResource : ScriptableObject
     {
         [Tooltip("Name of the resource")]
-        [SerializeField]
-        private string resourceName;
+        [field: SerializeField]
+        public string Name { get; private set; }
 
         [Tooltip("How much of this resource the player has")]
-        [SerializeField]
-        private int amountOwned = 0;
-
-        /// <summary>
-        /// The name of this resource.
-        /// </summary>
-        public string Name => resourceName;
-
+        [field: SerializeField]
         /// <summary>
         /// How much of this resource the player has.
         /// </summary>
-        public int AmountOwned => amountOwned;
+        public float AmountOwned { get; private set; }
 
         /// <summary>
         /// Set the amount of this resource to <i>value</i>.
         /// </summary>
         /// <param name="value"></param>
-        public void Set(int value)
+        public void Set(float value)
         {
-            amountOwned = value;
+            AmountOwned = value;
         }
 
         /// <summary>
         /// Increase the amount of this resource by <i>value</i>.
         /// </summary>
         /// <param name="value"></param>
-        public void ApplyChange(int value)
+        public void ApplyChange(float value)
         {
-            amountOwned += value;
+            AmountOwned += value;
         }
     }
 }
