@@ -6,6 +6,8 @@ public class NetworkButton : MonoBehaviour
     [SerializeField]
     public GameEvent startEvent;
 
+    
+
     public void OnStartServer()
     {
         Debug.Log("me host start button click :))");

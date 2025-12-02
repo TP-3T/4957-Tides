@@ -41,6 +41,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     private GameEvent newMapEvent;
 
+    [SerializeField]
+    private GameObject MenuBackground;
+
     private GameObject CurrentMenu;
     private GameObject previousMenu;
 
@@ -113,8 +116,7 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Clicked Start Game!");
         ChangeActiveMenu(LoadingScreen);
-
-        Debug.Log($"Selected Map: {selectedMap}");
+        MenuBackground.SetActive(false);
         if (
             LoadExternalJson.TryGetMapJson(selectedMap, out TextAsset loadedMap)
         )

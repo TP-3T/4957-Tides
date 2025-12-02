@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -8,6 +9,9 @@ namespace TTT.Managers
 {
     public static class AssetLoader<T>
     {
+        // Track all loaded handles to prevent memory leaks
+        private static List<AsyncOperationHandle> loadedHandles = new();
+
         public static IEnumerator Load(
             AssetReference reference,
             Action<T> callback
@@ -16,6 +20,7 @@ namespace TTT.Managers
             AsyncOperationHandle<T> assetHandle =
                 Addressables.LoadAssetAsync<T>(reference);
             assetHandle.Completed += ValidateResult;
+            loadedHandles.Add(assetHandle);
             yield return assetHandle;
             Debug.Log("Continuing after loading.");
             callback(assetHandle.Result);
@@ -27,6 +32,7 @@ namespace TTT.Managers
         )
         {
             var assetHandle = Addressables.LoadAssetsAsync<T>(groupName);
+            loadedHandles.Add(assetHandle);
             while (!assetHandle.IsDone)
             {
                 yield return assetHandle;
@@ -35,6 +41,23 @@ namespace TTT.Managers
             {
                 callback(item);
             }
+        }
+
+        /// <summary>
+        /// Release all loaded Addressable assets to prevent memory leaks.
+        /// Call this when changing scenes or when assets are no longer needed.
+        /// </summary>
+        public static void ReleaseAll()
+        {
+            foreach (var handle in loadedHandles)
+            {
+                if (handle.IsValid())
+                {
+                    Addressables.Release(handle);
+                }
+            }
+            loadedHandles.Clear();
+            Debug.Log($"Released {loadedHandles.Count} Addressable asset handles");
         }
 
         private static void ValidateResult(AsyncOperationHandle<T> handle)

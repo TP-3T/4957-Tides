@@ -28,8 +28,26 @@ namespace TTT.UI
         public GameObject activeToggle;
         private MapData localMapData = new();
         private List<MapInfo> localMapInfoList = new();
+        private List<GameObject> instantiatedMapItems = new();
 
         void Start() { }
+
+        private void OnDisable()
+        {
+            ClearMapItems();
+        }
+
+        private void ClearMapItems()
+        {
+            foreach (var item in instantiatedMapItems)
+            {
+                if (item != null)
+                {
+                    Destroy(item);
+                }
+            }
+            instantiatedMapItems.Clear();
+        }
 
         public void FetchMapList()
         {
@@ -168,6 +186,7 @@ namespace TTT.UI
                     MapListItem,
                     content.transform
                 );
+                instantiatedMapItems.Add(mapItem);
 
                 var controller = mapItem.AddComponent<MapListItemController>();
                 controller.MapId = mapInfo.MapId;

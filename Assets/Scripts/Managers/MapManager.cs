@@ -111,6 +111,19 @@ namespace TTT.Managers
                 OnClientConnect;
         }
 
+        public override void OnNetworkDespawn()
+        {
+            if (NetworkManager.Singleton != null)
+            {
+                NetworkManager.Singleton.OnClientConnectedCallback -=
+                    OnClientConnect;
+            }
+            
+            // Release all loaded Addressable assets to prevent memory leaks
+            AssetLoader<GameObject>.ReleaseAll();
+            AssetLoader<FeatureType>.ReleaseAll();
+        }
+
         private IEnumerator SpawnMapObjects()
         {
             yield return AssetLoader<GameObject>.Load(
