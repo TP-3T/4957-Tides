@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -23,5 +26,33 @@ namespace TTT.Helpers
             return serializedProp.FindPropertyRelative(realName);
         }
 #endif
+
+        public static List<List<T>> ChunkBy<T>(
+            this List<T> source,
+            int chunkSize
+        )
+        {
+            return source
+                .Select((x, i) => new { Index = i, Value = x })
+                .GroupBy(x => x.Index / chunkSize)
+                .Select(x => x.Select(v => v.Value).ToList())
+                .ToList();
+        }
+
+        public static T NextEnumValue<T>(this T src)
+            where T : struct
+        {
+            if (!typeof(T).IsEnum)
+                throw new ArgumentException(
+                    String.Format(
+                        "Argument {0} is not an Enum",
+                        typeof(T).FullName
+                    )
+                );
+
+            T[] Arr = (T[])Enum.GetValues(src.GetType());
+            int j = Array.IndexOf<T>(Arr, src) + 1;
+            return (Arr.Length == j) ? Arr[0] : Arr[j];
+        }
     }
 }

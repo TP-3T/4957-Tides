@@ -315,9 +315,10 @@ namespace TTT.Managers
                 }
                 else
                 {
+                    //This basically never happens but I put this here just in case :/
                     Debug.LogWarning(
                         $"skipped unknown feature '{featureId}' at {position}"
-                    ); //THis basically never happens but I put this here just in case :/
+                    );
                 }
             }
 
