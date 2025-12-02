@@ -79,14 +79,6 @@ namespace TTT.Managers
         public NetworkVariable<float> Temperature { get; private set; } =
             new(INITIAL_SEA_LEVEL_M);
 
-        public override void Awake()
-        {
-            base.Awake();
-            // Temperature.Value = INITIAL_TEMPERATURE_DEG_C;
-            // CO2_Pollution.Value = INITIAL_CO2_PPM;
-            // SeaLevel.Value = INITIAL_SEA_LEVEL_M;
-        }
-
         // Start
         //  is called once
         //  before the first

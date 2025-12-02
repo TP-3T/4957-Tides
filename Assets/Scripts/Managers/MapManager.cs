@@ -411,7 +411,7 @@ namespace TTT.Managers
                 int width = _gameMapData.MapTile.Count;
                 int height = _gameMapData.MapTile["0"].Count;
 
-                if (IsSpawned)
+                if (NetworkManager.Singleton.IsHost)
                 {
                     _hexGridWidth.Value = width;
                     _hexGridHeight.Value = height;
