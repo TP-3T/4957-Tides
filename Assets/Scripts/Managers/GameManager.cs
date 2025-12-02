@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Codice.Client.BaseCommands;
+using NUnit.Framework.Constraints;
+using TTT.DataClasses;
 using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.States;
 using TTT.GameEvents;
@@ -31,49 +34,42 @@ namespace TTT.Managers
             "Winter",
         };
 
-        public NetworkClient CurrentPlayer { get; private set; }
-        public NetworkVariable<ulong> CurrentPlayerId = new();
+        public NetworkVariable<ulong> CurrentPlayerId = new ();
 
-        //serialize for now
         [field: SerializeField]
         public int Year { get; private set; } = 1;
-
         [field: SerializeField]
         public string Season { get; private set; }
-
         [field: SerializeField]
         public int CO2 { get; private set; } = 0;
-
         [field: SerializeField]
         public int Temperature { get; private set; }
+        [SerializeField]
+        public bool FTTaken { get; private set; } = false;
 
         [SerializeField]
         private GameEvent startTurnEvent;
-
         [SerializeField]
         private GameEvent endTurnEvent;
-
         [SerializeField]
         private GameEvent endingSeasonEvent;
-
         [SerializeField]
         private GameEvent endingYearEvent;
-
         [SerializeField]
         private GameEvent newMapEvent;
-
         [SerializeField]
         private GameEvent BuildingFeatureEvent;
-
-        [SerializeField]
-        public bool FTTaken { get; private set; } = false;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
             Season = Seasons[0];
             CO2 = 0;
-            // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
+        }
+
+        public void OnGlobalInformationChanged(GlobalInformation oldI, GlobalInformation newI)
+        {
+            Debug.Log($"[GameManager] global information modified. old {oldI}, new {newI}");
         }
 
         #region:Utility
@@ -84,9 +80,9 @@ namespace TTT.Managers
         private void NetworkingInformationLog()
         {
             var self = NetworkManager.Singleton.LocalClient;
-            Debug.Log($"[GameManager] client rpc, connected players {NetworkManager.Singleton.ConnectedClientsList.Count}");
-            Debug.Log($"[GameManager] client rpc, current player id {self.ClientId}");
-            Debug.Log($"[GameManager] client rpc, current turn guy {CurrentPlayerId.Value}");
+            // Debug.Log($"[GameManager] client rpc, connected players {NetworkManager.Singleton.ConnectedClientsList.Count}");
+            // Debug.Log($"[GameManager] client rpc, current player id {self.ClientId}");
+            // Debug.Log($"[GameManager] client rpc, current turn guy {CurrentPlayerId}");
         }
 
         private void StartGameClient()
@@ -107,7 +103,7 @@ namespace TTT.Managers
                 throw new IOException("Could not load file.");
             }
 
-            CurrentPlayer = NetworkManager.Singleton.LocalClient;
+            CurrentPlayerId.Value = NetworkManager.Singleton.LocalClientId;
         }
 
         /// <summary>
@@ -117,8 +113,6 @@ namespace TTT.Managers
         {
             endingSeasonEvent.Raise();
             int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
-
-            // % to wrap around to the beginning after winter
             int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
             Season = Seasons[nextSeasonIndex];
         }
@@ -128,6 +122,7 @@ namespace TTT.Managers
             Debug.Log(
                 "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
             );
+
             Year += 1;
 
             // Calculate and apply sea level change based on pollution
@@ -146,15 +141,18 @@ namespace TTT.Managers
         #region:RPC Definitions
 
         [Rpc(SendTo.ClientsAndHost)]
-        public void OnTurnEndingClientRpc(ulong nextClient)
+        public void OnTurnEndingClientRpc()
         {
             NetworkingInformationLog();
-
             // Debug.Log($"[GameManager] on client turn ending matches current {self == nextClient}");
             // Debug.Log($"[GameManager] on client turn ending client rpc {NetworkManager.Singleton.LocalClientId}, start turn");
             // startTurnEvent.Raise(new NextTurnEventArgs() {});
-            endTurnEvent.Raise();
 
+            endTurnEvent.Raise(new EndTurnEventArgs()
+            {
+                Year = Year,
+                Season = Season
+            });
         }
 
         [Rpc(SendTo.SpecifiedInParams)]
@@ -167,24 +165,24 @@ namespace TTT.Managers
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void OnTurnEndingServerRpc()
         {
-            Debug.Log($"{Season.Equals(Seasons[0])}");
-            Debug.Log($"[GameManager] server rpc, current season {Season}");
-            Debug.Log($"[GameManager] server rpc, first season {Seasons[0]}");
+            // Debug.Log($"{Season.Equals(Seasons[0])}");
+            // Debug.Log($"[GameManager] server rpc, current season {Season}");
+            // Debug.Log($"[GameManager] server rpc, first season {Seasons[0]}");
 
-            ulong nextClient = (CurrentPlayerId.Value + 1) % ((ulong)NetworkManager.Singleton.ConnectedClientsList.Count);
+            ulong nextPlayerId = (CurrentPlayerId.Value + 1) % ((ulong)NetworkManager.Singleton.ConnectedClientsList.Count);
 
-            if (FTTaken && nextClient == 0)             // The next season
+            if (FTTaken && nextPlayerId == 0)   // The next season
                 EndSeason();
             if (FTTaken
-                && nextClient == 0
-                && Season.Equals(Seasons[0]))           // The year is over
+                && nextPlayerId == 0
+                && Season.Equals(Seasons[0]))   // The year is over
                 EndYear();
 
-            CurrentPlayerId.Value = nextClient;
+            CurrentPlayerId.Value = nextPlayerId;
             FTTaken = true;
 
-            OnTurnEndingClientRpc(nextClient);
-            StartNextTurnCilentRpc(RpcTarget.Single(nextClient, RpcTargetUse.Temp));
+            OnTurnEndingClientRpc();
+            StartNextTurnCilentRpc(RpcTarget.Single(nextPlayerId, RpcTargetUse.Temp));
         }
 
         #endregion

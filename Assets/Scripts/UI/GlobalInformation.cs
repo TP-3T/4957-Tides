@@ -1,5 +1,6 @@
 using TMPro;
 using TTT.DataClasses.States;
+using TTT.GameEvents;
 using TTT.Managers;
 using UnityEngine;
 
@@ -28,28 +29,16 @@ public class GlobalInformation : MonoBehaviour
     void Start()
     {
         GameManager = GameManager.Instance;
-        setDateText();
-        setCO2Text();
+        // setDateText();
+        // setCO2Text();
     }
 
-    void Update()
-    {
-        if (GameManager.Year != Year || GameManager.Season != Season)
-        {
-            setDateText();
-        }
-        if (playerStats != null && playerStats.pollution != null && playerStats.pollution.AmountOwned != CO2)
-        {
-            setCO2Text();
-        }
-    }
-
-    private void setDateText()
-    {
-        Year = GameManager.Year;
-        Season = GameManager.Season;
-        _dateText.text = $"{Season}, {Year}";
-    }
+    // private void setDateText()
+    // {
+    //     Year = GameManager.Year;
+    //     Season = GameManager.Season;
+    //     _dateText.text = $"{Season}, {Year}";
+    // }
 
     private void setCO2Text()
     {
@@ -63,5 +52,15 @@ public class GlobalInformation : MonoBehaviour
         {
             _CO2Text.text = "CO2: -- ppm";
         }
+    }
+
+    public void OnTurnEnded(Object args)
+    {
+        if (args is not EndTurnEventArgs evArgs)
+        {
+            Debug.LogWarning("Turn ended args should be type EndTurnEventArgs");
+            return;
+        }
+        _dateText.text = $"{evArgs.Season}, {evArgs.Year}";
     }
 }

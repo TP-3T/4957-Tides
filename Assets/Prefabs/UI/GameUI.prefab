@@ -1484,7 +1484,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c5a39d6f5dd674f81ab382788810bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endingTurnEvent: {fileID: 0}
+  endingTurnEvent: {fileID: 11400000, guid: 7fb5caf436b5e804f92a5cc9fc1b0abd, type: 2}
 --- !u!1 &8224965465110706740
 GameObject:
   m_ObjectHideFlags: 0
@@ -2205,13 +2205,60 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4639673261099254899, guid: de23574681e1fd94fae05eacba2071a0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1718408183507295280}
   m_SourcePrefab: {fileID: 100100000, guid: de23574681e1fd94fae05eacba2071a0, type: 3}
+--- !u!1 &1432293235887632716 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4639673261099254899, guid: de23574681e1fd94fae05eacba2071a0, type: 3}
+  m_PrefabInstance: {fileID: 6017909866766923071}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1718408183507295280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432293235887632716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: ae18fced95a4b6749b1a727654516355, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8325683642447612736}
+        m_TargetAssemblyTypeName: GlobalInformation, UI
+        m_MethodName: OnTurnEnded
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &3949119422452196855 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7299769929739145416, guid: de23574681e1fd94fae05eacba2071a0, type: 3}
   m_PrefabInstance: {fileID: 6017909866766923071}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8325683642447612736 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2308424709469585023, guid: de23574681e1fd94fae05eacba2071a0, type: 3}
+  m_PrefabInstance: {fileID: 6017909866766923071}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432293235887632716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8757322f694f79e4986c9497e634360a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7155911051410567921
 PrefabInstance:
   m_ObjectHideFlags: 0
