@@ -101,10 +101,13 @@ namespace TTT.Managers
         public void OnStartNetworkEvent(Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
+            Debug.Log("Starting network...");
+            Debug.Log($"IsHost: {args.IsHost}");
             try
             {
                 if (args.IsHost)
                 {
+                    Debug.Log("me host :))");
                     StartGameHost();
                 }
                 else
