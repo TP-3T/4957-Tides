@@ -101,7 +101,7 @@ namespace TTT.Managers
                 && !string.IsNullOrEmpty(featureType.UniqueID)
             )
             {
-                _featureTypesByUniqueId[featureType.UniqueID] = featureType;
+                //  in our Addressables.
             }
         }
 
@@ -277,16 +277,14 @@ namespace TTT.Managers
             //    creates building feature args
             //    calls FeatureBuilder.OnLoadingMapFeature(args)
             //       where BuildAt() instantiates prefab
-            if (!_featuresLoaded)
+            if (_featureTypesByUniqueId.Keys.Count <= 0)
             {
-                Debug.LogWarning("feature types didn't load");
-                yield break;
+                throw new UnityException("Feature types didn't load!");
             }
 
             int spawnedCount = 0;
             int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smooth-ish loading
-            Dictionary<string, int> featureTypeCounts =
-                new Dictionary<string, int>();
+            Dictionary<string, int> featureTypeCounts = new();
 
             Debug.Log(
                 $"Starting async spawn of {_pendingFeatures.Count} features..."
