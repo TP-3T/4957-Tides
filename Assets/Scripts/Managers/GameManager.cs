@@ -148,21 +148,13 @@ namespace TTT.Managers
         [Rpc(SendTo.ClientsAndHost)]
         public void OnTurnEndingClientRpc(ulong nextClient)
         {
-            var self = NetworkManager.Singleton.LocalClientId;
-
             NetworkingInformationLog();
 
             // Debug.Log($"[GameManager] on client turn ending matches current {self == nextClient}");
             // Debug.Log($"[GameManager] on client turn ending client rpc {NetworkManager.Singleton.LocalClientId}, start turn");
             // startTurnEvent.Raise(new NextTurnEventArgs() {});
             endTurnEvent.Raise();
-        }
 
-        [Rpc(SendTo.ClientsAndHost)]
-        public void StartNextTurnClientRpc()
-        {
-            Debug.Log($"[GameManager] client rpc {NetworkManager.Singleton.LocalClientId}, start turn");
-            // startTurnEvent.Raise();
         }
 
         [Rpc(SendTo.SpecifiedInParams)]
@@ -192,8 +184,6 @@ namespace TTT.Managers
             FTTaken = true;
 
             OnTurnEndingClientRpc(nextClient);
-            // StartNextTurnClientRpc();                       // Handle it for each clients
-
             StartNextTurnCilentRpc(RpcTarget.Single(nextClient, RpcTargetUse.Temp));
         }
 
@@ -229,15 +219,6 @@ namespace TTT.Managers
         public void OnTurnEnding(Object _)
         {
             OnTurnEndingServerRpc();
-        }
-
-        /// <summary>
-        /// Appease the SCROBJECT event handler
-        /// </summary>
-        /// <param name="_"></param>
-        public void StartNextTurn(Object _)
-        {
-            StartNextTurnClientRpc();
         }
 
         public void OnPlayerLose(Object _)
