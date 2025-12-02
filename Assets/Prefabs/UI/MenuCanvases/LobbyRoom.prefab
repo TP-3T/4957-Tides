@@ -1532,9 +1532,9 @@ MonoBehaviour:
       - m_Target: {fileID: 341977623079531775}
         m_TargetAssemblyTypeName: NetworkButton, UI
         m_MethodName: OnMapLoad
-        m_Mode: 2
+        m_Mode: 0
         m_Arguments:
-          m_ObjectArgument: {fileID: 11500000, guid: 4b46e5eb79ab52c4395a99fcedf251f6, type: 3}
+          m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0

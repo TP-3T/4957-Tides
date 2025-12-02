@@ -12,7 +12,6 @@ using TTT.Hex;
 using Unity.Netcode;
 using UnityEngine;
 
-
 namespace TTT.Managers
 {
     [RequireComponent(typeof(LineRenderer))]
@@ -131,7 +130,10 @@ namespace TTT.Managers
             HexMesh hexMeshInstance = hexMeshGameObject.GetComponent<HexMesh>();
 
             // Instance HexMesh prefab based off of the build data
-            if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+            if (
+                NetworkManager.Singleton != null
+                && NetworkManager.Singleton.IsListening
+            )
             {
                 hexMeshInstance.GetComponent<NetworkObject>().Spawn();
                 hexMeshInstance.transform.position += new Vector3(
@@ -152,7 +154,10 @@ namespace TTT.Managers
             SeaMesh seaMeshInstance = seaMeshGameObject.GetComponent<SeaMesh>();
 
             // Instance SeaMesh prefab based off of the
-            if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+            if (
+                NetworkManager.Singleton != null
+                && NetworkManager.Singleton.IsListening
+            )
             {
                 seaMeshInstance.GetComponent<NetworkObject>().Spawn();
                 _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
@@ -271,17 +276,11 @@ namespace TTT.Managers
             }
         }
 
-
-
-
         private IEnumerator SpawnPendingFeaturesAsync()
         {
-            // po: the idea is that
-            // OnNewMap() parses json
-            // then on each tile with feature != null
-            //   adds (position, featureId) to pending features,
-            // then spawnMapObjects() creates mesh prefabs
-            // then TriangulateWhatever() makes visual mesh
+            // po: the idea is that OnNewMap() parses json then on each tile
+            //  with feature != null adds (position, featureId) to pending
+            // features, then spawnMapObjects() creates mesh prefab then TriangulateWhatever() makes visual mesh
             // then SpawnPendingFeatures()
             //    looks up feature id in feature types by unique id
             //    creates building feature args

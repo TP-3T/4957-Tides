@@ -16,14 +16,6 @@ public class WaterLevelControl : MonoBehaviour
     [SerializeField]
     private RectMask2D _mask;
 
-    // [SerializeField]
-    // private TextMeshProUGUI _waterLevelText;
-
-    // [Tooltip(
-    //     "The amount to increase or decrease the water level by for testing."
-    // )]
-    // private int _testChangeAmount = 1;
-
     private float _maxBarHeight;
     private float _initialTopMaskPadding;
 
@@ -83,34 +75,5 @@ public class WaterLevelControl : MonoBehaviour
         var padding = _mask.padding;
         padding.w = newTopPadding;
         _mask.padding = padding;
-
-        // _waterLevelText.text = $"{newValue}/{_waterLevel.MaxWaterLevel}";
     }
-
-    void Update()
-    {
-        // TestInput();
-    }
-
-    // private void TestInput()
-    // {
-    //     bool changed = false;
-
-    //     if (Input.GetKeyDown(KeyCode.T))
-    //     {
-    //         _waterLevel.RiseWaterLevel(_testChangeAmount);
-    //         changed = true;
-    //     }
-    //     else if (Input.GetKeyDown(KeyCode.H))
-    //     {
-    //         _waterLevel.LowerWaterLevel(_testChangeAmount);
-    //         changed = true;
-    //     }
-
-    //     if (changed)
-    //     {
-    //         SetValue(_waterLevel.WaterLevelValue);
-    //         Debug.Log($"Water Level changed to {_waterLevel.WaterLevelValue}.");
-    //     }
-    // }
 }

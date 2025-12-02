@@ -63,7 +63,7 @@ namespace TTT.Managers
         private GameEvent BuildingFeatureEvent;
 
         // Initial climate values
-        public static readonly float INITIAL_SEA_LEVEL_M = 0.0f;
+        public static readonly float INITIAL_SEA_LEVEL_M = 1.0f;
         public static readonly float INITIAL_CO2_PPM = 309.41f;
         public static readonly float INITIAL_TEMPERATURE_DEG_C = 14.15561478f;
 

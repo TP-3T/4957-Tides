@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5185765772463726796}
   - component: {fileID: 3564639392169959142}
   - component: {fileID: 5185997172144782072}
+  - component: {fileID: 5567296110961213309}
   m_Layer: 5
   m_Name: MainMenuUI
   m_TagString: Untagged
@@ -131,6 +132,34 @@ MonoBehaviour:
   LoadingScreen: {fileID: 9137328216038302542, guid: f0ad03dd508bf8d45998f2f029e8f751, type: 3}
   MapID: 0
   newMapEvent: {fileID: 11400000, guid: 9438c37d1b6c53b408804b0dce45c597, type: 2}
+--- !u!114 &5567296110961213309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3385910412119323892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: d26b6b3deba7afe449dfce1f5b502c0d, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5185997172144782072}
+        m_TargetAssemblyTypeName: MainMenu, UI
+        m_MethodName: OpenGameUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &2176838557028484682
 PrefabInstance:
   m_ObjectHideFlags: 0
