@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using TTT.ClimateModel;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.States;
 using TTT.DataClasses.Terrain;

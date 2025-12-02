@@ -74,6 +74,12 @@ namespace TTT.Managers
         void Start()
         {
             Season = Seasons.Spring;
+            SystemStateChange.Raise(
+                new StateSystemChangeEventArgs()
+                {
+                    NewState = SystemState.MAIN_MENU,
+                }
+            );
         }
 
         public void OnStartNetworkEvent(Object eventArgs)

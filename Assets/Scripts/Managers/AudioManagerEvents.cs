@@ -47,7 +47,7 @@ namespace TTT.Managers
 
             if (!track.IsNullOrEmpty())
             {
-                PlayAmbience(track);
+                PlayMusic(track);
             }
         }
     }

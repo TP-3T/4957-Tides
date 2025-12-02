@@ -194,18 +194,25 @@ namespace TTT.UI
                 {
                     TabClicked(newTab);
                     PlayAudioEvent.Raise(
-                        new AudioEventArgs()
-                        {
-                            Type = AudioTypes.ONESHOT,
-                            ToPlay = type switch
+                        this.IsOpen
+                            ? new AudioEventArgs()
                             {
-                                FeatureCategory.INDUSTRY => "click_industry",
-                                FeatureCategory.HOUSING => "click_home",
-                                FeatureCategory.ENERGY => "click_energy",
-                                FeatureCategory.NATURE => "click_renewable",
-                                _ => "click_generic",
-                            },
-                        }
+                                Type = AudioTypes.ONESHOT,
+                                ToPlay = type switch
+                                {
+                                    FeatureCategory.INDUSTRY =>
+                                        "click_industry",
+                                    FeatureCategory.HOUSING => "click_home",
+                                    FeatureCategory.ENERGY => "click_energy",
+                                    FeatureCategory.NATURE => "click_renewable",
+                                    _ => "click_generic",
+                                },
+                            }
+                            : new AudioEventArgs()
+                            {
+                                Type = AudioTypes.ONESHOT,
+                                ToPlay = "drawer_close",
+                            }
                     );
                 });
                 newTab.transform.SetParent(ShopTabArea.transform);

@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using TTT.DataClasses.States;
+using TTT.GameEvents;
 using TTT.UI;
 using UnityEngine;
 
@@ -30,6 +31,9 @@ public class FeatureInfo : MonoBehaviour, IOpenable
     [field: SerializeField]
     private GameObject hexFeature;
 
+    [SerializeField]
+    private GameEvent AudioEvent;
+
     private TextMeshProUGUI featureTileText;
     private Coroutine CurrentShift { get; set; }
 
@@ -57,6 +61,17 @@ public class FeatureInfo : MonoBehaviour, IOpenable
         {
             StopCoroutine(CurrentShift);
         }
+
+        AudioEvent.Raise(
+            new AudioEventArgs()
+            {
+                Type = AudioTypes.ONESHOT,
+                ToPlay = (this as IOpenable).IsOpen
+                    ? "drawer_close"
+                    : "drawer_open",
+            }
+        );
+
         CurrentShift = StartCoroutine((this as IOpenable).ToggleOpenable());
     }
 

@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TTT.DataClasses;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
@@ -17,6 +19,9 @@ namespace TTT.Managers
     {
         [SerializeField]
         private GameEvent DestroyingFeatureEvent;
+
+        [SerializeField]
+        private GameEvent AudioEvent;
 
         [SerializeField]
         private FeatureRuntimeSet spawnedFeatures;
@@ -187,6 +192,7 @@ namespace TTT.Managers
                     {
                         HexCell test = FloodQueue.Dequeue();
 
+                        //! CB: No braces on if/else! Bad style :C
                         if (
                             test.CellPosition.y
                             <= GameManager.Instance.SeaLevel.Value
@@ -238,12 +244,17 @@ namespace TTT.Managers
                 // --- 3. Retriangulate what has been flooded ---
                 // TriangulateMeshInstanceClientRpc(flooded.ToArray());
                 TriangulateSeaMeshClientRpc(flooded.ToArray());
-
+                AudioEvent.Raise(
+                    new AudioEventArgs()
+                    {
+                        Type = AudioTypes.ONESHOT,
+                        ToPlay = "water_rise",
+                    }
+                );
                 yield return null;
             }
 
             onFloodEnded.Raise();
-            //says unreachable but it is
         }
     }
 }

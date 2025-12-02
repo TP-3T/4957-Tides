@@ -105,7 +105,7 @@ namespace TTT.Player
                 if (playerCamera != null)
                 {
                     playerCamera.enabled = true;
-                    Debug.Log("Enable camera for local player");
+                    // Debug.Log("Enable camera for local player");
                 }
                 else
                 {
@@ -182,7 +182,7 @@ namespace TTT.Player
                 // Don't process world clicks when clicking on UI
                 if (IsMouseOverUI())
                 {
-                    Debug.Log("Mouse over UI, not processing world click");
+                    // Debug.Log("Mouse over UI, not processing world click");
                     return;
                 }
 
@@ -193,7 +193,7 @@ namespace TTT.Player
                 );
                 if (mouseMovement > CLICK_THRESHOLD)
                 {
-                    Debug.Log(mouseMovement);
+                    // Debug.Log(mouseMovement);
                     // This was a drag, not a click - don't select tile
                     return;
                 }
