@@ -189,7 +189,7 @@ namespace TTT.Player
                         building.FeatureType = FeatureType;
                         // building.OwnedByClient = true;
                         building.OwnerId = NetworkManager.Singleton.LocalClientId;
-                        // BuildingFeatureEvent.Raise(building);
+                        // BuildingFeatureEvent.Raise(building)
 
                         _tryBuildFeatureEvent.Raise(building);
                     }

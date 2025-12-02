@@ -152,10 +152,10 @@ namespace TTT.Managers
 
             NetworkingInformationLog();
 
-            Debug.Log($"[GameManager] on client turn ending matches current {self == nextClient}");
-            Debug.Log($"[GameManager] on client turn ending client rpc {NetworkManager.Singleton.LocalClientId}, start turn");
-
-            startTurnEvent.Raise();
+            // Debug.Log($"[GameManager] on client turn ending matches current {self == nextClient}");
+            // Debug.Log($"[GameManager] on client turn ending client rpc {NetworkManager.Singleton.LocalClientId}, start turn");
+            // startTurnEvent.Raise(new NextTurnEventArgs() {});
+            endTurnEvent.Raise();
         }
 
         [Rpc(SendTo.ClientsAndHost)]
@@ -163,6 +163,13 @@ namespace TTT.Managers
         {
             Debug.Log($"[GameManager] client rpc {NetworkManager.Singleton.LocalClientId}, start turn");
             // startTurnEvent.Raise();
+        }
+
+        [Rpc(SendTo.SpecifiedInParams)]
+        public void StartNextTurnCilentRpc(RpcParams paramS = default)
+        {
+            Debug.Log($"[GameManager] cilent rpc IT SHOULD ONLY BE ME {NetworkManager.Singleton.LocalClientId}");
+            startTurnEvent.Raise();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
@@ -186,6 +193,8 @@ namespace TTT.Managers
 
             OnTurnEndingClientRpc(nextClient);
             // StartNextTurnClientRpc();                       // Handle it for each clients
+
+            StartNextTurnCilentRpc(RpcTarget.Single(nextClient, RpcTargetUse.Temp));
         }
 
         #endregion

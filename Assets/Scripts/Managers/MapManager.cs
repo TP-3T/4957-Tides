@@ -139,7 +139,7 @@ namespace TTT.Managers
 
             bfArgs.Location = cellPosition;
             bfArgs.FeatureType = featureType;
-            bfArgs.OwnedByClient = (builder == NetworkManager.Singleton.LocalClientId);
+            bfArgs.OwnerId = builder;
 
             _onFeaturePlace.Raise(bfArgs);
         }
@@ -435,7 +435,7 @@ namespace TTT.Managers
             BuildingFeatureArgs eventArgs = args as BuildingFeatureArgs;
 
             PlaceFeatureClientRpc(
-                NetworkManager.Singleton.LocalClientId,
+                eventArgs.OwnerId,
                 eventArgs.FeatureType.UniqueID,
                 eventArgs.Location
             );

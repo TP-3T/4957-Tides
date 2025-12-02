@@ -46,7 +46,8 @@ public class FeatureBuilder : MonoBehaviour
             FixLocation(bfArgs.Location),
             bfArgs.FeatureType,
             bfArgs.OwnedByClient,
-            bfArgs.CheckForCost
+            bfArgs.CheckForCost,
+            bfArgs.OwnerId
         );
     }
 
@@ -96,7 +97,8 @@ public class FeatureBuilder : MonoBehaviour
         Vector3 location,
         FeatureType featureType,
         bool ownedByClient,
-        bool checkForCost
+        bool checkForCost,
+        ulong ownerId
     )
     {
         if (ownedByClient && checkForCost && !CheckCost(featureType, out string insufficientResource))
@@ -115,21 +117,12 @@ public class FeatureBuilder : MonoBehaviour
             return;
         }
         
-        // WO: Will need to figure out a way to have this logic exist
-
-        // Feature feature = BuildAt(location, featureType);
-
-        // if (feature == null)
-        // {
-        //     Debug.LogError("No renderers found in this prefab.");
-        //     return;
-        // }
-
         if (checkForCost)
             DeductCost(featureType);
 
         _onBuildFeature.Raise(new BuildingFeatureArgs()
         {
+            OwnerId = ownerId,
             Location = location,
             FeatureType = featureType
         });
@@ -302,6 +295,8 @@ public class FeatureBuilder : MonoBehaviour
         // encapsulate in feature object
         Feature feature = new(location, featureType, parent);
         bool owner = ownerId == NetworkManager.Singleton.LocalClientId;
+
+        Debug.Log($"[FeatureBuilder] THE OWNER ID VALYUE {ownerId}, {NetworkManager.Singleton.LocalClientId}");
 
         if (owner)
         {
