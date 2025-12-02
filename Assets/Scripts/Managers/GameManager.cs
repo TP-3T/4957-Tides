@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TTT.DataClasses;
 using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.States;
 using TTT.GameEvents;
@@ -33,19 +34,20 @@ namespace TTT.Managers
 
         public NetworkClient CurrentPlayer { get; private set; }
         public NetworkVariable<ulong> CurrentPlayerId = new();
+        public NetworkVariable<GlobalInformation> GlobalInformation = new();
 
         //serialize for now
-        [field: SerializeField]
-        public int Year { get; private set; } = 1;
+        // [field: SerializeField]
+        // public int Year { get; private set; } = 1;
 
-        [field: SerializeField]
-        public string Season { get; private set; }
+        // [field: SerializeField]
+        // public string Season { get; private set; }
 
-        [field: SerializeField]
-        public int CO2 { get; private set; } = 0;
+        // [field: SerializeField]
+        // public int CO2 { get; private set; } = 0;
 
-        [field: SerializeField]
-        public int Temperature { get; private set; }
+        // [field: SerializeField]
+        // public int Temperature { get; private set; }
 
         [SerializeField]
         private GameEvent startTurnEvent;
@@ -68,12 +70,15 @@ namespace TTT.Managers
         [SerializeField]
         public bool FTTaken { get; private set; } = false;
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        public override void OnNetworkSpawn()
         {
-            Season = Seasons[0];
-            CO2 = 0;
-            // NetworkManager.Singleton.OnServerStarted += ServerStartHandler;
+            GlobalInformation ginf = new ();
+            ginf.Season = Seasons[0];
+            ginf.CO2 = 0;
+
+            GlobalInformation.Value = ginf;
+
+            GlobalInformation.OnValueChanged += GlobalInformationChanged;
         }
 
         #region:Utility
@@ -115,12 +120,15 @@ namespace TTT.Managers
         /// </summary>
         private void EndSeason()
         {
-            endingSeasonEvent.Raise();
-            int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
+            GlobalInformation ginf = GlobalInformation.Value;
 
-            // % to wrap around to the beginning after winter
+            int currentSeasonIndex = System.Array.IndexOf(Seasons, ginf.Season);
             int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
-            Season = Seasons[nextSeasonIndex];
+            ginf.Season = Seasons[nextSeasonIndex];
+
+            GlobalInformation.Value = ginf;
+
+            endingSeasonEvent.Raise();
         }
 
         private void EndYear()
@@ -128,7 +136,10 @@ namespace TTT.Managers
             Debug.Log(
                 "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
             );
-            Year += 1;
+
+            GlobalInformation ginf = GlobalInformation.Value;
+            ginf.Year += 1;
+            GlobalInformation.Value = ginf;
 
             // Calculate and apply sea level change based on pollution
             if (PlayerStats != null)
@@ -139,6 +150,11 @@ namespace TTT.Managers
             }
 
             endingYearEvent.Raise();
+        }
+
+        private void GlobalInformationChanged(GlobalInformation oldI, GlobalInformation newI)
+        {
+            Debug.Log($"[GameManager] global information modified {oldI}, {newI}");
         }
 
         #endregion
@@ -175,8 +191,10 @@ namespace TTT.Managers
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void OnTurnEndingServerRpc()
         {
-            Debug.Log($"{Season.Equals(Seasons[0])}");
-            Debug.Log($"[GameManager] server rpc, current season {Season}");
+            GlobalInformation ginf = GlobalInformation.Value;
+
+            Debug.Log($"{ginf.Season.Equals(Seasons[0])}");
+            Debug.Log($"[GameManager] server rpc, current season {ginf.Season}");
             Debug.Log($"[GameManager] server rpc, first season {Seasons[0]}");
 
             ulong nextClient = (CurrentPlayerId.Value + 1) % ((ulong)NetworkManager.Singleton.ConnectedClientsList.Count);
@@ -185,7 +203,7 @@ namespace TTT.Managers
                 EndSeason();
             if (FTTaken
                 && nextClient == 0
-                && Season.Equals(Seasons[0]))           // The year is over
+                && ginf.Season.Equals(Seasons[0]))           // The year is over
                 EndYear();
 
             CurrentPlayerId.Value = nextClient;

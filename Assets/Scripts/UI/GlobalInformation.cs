@@ -34,7 +34,8 @@ public class GlobalInformation : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Year != Year || GameManager.Season != Season)
+        if (    GameManager.GlobalInformation.Value.Year != Year
+            ||  GameManager.GlobalInformation.Value.Season.ToString() != Season)
         {
             setDateText();
         }
@@ -46,8 +47,8 @@ public class GlobalInformation : MonoBehaviour
 
     private void setDateText()
     {
-        Year = GameManager.Year;
-        Season = GameManager.Season;
+        Year = GameManager.GlobalInformation.Value.Year;
+        Season = GameManager.GlobalInformation.Value.Season.ToString();
         _dateText.text = $"{Season}, {Year}";
     }
 
