@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class NetworkButton : MonoBehaviour
 {
+    [SerializeField]
     public GameEvent startNetworkEvent;
 
     public void OnStartServer()

@@ -65,7 +65,7 @@ namespace TTT.Player
         /// </summary>
         public bool IsDragging => isDragging;
 
-        private void Awake()
+        public void Start()
         {
             cameraActions = new();
             cameraActions.Camera.Enable();

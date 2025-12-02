@@ -55,7 +55,7 @@ namespace TTT.Managers
         private GameEvent SystemStateChange;
 
         // Initial climate values
-        public static readonly float INITIAL_SEA_LEVEL_M = 0.0f;
+        public static readonly float INITIAL_SEA_LEVEL_M = 1.0f;
         public static readonly float INITIAL_CO2_PPM = 309.41f;
         public static readonly float INITIAL_TEMPERATURE_DEG_C = 14.15561478f;
 
@@ -85,10 +85,13 @@ namespace TTT.Managers
         public void OnStartNetworkEvent(Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
+            Debug.Log("Starting network...");
+            Debug.Log($"IsHost: {args.IsHost}");
             try
             {
                 if (args.IsHost)
                 {
+                    Debug.Log("me host :))");
                     StartGameHost();
                 }
                 else
@@ -111,15 +114,6 @@ namespace TTT.Managers
         private void StartGameHost()
         {
             NetworkManager.Singleton.StartHost();
-
-            if (LoadExternalJson.TryGetDataJson(out TextAsset newMap))
-            {
-                newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
-            }
-            else
-            {
-                throw new IOException("Could not load file.");
-            }
         }
 
         public void OnNewMapFinish(Object eventArgs)

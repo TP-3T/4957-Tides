@@ -9,6 +9,7 @@ namespace TTT.DataClasses.States
         MAIN_MENU,
         SAVING,
         LOADING,
+        PAUSED,
 
         // For multiplayer
         LOBBY,

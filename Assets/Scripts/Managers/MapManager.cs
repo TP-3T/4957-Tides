@@ -105,6 +105,19 @@ namespace TTT.Managers
                 OnClientConnect;
         }
 
+        public override void OnNetworkDespawn()
+        {
+            if (NetworkManager.Singleton != null)
+            {
+                NetworkManager.Singleton.OnClientConnectedCallback -=
+                    OnClientConnect;
+            }
+            
+            // Release all loaded Addressable assets to prevent memory leaks
+            AssetLoader<GameObject>.ReleaseAll();
+            AssetLoader<FeatureType>.ReleaseAll();
+        }
+
         private IEnumerator SpawnMapObjects()
         {
             yield return AssetLoader<GameObject>.Load(
@@ -124,15 +137,21 @@ namespace TTT.Managers
             HexMesh hexMeshInstance = hexMeshGameObject.GetComponent<HexMesh>();
 
             // Instance HexMesh prefab based off of the build data
-            hexMeshInstance.GetComponent<NetworkObject>().Spawn();
-            hexMeshInstance.transform.position += new Vector3(
-                0.0f,
-                -0.01f,
-                0.0f
-            );
-            _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
+            if (
+                NetworkManager.Singleton != null
+                && NetworkManager.Singleton.IsListening
+            )
+            {
+                hexMeshInstance.GetComponent<NetworkObject>().Spawn();
+                hexMeshInstance.transform.position += new Vector3(
+                    0.0f,
+                    -0.01f,
+                    0.0f
+                );
+                _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
 
-            TriangulateHexMeshClientRpc();
+                TriangulateHexMeshClientRpc();
+            }
         }
 
         private void SpawnSeaMesh(GameObject sm)
@@ -142,10 +161,16 @@ namespace TTT.Managers
             SeaMesh seaMeshInstance = seaMeshGameObject.GetComponent<SeaMesh>();
 
             // Instance SeaMesh prefab based off of the
-            seaMeshInstance.GetComponent<NetworkObject>().Spawn();
-            _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
+            if (
+                NetworkManager.Singleton != null
+                && NetworkManager.Singleton.IsListening
+            )
+            {
+                seaMeshInstance.GetComponent<NetworkObject>().Spawn();
+                _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
 
-            TriangulateSeaMeshClientRpc(); // for the host, this should eventually not be necessary
+                TriangulateSeaMeshClientRpc(); // for the host, this should eventually not be necessary
+            }
         }
 
         [ClientRpc]
@@ -168,7 +193,7 @@ namespace TTT.Managers
                 );
             }
 
-            // Spawn features asynchronously across multiple frames
+            // Spawn features asynchronously across multiple frames after triangulation
             StartCoroutine(SpawnPendingFeaturesAsync());
         }
 
@@ -260,12 +285,9 @@ namespace TTT.Managers
 
         private IEnumerator SpawnPendingFeaturesAsync()
         {
-            // po: the idea is that
-            // OnNewMap() parses json
-            // then on each tile with feature != null
-            //   adds (position, featureId) to pending features,
-            // then spawnMapObjects() creates mesh prefabs
-            // then TriangulateWhatever() makes visual mesh
+            // po: the idea is that OnNewMap() parses json then on each tile
+            //  with feature != null adds (position, featureId) to pending
+            // features, then spawnMapObjects() creates mesh prefab then TriangulateWhatever() makes visual mesh
             // then SpawnPendingFeatures()
             //    looks up feature id in feature types by unique id
             //    creates building feature args
@@ -380,7 +402,6 @@ namespace TTT.Managers
         public void OnNewMap(UnityEngine.Object eventArgs)
         {
             NewMapEventArgs args = eventArgs as NewMapEventArgs;
-
             // WO: Deserializer / Serializer class for game data will eventually do the job of this routine
             // Maybe...
             try
@@ -395,8 +416,11 @@ namespace TTT.Managers
                 int width = _gameMapData.MapTile.Count;
                 int height = _gameMapData.MapTile["0"].Count;
 
-                _hexGridWidth.Value = width;
-                _hexGridHeight.Value = height;
+                if (NetworkManager.Singleton.IsHost)
+                {
+                    _hexGridWidth.Value = width;
+                    _hexGridHeight.Value = height;
+                }
 
                 HexCell[] hexCells = new HexCell[width * height];
 
