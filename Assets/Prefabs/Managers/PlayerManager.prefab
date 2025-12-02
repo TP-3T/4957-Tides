@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 486052804758396404}
   - component: {fileID: 1509698752762202902}
   - component: {fileID: 5960998352088198174}
+  - component: {fileID: 9110496381387498903}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
@@ -54,7 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3942152717
+  GlobalObjectIdHash: 2492282697
   InScenePlacedSourceGlobalObjectIdHash: 2492282697
   DeferredDespawnTick: 0
   Ownership: 1
@@ -206,6 +207,34 @@ MonoBehaviour:
       - m_Target: {fileID: 486052804758396404}
         m_TargetAssemblyTypeName: TTT.Player.CameraController, TTT.Player
         m_MethodName: OnNewMapFinish
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &9110496381387498903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3588933447207156260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: ecc6c0b36e43a784d8e35592e9f55032, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 486052804758396404}
+        m_TargetAssemblyTypeName: TTT.Player.CameraController, TTT.Player
+        m_MethodName: OnSystemStateChange
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
