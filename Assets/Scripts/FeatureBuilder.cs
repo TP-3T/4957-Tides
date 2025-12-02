@@ -84,8 +84,9 @@ public class FeatureBuilder : MonoBehaviour
 
     public void OnRemoveFeature(Object eventArgs)
     {
-        if (eventArgs is not BuildingFeatureArgs bfArgs)
+        if (eventArgs is not FeatureRemoveArgs bfArgs)
         {
+            Debug.LogWarning("[FeatureBuilder] cannot invoke this event with parameter type not FeatureRemoveArgs");
             return;
         }
 
@@ -93,22 +94,6 @@ public class FeatureBuilder : MonoBehaviour
     }
 
     #endregion
-
-    private static Vector3 FixLocation(Vector3 location)
-    {
-        HexCell? exactCell = MapManager.Instance.GetCellFromPosition(
-            location,
-            out _
-        );
-
-        if (exactCell == null)
-        {
-            Debug.LogWarning($"Could not find cell at location {location}");
-            return new Vector3(0, 0, 0);
-        }
-
-        return ((HexCell)exactCell).CellPosition;
-    }
 
     private void TryToBuild(
         Vector3 location,
@@ -153,6 +138,8 @@ public class FeatureBuilder : MonoBehaviour
 
     private void TryToDestroy(Vector3 location, ulong destroyerId)
     {
+        Debug.Log($"[FeatureBuilder] attempting to destroy feature {location}, I am {destroyerId}");
+
         Feature[] allfA = PlayerFeatures.GetItems();
         if (allfA.Any(f => f.CellPosition.Equals(location)))
         {
@@ -268,6 +255,22 @@ public class FeatureBuilder : MonoBehaviour
     #endregion
 
     #region: Utility
+
+    private static Vector3 FixLocation(Vector3 location)
+    {
+        HexCell? exactCell = MapManager.Instance.GetCellFromPosition(
+            location,
+            out _
+        );
+
+        if (exactCell == null)
+        {
+            Debug.LogWarning($"Could not find cell at location {location}");
+            return new Vector3(0, 0, 0);
+        }
+
+        return ((HexCell)exactCell).CellPosition;
+    }
 
     private Feature BuildAt(ulong ownerId, Vector3 location, FeatureType featureType)
     {

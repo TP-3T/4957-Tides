@@ -139,6 +139,7 @@ namespace TTT.Managers
         [Rpc(SendTo.ClientsAndHost)]
         private void RemoveFeatureClientRpc(Vector3 cellPosition)
         {
+            Debug.Log("[MapManager] removing feature client rpc");
             FeatureRemoveArgs rmArgs = new FeatureRemoveArgs()
             {
                 Location = cellPosition
@@ -444,6 +445,8 @@ namespace TTT.Managers
 
         public void OnFeatureDestroy(UnityEngine.Object args)
         {
+            Debug.Log("[MapManager] destroying feature");
+
             if (args is not FeatureDestroyArgs dtrArgs)
             {
                 Debug.LogWarning("[MapManager] could not destroy feature");
