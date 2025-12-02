@@ -190,7 +190,7 @@ MonoBehaviour:
   _mapMeshClicked: {fileID: 11400000, guid: 430d05d8968fdce498f62567aa054de0, type: 2}
   BuildingFeatureEvent: {fileID: 11400000, guid: e1dad23c1ad07604c979c75b37dc9c91, type: 2}
   _tryBuildFeatureEvent: {fileID: 11400000, guid: 769a50b7020b8e544954a96711d996fa, type: 2}
-  _tryDestroyFeatureEvent: {fileID: 11400000, guid: 7d47a35cd7404494b8734dec9c82f501, type: 2}
+  _tryDestroyFeatureEvent: {fileID: 0}
   playerCamera: {fileID: 9052904617789525854}
   cameraController: {fileID: 486052804758396404}
   playerBuildings: {fileID: 11400000, guid: b18489e19391e034ea0d1bdb8cc91ae7, type: 2}
