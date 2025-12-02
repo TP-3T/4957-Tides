@@ -73,6 +73,7 @@ namespace TTT.Managers
 
         void Start()
         {
+            NetworkManager.Singleton.enabled = true;
             Season = Seasons.Spring;
             SystemStateChange.Raise(
                 new StateSystemChangeEventArgs()

@@ -112,7 +112,7 @@ namespace TTT.Managers
                 NetworkManager.Singleton.OnClientConnectedCallback -=
                     OnClientConnect;
             }
-            
+
             // Release all loaded Addressable assets to prevent memory leaks
             AssetLoader<GameObject>.ReleaseAll();
             AssetLoader<FeatureType>.ReleaseAll();

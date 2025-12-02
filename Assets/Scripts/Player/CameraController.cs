@@ -1,3 +1,6 @@
+using TTT.DataClasses.States;
+using TTT.GameEvents;
+using TTT.Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -65,13 +68,15 @@ namespace TTT.Player
         /// </summary>
         public bool IsDragging => isDragging;
 
+        private bool IsPlaying = false;
+
         public void Start()
         {
             cameraActions = new();
             cameraActions.Camera.Enable();
             cameraTransform = playerCamera.transform;
             zoomHeight = cameraTransform.localPosition.y;
-            cameraTransform.LookAt(this.transform);
+
             lastPosition = this.transform.position;
             movement = cameraActions.Camera.Movement;
 
@@ -80,24 +85,42 @@ namespace TTT.Player
             cameraActions.Camera.ZoomCamera.performed += ZoomCamera;
         }
 
+        public void OnNewMapFinish(object args)
+        {
+            var eventArgs = args as NewMapFinishedEventArgs;
+            if (eventArgs.WasSuccessful)
+            {
+                cameraTransform.LookAt(this.transform);
+            }
+        }
+
+        public void OnSystemStateChange(object args)
+        {
+            var eventArgs = args as StateSystemChangeEventArgs;
+            IsPlaying = eventArgs.NewState.Equals(SystemState.PLAYING);
+        }
+
         /// <summary>
         /// Called once per frame to update.
         /// </summary>
         private void Update()
         {
-            GetKeyboardMovement();
+            if (IsPlaying)
+            {
+                GetKeyboardMovement();
 
-            CheckMouseAtScreenEdge();
+                CheckMouseAtScreenEdge();
 
-            DragCamera();
+                DragCamera();
 
-            UpdateVelocity();
+                UpdateVelocity();
 
-            CheckTerrainHeight();
+                CheckTerrainHeight();
 
-            UpdateCameraPos();
+                UpdateCameraPos();
 
-            UpdateBasePosition();
+                UpdateBasePosition();
+            }
         }
 
         /// <summary>
