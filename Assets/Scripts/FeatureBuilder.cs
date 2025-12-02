@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
 using TTT.Managers;
+using Unity.Netcode;
 using UnityEngine;
 
 public class FeatureBuilder : MonoBehaviour
@@ -55,7 +57,11 @@ public class FeatureBuilder : MonoBehaviour
             return;
         }
 
-        BuildAt(FixLocation(bfArgs.Location), bfArgs.FeatureType);
+        Vector3 fixedLocation = FixLocation(bfArgs.Location);
+        if (CheckIfCanBuild(fixedLocation, bfArgs.FeatureType))
+        {
+            BuildAt(bfArgs.OwnerId, fixedLocation, bfArgs.FeatureType);
+        }
     }
 
     public void OnDestroyingFeature(Object eventArgs)
@@ -119,22 +125,8 @@ public class FeatureBuilder : MonoBehaviour
         //     return;
         // }
 
-        // if (ownedByClient && checkForCost)
-        // {
-        //     DeductCost(featureType);
-        // }
-
-        // if (ownedByClient)
-        // {
-        //     // Trigger all resource producers for this feature
-        //     InitializeResourceProducers(featureType);
-        // }
-
-        // SpawnedFeatures.Add(feature);
-        // if (ownedByClient)
-        // {
-        //     PlayerFeatures.Add(feature);
-        // }
+        if (checkForCost)
+            DeductCost(featureType);
 
         _onBuildFeature.Raise(new BuildingFeatureArgs()
         {
@@ -242,7 +234,7 @@ public class FeatureBuilder : MonoBehaviour
         }
     }
 
-    private Feature BuildAt(Vector3 location, FeatureType featureType)
+    private Feature BuildAt(ulong ownerId, Vector3 location, FeatureType featureType)
     {
         GameObject modelInstance = Instantiate(featureType.Prefab);
 
@@ -309,6 +301,18 @@ public class FeatureBuilder : MonoBehaviour
 #endif
         // encapsulate in feature object
         Feature feature = new(location, featureType, parent);
+        bool owner = ownerId == NetworkManager.Singleton.LocalClientId;
+
+        if (owner)
+        {
+            InitializeResourceProducers(featureType);
+        }
+
+        SpawnedFeatures.Add(feature);
+        if (owner)
+        {
+            PlayerFeatures.Add(feature);
+        }
 
         return feature;
     }

@@ -187,7 +187,8 @@ namespace TTT.Player
                             ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                         building.Location = raycastHit.point;
                         building.FeatureType = FeatureType;
-                        building.OwnedByClient = true;
+                        // building.OwnedByClient = true;
+                        building.OwnerId = NetworkManager.Singleton.LocalClientId;
                         // BuildingFeatureEvent.Raise(building);
 
                         _tryBuildFeatureEvent.Raise(building);

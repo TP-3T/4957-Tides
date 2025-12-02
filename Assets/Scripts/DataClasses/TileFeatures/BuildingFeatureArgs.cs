@@ -24,6 +24,11 @@ namespace TTT.DataClasses.TileFeatures
         public bool OwnedByClient;
 
         /// <summary>
+        /// The owner of this feature
+        /// </summary>
+        public ulong OwnerId = ulong.MaxValue;
+
+        /// <summary>
         /// Whether building this feature should subtract the player's resources
         /// </summary>
         public bool CheckForCost = true;
