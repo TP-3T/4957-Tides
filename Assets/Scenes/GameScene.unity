@@ -574,7 +574,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2315601190507965176, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -17.126099
+      value: -19.479979
       objectReference: {fileID: 0}
     - target: {fileID: 2408728085975243179, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: <IsOpen>k__BackingField
@@ -704,10 +704,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4740638150409569193, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: m_fontSize
+      value: 59.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4871164678806478813, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: playerStats
       value: 
       objectReference: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
+    - target: {fileID: 4971699643227154928, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5248143721908876236, guid: d7f970538c0e64f4d81cdd5a40a894c5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -928,7 +936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5287792316253268995, guid: 897fad17376beb44da7e5f8638f4b74d, type: 3}
       propertyPath: ConnectionData.Port
-      value: 2100
+      value: 6767
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

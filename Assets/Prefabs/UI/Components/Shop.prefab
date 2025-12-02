@@ -661,6 +661,8 @@ GameObject:
   - component: {fileID: 4655228308963635219}
   - component: {fileID: 2743887434435340111}
   - component: {fileID: 1396512214478044995}
+  - component: {fileID: 4758973534846291366}
+  - component: {fileID: 6620752645618919806}
   m_Layer: 5
   m_Name: Shop
   m_TagString: Untagged
@@ -745,3 +747,59 @@ MonoBehaviour:
   SlotSpacing: 20
   ShopTabArea: {fileID: 2519198667540855256}
   ShopTabPrefab: {fileID: 7902394278506430923, guid: 9882b9346389f4244b5ee6f6e1ab0e08, type: 3}
+--- !u!114 &4758973534846291366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8196562055711730827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 7fb5caf436b5e804f92a5cc9fc1b0abd, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1396512214478044995}
+        m_TargetAssemblyTypeName: TTT.UI.BottomMenu, UI
+        m_MethodName: OnTurnEnding
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+--- !u!114 &6620752645618919806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8196562055711730827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 05610094447874b4fb50121eb5692137, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1396512214478044995}
+        m_TargetAssemblyTypeName: TTT.UI.BottomMenu, UI
+        m_MethodName: OnTurnStarted
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2

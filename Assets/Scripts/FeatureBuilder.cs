@@ -116,6 +116,12 @@ public class FeatureBuilder : MonoBehaviour
             );
             return;
         }
+
+        if (!CheckCost(featureType))
+        {
+            Debug.LogWarning("Tried to build a feature that you cannot afford!");
+            return;
+        }
         
         if (checkForCost)
             DeductCost(featureType);
@@ -149,6 +155,7 @@ public class FeatureBuilder : MonoBehaviour
             Debug.LogWarning("Tried to build but couldn't find a HexCell");
             return false;
         }
+
 
         // build area
         HexCell[] adjacentTiles = MapManager
