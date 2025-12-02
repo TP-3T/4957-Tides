@@ -2,6 +2,7 @@ using TMPro;
 using TTT.DataClasses.States;
 using TTT.GameEvents;
 using TTT.Managers;
+using Unity.Netcode;
 using UnityEngine;
 
 public class GlobalInformation : MonoBehaviour
@@ -56,6 +57,7 @@ public class GlobalInformation : MonoBehaviour
 
     public void OnTurnEnded(Object args)
     {
+        Debug.Log($"[GlobalInformation] TURN WAS ENDED {NetworkManager.Singleton.LocalClientId}");
         if (args is not EndTurnEventArgs evArgs)
         {
             Debug.LogWarning("Turn ended args should be type EndTurnEventArgs");

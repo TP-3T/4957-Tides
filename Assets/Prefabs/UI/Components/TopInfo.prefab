@@ -843,6 +843,7 @@ GameObject:
   - component: {fileID: 2308424709469585023}
   - component: {fileID: 4860343872770080796}
   - component: {fileID: 5157633302747710541}
+  - component: {fileID: 4925506431826159887}
   m_Layer: 5
   m_Name: GlobalInformation
   m_TagString: Untagged
@@ -923,6 +924,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dateText: {fileID: 1257057631110287657}
   _CO2Text: {fileID: 902250130094468496}
+  playerStats: {fileID: 0}
+  pollutionToPpmMultiplier: 0.001
 --- !u!114 &4860343872770080796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -969,6 +972,34 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &4925506431826159887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4639673261099254899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: ae18fced95a4b6749b1a727654516355, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2308424709469585023}
+        m_TargetAssemblyTypeName: GlobalInformation, UI
+        m_MethodName: OnTurnEnded
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4748812185013218318
 GameObject:
   m_ObjectHideFlags: 0

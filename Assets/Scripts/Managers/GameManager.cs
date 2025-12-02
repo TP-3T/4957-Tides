@@ -9,6 +9,7 @@ using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.States;
 using TTT.GameEvents;
 using TTT.Helpers;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEditor.SearchService;
 using UnityEngine;
@@ -141,7 +142,7 @@ namespace TTT.Managers
         #region:RPC Definitions
 
         [Rpc(SendTo.ClientsAndHost)]
-        public void OnTurnEndingClientRpc()
+        public void OnTurnEndingClientRpc(int year, FixedString32Bytes season)
         {
             NetworkingInformationLog();
             // Debug.Log($"[GameManager] on client turn ending matches current {self == nextClient}");
@@ -150,8 +151,8 @@ namespace TTT.Managers
 
             endTurnEvent.Raise(new EndTurnEventArgs()
             {
-                Year = Year,
-                Season = Season
+                Year = year,
+                Season = season.ToString()
             });
         }
 
@@ -181,7 +182,7 @@ namespace TTT.Managers
             CurrentPlayerId.Value = nextPlayerId;
             FTTaken = true;
 
-            OnTurnEndingClientRpc();
+            OnTurnEndingClientRpc(Year, Season);
             StartNextTurnCilentRpc(RpcTarget.Single(nextPlayerId, RpcTargetUse.Temp));
         }
 
