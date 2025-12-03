@@ -18,14 +18,16 @@ namespace TTT.Helpers
         )
         {
             textAsset = new TextAsset();
-            if (filePath.IsNullOrEmpty())
+            if (
+                filePath.IsNullOrEmpty()
+                || !filePath.EndsWith(".json")
+                || File.Exists(filePath.TrimStart('.'))
+            )
             {
                 return false;
             }
 
-            using StreamReader sr = new(
-                "./Assets/Resources/" + filePath + ".json"
-            );
+            using StreamReader sr = new(filePath);
             textAsset = new TextAsset(sr.ReadToEnd());
             return true;
         }

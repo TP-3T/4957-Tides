@@ -107,7 +107,7 @@ namespace TTT.Player
 
         private void Start()
         {
-            CurrentUI = Instantiate(MainMenu);
+            // CurrentUI = Instantiate(MainMenu);
             Mode = InteractionMode.INSPECTING;
         }
 

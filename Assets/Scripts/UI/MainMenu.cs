@@ -1,5 +1,3 @@
-using System.IO;
-using Newtonsoft.Json;
 using TTT.GameEvents;
 using TTT.Helpers;
 using UnityEngine;
@@ -126,11 +124,13 @@ public class MainMenu : MonoBehaviour
         else
         {
             Debug.LogError($"Failed to load {selectedMap}");
+            ChangeActiveMenu(Mainmenu);
         }
     }
 
     public void OpenGameUI()
     {
+        LoadingScreen.SetActive(false);
         ChangeActiveMenu(GameUI);
     }
 
