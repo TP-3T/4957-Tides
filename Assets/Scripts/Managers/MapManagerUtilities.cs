@@ -156,6 +156,13 @@ namespace TTT.Managers
 
         private void SpawnGridMesh(GameObject hm)
         {
+            // Only server spawns NetworkObjects
+            if (!NetworkManager.Singleton.IsServer)
+            {
+                Debug.Log("[MapManager] Client skipping hex mesh spawn (server will handle it)");
+                return;
+            }
+
             // Get reference to HexMesh prefab
             GameObject hexMeshGameObject = Instantiate(hm);
             HexMesh hexMeshInstance = hexMeshGameObject.GetComponent<HexMesh>();
@@ -168,12 +175,21 @@ namespace TTT.Managers
                 0.0f
             );
             _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
+            Debug.Log($"[MapManager] Server spawned hex mesh with ID: {_hexMeshId.Value}");
 
+            // Server also triangulates for itself
             TriangulateHexMeshClientRpc();
         }
 
         private void SpawnSeaMesh(GameObject sm)
         {
+            // Only server spawns NetworkObjects
+            if (!NetworkManager.Singleton.IsServer)
+            {
+                Debug.Log("[MapManager] Client skipping sea mesh spawn (server will handle it)");
+                return;
+            }
+
             // Get reference to SeaMesh prefab
             GameObject seaMeshGameObject = Instantiate(sm);
             SeaMesh seaMeshInstance = seaMeshGameObject.GetComponent<SeaMesh>();
@@ -181,7 +197,9 @@ namespace TTT.Managers
             // Instance SeaMesh prefab based off of the
             seaMeshInstance.GetComponent<NetworkObject>().Spawn();
             _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
+            Debug.Log($"[MapManager] Server spawned sea mesh with ID: {_seaMeshId.Value}");
 
+            // Server also triangulates for itself
             TriangulateSeaMeshClientRpc();
         }
 

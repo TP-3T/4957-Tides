@@ -101,6 +101,77 @@ namespace TTT.Managers
                 CacheFeatureType
             );
             yield return buildingRoutine;
+
+            // Subscribe to NetworkVariable changes so clients triangulate when mesh IDs are received
+            _hexMeshId.OnValueChanged += OnHexMeshIdChanged;
+            _seaMeshId.OnValueChanged += OnSeaMeshIdChanged;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            // Unsubscribe from NetworkVariable changes
+            _hexMeshId.OnValueChanged -= OnHexMeshIdChanged;
+            _seaMeshId.OnValueChanged -= OnSeaMeshIdChanged;
+        }
+
+        private void OnHexMeshIdChanged(ulong oldValue, ulong newValue)
+        {
+            // When client receives mesh ID from server, triangulate it
+            if (!NetworkManager.Singleton.IsServer && newValue != 0)
+            {
+                Debug.Log($"[MapManager] Client received hex mesh ID: {newValue}, waiting to triangulate...");
+                StartCoroutine(WaitAndTriangulateHexMesh());
+            }
+        }
+
+        private void OnSeaMeshIdChanged(ulong oldValue, ulong newValue)
+        {
+            // When client receives mesh ID from server, triangulate it
+            if (!NetworkManager.Singleton.IsServer && newValue != 0)
+            {
+                Debug.Log($"[MapManager] Client received sea mesh ID: {newValue}, waiting to triangulate...");
+                StartCoroutine(WaitAndTriangulateSeaMesh());
+            }
+        }
+
+        private IEnumerator WaitAndTriangulateHexMesh()
+        {
+            // Wait until the NetworkObject is spawned and available on client
+            while (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(_hexMeshId.Value))
+            {
+                yield return null;
+            }
+
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                _hexMeshId.Value,
+                out NetworkObject hexMeshNetworkObject))
+            {
+                HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
+                hexMeshInstance.Triangulate(HexCells, MapManager.HexSize, MapManager.HexOrientation);
+                Debug.Log("[MapManager] Client successfully triangulated hex mesh");
+                
+                // Spawn features after triangulation
+                StartCoroutine(SpawnPendingFeaturesAsync());
+            }
+        }
+
+        private IEnumerator WaitAndTriangulateSeaMesh()
+        {
+            // Wait until the NetworkObject is spawned and available on client
+            while (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(_seaMeshId.Value))
+            {
+                yield return null;
+            }
+
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                _seaMeshId.Value,
+                out NetworkObject seaMeshNetworkObject))
+            {
+                SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
+                seaMeshInstance.Triangulate(HexCells, GameManager.Instance.SeaLevel.Value, MapManager.HexSize, MapManager.HexOrientation);
+                Debug.Log("[MapManager] Client successfully triangulated sea mesh");
+            }
         }
 
         private void CacheFeatureType(FeatureType featureType)
