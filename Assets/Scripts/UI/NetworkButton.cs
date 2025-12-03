@@ -65,7 +65,7 @@ public class NetworkButton : MonoBehaviour
             }
         }
 
-        Debug.Log($"[NetworkButton] Connecting to {ipAddress}:{port}");
+        // Debug.Log($"[NetworkButton] Connecting to {ipAddress}:{port}");
         StartClient(ipAddress, port);
     }
 

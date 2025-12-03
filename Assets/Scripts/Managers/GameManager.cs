@@ -105,9 +105,9 @@ namespace TTT.Managers
             GlobalInformation newI
         )
         {
-            Debug.Log(
-                $"[GameManager] global information modified. old {oldI}, new {newI}"
-            );
+            // Debug.Log(
+            //     $"[GameManager] global information modified. old {oldI}, new {newI}"
+            // );
         }
 
         #region:Utility
@@ -134,9 +134,9 @@ namespace TTT.Managers
 
         private void EndYear()
         {
-            Debug.Log(
-                "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
-            );
+            // Debug.Log(
+            //     "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
+            // );
 
             Year += 1;
 
@@ -175,9 +175,9 @@ namespace TTT.Managers
         [Rpc(SendTo.SpecifiedInParams)]
         public void StartNextTurnCilentRpc(RpcParams paramS = default)
         {
-            Debug.Log(
-                $"[GameManager] cilent rpc IT SHOULD ONLY BE ME {NetworkManager.Singleton.LocalClientId}"
-            );
+            // Debug.Log(
+            //     $"[GameManager] cilent rpc IT SHOULD ONLY BE ME {NetworkManager.Singleton.LocalClientId}"
+            // );
             startTurnEvent.Raise();
         }
 
@@ -235,7 +235,7 @@ namespace TTT.Managers
                 {
                     // For host, use "0.0.0.0" as listen address to accept connections on all interfaces
                     transport.SetConnectionData(cleanIp, args.Port, cleanIp);
-                    Debug.Log($"Starting host on {cleanIp}:{args.Port}");
+                    // Debug.Log($"Starting host on {cleanIp}:{args.Port}");
                     NetworkManager.Singleton.StartHost();
                     CurrentPlayerId.Value = NetworkManager.Singleton.LocalClientId;
                 }
@@ -243,7 +243,7 @@ namespace TTT.Managers
                 {
                     // For client, use the IP as the listen address parameter (not actually used by client)
                     transport.SetConnectionData(cleanIp, args.Port, cleanIp);
-                    Debug.Log($"Starting client connecting to {cleanIp}:{args.Port}");
+                    // Debug.Log($"Starting client connecting to {cleanIp}:{args.Port}");
                     NetworkManager.Singleton.StartClient();
                 }
             }
@@ -265,7 +265,7 @@ namespace TTT.Managers
 
         public void OnPlayerLose(Object _)
         {
-            Debug.Log("Player has lost the game.");
+            // Debug.Log("Player has lost the game.");
         }
 
         public bool CanEndTurn()

@@ -120,7 +120,7 @@ namespace TTT.Managers
             // When client receives mesh ID from server, triangulate it
             if (!NetworkManager.Singleton.IsServer && newValue != 0)
             {
-                Debug.Log($"[MapManager] Client received hex mesh ID: {newValue}, waiting to triangulate...");
+                // Debug.Log($"[MapManager] Client received hex mesh ID: {newValue}, waiting to triangulate...");
                 StartCoroutine(WaitAndTriangulateHexMesh());
             }
         }
@@ -130,7 +130,7 @@ namespace TTT.Managers
             // When client receives mesh ID from server, triangulate it
             if (!NetworkManager.Singleton.IsServer && newValue != 0)
             {
-                Debug.Log($"[MapManager] Client received sea mesh ID: {newValue}, waiting to triangulate...");
+                // Debug.Log($"[MapManager] Client received sea mesh ID: {newValue}, waiting to triangulate...");
                 StartCoroutine(WaitAndTriangulateSeaMesh());
             }
         }
@@ -149,7 +149,7 @@ namespace TTT.Managers
             {
                 HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
                 hexMeshInstance.Triangulate(HexCells, MapManager.HexSize, MapManager.HexOrientation);
-                Debug.Log("[MapManager] Client successfully triangulated hex mesh");
+                // Debug.Log("[MapManager] Client successfully triangulated hex mesh");
                 
                 // Spawn features after triangulation
                 StartCoroutine(SpawnPendingFeaturesAsync());
@@ -170,7 +170,7 @@ namespace TTT.Managers
             {
                 SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
                 seaMeshInstance.Triangulate(HexCells, GameManager.Instance.SeaLevel.Value, MapManager.HexSize, MapManager.HexOrientation);
-                Debug.Log("[MapManager] Client successfully triangulated sea mesh");
+                // Debug.Log("[MapManager] Client successfully triangulated sea mesh");
             }
         }
 
@@ -501,7 +501,7 @@ namespace TTT.Managers
 
         public void OnFlood(UnityEngine.Object _)
         {
-            Debug.Log("Flood Event Triggered - MapManager line 261");
+            // Debug.Log("Flood Event Triggered - MapManager line 261");
 
             StartRaiseSeaServerRpc();
         }

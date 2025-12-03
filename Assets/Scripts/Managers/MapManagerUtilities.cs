@@ -159,7 +159,7 @@ namespace TTT.Managers
             // Only server spawns NetworkObjects
             if (!NetworkManager.Singleton.IsServer)
             {
-                Debug.Log("[MapManager] Client skipping hex mesh spawn (server will handle it)");
+                // Debug.Log("[MapManager] Client skipping hex mesh spawn (server will handle it)");
                 return;
             }
 
@@ -175,7 +175,7 @@ namespace TTT.Managers
                 0.0f
             );
             _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
-            Debug.Log($"[MapManager] Server spawned hex mesh with ID: {_hexMeshId.Value}");
+            // Debug.Log($"[MapManager] Server spawned hex mesh with ID: {_hexMeshId.Value}");
 
             // Server also triangulates for itself
             TriangulateHexMeshClientRpc();
@@ -186,7 +186,7 @@ namespace TTT.Managers
             // Only server spawns NetworkObjects
             if (!NetworkManager.Singleton.IsServer)
             {
-                Debug.Log("[MapManager] Client skipping sea mesh spawn (server will handle it)");
+                // Debug.Log("[MapManager] Client skipping sea mesh spawn (server will handle it)");
                 return;
             }
 
@@ -197,7 +197,7 @@ namespace TTT.Managers
             // Instance SeaMesh prefab based off of the
             seaMeshInstance.GetComponent<NetworkObject>().Spawn();
             _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
-            Debug.Log($"[MapManager] Server spawned sea mesh with ID: {_seaMeshId.Value}");
+            // Debug.Log($"[MapManager] Server spawned sea mesh with ID: {_seaMeshId.Value}");
 
             // Server also triangulates for itself
             TriangulateSeaMeshClientRpc();
@@ -268,7 +268,7 @@ namespace TTT.Managers
                     while (AboveSeaLevelQueue.Count > 0)
                         FloodQueue.Enqueue(AboveSeaLevelQueue.Dequeue());
 
-                    Debug.Log("Flood fill cycle complete");
+                    // Debug.Log("Flood fill cycle complete");
 
                     break;
                 }
@@ -325,7 +325,7 @@ namespace TTT.Managers
         {
             if (_featureTypesByUniqueId.Keys.Count <= 0)
             {
-                Debug.LogWarning("feature types didn't load");
+                // Debug.LogWarning("feature types didn't load");
                 yield break;
             }
 
@@ -334,9 +334,9 @@ namespace TTT.Managers
             Dictionary<string, int> featureTypeCounts =
                 new Dictionary<string, int>();
 
-            Debug.Log(
-                $"Starting async spawn of {_pendingFeatures.Count} features..."
-            );
+            // Debug.Log(
+            //     $"Starting async spawn of {_pendingFeatures.Count} features..."
+            // );
 
             foreach (var featureNet in _pendingFeaturesGoated)
             {
@@ -373,19 +373,19 @@ namespace TTT.Managers
                 }
                 else
                 {
-                    Debug.LogWarning(
-                        $"skipped unknown feature '{featureIdS}' at {featureNet.FeaturePosition}"
-                    ); //THis basically never happens but I put this here just in case :/
+                    // Debug.LogWarning(
+                    //     $"skipped unknown feature '{featureIdS}' at {featureNet.FeaturePosition}"
+                    // ); //THis basically never happens but I put this here just in case :/
                 }
             }
 
             if (spawnedCount > 0)
             {
-                Debug.Log($"Finished spawning {spawnedCount} features:");
-                foreach (var kvp in featureTypeCounts)
-                {
-                    Debug.Log($"  {kvp.Key}: {kvp.Value}");
-                }
+                // Debug.Log($"Finished spawning {spawnedCount} features:");
+                // foreach (var kvp in featureTypeCounts)
+                // {
+                //     Debug.Log($"  {kvp.Key}: {kvp.Value}");
+                // }
             }
 
             // _pendingFeatures.Clear();

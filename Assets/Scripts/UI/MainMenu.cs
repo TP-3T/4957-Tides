@@ -50,7 +50,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenJoinMenu()
     {
-        Debug.Log("Clicked join button!");
+        // Debug.Log("Clicked join button!");
         ChangeActiveMenu(JoinMenu);
     }
 
@@ -59,7 +59,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenCreateMenu()
     {
-        Debug.Log("Clicked create button!");
+        // Debug.Log("Clicked create button!");
         ChangeActiveMenu(CreateMenu);
     }
 
@@ -68,7 +68,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenLobbyRoomMenu()
     {
-        Debug.Log("Clicked single player!");
+        // Debug.Log("Clicked single player!");
         ChangeActiveMenu(LobbyRoom);
     }
 
@@ -77,7 +77,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenSettingsMenu()
     {
-        Debug.Log("Clicked settings!");
+        // Debug.Log("Clicked settings!");
         ChangeActiveMenu(SettingsMenu);
     }
 
@@ -86,7 +86,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenMultiplayerMenu()
     {
-        Debug.Log("Clicked multiplayer!");
+        // Debug.Log("Clicked multiplayer!");
         ChangeActiveMenu(MultiplayerMenu);
     }
 
@@ -103,7 +103,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenMapBrowserMenu()
     {
-        Debug.Log("Clicked map browser!");
+        // Debug.Log("Clicked map browser!");
         ChangeActiveMenu(MapBrowserMenu);
     }
 
@@ -112,7 +112,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void StartGameMenu()
     {
-        Debug.Log("Clicked Start Game!");
+        // Debug.Log("Clicked Start Game!");
         ChangeActiveMenu(LoadingScreen);
         MenuBackground.SetActive(true);
         // Defer map loading until after network starts (handled post-host/client start)
@@ -125,7 +125,7 @@ public class MainMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("Quitting game...");
+        // Debug.Log("Quitting game...");
         Application.Quit();
     }
 
@@ -160,13 +160,13 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenMainMenu()
     {
-        Debug.Log("Clicked Start Game!");
+        // Debug.Log("Clicked Start Game!");
         ChangeActiveMenu(Mainmenu);
     }
 
     public void SillyFunction(string msg)
     {
-        Debug.LogWarning(msg);
+        // Debug.LogWarning(msg);
     }
 
 
