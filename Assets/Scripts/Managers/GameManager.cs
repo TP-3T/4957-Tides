@@ -65,9 +65,6 @@ namespace TTT.Managers
         private GameEvent endingYearEvent;
 
         [SerializeField]
-        private GameEvent newMapEvent;
-
-        [SerializeField]
         private GameEvent BuildingFeatureEvent;
 
         [SerializeField]
@@ -123,27 +120,6 @@ namespace TTT.Managers
             // Debug.Log($"[GameManager] client rpc, connected players {NetworkManager.Singleton.ConnectedClientsList.Count}");
             // Debug.Log($"[GameManager] client rpc, current player id {self.ClientId}");
             // Debug.Log($"[GameManager] client rpc, current turn guy {CurrentPlayerId}");
-        }
-
-        private void StartGameClient()
-        {
-            NetworkManager.Singleton.StartClient();
-        }
-
-        private void StartGameHost()
-        {
-            NetworkManager.Singleton.StartHost();
-
-            // if (LoadExternalJson.TryGetDataJson(out TextAsset newMap))
-            // {
-            //     newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
-            // }
-            // else
-            // {
-            //     throw new IOException("Could not load file.");
-            // }
-
-            CurrentPlayerId.Value = NetworkManager.Singleton.LocalClientId;
         }
 
         /// <summary>
@@ -236,23 +212,28 @@ namespace TTT.Managers
         public void OnStartNetworkEvent(Object eventArgs)
         {
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
-            Debug.Log("Starting network...");
-            Debug.Log($"IsHost: {args.IsHost}");
             try
             {
+                // Configure transport with IP and Port from args
+                var transport = NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
+                transport.ConnectionData.Address = args.Ip;
+                transport.ConnectionData.Port = args.Port;
+
                 if (args.IsHost)
                 {
-                    Debug.Log("me host :))");
-                    StartGameHost();
+                    Debug.Log($"Starting host on {args.Ip}:{args.Port}");
+                    NetworkManager.Singleton.StartHost();
+                    CurrentPlayerId.Value = NetworkManager.Singleton.LocalClientId;
                 }
                 else
                 {
-                    StartGameClient();
+                    Debug.Log($"Starting client connecting to {args.Ip}:{args.Port}");
+                    NetworkManager.Singleton.StartClient();
                 }
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"Failed to start host: {e.Message}");
+                Debug.LogError($"Failed to start network: {e.Message}");
                 return;
             }
         }

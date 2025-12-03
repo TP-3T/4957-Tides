@@ -4,22 +4,32 @@ using UnityEngine;
 public class NetworkButton : MonoBehaviour
 {
     [SerializeField]
-    public GameEvent startNetworkEvent;
+    public GameEvent newMapEvent;
 
-    public void OnStartServer()
+    [SerializeField]
+    private MainMenu MainMenu;
+    
+    private string selectedMap;
+
+    void Start()
     {
-        Debug.Log("I am being clicked");
-        startNetworkEvent.Raise(new StartNetworkEventArgs() { IsHost = true });
+        selectedMap = MainMenu.selectedMap;
     }
 
-    public void OnStartClient()
-    {
-        Debug.Log("I am being clicked");
-        startNetworkEvent.Raise(new StartNetworkEventArgs() { IsHost = false });
-    }
 
-    public void OnMapLoad(Object eventArgs)
+
+    public void OnMapLoad()
     {
         gameObject.SetActive(false);
+        
+        // Get the selected map from MainMenu and raise the event with it
+        if (MainMenu.selectedMap != null)
+        {
+            // newMapEvent.Raise(new NewMapEventArgs() { DataFile = MainMenu.selectedMap });
+        }
+        else
+        {
+            Debug.LogError("[NetworkButton] No map selected in MainMenu");
+        }
     }
 }

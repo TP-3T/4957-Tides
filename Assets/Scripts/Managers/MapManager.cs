@@ -115,26 +115,6 @@ namespace TTT.Managers
                 _featureTypesByUniqueId.Add(featureType.UniqueID, featureType);
             }
         }
-
-        public override void OnNetworkSpawn()
-        {
-            NetworkManager.Singleton.OnClientConnectedCallback +=
-                OnClientConnect;
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            if (NetworkManager.Singleton != null)
-            {
-                NetworkManager.Singleton.OnClientConnectedCallback -=
-                    OnClientConnect;
-            }
-
-            // Release all loaded Addressable assets to prevent memory leaks
-            AssetLoader<GameObject>.ReleaseAll();
-            AssetLoader<FeatureType>.ReleaseAll();
-        }
-
         #region:RPC Definitions
 
         [Rpc(SendTo.ClientsAndHost)]
@@ -167,6 +147,13 @@ namespace TTT.Managers
                 Location = cellPosition,
             };
             _onFeatureRemoved.Raise(rmArgs);
+        }
+
+
+        public void TriangulateMeshes()
+        {
+            TriangulateHexMeshClientRpc();
+            TriangulateSeaMeshClientRpc();
         }
 
         [ClientRpc]
@@ -433,15 +420,6 @@ namespace TTT.Managers
                 _mapLoadFinishEvent.Raise(
                     new NewMapFinishedEventArgs() { WasSuccessful = false }
                 );
-            }
-        }
-
-        public void OnClientConnect(ulong clientId)
-        {
-            if (IsClient)
-            {
-                TriangulateHexMeshClientRpc();
-                TriangulateSeaMeshClientRpc();
             }
         }
 
