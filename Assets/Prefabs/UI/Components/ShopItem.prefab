@@ -1427,6 +1427,7 @@ GameObject:
   - component: {fileID: 6266292366093410534}
   - component: {fileID: 1849591943704540561}
   - component: {fileID: 8182804029425451958}
+  - component: {fileID: 7530068031616082311}
   m_Layer: 5
   m_Name: ShopItem
   m_TagString: Untagged
@@ -1586,6 +1587,26 @@ MonoBehaviour:
   hexConstraintRestrictedIcon: {fileID: 21300000, guid: 537aef247469f674dba60f3a904da38d, type: 3}
   hexConstraintHexContainer: {fileID: 8033875447301748715}
   InteractModeChange: {fileID: 11400000, guid: 53831617160b4ed4f9fe4ba754f965d8, type: 2}
+--- !u!114 &7530068031616082311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5876843518120190640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 560
+  m_PreferredHeight: 280
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &6028885641320342278
 GameObject:
   m_ObjectHideFlags: 0

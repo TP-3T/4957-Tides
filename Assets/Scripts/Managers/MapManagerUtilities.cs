@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TTT.DataClasses;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
@@ -16,6 +18,12 @@ namespace TTT.Managers
     /// </summary>
     public partial class MapManager
     {
+        [SerializeField]
+        private GameEvent DestroyingFeatureEvent;
+
+        [SerializeField]
+        private GameEvent AudioEvent;
+
         [SerializeField]
         private FeatureRuntimeSet spawnedFeatures;
 
@@ -220,8 +228,6 @@ namespace TTT.Managers
         /// </summary>
         public IEnumerator RaiseSea()
         {
-            SeaLevel.Value += RisingRate.Value;
-
             // update spawned features cache before flooding
             spawnedFeaturesCache = spawnedFeatures.GetItems();
 
@@ -233,9 +239,10 @@ namespace TTT.Managers
                     {
                         HexCell test = FloodQueue.Dequeue();
 
+                        //! CB: No braces on if/else! Bad style :C
                         if (
                             test.CellPosition.y
-                            <= (SeaLevel.Value + RisingRate.Value)
+                            <= GameManager.Instance.SeaLevel.Value
                         )
                             ToFlood.Enqueue(test);
                         else
@@ -268,7 +275,10 @@ namespace TTT.Managers
                             || FloodQueue.Contains(neighbor)
                         )
                             continue;
-                        if (neighbor.CellPosition.y <= SeaLevel.Value)
+                        if (
+                            neighbor.CellPosition.y
+                            <= GameManager.Instance.SeaLevel.Value
+                        )
                             ToFlood.Enqueue(neighbor);
                         else
                             FloodQueue.Enqueue(neighbor);
@@ -278,12 +288,17 @@ namespace TTT.Managers
                 }
 
                 TriangulateSeaMeshClientRpc(flooded.ToArray());
-
+                AudioEvent.Raise(
+                    new AudioEventArgs()
+                    {
+                        Type = AudioTypes.ONESHOT,
+                        ToPlay = "water_rise",
+                    }
+                );
                 yield return null;
             }
 
             onFloodEnded.Raise();
-            //says unreachable but it is
         }
 
         /// <summary>

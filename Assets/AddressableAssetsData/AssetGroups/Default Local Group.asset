@@ -82,7 +82,8 @@ MonoBehaviour:
   - m_GUID: a574734cbcc1411429593620b463cc3a
     m_Address: P_HexMesh
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - ui
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d2fc9cdc2eae8f04181273b343e0526f
     m_Address: B_Nuclear
@@ -90,11 +91,21 @@ MonoBehaviour:
     m_SerializedLabels:
     - building
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd6d90409f7c7794fba168c476fe98d8
+    m_Address: Assets/SO/MenuUI/LobbyEntry.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e5d9312cc2bc86247ba1cd8b25efa927
     m_Address: B_Wind
     m_ReadOnly: 0
     m_SerializedLabels:
     - building
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec1b89087c1d471438bf790255db6493
+    m_Address: UI_MainMenuButton
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: dc847a122f093dc4080e470c320f582d, type: 2}

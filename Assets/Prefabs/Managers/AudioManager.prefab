@@ -90,7 +90,7 @@ AudioSource:
   m_GameObject: {fileID: 2634174782925569582}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 3039014484019229160, guid: 088fbb5a6fdb40643a3dedb6a476e093, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -219,7 +219,7 @@ AudioSource:
   m_GameObject: {fileID: 3242763182274600838}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -8817680908394968952, guid: 088fbb5a6fdb40643a3dedb6a476e093, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -348,7 +348,7 @@ AudioSource:
   m_GameObject: {fileID: 6246118570779891074}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -444733584939180285, guid: 088fbb5a6fdb40643a3dedb6a476e093, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -477,7 +477,7 @@ AudioSource:
   m_GameObject: {fileID: 7024657368059590143}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1892399615144303449, guid: 088fbb5a6fdb40643a3dedb6a476e093, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -574,8 +574,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6746348735589005830}
-  - component: {fileID: 4993364270956350341}
   - component: {fileID: 1626378204067455568}
+  - component: {fileID: 4691896574836297430}
+  - component: {fileID: 7001830905837718955}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -601,31 +602,6 @@ Transform:
   - {fileID: 1989170171335921111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4993364270956350341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8346006429926495666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2418718486
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!114 &1626378204067455568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -659,7 +635,68 @@ MonoBehaviour:
   AmbienceFadingPlayer: {fileID: 2526911699916503797}
   MusicEntries:
   - {fileID: 11400000, guid: 48ccbea2650d71548a402d7546673a11, type: 2}
+  - {fileID: 11400000, guid: b7ab9a49cf7b0b4438c695f508485ca0, type: 2}
+  - {fileID: 11400000, guid: cedd2cae6ad4b8547a6e059888563d3d, type: 2}
+  - {fileID: 11400000, guid: 11e57eb7cae234647bcb80f74953e520, type: 2}
+  - {fileID: 11400000, guid: 6dae5148da766704eb51ab4be3cc75e9, type: 2}
+  - {fileID: 11400000, guid: 0e684b8f1888b6440b7f969d16d8ceb5, type: 2}
   MusicFadingPlayer: {fileID: 7715076949276073071}
+--- !u!114 &4691896574836297430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8346006429926495666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 495e94ea5e938534bb5d3fdc6bfc2083, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1626378204067455568}
+        m_TargetAssemblyTypeName: TTT.Managers.AudioManager, TTT.Managers
+        m_MethodName: OnPlayAudioEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7001830905837718955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8346006429926495666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: ecc6c0b36e43a784d8e35592e9f55032, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1626378204067455568}
+        m_TargetAssemblyTypeName: TTT.Managers.AudioManager, TTT.Managers
+        m_MethodName: OnSystemStateChange
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8621904314381307518
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,7 +738,7 @@ AudioSource:
   m_GameObject: {fileID: 8621904314381307518}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1273042183861508796, guid: 088fbb5a6fdb40643a3dedb6a476e093, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0

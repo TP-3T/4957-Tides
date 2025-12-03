@@ -89,7 +89,7 @@ namespace TTT.UI
 
             // Accumulators for each resource type
             int totalMoneyRevenue = 0;
-            int totalPollutionRevenue = 0;
+            float totalPollutionRevenue = 0.0f;
             int totalMoneyCost = 0; // po: why everything to do with this unused?
             int totalEnergyCost = 0;
             int totalPopulationCost = 0;
@@ -133,7 +133,7 @@ namespace TTT.UI
             }
 
             //This should be a resource producer IMO, but I'm not changing it now
-            if (feature.PollutionEmission > 0)
+            if (feature.PollutionEmission > 0.0f)
                 totalPollutionRevenue += feature.PollutionEmission;
 
             UpdateConstraintIcons();
@@ -230,7 +230,7 @@ namespace TTT.UI
                 moneyRevText?.SetText(revenue.ToString());
         }
 
-        private void SetPollutionDisplay(int revenue)
+        private void SetPollutionDisplay(float revenue)
         {
             if (revenue > 0)
                 pollRevText?.SetText(revenue.ToString());

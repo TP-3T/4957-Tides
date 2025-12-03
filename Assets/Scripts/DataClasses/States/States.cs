@@ -9,6 +9,7 @@ namespace TTT.DataClasses.States
         MAIN_MENU,
         SAVING,
         LOADING,
+        PAUSED,
 
         // For multiplayer
         LOBBY,
@@ -47,5 +48,20 @@ namespace TTT.DataClasses.States
         INSPECTING,
         DESTROYING,
         BUILDING,
+    }
+
+    public enum AudioTypes
+    {
+        ONESHOT,
+        AMBIENCE,
+        MUSIC,
+    }
+
+    public enum Seasons
+    {
+        Spring,
+        Summer,
+        Fall,
+        Winter,
     }
 }

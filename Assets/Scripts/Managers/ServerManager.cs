@@ -26,6 +26,14 @@ namespace TTT.Managers
             networkManager.OnClientConnectedCallback += this.OnClientConnected;
         }
 
+        private void OnDestroy()
+        {
+            if (networkManager != null)
+            {
+                networkManager.OnClientConnectedCallback -= this.OnClientConnected;
+            }
+        }
+
         private void OnClientConnected(ulong ClientId)
         {
             NetworkClient client = networkManager.ConnectedClients[ClientId];

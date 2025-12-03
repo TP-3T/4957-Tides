@@ -1,6 +1,7 @@
 using System.IO;
 using SFB;
 using UnityEngine;
+using WebSocketSharp;
 
 namespace TTT.Helpers
 {
@@ -10,6 +11,24 @@ namespace TTT.Helpers
         {
             new SFB.ExtensionFilter("Data File", new string[] { "json" }),
         };
+
+        public static bool TryGetMapJson(
+            string filePath,
+            out TextAsset textAsset
+        )
+        {
+            textAsset = new TextAsset();
+            if (filePath.IsNullOrEmpty())
+            {
+                return false;
+            }
+
+            using StreamReader sr = new(
+                "./Assets/Resources/" + filePath + ".json"
+            );
+            textAsset = new TextAsset(sr.ReadToEnd());
+            return true;
+        }
 
         public static bool TryGetDataJson(out TextAsset textAsset)
         {

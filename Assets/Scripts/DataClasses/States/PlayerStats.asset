@@ -12,14 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b508dae1fc299314a8ef29357eceb2fb, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  <money>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
-  <power>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-  <population>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
-  <pollution>k__BackingField: {fileID: 11400000, guid: 42ab95fe1d4a97c45ac3c75ab8416f38, type: 2}
-  startingMoney: 500
-  startingPower: 0
-  startingPopulation: 0
-  startingPollution: 0
+  <Money>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
+  <Power>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
+  <Population>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
+  <Pollution>k__BackingField: {fileID: 11400000, guid: 42ab95fe1d4a97c45ac3c75ab8416f38, type: 2}
+  pollutionToSeaLevelFactor: 0.001
+  baseSeaLevelRiseRate: 0.05
   selectedTileData:
     Feature: 
     TileType: 0

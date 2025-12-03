@@ -15,7 +15,7 @@ MonoBehaviour:
   <UniqueID>k__BackingField: coal
   <Category>k__BackingField: 2
   <DisplayName>k__BackingField: Coal Power
-  <PollutionEmission>k__BackingField: 300
+  <PollutionEmission>k__BackingField: 10
   <Constraints>k__BackingField:
     <MaximumHeight>k__BackingField: 750
     <TerrainConstraints>k__BackingField:
@@ -24,20 +24,17 @@ MonoBehaviour:
       - {fileID: 11400000, guid: df18eb8c24270bf468df79b96fb1553c, type: 2}
       - {fileID: 11400000, guid: 112d508e3d5328640b53bbbf9e6ff1d6, type: 2}
       - {fileID: 11400000, guid: da73337ffc743494987e98ff083029ef, type: 2}
+      - {fileID: 11400000, guid: 642c9db17390d884c842f1eebd96973d, type: 2}
     <FeatureConstraints>k__BackingField: []
   <BuildValidator>k__BackingField: {fileID: 11400000, guid: 418d17bf1c05a9c40aff3428a267cd49, type: 2}
   <ResourceProducers>k__BackingField:
   - <ProductionSchedule>k__BackingField: {fileID: 11400000, guid: edef3b431516b8048a30517cd2383a7b, type: 2}
     <ResourceAmounts>k__BackingField:
     - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
-      <Count>k__BackingField: 20
-  - <ProductionSchedule>k__BackingField: {fileID: 11400000, guid: 17a0647e21e0cef458dc0b557a3a7cbe, type: 2}
-    <ResourceAmounts>k__BackingField:
-    - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
-      <Count>k__BackingField: -5
+      <Count>k__BackingField: 10
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
-    <Count>k__BackingField: 20
+    <Count>k__BackingField: 100
   - <Thing>k__BackingField: {fileID: 11400000, guid: 308a716550260c640b0eeca75cad67c4, type: 2}
     <Count>k__BackingField: 5
   - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}

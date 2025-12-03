@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
+using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
@@ -29,7 +30,7 @@ public class FeatureBuilder : MonoBehaviour
     public FeatureRuntimeSet SpawnedFeatures;
 
     [SerializeField]
-    private TTT.DataClasses.States.PlayerStats playerStats;
+    private PlayerStats playerStats;
 
     private const float hexCellPadding = 0.05f;
 
@@ -103,9 +104,15 @@ public class FeatureBuilder : MonoBehaviour
         ulong ownerId
     )
     {
-        if (ownedByClient && checkForCost && !CheckCost(featureType, out string insufficientResource))
+        if (
+            ownedByClient
+            && checkForCost
+            && !CheckCost(featureType, out string insufficientResource)
+        )
         {
-            Debug.LogWarning($"Cannot afford {featureType.name}. Insufficient {insufficientResource}.");
+            Debug.LogWarning(
+                $"Cannot afford {featureType.name}. Insufficient {insufficientResource}."
+            );
             return;
         }
 
@@ -196,7 +203,10 @@ public class FeatureBuilder : MonoBehaviour
         return CheckCost(featureType, out _);
     }
 
-    private bool CheckCost(FeatureType featureType, out string insufficientResource)
+    private bool CheckCost(
+        FeatureType featureType,
+        out string insufficientResource
+    )
     {
         insufficientResource = string.Empty;
         foreach (var resourceCost in featureType.Cost)
@@ -209,7 +219,8 @@ public class FeatureBuilder : MonoBehaviour
             PlayerResource resource = resourceCost.Thing;
             if (resource.AmountOwned < resourceCost.Count)
             {
-                insufficientResource = $"{resource.Name} (Need: {resourceCost.Count}, Have: {resource.AmountOwned})";
+                insufficientResource =
+                    $"{resource.Name} (Need: {resourceCost.Count}, Have: {resource.AmountOwned})";
                 return false;
             }
         }
@@ -246,9 +257,13 @@ public class FeatureBuilder : MonoBehaviour
         }
 
         // Automatically handle pollution emission if feature has PollutionEmission
-        if (featureType.PollutionEmission != 0 && playerStats != null && playerStats.pollution != null)
+        if (
+            featureType.PollutionEmission != 0
+            && GameManager.Instance.CO2_Pollution != null
+        )
         {
-            playerStats.pollution.ApplyChange(featureType.PollutionEmission);
+            GameManager.Instance.CO2_Pollution.Value +=
+                featureType.PollutionEmission;
         }
     }
 
@@ -278,13 +293,13 @@ public class FeatureBuilder : MonoBehaviour
 
         Bounds modelBounds;
         Vector3 center;
-        try
+        if (modelInstance.TryGetComponent(out Renderer meshRenderer))
         {
             // prefab with one renderer at the top level
-            modelBounds = modelInstance.GetComponent<Renderer>().bounds;
+            modelBounds = meshRenderer.bounds;
             center = modelBounds.center;
         }
-        catch (MissingComponentException)
+        else
         {
             // prefab with many child renderers
             MeshRenderer[] renderers =
@@ -310,6 +325,7 @@ public class FeatureBuilder : MonoBehaviour
 
         Vector3 modelSize = modelBounds.size;
         float modelLength = Hypotenuse(modelSize.x, modelSize.y);
+        //! CB: Scale Factor becomes Infinity because divide by zero issue.
         float scaleFactor = 2 * hexCellSize / modelLength;
 
         // move
@@ -324,6 +340,7 @@ public class FeatureBuilder : MonoBehaviour
         GameObject parent = new($"{modelInstance.name} (Parent)");
         parent.transform.position = location;
         modelInstance.transform.SetParent(parent.transform);
+        parent.transform.parent = this.transform;
 
         // scale (the parent, not the model)
         Vector3 displayScale = new(scaleFactor, scaleFactor, scaleFactor);

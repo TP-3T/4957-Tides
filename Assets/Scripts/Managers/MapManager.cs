@@ -94,10 +94,14 @@ namespace TTT.Managers
 
         private bool _featuresLoaded = false;
 
-        void Start()
+        IEnumerator Start()
         {
             lineRenderer = GetComponent<LineRenderer>();
-            StartCoroutine(LoadFeatureTypes());
+            var buildingRoutine = AssetLoader<FeatureType>.LoadGroup(
+                "building",
+                CacheFeatureType
+            );
+            yield return buildingRoutine;
         }
 
         private void CacheFeatureType(FeatureType featureType)
@@ -107,7 +111,7 @@ namespace TTT.Managers
                 && !string.IsNullOrEmpty(featureType.UniqueID)
             )
             {
-                _featureTypesByUniqueId[featureType.UniqueID] = featureType;
+                _featureTypesByUniqueId.Add(featureType.UniqueID, featureType);
             }
         }
 
@@ -116,6 +120,20 @@ namespace TTT.Managers
             NetworkManager.Singleton.OnClientConnectedCallback +=
                 OnClientConnect;
         }
+
+        public override void OnNetworkDespawn()
+        {
+            if (NetworkManager.Singleton != null)
+            {
+                NetworkManager.Singleton.OnClientConnectedCallback -=
+                    OnClientConnect;
+            }
+
+            // Release all loaded Addressable assets to prevent memory leaks
+            AssetLoader<GameObject>.ReleaseAll();
+            AssetLoader<FeatureType>.ReleaseAll();
+        }
+        
 
         #region:RPC Definitions
 
@@ -166,7 +184,7 @@ namespace TTT.Managers
                 );
             }
 
-            // Spawn features asynchronously across multiple frames
+            // Spawn features asynchronously across multiple frames after triangulation
             StartCoroutine(SpawnPendingFeaturesAsync());
         }
 
@@ -206,7 +224,7 @@ namespace TTT.Managers
 
                 seaMeshInstance.Triangulate(
                     HexCells,
-                    SeaLevel.Value,
+                    GameManager.Instance.SeaLevel.Value,
                     MapManager.HexSize,
                     MapManager.HexOrientation
                 );
@@ -249,7 +267,7 @@ namespace TTT.Managers
 
                 seaMeshInstance.TriangulateCells(
                     cells,
-                    SeaLevel.Value,
+                    GameManager.Instance.SeaLevel.Value,
                     MapManager.HexSize,
                     MapManager.HexOrientation
                 );
@@ -297,7 +315,6 @@ namespace TTT.Managers
         public void OnNewMap(UnityEngine.Object eventArgs)
         {
             NewMapEventArgs args = eventArgs as NewMapEventArgs;
-
             // WO: Deserializer / Serializer class for game data will eventually do the job of this routine
             // Maybe...
             try
@@ -312,8 +329,11 @@ namespace TTT.Managers
                 int width = _gameMapData.MapTile.Count;
                 int height = _gameMapData.MapTile["0"].Count;
 
-                _hexGridWidth.Value = width;
-                _hexGridHeight.Value = height;
+                if (NetworkManager.Singleton.IsHost)
+                {
+                    _hexGridWidth.Value = width;
+                    _hexGridHeight.Value = height;
+                }
 
                 HexCell[] hexCells = new HexCell[width * height];
 
@@ -384,12 +404,19 @@ namespace TTT.Managers
                     HexCells.Add(hc);
                 }
 
-                SeaLevel.Value = _gameMapData.WorldState.SeaLevel;
+                GameManager.Instance.SeaLevel.Value = _gameMapData
+                    .WorldState
+                    .SeaLevel;
 
-                // Load pollution from map data into PlayerStats
-                if (_playerStats != null)
-                    _playerStats.LoadPollutionFromMapData(_gameMapData.WorldState.Pollution);
-
+                // Load pollution from map data into game manager
+                GameManager.Instance.CO2_Pollution.Value = _gameMapData
+                    .WorldState
+                    .Pollution;
+                //load temperature from map data into game manager
+                GameManager.Instance.Temperature.Value = _gameMapData
+                    .WorldState
+                    .Temp;
+                GameManager.Instance.Year = _gameMapData.WorldState.Year;
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
                 StartCoroutine(SpawnMapObjects());

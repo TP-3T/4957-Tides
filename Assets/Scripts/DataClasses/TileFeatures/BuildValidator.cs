@@ -48,7 +48,7 @@ namespace TTT.DataClasses.TileFeatures
             var isBlacklist =
                 constraints.TerrainConstraints.Mode is FilterListMode.BLACKLIST;
 
-            Debug.Log($"Build location terrain ID: {constraints.TerrainConstraints}");
+            // Debug.Log($"Build location terrain ID: {constraints.TerrainConstraints}");
             var buildLocationTerrain = buildLocation.TerrainTypeId;
             return terrainConstraintsUIDs.Contains(buildLocationTerrain)
                 == isBlacklist;

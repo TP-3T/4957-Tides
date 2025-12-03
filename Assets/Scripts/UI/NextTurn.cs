@@ -1,5 +1,6 @@
 using TTT.GameEvents;
 using TTT.Managers;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,5 +49,12 @@ public class NextTurn : MonoBehaviour
         }
 
         EndTurn();
+    }
+
+    public void OnStartTurn(object _)
+    {
+        nextTurnButton.interactable = GameManager.Instance.CurrentPlayer.Equals(
+            NetworkManager.Singleton.LocalClient
+        );
     }
 }
