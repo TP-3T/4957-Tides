@@ -9,11 +9,9 @@ using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using Unity.Collections;
-using Unity.VisualScripting.IonicZip;
 
 namespace TTT.Managers
 {
@@ -52,10 +50,13 @@ namespace TTT.Managers
 
         [SerializeField]
         private GameEvent _onFeatureBuild;
+
         [SerializeField]
         private GameEvent _onFeaturePlace;
+
         [SerializeField]
         private GameEvent _onFeatureDestroy;
+
         [SerializeField]
         private GameEvent _onFeatureRemoved;
 
@@ -133,14 +134,18 @@ namespace TTT.Managers
             AssetLoader<GameObject>.ReleaseAll();
             AssetLoader<FeatureType>.ReleaseAll();
         }
-        
 
         #region:RPC Definitions
 
         [Rpc(SendTo.ClientsAndHost)]
-        private void PlaceFeatureClientRpc(ulong builder, FixedString32Bytes featureId, Vector3 cellPosition)
+        private void PlaceFeatureClientRpc(
+            ulong builder,
+            FixedString32Bytes featureId,
+            Vector3 cellPosition
+        )
         {
-            BuildingFeatureArgs bfArgs = ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+            BuildingFeatureArgs bfArgs =
+                ScriptableObject.CreateInstance<BuildingFeatureArgs>();
 
             _featureTypesByUniqueId.TryGetValue(
                 featureId.ToString(),
@@ -159,7 +164,7 @@ namespace TTT.Managers
         {
             FeatureRemoveArgs rmArgs = new FeatureRemoveArgs()
             {
-                Location = cellPosition
+                Location = cellPosition,
             };
             _onFeatureRemoved.Raise(rmArgs);
         }
@@ -416,7 +421,7 @@ namespace TTT.Managers
                 GameManager.Instance.Temperature.Value = _gameMapData
                     .WorldState
                     .Temp;
-                GameManager.Instance.Year = _gameMapData.WorldState.Year;
+                // GameManager.Instance.Year = _gameMapData.WorldState.Year;
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
                 StartCoroutine(SpawnMapObjects());

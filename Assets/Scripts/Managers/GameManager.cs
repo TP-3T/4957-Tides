@@ -45,8 +45,6 @@ namespace TTT.Managers
         [field: SerializeField]
         public int Year { get; private set; } = 1;
 
-        [field: SerializeField]
-        public int CO2 { get; private set; } = 0;
 
         [SerializeField]
         public bool FTTaken { get; private set; } = false;
@@ -136,14 +134,14 @@ namespace TTT.Managers
         {
             NetworkManager.Singleton.StartHost();
 
-            if (LoadExternalJson.TryGetDataJson(out TextAsset newMap))
-            {
-                newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
-            }
-            else
-            {
-                throw new IOException("Could not load file.");
-            }
+            // if (LoadExternalJson.TryGetDataJson(out TextAsset newMap))
+            // {
+            //     newMapEvent.Raise(new NewMapEventArgs() { DataFile = newMap });
+            // }
+            // else
+            // {
+            //     throw new IOException("Could not load file.");
+            // }
 
             CurrentPlayerId.Value = NetworkManager.Singleton.LocalClientId;
         }

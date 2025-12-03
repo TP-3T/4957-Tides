@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2967250625
+  GlobalObjectIdHash: 1572295236
   InScenePlacedSourceGlobalObjectIdHash: 2967250625
   DeferredDespawnTick: 0
   Ownership: 1
@@ -85,12 +85,14 @@ MonoBehaviour:
   _onFeaturePlace: {fileID: 11400000, guid: d4ed550f6a4d82e498113aa656ae85e7, type: 2}
   _onFeatureDestroy: {fileID: 11400000, guid: be77d2d33c12b1b43b2c40d9edbddf12, type: 2}
   _onFeatureRemoved: {fileID: 11400000, guid: 77beb0c6c075d3a41af672d74b1e416f, type: 2}
-  _playerStats: {fileID: 0}
+  _playerStats: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
   SeaLevel:
     m_InternalValue: 0
   RisingRate:
     m_InternalValue: 1
   DrawDebugLabels: 0
+  DestroyingFeatureEvent: {fileID: 11400000, guid: be77d2d33c12b1b43b2c40d9edbddf12, type: 2}
+  AudioEvent: {fileID: 11400000, guid: 495e94ea5e938534bb5d3fdc6bfc2083, type: 2}
   spawnedFeatures: {fileID: 11400000, guid: 13341c7795559b74d98b04f151a7cf36, type: 2}
 --- !u!114 &7227047647059873641
 MonoBehaviour:
@@ -160,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 944619221b6664749b66a67e05cb4b08, type: 2}
+  Event: {fileID: 11400000, guid: 41e01cdfff1d08a408a8a22cfe7bcc81, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:

@@ -135,7 +135,7 @@ MonoBehaviour:
   LoadingScreen: {fileID: 9137328216038302542, guid: f0ad03dd508bf8d45998f2f029e8f751, type: 3}
   MapID: 0
   newMapEvent: {fileID: 11400000, guid: 9438c37d1b6c53b408804b0dce45c597, type: 2}
-  MenuBackground: {fileID: 0}
+  MenuBackground: {fileID: 6140946198063708948}
 --- !u!114 &5567296110961213309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,7 +265,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 694371325591416077, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_Size
-      value: 0.9999999
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 694371325591416077, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_Value
@@ -329,7 +329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1929264975137934036, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 1.0000002
       objectReference: {fileID: 0}
     - target: {fileID: 1998918912063783338, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -589,7 +589,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7447894206984090900, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 1.0000002
       objectReference: {fileID: 0}
     - target: {fileID: 7543649969644881060, guid: 063915200f5709c4aa44cc34bf13a397, type: 3}
       propertyPath: MainMenu
@@ -723,11 +723,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 45586387375133754, guid: 8b83598659a44c844b8f1d4ccaf63e85, type: 3}
       propertyPath: m_fontSize
-      value: 67.1
+      value: 67
       objectReference: {fileID: 0}
     - target: {fileID: 1416012183059609212, guid: 8b83598659a44c844b8f1d4ccaf63e85, type: 3}
       propertyPath: m_fontSize
-      value: 67.1
+      value: 67
       objectReference: {fileID: 0}
     - target: {fileID: 2941469449677729617, guid: 8b83598659a44c844b8f1d4ccaf63e85, type: 3}
       propertyPath: m_fontSize
@@ -1099,7 +1099,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8532714259082291207, guid: 8b83598659a44c844b8f1d4ccaf63e85, type: 3}
       propertyPath: m_fontSize
-      value: 67.1
+      value: 67
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1224,6 +1224,11 @@ PrefabInstance:
 --- !u!4 &5588227881606577296 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 385066363643551504, guid: 3aadfc31e8b1a0841b48579efe16424b, type: 3}
+  m_PrefabInstance: {fileID: 5248198212199326592}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6140946198063708948 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2156202157616158868, guid: 3aadfc31e8b1a0841b48579efe16424b, type: 3}
   m_PrefabInstance: {fileID: 5248198212199326592}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5414479717110007448
@@ -1604,7 +1609,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7328878628689135724, guid: dfb776bb0bcae04489b19e36059730cb, type: 3}
       propertyPath: m_fontSize
-      value: 67.5
+      value: 67.45
       objectReference: {fileID: 0}
     - target: {fileID: 7827280204307429540, guid: dfb776bb0bcae04489b19e36059730cb, type: 3}
       propertyPath: m_fontSize

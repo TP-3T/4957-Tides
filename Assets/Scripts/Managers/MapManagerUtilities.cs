@@ -219,8 +219,8 @@ namespace TTT.Managers
                 "building",
                 CacheFeatureType
             );
-            _featuresLoaded = true;
-            Debug.Log($"Loaded {_featureTypesByUniqueId.Count} feature types");
+            // _featuresLoaded = true;
+            // Debug.Log($"Loaded {_featureTypesByUniqueId.Count} feature types");
         }
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace TTT.Managers
         /// <returns></returns>
         private IEnumerator SpawnPendingFeaturesAsync()
         {
-            if (!_featuresLoaded)
+            if (_featureTypesByUniqueId.Keys.Count <= 0)
             {
                 Debug.LogWarning("feature types didn't load");
                 yield break;
