@@ -52,7 +52,7 @@ MonoBehaviour:
   _onDestroyFeature: {fileID: 11400000, guid: be77d2d33c12b1b43b2c40d9edbddf12, type: 2}
   PlayerFeatures: {fileID: 11400000, guid: b18489e19391e034ea0d1bdb8cc91ae7, type: 2}
   SpawnedFeatures: {fileID: 11400000, guid: 13341c7795559b74d98b04f151a7cf36, type: 2}
-  playerStats: {fileID: 0}
+  playerStats: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
 --- !u!114 &248936995052224105
 MonoBehaviour:
   m_ObjectHideFlags: 0

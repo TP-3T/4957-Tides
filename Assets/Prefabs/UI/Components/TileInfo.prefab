@@ -165,7 +165,8 @@ MonoBehaviour:
   <ShiftDirection>k__BackingField: 2
   <ShiftPadding>k__BackingField: {x: 0, y: 0}
   hexFeature: {fileID: 8487072585036448536}
-  playerStats: {fileID: 0}
+  AudioEvent: {fileID: 11400000, guid: 495e94ea5e938534bb5d3fdc6bfc2083, type: 2}
+  playerStats: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
 --- !u!114 &2384326254899312327
 MonoBehaviour:
   m_ObjectHideFlags: 0
