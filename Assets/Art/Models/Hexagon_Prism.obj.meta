@@ -3,7 +3,12 @@ guid: b3337035951fa964dbe07a72e20fc47d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 20265_Hexagonal_prism_v1Mat
+    second: {fileID: 2100000, guid: 59d836b349867f943b793f661d9bc5ef, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

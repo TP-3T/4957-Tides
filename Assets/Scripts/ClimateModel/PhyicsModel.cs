@@ -44,7 +44,7 @@ namespace TTT.ClimateModel
         private static readonly double _1950_CO2_PPM = 309.41f;
 
         // Pre-industrial temperature in Kelvin
-        private static readonly double _PRE_INDUSTRIAL_TEMP_KELVIN = 288.0;
+        private static readonly double _PRE_INDUSTRIAL_TEMP_KELVIN = 286.95f;
 
         // Calculate heat capacity of the Earth system
 
@@ -208,13 +208,6 @@ namespace TTT.ClimateModel
 
             // Calculate temperature anomaly relative to pre-industrial baseline
             double tempAnomaly = currTempKelvin - _PRE_INDUSTRIAL_TEMP_KELVIN;
-
-            // No sea level rise if temperature is at or below pre-industrial levels
-            if (tempAnomaly <= _MIN_TEMP_ANOMALY)
-            {
-                return _NO_SEA_LEVEL_RISE_VALUE;
-            }
-
             // Calculate base annual rate of sea level rise
             double annualRate = _TOTAL_SENSITIVITY * tempAnomaly;
 
