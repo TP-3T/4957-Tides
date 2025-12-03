@@ -53,8 +53,6 @@ public class NextTurn : MonoBehaviour
 
     public void OnStartTurn(object _)
     {
-        nextTurnButton.interactable = GameManager.Instance.CurrentPlayer.Equals(
-            NetworkManager.Singleton.LocalClient
-        );
+        nextTurnButton.interactable = true;
     }
 }

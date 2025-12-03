@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5880054c2fca2354ca0fefd76198c20e, type: 3}
   m_Name: Per Season
   m_EditorClassIdentifier: 
-  onCreated: 0
-  onTurnEnding: 0
-  onSeasonEnding: 1
-  onYearEnding: 0
-  onSold: 0
-  onDestroyed: 0
+  <OnCreated>k__BackingField: 0
+  <OnTurnEnding>k__BackingField: 0
+  <OnSeasonEnding>k__BackingField: 1
+  <OnYearEnding>k__BackingField: 0
+  <OnSold>k__BackingField: 0
+  <OnDestroyed>k__BackingField: 0

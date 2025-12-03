@@ -1,3 +1,4 @@
+using log4net.DateFormatter;
 using TMPro;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
@@ -18,10 +19,25 @@ using UnityEngine.EventSystems;
 /// </summary>
 namespace TTT.Player
 {
-    public class PlayerController : NetworkBehaviour
+    public class PlayerController : MonoBehaviour
     {
         const int LeftMouseIndex = 0;
         const float CLICK_THRESHOLD = 50f; // Max pixel movement to still be considered a click
+
+        [SerializeField]
+        private GameEvent InteractModeChange;
+
+        [SerializeField]
+        private GameEvent _mapMeshClicked;
+
+        [SerializeField]
+        private GameEvent BuildingFeatureEvent;
+
+        [SerializeField]
+        private GameEvent _tryBuildFeatureEvent;
+
+        [SerializeField]
+        private GameEvent _tryDestroyFeatureEvent;
 
         [SerializeField]
         private Camera playerCamera;
@@ -42,18 +58,6 @@ namespace TTT.Player
         private int maxTemperature = 50;
 
         public FeatureType FeatureType;
-
-        [SerializeField]
-        private GameEvent InteractModeChange;
-
-        [SerializeField]
-        private GameEvent _mapMeshClicked;
-
-        [SerializeField]
-        private GameEvent BuildingFeatureEvent;
-
-        // [SerializeField]
-        // private Canvas currentUI;
         public InteractionMode Mode;
 
         [SerializeField]
@@ -85,71 +89,28 @@ namespace TTT.Player
 
         private Vector3 mouseDownPosition;
 
-        /// <summary>
-        /// Called when the networked object is spawned on the network.
-        /// It checks if the object is owned by the local client. If it is,
-        /// it enables the camera for that player and disables the default
-        /// scene camera to avoid conflicts.
-        /// </summary>
-        public override void OnNetworkSpawn()
+        public void OnStart()
         {
-            // NEW: Server assigns a unique color when the player spawns.
-            if (IsServer)
+            transform.position = startingPosition;
+            if (playerCamera != null)
             {
-                AssignUniquePlayerColor(OwnerClientId);
+                playerCamera.enabled = true;
+                Debug.Log("Enable camera for local player");
             }
-
-            if (IsOwner)
+            else
             {
-                transform.position = startingPosition;
-                if (playerCamera != null)
-                {
-                    playerCamera.enabled = true;
-                    // Debug.Log("Enable camera for local player");
-                }
-                else
-                {
-                    Debug.LogError(
-                        $"PlayerController on {gameObject.name} playerCamera is not assigned"
-                    );
-                }
-            }
-        }
-
-        private void AssignUniquePlayerColor(ulong clientId)
-        {
-            // TODO: Let players pick 4 colors they want to see.
-            Color uniqueColor = (clientId % 4) switch
-            {
-                // Cycle through 4 basic colors
-                0 => Color.red,
-                1 => Color.blue,
-                2 => Color.green,
-                3 => Color.yellow,
-                _ => Color.white,
-            };
-            PlayerColor.Value = uniqueColor;
-            Debug.Log(
-                $"Assigned color {PlayerColor.Value} to Player {clientId}"
-            );
-        }
-
-        //? po: is this ever used or called anywhere??
-        private void FindHexGridAfterConnection(ulong clientId)
-        {
-            // The event fires for *all* clients connecting, but we only care about the local player's logic.
-            if (NetworkManager.Singleton.LocalClientId == clientId)
-            {
-                // Unsubscribe immediately to prevent running again.
-                NetworkManager.Singleton.OnClientConnectedCallback -=
-                    FindHexGridAfterConnection;
+                Debug.LogError(
+                    $"PlayerController on {gameObject.name} playerCamera is not assigned"
+                );
             }
         }
 
         private void Start()
         {
-            CurrentUI = Instantiate(MainMenu);
+            // CurrentUI = Instantiate(MainMenu);
             Mode = InteractionMode.INSPECTING;
+            GameUI.SetActive(false);
+            SetCurrentUI(MainMenu);
         }
 
         private void SetCurrentUI(GameObject newUI)
@@ -216,8 +177,24 @@ namespace TTT.Player
                             ScriptableObject.CreateInstance<BuildingFeatureArgs>();
                         building.Location = raycastHit.point;
                         building.FeatureType = FeatureType;
-                        building.OwnedByClient = true;
-                        BuildingFeatureEvent.Raise(building);
+                        // building.OwnedByClient = true;
+                        building.OwnerId = NetworkManager
+                            .Singleton
+                            .LocalClientId;
+                        // BuildingFeatureEvent.Raise(building)
+
+                        _tryBuildFeatureEvent.Raise(building);
+                    }
+                    else if (Mode.Equals(InteractionMode.DESTROYING))
+                    {
+                        var destroying = new FeatureDestroyArgs()
+                        {
+                            Location = raycastHit.point,
+                            DestroyerId = NetworkManager
+                                .Singleton
+                                .LocalClientId,
+                        };
+                        _tryDestroyFeatureEvent.Raise(destroying);
                     }
                     else if (Mode.Equals(InteractionMode.INSPECTING))
                     {
@@ -225,7 +202,10 @@ namespace TTT.Player
                             new MapMeshClickedEventArgs
                             {
                                 ClickedPoint = raycastHit.point,
-                                PlayerId = OwnerClientId,
+                                PlayerColor = PlayerColor.Value,
+                                PlayerId = NetworkManager
+                                    .Singleton
+                                    .LocalClientId,
                             }
                         );
                     }
@@ -278,6 +258,17 @@ namespace TTT.Player
         public void OnLose()
         {
             SetCurrentUI(LoseUI);
+        }
+
+        public void EnableUI()
+        {
+            InteractModeChange.Raise(
+                new InteractionModeChangeEventArgs()
+                {
+                    NewMode = InteractionMode.BUILDING,
+                }
+            );
+            CurrentUI.SetActive(true);
         }
     }
 }

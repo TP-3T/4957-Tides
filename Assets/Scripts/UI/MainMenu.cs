@@ -1,5 +1,3 @@
-using System.IO;
-using Newtonsoft.Json;
 using TTT.GameEvents;
 using TTT.Helpers;
 using UnityEngine;
@@ -18,7 +16,7 @@ public class MainMenu : MonoBehaviour
     private GameObject SettingsMenu;
 
     [SerializeField]
-    private GameObject SinglePlayerMenu;
+    private GameObject LobbyRoom;
 
     [SerializeField]
     private GameObject MapBrowserMenu;
@@ -39,7 +37,7 @@ public class MainMenu : MonoBehaviour
     private int MapID;
 
     [SerializeField]
-    private GameEvent newMapEvent;
+    private GameEvent startNetworkEvent;
 
     [SerializeField]
     private GameObject MenuBackground;
@@ -52,7 +50,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenJoinMenu()
     {
-        Debug.Log("Clicked join button!");
+        // Debug.Log("Clicked join button!");
         ChangeActiveMenu(JoinMenu);
     }
 
@@ -61,17 +59,17 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenCreateMenu()
     {
-        Debug.Log("Clicked create button!");
+        // Debug.Log("Clicked create button!");
         ChangeActiveMenu(CreateMenu);
     }
 
     /// <summary>
     /// On click to open single player menu.
     /// </summary>
-    public void OpenSinglePlayerMenu()
+    public void OpenLobbyRoomMenu()
     {
-        Debug.Log("Clicked single player!");
-        ChangeActiveMenu(SinglePlayerMenu);
+        // Debug.Log("Clicked single player!");
+        ChangeActiveMenu(LobbyRoom);
     }
 
     /// <summary>
@@ -79,7 +77,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenSettingsMenu()
     {
-        Debug.Log("Clicked settings!");
+        // Debug.Log("Clicked settings!");
         ChangeActiveMenu(SettingsMenu);
     }
 
@@ -88,7 +86,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenMultiplayerMenu()
     {
-        Debug.Log("Clicked multiplayer!");
+        // Debug.Log("Clicked multiplayer!");
         ChangeActiveMenu(MultiplayerMenu);
     }
 
@@ -105,7 +103,7 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenMapBrowserMenu()
     {
-        Debug.Log("Clicked map browser!");
+        // Debug.Log("Clicked map browser!");
         ChangeActiveMenu(MapBrowserMenu);
     }
 
@@ -114,19 +112,10 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void StartGameMenu()
     {
-        Debug.Log("Clicked Start Game!");
+        // Debug.Log("Clicked Start Game!");
         ChangeActiveMenu(LoadingScreen);
         MenuBackground.SetActive(true);
-        if (
-            LoadExternalJson.TryGetMapJson(selectedMap, out TextAsset loadedMap)
-        )
-        {
-            newMapEvent.Raise(new NewMapEventArgs() { DataFile = loadedMap });
-        }
-        else
-        {
-            Debug.LogError($"Failed to load {selectedMap}");
-        }
+        // Defer map loading until after network starts (handled post-host/client start)
     }
 
     public void OpenGameUI()
@@ -136,7 +125,7 @@ public class MainMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("Quitting game...");
+        // Debug.Log("Quitting game...");
         Application.Quit();
     }
 
@@ -152,18 +141,13 @@ public class MainMenu : MonoBehaviour
         CurrentMenu = menu;
     }
 
-    void Awake()
-    {
-        Debug.Log("Main Menu script is awake.");
-    }
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         CurrentMenu = Mainmenu;
         SettingsMenu.SetActive(false);
         MultiplayerMenu.SetActive(false);
-        SinglePlayerMenu.SetActive(false);
+        LobbyRoom.SetActive(false);
         MapBrowserMenu.SetActive(false);
         GameUI.SetActive(false);
         LoadingScreen.SetActive(false);
@@ -176,15 +160,46 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OpenMainMenu()
     {
-        Debug.Log("Clicked Start Game!");
+        // Debug.Log("Clicked Start Game!");
         ChangeActiveMenu(Mainmenu);
     }
 
     public void SillyFunction(string msg)
     {
-        Debug.LogWarning(msg);
+        // Debug.LogWarning(msg);
     }
 
-    // Update is called once per frame
-    void Update() { }
+
+    /// <summary>
+    /// Raises startNetworkEvent and starts as host with default IP and Port.
+    /// Uses listen address "0.0.0.0" to listen on all network interfaces.
+    /// </summary>
+    public void StartHost()
+    {
+        if (startNetworkEvent != null)
+        {
+            var args = ScriptableObject.CreateInstance<StartNetworkEventArgs>();
+            args.IsHost = true;
+            args.Ip = "127.0.0.1";
+            args.Port = 6767;
+            startNetworkEvent.Raise(args);
+        }
+    }
+
+    /// <summary>
+    /// Raises startNetworkEvent and starts as client with specified IP and Port.
+    /// Uses SetConnectionData to configure the UnityTransport component.
+    /// </summary>
+    public void StartClient(string ipAddress, ushort port)
+    {
+        if (startNetworkEvent != null)
+        {
+            var args = ScriptableObject.CreateInstance<StartNetworkEventArgs>();
+            args.IsHost = false;
+            args.Ip = ipAddress;
+            args.Port = port;
+            startNetworkEvent.Raise(args);
+        }
+    }
+
 }

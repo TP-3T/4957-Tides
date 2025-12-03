@@ -9,6 +9,7 @@ using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Helpers;
 using TTT.Hex;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -36,6 +37,8 @@ namespace TTT.Managers
         [SerializeField]
         private TextAsset _jsonMap;
 
+        #region:Events
+
         [SerializeField]
         private GameEvent _mapLoadFinishEvent;
 
@@ -45,38 +48,50 @@ namespace TTT.Managers
         [SerializeField]
         private GameEvent onFloodEnded;
 
+        [SerializeField]
+        private GameEvent _onFeatureBuild;
+
+        [SerializeField]
+        private GameEvent _onFeaturePlace;
+
+        [SerializeField]
+        private GameEvent _onFeatureDestroy;
+
+        [SerializeField]
+        private GameEvent _onFeatureRemoved;
+
+        #endregion
+
+        [SerializeField]
+        private PlayerStats _playerStats;
+        private MapData _gameMapData;
+        private const int CellsPerFrame = 25;
+        private float _hexMaxHeight = 0;
+        private Dictionary<string, FeatureType> _featureTypesByUniqueId = new();
+
         private NetworkVariable<int> _hexGridWidth = new();
         private NetworkVariable<int> _hexGridHeight = new();
         private NetworkVariable<ulong> _hexMeshId = new();
         private NetworkVariable<ulong> _seaMeshId = new();
-        private MapData _gameMapData;
-        private const int CellsPerFrame = 25;
-        private float _hexMaxHeight = 0;
-
-        [SerializeField]
-        private GameEvent BuildingFeatureEvent;
-
-        [SerializeField]
-        private PlayerStats _playerStats;
-
-        private Dictionary<string, FeatureType> _featureTypesByUniqueId = new();
-
         public NetworkList<HexCell> HexCells = new(
             default,
             NetworkVariableReadPermission.Everyone,
             NetworkVariableWritePermission.Owner
         );
+        public NetworkVariable<float> SeaLevel = new(0.0f);
+        public NetworkVariable<float> RisingRate = new(1.0f);
+
         public Queue<HexCell> ToFlood = new();
         public Queue<HexCell> FloodQueue = new();
         public Queue<HexCell> AboveSeaLevelQueue = new();
-
         public bool DrawDebugLabels;
 
         private LineRenderer lineRenderer;
 
         private List<(Vector3 position, string featureId)> _pendingFeatures =
             new();
-        private bool _featuresLoaded = false;
+
+        private NetworkList<FeatureNet> _pendingFeaturesGoated = new();
 
         IEnumerator Start()
         {
@@ -86,6 +101,77 @@ namespace TTT.Managers
                 CacheFeatureType
             );
             yield return buildingRoutine;
+
+            // Subscribe to NetworkVariable changes so clients triangulate when mesh IDs are received
+            _hexMeshId.OnValueChanged += OnHexMeshIdChanged;
+            _seaMeshId.OnValueChanged += OnSeaMeshIdChanged;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            // Unsubscribe from NetworkVariable changes
+            _hexMeshId.OnValueChanged -= OnHexMeshIdChanged;
+            _seaMeshId.OnValueChanged -= OnSeaMeshIdChanged;
+        }
+
+        private void OnHexMeshIdChanged(ulong oldValue, ulong newValue)
+        {
+            // When client receives mesh ID from server, triangulate it
+            if (!NetworkManager.Singleton.IsServer && newValue != 0)
+            {
+                // Debug.Log($"[MapManager] Client received hex mesh ID: {newValue}, waiting to triangulate...");
+                StartCoroutine(WaitAndTriangulateHexMesh());
+            }
+        }
+
+        private void OnSeaMeshIdChanged(ulong oldValue, ulong newValue)
+        {
+            // When client receives mesh ID from server, triangulate it
+            if (!NetworkManager.Singleton.IsServer && newValue != 0)
+            {
+                // Debug.Log($"[MapManager] Client received sea mesh ID: {newValue}, waiting to triangulate...");
+                StartCoroutine(WaitAndTriangulateSeaMesh());
+            }
+        }
+
+        private IEnumerator WaitAndTriangulateHexMesh()
+        {
+            // Wait until the NetworkObject is spawned and available on client
+            while (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(_hexMeshId.Value))
+            {
+                yield return null;
+            }
+
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                _hexMeshId.Value,
+                out NetworkObject hexMeshNetworkObject))
+            {
+                HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
+                hexMeshInstance.Triangulate(HexCells, MapManager.HexSize, MapManager.HexOrientation);
+                // Debug.Log("[MapManager] Client successfully triangulated hex mesh");
+                
+                // Spawn features after triangulation
+                StartCoroutine(SpawnPendingFeaturesAsync());
+            }
+        }
+
+        private IEnumerator WaitAndTriangulateSeaMesh()
+        {
+            // Wait until the NetworkObject is spawned and available on client
+            while (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(_seaMeshId.Value))
+            {
+                yield return null;
+            }
+
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                _seaMeshId.Value,
+                out NetworkObject seaMeshNetworkObject))
+            {
+                SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
+                seaMeshInstance.Triangulate(HexCells, GameManager.Instance.SeaLevel.Value, MapManager.HexSize, MapManager.HexOrientation);
+                // Debug.Log("[MapManager] Client successfully triangulated sea mesh");
+            }
         }
 
         private void CacheFeatureType(FeatureType featureType)
@@ -98,79 +184,45 @@ namespace TTT.Managers
                 _featureTypesByUniqueId.Add(featureType.UniqueID, featureType);
             }
         }
+        #region:RPC Definitions
 
-        public override void OnNetworkSpawn()
+        [Rpc(SendTo.ClientsAndHost)]
+        private void PlaceFeatureClientRpc(
+            ulong builder,
+            FixedString32Bytes featureId,
+            Vector3 cellPosition
+        )
         {
-            NetworkManager.Singleton.OnClientConnectedCallback +=
-                OnClientConnect;
-        }
+            BuildingFeatureArgs bfArgs =
+                ScriptableObject.CreateInstance<BuildingFeatureArgs>();
 
-        public override void OnNetworkDespawn()
-        {
-            if (NetworkManager.Singleton != null)
-            {
-                NetworkManager.Singleton.OnClientConnectedCallback -=
-                    OnClientConnect;
-            }
-
-            // Release all loaded Addressable assets to prevent memory leaks
-            AssetLoader<GameObject>.ReleaseAll();
-            AssetLoader<FeatureType>.ReleaseAll();
-        }
-
-        private IEnumerator SpawnMapObjects()
-        {
-            yield return AssetLoader<GameObject>.Load(
-                new("P_HexMesh"),
-                SpawnGridMesh
+            _featureTypesByUniqueId.TryGetValue(
+                featureId.ToString(),
+                out FeatureType featureType
             );
-            yield return AssetLoader<GameObject>.Load(
-                new("P_SeaMesh"),
-                SpawnSeaMesh
-            );
+
+            bfArgs.Location = cellPosition;
+            bfArgs.FeatureType = featureType;
+            bfArgs.OwnerId = builder;
+
+            _onFeaturePlace.Raise(bfArgs);
         }
 
-        private void SpawnGridMesh(GameObject hm)
+        [Rpc(SendTo.ClientsAndHost)]
+        private void RemoveFeatureClientRpc(Vector3 cellPosition)
         {
-            // Get reference to HexMesh prefab
-            GameObject hexMeshGameObject = Instantiate(hm);
-            HexMesh hexMeshInstance = hexMeshGameObject.GetComponent<HexMesh>();
-
-            // Instance HexMesh prefab based off of the build data
-            if (
-                NetworkManager.Singleton != null
-                && NetworkManager.Singleton.IsListening
-            )
+            FeatureRemoveArgs rmArgs = new FeatureRemoveArgs()
             {
-                hexMeshInstance.GetComponent<NetworkObject>().Spawn();
-                hexMeshInstance.transform.position += new Vector3(
-                    0.0f,
-                    -0.01f,
-                    0.0f
-                );
-                _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
-
-                TriangulateHexMeshClientRpc();
-            }
+                Location = cellPosition,
+            };
+            _onFeatureRemoved.Raise(rmArgs);
         }
 
-        private void SpawnSeaMesh(GameObject sm)
+
+        public void TriangulateMeshes()
         {
-            // Get reference to SeaMesh prefab
-            GameObject seaMeshGameObject = Instantiate(sm);
-            SeaMesh seaMeshInstance = seaMeshGameObject.GetComponent<SeaMesh>();
-
-            // Instance SeaMesh prefab based off of the
-            if (
-                NetworkManager.Singleton != null
-                && NetworkManager.Singleton.IsListening
-            )
-            {
-                seaMeshInstance.GetComponent<NetworkObject>().Spawn();
-                _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
-
-                TriangulateSeaMeshClientRpc(); // for the host, this should eventually not be necessary
-            }
+            TriangulateHexMeshClientRpc();
+            TriangulateSeaMeshClientRpc();
         }
 
         [ClientRpc]
@@ -283,96 +335,18 @@ namespace TTT.Managers
             }
         }
 
-        private IEnumerator SpawnPendingFeaturesAsync()
-        {
-            // po: the idea is that OnNewMap() parses json then on each tile
-            //  with feature != null adds (position, featureId) to pending
-            // features, then spawnMapObjects() creates mesh prefab then TriangulateWhatever() makes visual mesh
-            // then SpawnPendingFeatures()
-            //    looks up feature id in feature types by unique id
-            //    creates building feature args
-            //    calls FeatureBuilder.OnLoadingMapFeature(args)
-            //       where BuildAt() instantiates prefab
-            if (_featureTypesByUniqueId.Keys.Count <= 0)
-            {
-                throw new UnityException("Feature types didn't load!");
-            }
-
-            int spawnedCount = 0;
-            int spawnsPerFrame = 50; // Spawn 50 buildings per frame for smooth-ish loading
-            Dictionary<string, int> featureTypeCounts = new();
-
-            Debug.Log(
-                $"Starting async spawn of {_pendingFeatures.Count} features..."
-            );
-
-            foreach (var (position, featureId) in _pendingFeatures)
-            {
-                if (
-                    _featureTypesByUniqueId.TryGetValue(
-                        featureId,
-                        out FeatureType featureType
-                    )
-                )
-                {
-                    var args =
-                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-                    args.Location = position;
-                    args.FeatureType = featureType;
-                    args.OwnedByClient = false;
-                    BuildingFeatureEvent.Raise(args);
-                    spawnedCount++;
-
-                    // Track counts by type
-                    if (!featureTypeCounts.ContainsKey(featureId))
-                        featureTypeCounts[featureId] = 0;
-                    featureTypeCounts[featureId]++;
-
-                    // Yield every X spawns to maintain framerate
-                    //Kinda doesn't work :/
-                    if (spawnedCount % spawnsPerFrame == 0)
-                    {
-                        yield return null; // Wait one frame
-                    }
-                }
-                else
-                {
-                    //This basically never happens but I put this here just in case :/
-                    Debug.LogWarning(
-                        $"skipped unknown feature '{featureId}' at {position}"
-                    );
-                }
-            }
-
-            if (spawnedCount > 0)
-            {
-                Debug.Log($"Finished spawning {spawnedCount} features:");
-                foreach (var kvp in featureTypeCounts)
-                {
-                    Debug.Log($"  {kvp.Key}: {kvp.Value}");
-                }
-            }
-
-            _pendingFeatures.Clear();
-            _mapLoadFinishEvent.Raise(
-                new NewMapFinishedEventArgs()
-                {
-                    WasSuccessful = true,
-                    MaxMapHeight = _hexMaxHeight,
-                    SeaLevel = GameManager.Instance.SeaLevel.Value,
-                }
-            );
-        }
-
-        [ServerRpc(RequireOwnership = false)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void StartRaiseSeaServerRpc()
         {
             StopAllCoroutines();
             StartCoroutine(RaiseSea());
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        public void OnMapMeshClickedServerRpc(Vector3 point, Color newColor)
+        #endregion
+
+        #region:SCRBOJECT Handlers
+
+        public void OnMapMeshClicked(Vector3 point, Color newColor)
         {
             int index = GetCellIndexFromPosition(point);
             HexCell hc = HexCells[index];
@@ -476,7 +450,10 @@ namespace TTT.Managers
                         // po: queue features for spawning after mesh is created
                         if (!string.IsNullOrEmpty(tileData.Feature))
                         {
-                            _pendingFeatures.Add((hexCenter, tileData.Feature));
+                            var n = new FeatureNet();
+                            n.FeatureId = tileData.Feature;
+                            n.FeaturePosition = hexCell.CellPosition;
+                            _pendingFeaturesGoated.Add(n);
                         }
                     }
                 }
@@ -500,7 +477,7 @@ namespace TTT.Managers
                 GameManager.Instance.Temperature.Value = _gameMapData
                     .WorldState
                     .Temp;
-                GameManager.Instance.Year = _gameMapData.WorldState.Year;
+                // GameManager.Instance.Year = _gameMapData.WorldState.Year;
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this
                 StartCoroutine(SpawnMapObjects());
@@ -515,27 +492,46 @@ namespace TTT.Managers
             }
         }
 
-        public void OnClientConnect(ulong clientId)
-        {
-            if (IsClient)
-            {
-                TriangulateHexMeshClientRpc();
-                TriangulateSeaMeshClientRpc();
-            }
-        }
-
         public void OnMapMeshClicked(UnityEngine.Object eventArgs)
         {
             MapMeshClickedEventArgs args = eventArgs as MapMeshClickedEventArgs;
 
-            OnMapMeshClickedServerRpc(args.ClickedPoint, args.PlayerColor);
+            OnMapMeshClicked(args.ClickedPoint, args.PlayerColor);
         }
 
         public void OnFlood(UnityEngine.Object _)
         {
-            Debug.Log("Flood Event Triggered - MapManager line 261");
+            // Debug.Log("Flood Event Triggered - MapManager line 261");
 
             StartRaiseSeaServerRpc();
         }
+
+        public void OnFeatureBuild(UnityEngine.Object args)
+        {
+            if (args is not BuildingFeatureArgs bldArgs)
+            {
+                Debug.LogWarning("[MapManager] could not build feature");
+                return;
+            }
+
+            PlaceFeatureClientRpc(
+                bldArgs.OwnerId,
+                bldArgs.FeatureType.UniqueID,
+                bldArgs.Location
+            );
+        }
+
+        public void OnFeatureDestroy(UnityEngine.Object args)
+        {
+            if (args is not FeatureDestroyArgs dtrArgs)
+            {
+                Debug.LogWarning("[MapManager] could not destroy feature");
+                return;
+            }
+
+            RemoveFeatureClientRpc(dtrArgs.Location);
+        }
+
+        #endregion
     }
 }

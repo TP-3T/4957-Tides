@@ -51,5 +51,14 @@ namespace TTT.Helpers
                 Destroy(gameObject);
             }
         }
+
+        protected virtual void OnDestroy()
+        {
+            // Clear the instance reference when destroyed
+            if (_instance == this as T)
+            {
+                _instance = null;
+            }
+        }
     }
 }

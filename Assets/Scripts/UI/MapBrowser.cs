@@ -1,6 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TMPro;
 using TTT.DataClasses.HexData;
@@ -12,6 +13,8 @@ namespace TTT.UI
 {
     public class MapBrowser : MonoBehaviour
     {
+        private static readonly WaitForSeconds _waitForSeconds = new(3);
+
         [SerializeField]
         private MainMenu MainMenu;
 
@@ -23,17 +26,31 @@ namespace TTT.UI
 
         [SerializeField]
         public GameObject LocalContent;
+
+        [SerializeField]
+        private Button SelectButton;
         public int selectedMapId;
 
-        public GameObject activeToggle;
+        [SerializeField]
+        private GameObject LoadingPanel;
+
         private MapData localMapData = new();
         private List<MapInfo> localMapInfoList = new();
         private List<GameObject> instantiatedMapItems = new();
 
+        private static readonly string folderPath = "./Assets/Resources";
+
         void Start() { }
+
+        private void OnEnable()
+        {
+            FetchMapList();
+            StartCoroutine(FetchLocalMapList());
+        }
 
         private void OnDisable()
         {
+            StopAllCoroutines();
             ClearMapItems();
         }
 
@@ -56,16 +73,25 @@ namespace TTT.UI
             StartCoroutine(
                 GetMapList(
                     onSuccess: (mapList) =>
-                        OnMapListFetched(mapList, DBContent),
+                    {
+                        OnMapListFetched(mapList, DBContent);
+                        instantiatedMapItems.ForEach(item =>
+                        {
+                            item.GetComponent<MapListItemController>().MapSize.enabled =
+                                false;
+                        });
+                    },
                     onError: (error) => OnMapListError(error)
                 )
             );
         }
 
-        public void FetchLocalMapList()
+        public IEnumerator FetchLocalMapList()
         {
-            string folderPath = "./Assets/Maps";
-            string[] jsonFileNames = Directory.GetFiles(folderPath, "*.json");
+            string[] jsonFileNames = Directory.GetFiles(
+                Path.GetFullPath(folderPath),
+                "*.json"
+            );
 
             foreach (var jsonFileName in jsonFileNames)
             {
@@ -76,101 +102,73 @@ namespace TTT.UI
                 localMapData = JsonConvert.DeserializeObject<MapData>(
                     jsonString
                 );
-
-                localMapInfoList.Add(
-                    new MapInfo(
-                        localMapData.MapID,
-                        localMapData.MapName,
-                        localMapData.SteamID
-                    )
+                var newInfo = new MapInfo(
+                    localMapData.MapID,
+                    localMapData.MapName,
+                    localMapData.SteamID
                 );
+                localMapInfoList.Add(newInfo);
+                var item = OnMapListItemFetched(newInfo, LocalContent);
+                item.MapSize.text =
+                    $"{localMapData.MapTile.Count} x {localMapData.MapTile["0"].Count}";
+                yield return null;
             }
-
-            OnMapListFetched(localMapInfoList, LocalContent);
         }
 
-        // OnClick method for select button triggers GetActiveToggle
-        //  IF there is an activeToggle (through isOn), then we get the text (mapName) from the component
-        //  Use it to get the MapID through the dictionary
-        //  query for MapData from brysons stuff using MapID
-        //
-
-        /// <summary>
-        /// RUNS
-        /// </summary>
-        /// <returns></returns>
-        public void GetActiveToggle()
+        public void OnSelectMap()
         {
-            // Retrieve all the MapListItems (gameobjects)
-            // check for if the isOn property is checked
-            Toggle[] dbToggles = DBContent.GetComponentsInChildren<Toggle>();
-            Toggle[] localToggles =
-                LocalContent.GetComponentsInChildren<Toggle>();
+            StartCoroutine(NewMethod());
+        }
 
-            Toggle[] toggles = dbToggles.Concat(localToggles).ToArray();
-
-            Debug.Log($"Toggles found: {toggles.Length}");
-            foreach (var toggle in toggles)
+        private IEnumerator NewMethod()
+        {
+            SelectButton.gameObject.SetActive(false);
+            LoadingPanel.SetActive(true);
+            var loadingText =
+                LoadingPanel.GetComponentInChildren<TextMeshProUGUI>();
+            string filePath = $"./Assets/Resources/{selectedMapId}.json";
+            if (!File.Exists(filePath))
             {
-                if (toggle.isOn)
+                loadingText.text = "Downloading...";
+                var getter = FetchMapByMapId(
+                    selectedMapId,
+                    onSuccess: mapData => SaveMap(mapData, filePath),
+                    onError: error =>
+                        StartCoroutine(LogError(loadingText, error))
+                );
+                while (getter.MoveNext())
                 {
-                    var controller =
-                        toggle.GetComponent<MapListItemController>();
-                    int mapId = controller.MapId;
-                    selectedMapId = mapId;
-                    Debug.Log($"Selected Map ID: {selectedMapId}");
-
-                    if (toggle.transform.IsChildOf(DBContent.transform))
-                    {
-                        Debug.Log(
-                            "Map selected from online DB, fetching data..."
-                        );
-                        StartCoroutine(
-                            FetchMapByMapId(
-                                selectedMapId,
-                                onSuccess: (mapData) =>
-                                {
-                                    Debug.Log(
-                                        $"Map Data fetched for Map ID: {selectedMapId}"
-                                    );
-
-                                    MapData mapJson =
-                                        JsonConvert.DeserializeObject<MapData>(
-                                            mapData
-                                        );
-
-                                    string localPath = $"{selectedMapId}";
-
-                                    File.WriteAllText(
-                                        "./Assets/Resources/"
-                                            + localPath
-                                            + ".json",
-                                        JsonConvert.SerializeObject(
-                                            mapJson,
-                                            Formatting.Indented
-                                        )
-                                    );
-                                    MainMenu.selectedMap = localPath;
-
-                                    Debug.Log($"Map data saved to {localPath}");
-                                },
-                                onError: (error) =>
-                                {
-                                    Debug.LogError(
-                                        $"Failed to fetch map data: {error}"
-                                    );
-                                }
-                            )
-                        );
-                    }
-                    else
-                    {
-                        Debug.Log(
-                            "Map selected from local files, no fetch needed."
-                        );
-                    }
+                    yield return null;
                 }
             }
+            else
+            {
+                MainMenu.selectedMap = filePath;
+                StartCoroutine(LogError(loadingText, "Map loaded!"));
+            }
+        }
+
+        private void SaveMap(string mapData, string filePath)
+        {
+            MapData mapJson = JsonConvert.DeserializeObject<MapData>(mapData);
+
+            string localPath = $"{selectedMapId}";
+
+            File.WriteAllText(
+                filePath,
+                JsonConvert.SerializeObject(mapJson, Formatting.Indented)
+            );
+            MainMenu.selectedMap = localPath;
+            var loadingText =
+                LoadingPanel.GetComponentInChildren<TextMeshProUGUI>();
+            StartCoroutine(LogError(loadingText, "Map loaded!"));
+        }
+
+        private IEnumerator LogError(TextMeshProUGUI where, string what)
+        {
+            where.text = what;
+            yield return _waitForSeconds;
+            LoadingPanel.SetActive(false);
         }
 
         private void OnMapListFetched(
@@ -178,24 +176,32 @@ namespace TTT.UI
             GameObject content
         )
         {
-            Debug.Log(mapInfoList.Count);
+            mapInfoList.ForEach(item => OnMapListItemFetched(item, content));
+        }
 
-            foreach (var mapInfo in mapInfoList)
+        private MapListItemController OnMapListItemFetched(
+            MapInfo mapInfo,
+            GameObject content
+        )
+        {
+            GameObject mapItem = Instantiate(MapListItem, content.transform);
+            instantiatedMapItems.Add(mapItem);
+
+            var controller = mapItem.GetComponent<MapListItemController>();
+
+            controller.MapID.text = mapInfo.MapId.ToString();
+            controller.MapName.text = mapInfo.MapName;
+            Button selectButton = mapItem.GetComponent<Button>();
+
+            selectButton.onClick.RemoveAllListeners();
+
+            selectButton.onClick.AddListener(() =>
             {
-                GameObject mapItem = Instantiate(
-                    MapListItem,
-                    content.transform
-                );
-                instantiatedMapItems.Add(mapItem);
+                selectedMapId = mapInfo.MapId;
+                SelectButton.gameObject.SetActive(true);
+            });
 
-                var controller = mapItem.AddComponent<MapListItemController>();
-                controller.MapId = mapInfo.MapId;
-
-                mapItem.GetComponentInChildren<TMP_Text>().text =
-                    mapInfo.MapName;
-
-                Debug.Log("Map Info Created.0.001f");
-            }
+            return controller;
         }
 
         private void OnMapListError(string errorMessage)

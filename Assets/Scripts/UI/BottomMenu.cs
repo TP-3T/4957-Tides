@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -256,5 +257,35 @@ namespace TTT.UI
                 currentTab = tab;
             }
         }
+
+        public void DestroyModeEngaged()
+        {
+            InteractModeChange.Raise(new InteractionModeChangeEventArgs()
+            {
+                NewMode = InteractionMode.DESTROYING
+            });
+        }
+
+        #region:SCROBJECT handlers
+
+        public void OnTurnEnding(UnityEngine.Object _)
+        {
+            // transform.position -= new Vector3(0f, 900f, 0f);
+            foreach (Transform tr in gameObject.transform)
+            {
+                tr.gameObject.SetActive(false);
+            }
+        }
+
+        public void OnTurnStarted(UnityEngine.Object _)
+        {
+            // transform.position += new Vector3(0f, 900f, 0f);
+            foreach (Transform tr in gameObject.transform)
+            {
+                tr.gameObject.SetActive(true);
+            }
+        }
+
+        #endregion
     }
 }

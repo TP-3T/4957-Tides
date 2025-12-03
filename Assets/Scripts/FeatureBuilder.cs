@@ -1,15 +1,24 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
+using TTT.GameEvents;
 using TTT.Hex;
 using TTT.Managers;
+using Unity.Netcode;
 using UnityEngine;
 
 public class FeatureBuilder : MonoBehaviour
 {
+    [SerializeField]
+    public GameEvent _onBuildFeature;
+
+    [SerializeField]
+    public GameEvent _onDestroyFeature;
+
     /// <summary>
     /// Runtime set of features owned by this client.
     /// </summary>
@@ -28,7 +37,9 @@ public class FeatureBuilder : MonoBehaviour
     private readonly float hexCellSize =
         (1 - hexCellPadding) * HexMath.InnerRadius(MapManager.HexSize);
 
-    public void OnBuildingFeature(Object eventArgs)
+    #region:SCROBJECT Handlers
+
+    public void OnTryBuildingFeature(Object eventArgs)
     {
         if (eventArgs is not BuildingFeatureArgs bfArgs)
         {
@@ -39,41 +50,58 @@ public class FeatureBuilder : MonoBehaviour
             FixLocation(bfArgs.Location),
             bfArgs.FeatureType,
             bfArgs.OwnedByClient,
-            bfArgs.CheckForCost
+            bfArgs.CheckForCost,
+            bfArgs.OwnerId
         );
     }
 
-    public void OnDestroyingFeature(Object eventArgs)
+    public void OnTryDestroyFeature(Object eventArgs)
+    {
+        if (eventArgs is not FeatureDestroyArgs dtrArgs)
+        {
+            Debug.LogWarning("[FeatureBuilder] cannot invoke this event with parameter type not FeatureDestroyArgs");
+            return;
+        }
+
+        TryToDestroy(
+            FixLocation(dtrArgs.Location),
+            dtrArgs.DestroyerId
+        );
+    }
+
+    public void OnFeaturePlace(Object eventArgs)
     {
         if (eventArgs is not BuildingFeatureArgs bfArgs)
         {
             return;
         }
 
+        Vector3 fixedLocation = FixLocation(bfArgs.Location);
+        if (CheckIfCanBuild(fixedLocation, bfArgs.FeatureType))
+        {
+            BuildAt(bfArgs.OwnerId, fixedLocation, bfArgs.FeatureType);
+        }
+    }
+
+    public void OnRemoveFeature(Object eventArgs)
+    {
+        if (eventArgs is not FeatureRemoveArgs bfArgs)
+        {
+            Debug.LogWarning("[FeatureBuilder] cannot invoke this event with parameter type not FeatureRemoveArgs");
+            return;
+        }
+
         DestroyAt(FixLocation(bfArgs.Location));
     }
 
-    private static Vector3 FixLocation(Vector3 location)
-    {
-        HexCell? exactCell = MapManager.Instance.GetCellFromPosition(
-            location,
-            out _
-        );
-
-        if (exactCell == null)
-        {
-            Debug.LogWarning($"Could not find cell at location {location}");
-            return new Vector3(0, 0, 0);
-        }
-
-        return ((HexCell)exactCell).CellPosition;
-    }
+    #endregion
 
     private void TryToBuild(
         Vector3 location,
         FeatureType featureType,
         bool ownedByClient,
-        bool checkForCost
+        bool checkForCost,
+        ulong ownerId
     )
     {
         if (
@@ -98,31 +126,38 @@ public class FeatureBuilder : MonoBehaviour
             return;
         }
 
-        Feature feature = BuildAt(location, featureType);
-
-        if (feature == null)
+        if (!CheckCost(featureType))
         {
-            Debug.LogError("No renderers found in this prefab.");
+            Debug.LogWarning("Tried to build a feature that you cannot afford!");
             return;
         }
-
-        if (ownedByClient && checkForCost)
-        {
+        
+        if (checkForCost)
             DeductCost(featureType);
-        }
 
-        if (ownedByClient)
+        _onBuildFeature.Raise(new BuildingFeatureArgs()
         {
-            // Trigger all resource producers for this feature
-            InitializeResourceProducers(featureType);
-        }
+            OwnerId = ownerId,
+            Location = location,
+            FeatureType = featureType
+        });
+    }
 
-        SpawnedFeatures.Add(feature);
-        if (ownedByClient)
+    private void TryToDestroy(Vector3 location, ulong destroyerId)
+    {
+        Debug.Log($"[FeatureBuilder] attempting to destroy feature {location}, I am {destroyerId}");
+
+        Feature[] allfA = PlayerFeatures.GetItems();
+        if (allfA.Any(f => f.CellPosition.Equals(location)))
         {
-            PlayerFeatures.Add(feature);
+            _onDestroyFeature.Raise(new FeatureDestroyArgs()
+            {
+                Location = location
+            });
         }
     }
+
+    #region:BL 👍
 
     private bool CheckIfCanBuild(Vector3 location, FeatureType featureType)
     {
@@ -145,6 +180,7 @@ public class FeatureBuilder : MonoBehaviour
             Debug.LogWarning("Tried to build but couldn't find a HexCell");
             return false;
         }
+
 
         // build area
         HexCell[] adjacentTiles = MapManager
@@ -211,15 +247,6 @@ public class FeatureBuilder : MonoBehaviour
     /// </summary>
     private void InitializeResourceProducers(FeatureType featureType)
     {
-        // Trigger OnCreated for all defined resource producers
-        if (featureType.ResourceProducers != null)
-        {
-            foreach (var producer in featureType.ResourceProducers)
-            {
-                producer.OnCreated();
-            }
-        }
-
         // Automatically handle pollution emission if feature has PollutionEmission
         if (
             featureType.PollutionEmission != 0
@@ -231,7 +258,27 @@ public class FeatureBuilder : MonoBehaviour
         }
     }
 
-    private Feature BuildAt(Vector3 location, FeatureType featureType)
+    #endregion
+
+    #region: Utility
+
+    private static Vector3 FixLocation(Vector3 location)
+    {
+        HexCell? exactCell = MapManager.Instance.GetCellFromPosition(
+            location,
+            out _
+        );
+
+        if (exactCell == null)
+        {
+            Debug.LogWarning($"Could not find cell at location {location}");
+            return new Vector3(0, 0, 0);
+        }
+
+        return ((HexCell)exactCell).CellPosition;
+    }
+
+    private Feature BuildAt(ulong ownerId, Vector3 location, FeatureType featureType)
     {
         GameObject modelInstance = Instantiate(featureType.Prefab);
 
@@ -298,9 +345,21 @@ public class FeatureBuilder : MonoBehaviour
                 | UnityEditor.StaticEditorFlags.OccluderStatic
         );
 #endif
-
         // encapsulate in feature object
         Feature feature = new(location, featureType, parent);
+        bool owner = ownerId == NetworkManager.Singleton.LocalClientId;
+
+        if (owner)
+        {
+            InitializeResourceProducers(featureType);
+        }
+
+        SpawnedFeatures.Add(feature);
+        if (owner)
+        {
+            PlayerFeatures.Add(feature);
+        }
+
         return feature;
     }
 
@@ -319,10 +378,13 @@ public class FeatureBuilder : MonoBehaviour
         PlayerFeatures.Remove(feature); // returns quietly if not player owned
     }
 
+
     private static float Hypotenuse(float x, float y)
     {
         double zSquared = System.Math.Pow(x, 2) + System.Math.Pow(y, 2);
         double z = System.Math.Sqrt(zSquared);
         return (float)z;
     }
+
+    #endregion
 }

@@ -75,7 +75,7 @@ public class FeatureInfo : MonoBehaviour, IOpenable
         CurrentShift = StartCoroutine((this as IOpenable).ToggleOpenable());
     }
 
-    public void OnTileSelected()
+    public void OnTileSelected(Object _)
     {
         StartCoroutine(OnTileSelectedDelayed());
     }

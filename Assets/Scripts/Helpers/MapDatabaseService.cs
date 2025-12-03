@@ -56,8 +56,13 @@ namespace TTT.Helpers
             string url = $"{BASE_URL}{MAP_BY_ID_ENDPOINT}/{mapId}";
 
             UnityWebRequest request = UnityWebRequest.Get(url);
+            var req = request.SendWebRequest();
+            while (!req.isDone)
+            {
+                yield return null;
+            }
 
-            yield return request.SendWebRequest();
+            // yield return request.SendWebRequest();
 
             HandleRequestResult(onSuccess, onError, request);
 

@@ -8,6 +8,7 @@ using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
 using TTT.Hex;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace TTT.Managers
@@ -47,28 +48,11 @@ namespace TTT.Managers
 
             if (cellHasFeature)
             {
-                RaiseDestroyingFeatureEvent(hc.CellPosition);
+                RemoveFeatureClientRpc(hc.CellPosition);
             }
         }
 
-        /// <summary>
-        /// Removes a building from a cell when it gets flooded.
-        /// </summary>
-        private void RaiseDestroyingFeatureEvent(Vector3 cellPosition)
-        {
-            BuildingFeatureArgs bfArgs =
-                ScriptableObject.CreateInstance<BuildingFeatureArgs>();
-            bfArgs.Location = cellPosition;
-
-            if (DestroyingFeatureEvent == null)
-            {
-                Debug.LogError("DestroyingFeatureEvent is not set here");
-                return;
-            }
-
-            DestroyingFeatureEvent.Raise(bfArgs);
-            Debug.Log("destroyed!");
-        }
+        #region:Cell Management
 
         private void SetCellCenterVertex(HexCell hc, int cv)
         {
@@ -155,19 +139,104 @@ namespace TTT.Managers
 
             foreach (CubeCoordinates dir in MapManager.NeighbourDirections)
             {
-                bool success;
                 CubeCoordinates neighborPos = c.CellCubeCoordinates + dir;
                 HexCell? n = GetCellFromCubeCoordinates(
                     neighborPos,
-                    out success
+                    out bool success
                 );
-                // Debug.Log($"{success}, {neighborPos}, {dir}");
 
                 if (success)
                     neighbours.Add((HexCell)n);
             }
 
             return neighbours;
+        }
+
+        #region: Game OBJ Management
+
+        private void SpawnGridMesh(GameObject hm)
+        {
+            // Only server spawns NetworkObjects
+            if (!NetworkManager.Singleton.IsServer)
+            {
+                // Debug.Log("[MapManager] Client skipping hex mesh spawn (server will handle it)");
+                return;
+            }
+
+            // Get reference to HexMesh prefab
+            GameObject hexMeshGameObject = Instantiate(hm);
+            HexMesh hexMeshInstance = hexMeshGameObject.GetComponent<HexMesh>();
+
+            // Instance HexMesh prefab based off of the build data
+            hexMeshInstance.GetComponent<NetworkObject>().Spawn();
+            hexMeshInstance.transform.position += new Vector3(
+                0.0f,
+                -0.01f,
+                0.0f
+            );
+            _hexMeshId.Value = hexMeshInstance.NetworkObjectId;
+            // Debug.Log($"[MapManager] Server spawned hex mesh with ID: {_hexMeshId.Value}");
+
+            // Server also triangulates for itself
+            TriangulateHexMeshClientRpc();
+        }
+
+        private void SpawnSeaMesh(GameObject sm)
+        {
+            // Only server spawns NetworkObjects
+            if (!NetworkManager.Singleton.IsServer)
+            {
+                // Debug.Log("[MapManager] Client skipping sea mesh spawn (server will handle it)");
+                return;
+            }
+
+            // Get reference to SeaMesh prefab
+            GameObject seaMeshGameObject = Instantiate(sm);
+            SeaMesh seaMeshInstance = seaMeshGameObject.GetComponent<SeaMesh>();
+
+            // Instance SeaMesh prefab based off of the
+            seaMeshInstance.GetComponent<NetworkObject>().Spawn();
+            _seaMeshId.Value = seaMeshInstance.NetworkObjectId;
+            // Debug.Log($"[MapManager] Server spawned sea mesh with ID: {_seaMeshId.Value}");
+
+            // Server also triangulates for itself
+            TriangulateSeaMeshClientRpc();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region: Coroutines
+
+        /// <summary>
+        /// Spawns the map objects.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator SpawnMapObjects()
+        {
+            yield return AssetLoader<GameObject>.Load(
+                new("P_HexMesh"),
+                SpawnGridMesh
+            );
+            yield return AssetLoader<GameObject>.Load(
+                new("P_SeaMesh"),
+                SpawnSeaMesh
+            );
+        }
+
+        /// <summary>
+        /// Spawns features onto the map.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator LoadFeatureTypes()
+        {
+            yield return AssetLoader<FeatureType>.LoadGroup(
+                "building",
+                CacheFeatureType
+            );
+            // _featuresLoaded = true;
+            // Debug.Log($"Loaded {_featureTypesByUniqueId.Count} feature types");
         }
 
         /// <summary>
@@ -180,12 +249,6 @@ namespace TTT.Managers
 
             while (true)
             {
-                // string test2 = "";
-                // foreach (var hxc in ToFlood) test2 += $"{hxc}\n";
-                // Debug.Log(test2);
-                // Debug.Log($"{FloodQueue.Count}, {ToFlood.Count}");
-
-                // --- 1. Flood queue is empty, go through neighbours that were not eligible for flooding and see if they will be ---
                 if (ToFlood.Count == 0)
                 {
                     while (FloodQueue.Count > 0)
@@ -205,12 +268,11 @@ namespace TTT.Managers
                     while (AboveSeaLevelQueue.Count > 0)
                         FloodQueue.Enqueue(AboveSeaLevelQueue.Dequeue());
 
-                    Debug.Log("Flood fill cycle complete");
+                    // Debug.Log("Flood fill cycle complete");
 
                     break;
                 }
 
-                // --- 2. Process the flooding queue, use specific number of cells (idk 100) ---
                 List<HexCell> flooded = new();
                 int cellCount = 0;
                 while (ToFlood.Count > 0 && cellCount < CellsPerFrame)
@@ -241,8 +303,6 @@ namespace TTT.Managers
                     cellCount++;
                 }
 
-                // --- 3. Retriangulate what has been flooded ---
-                // TriangulateMeshInstanceClientRpc(flooded.ToArray());
                 TriangulateSeaMeshClientRpc(flooded.ToArray());
                 AudioEvent.Raise(
                     new AudioEventArgs()
@@ -256,5 +316,89 @@ namespace TTT.Managers
 
             onFloodEnded.Raise();
         }
+
+        /// <summary>
+        /// Coroutine to asynchronously spawn features onto the map.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator SpawnPendingFeaturesAsync()
+        {
+            if (_featureTypesByUniqueId.Keys.Count <= 0)
+            {
+                // Debug.LogWarning("feature types didn't load");
+                yield break;
+            }
+
+            int spawnedCount = 0;
+            int spawnsPerFrame = 5; // Spawn 50 buildings per frame for smooth-ish loading
+            Dictionary<string, int> featureTypeCounts =
+                new Dictionary<string, int>();
+
+            // Debug.Log(
+            //     $"Starting async spawn of {_pendingFeatures.Count} features..."
+            // );
+
+            foreach (var featureNet in _pendingFeaturesGoated)
+            {
+                var featureIdS = featureNet.FeatureId.ToString();
+                if (
+                    _featureTypesByUniqueId.TryGetValue(
+                        featureNet.FeatureId.ToString(),
+                        out FeatureType featureType
+                    )
+                )
+                {
+                    var args =
+                        ScriptableObject.CreateInstance<BuildingFeatureArgs>();
+                    args.Location = featureNet.FeaturePosition;
+                    args.FeatureType = featureType;
+                    args.OwnedByClient = false;
+                    // _onFeatureBuild.Raise(args);
+
+                    _onFeaturePlace.Raise(args);
+
+                    spawnedCount++;
+
+                    // Track counts by type
+                    if (!featureTypeCounts.ContainsKey(featureIdS))
+                        featureTypeCounts[featureIdS] = 0;
+                    featureTypeCounts[featureIdS]++;
+
+                    // Yield every X spawns to maintain framerate
+                    //Kinda doesn't work :/
+                    if (spawnedCount % spawnsPerFrame == 0)
+                    {
+                        yield return null; // Wait one frame
+                    }
+                }
+                else
+                {
+                    // Debug.LogWarning(
+                    //     $"skipped unknown feature '{featureIdS}' at {featureNet.FeaturePosition}"
+                    // ); //THis basically never happens but I put this here just in case :/
+                }
+            }
+
+            if (spawnedCount > 0)
+            {
+                // Debug.Log($"Finished spawning {spawnedCount} features:");
+                // foreach (var kvp in featureTypeCounts)
+                // {
+                //     Debug.Log($"  {kvp.Key}: {kvp.Value}");
+                // }
+            }
+
+            // _pendingFeatures.Clear();
+
+            _mapLoadFinishEvent.Raise(
+                new NewMapFinishedEventArgs()
+                {
+                    WasSuccessful = true,
+                    MaxMapHeight = _hexMaxHeight,
+                    SeaLevel = SeaLevel.Value,
+                }
+            );
+        }
+        #endregion
     }
 }

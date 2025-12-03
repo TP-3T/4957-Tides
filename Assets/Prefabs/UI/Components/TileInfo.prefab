@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 4098630174586739431}
   - component: {fileID: 501601508629992844}
   - component: {fileID: 844808965400395280}
-  - component: {fileID: 2384326254899312327}
   - component: {fileID: 851600568098823285}
+  - component: {fileID: 2384326254899312327}
   m_Layer: 5
   m_Name: TileInfo
   m_TagString: Untagged
@@ -123,34 +123,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2384326254899312327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684675110989884910}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 430d05d8968fdce498f62567aa054de0, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 851600568098823285}
-        m_TargetAssemblyTypeName: FeatureInfo, UI
-        m_MethodName: OnTileClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &851600568098823285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,7 +165,36 @@ MonoBehaviour:
   <ShiftDirection>k__BackingField: 2
   <ShiftPadding>k__BackingField: {x: 0, y: 0}
   hexFeature: {fileID: 8487072585036448536}
-  playerStats: {fileID: 0}
+  AudioEvent: {fileID: 11400000, guid: 495e94ea5e938534bb5d3fdc6bfc2083, type: 2}
+  playerStats: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
+--- !u!114 &2384326254899312327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684675110989884910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4d60daf2e5883458c6ff6ae91ec015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 430d05d8968fdce498f62567aa054de0, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 851600568098823285}
+        m_TargetAssemblyTypeName: FeatureInfo, UI
+        m_MethodName: OnTileSelected
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!1 &8487072585036448536
 GameObject:
   m_ObjectHideFlags: 0

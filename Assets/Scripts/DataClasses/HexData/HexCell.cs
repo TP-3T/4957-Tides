@@ -1,5 +1,6 @@
 using System;
 using TTT.DataClasses.Terrain;
+using TTT.DataClasses.TileFeatures;
 using Unity.Netcode;
 using UnityEngine;
 
