@@ -247,15 +247,6 @@ public class FeatureBuilder : MonoBehaviour
     /// </summary>
     private void InitializeResourceProducers(FeatureType featureType)
     {
-        // Trigger OnCreated for all defined resource producers
-        if (featureType.ResourceProducers != null)
-        {
-            foreach (var producer in featureType.ResourceProducers)
-            {
-                producer.OnCreated();
-            }
-        }
-
         // Automatically handle pollution emission if feature has PollutionEmission
         if (
             featureType.PollutionEmission != 0
@@ -357,8 +348,6 @@ public class FeatureBuilder : MonoBehaviour
         // encapsulate in feature object
         Feature feature = new(location, featureType, parent);
         bool owner = ownerId == NetworkManager.Singleton.LocalClientId;
-
-        Debug.Log($"[FeatureBuilder] THE OWNER ID VALYUE {ownerId}, {NetworkManager.Singleton.LocalClientId}");
 
         if (owner)
         {
