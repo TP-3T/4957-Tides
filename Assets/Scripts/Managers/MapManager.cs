@@ -93,8 +93,6 @@ namespace TTT.Managers
 
         private NetworkList<FeatureNet> _pendingFeaturesGoated = new();
 
-        private bool _featuresLoaded = false;
-
         IEnumerator Start()
         {
             lineRenderer = GetComponent<LineRenderer>();

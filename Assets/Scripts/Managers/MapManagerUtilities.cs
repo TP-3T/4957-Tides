@@ -139,13 +139,11 @@ namespace TTT.Managers
 
             foreach (CubeCoordinates dir in MapManager.NeighbourDirections)
             {
-                bool success;
                 CubeCoordinates neighborPos = c.CellCubeCoordinates + dir;
                 HexCell? n = GetCellFromCubeCoordinates(
                     neighborPos,
-                    out success
+                    out bool success
                 );
-                // Debug.Log($"{success}, {neighborPos}, {dir}");
 
                 if (success)
                     neighbours.Add((HexCell)n);

@@ -823,6 +823,7 @@ MonoBehaviour:
   <ShiftDirection>k__BackingField: 2
   <ShiftPadding>k__BackingField: {x: 20, y: 0}
   hexFeature: {fileID: 0}
+  AudioEvent: {fileID: 0}
   playerStats: {fileID: 0}
 --- !u!1 &6688934136522102278
 GameObject:
@@ -1748,7 +1749,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 38
+  m_fontSize: 59.5
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
