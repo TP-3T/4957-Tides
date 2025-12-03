@@ -89,7 +89,7 @@ namespace TTT.Player
 
         private Vector3 mouseDownPosition;
 
-        void OnStart()
+        public void OnStart()
         {
             transform.position = startingPosition;
             if (playerCamera != null)
@@ -109,6 +109,8 @@ namespace TTT.Player
         {
             // CurrentUI = Instantiate(MainMenu);
             Mode = InteractionMode.INSPECTING;
+            GameUI.SetActive(false);
+            SetCurrentUI(MainMenu);
         }
 
         private void SetCurrentUI(GameObject newUI)

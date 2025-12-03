@@ -13,6 +13,7 @@ using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Collections;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEditor.SearchService;
 using UnityEngine;
 
@@ -214,20 +215,35 @@ namespace TTT.Managers
             StartNetworkEventArgs args = eventArgs as StartNetworkEventArgs;
             try
             {
-                // Configure transport with IP and Port from args
+                // Clean up IP string to remove any hidden characters and invalid chars using a for loop
+                string ipRaw = args.Ip;
+                var ipBuilder = new System.Text.StringBuilder();
+                for (int i = 0; i < ipRaw.Length; i++)
+                {
+                    char c = ipRaw[i];
+                    if (char.IsDigit(c) || c == '.' || c == ':')
+                    {
+                        ipBuilder.Append(c);
+                    }
+                }
+                string cleanIp = ipBuilder.ToString().Trim();
+                
+                // Configure transport with IP and Port from args using SetConnectionData
                 var transport = NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
-                transport.ConnectionData.Address = args.Ip;
-                transport.ConnectionData.Port = args.Port;
-
+                
                 if (args.IsHost)
                 {
-                    Debug.Log($"Starting host on {args.Ip}:{args.Port}");
+                    // For host, use "0.0.0.0" as listen address to accept connections on all interfaces
+                    transport.SetConnectionData(cleanIp, args.Port, cleanIp);
+                    Debug.Log($"Starting host on {cleanIp}:{args.Port}");
                     NetworkManager.Singleton.StartHost();
                     CurrentPlayerId.Value = NetworkManager.Singleton.LocalClientId;
                 }
                 else
                 {
-                    Debug.Log($"Starting client connecting to {args.Ip}:{args.Port}");
+                    // For client, use the IP as the listen address parameter (not actually used by client)
+                    transport.SetConnectionData(cleanIp, args.Port, cleanIp);
+                    Debug.Log($"Starting client connecting to {cleanIp}:{args.Port}");
                     NetworkManager.Singleton.StartClient();
                 }
             }
