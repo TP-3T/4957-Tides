@@ -1,6 +1,7 @@
 using System.Linq;
 using TTT.DataClasses;
 using TTT.DataClasses.HexData;
+using TTT.DataClasses.Terrain;
 using TTT.DataClasses.TileFeatures;
 using UnityEngine;
 
@@ -10,10 +11,27 @@ using UnityEngine;
 )]
 public class NearWaterValidator : DefaultValidator
 {
-    private static bool TileHasWater(HexCell tile)
+    private readonly TerrainTypeId[] waterTerrains = new TerrainTypeId[]
     {
-        // we don't have a water/ocean/river/lake terrain type yet
-        return tile.Flooded;
+        TerrainTypeId.OCEAN,
+        TerrainTypeId.ESTUARY,
+        TerrainTypeId.FRESHWATER,
+    };
+
+    private bool TileHasWater(HexCell tile)
+    {
+        if (tile.Flooded)
+        {
+            return true;
+        }
+
+        TerrainTypeId terrainId = tile.TerrainTypeId;
+        if (waterTerrains.Contains(terrainId))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public override bool CanBuild(
