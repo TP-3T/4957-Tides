@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe355f656467054a8ff105106e9592b, type: 3}
   m_Name: Money
   m_EditorClassIdentifier: 
-  resourceName: money
-  amountOwned: 500
+  <Name>k__BackingField: 
+  <AmountOwned>k__BackingField: 650

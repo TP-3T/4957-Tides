@@ -1500,7 +1500,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a67b364743aad3a438a4fa04aa16ced9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newMapEvent: {fileID: 0}
+  newMapEvent: {fileID: 11400000, guid: 9438c37d1b6c53b408804b0dce45c597, type: 2}
+  MainMenu: {fileID: 0}
+  startNetworkEvent: {fileID: 11400000, guid: 5c9d44935efb4db4cbe1919ca9032bda, type: 2}
+  lobbyMenu: {fileID: 0}
 --- !u!114 &8192030440867239920
 MonoBehaviour:
   m_ObjectHideFlags: 0

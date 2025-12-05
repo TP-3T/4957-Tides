@@ -14,7 +14,8 @@ namespace TTT.ClimateModel
         private static readonly int SEA_LEVEL_SCALE_FACTOR = 1000;
 
         // 3 months
-        private static readonly double NUM_CHANGE_IN_TIME_YEARS = 0.25;
+        // private static readonly double NUM_CHANGE_IN_TIME_YEARS = 0.25;
+        private static readonly double NUM_CHANGE_IN_TIME_YEARS = 1.0;
 
         private static readonly Queue<WorldState> _climateModelWorldStatesQueue =
             new();
@@ -177,7 +178,9 @@ namespace TTT.ClimateModel
                     modelInput.currAtmosphericCO2ConcentrationPpm
                 );
 
-            UnityEngine.Debug.Log($"Future temp in deg C - {futureTemperatureCelsius}");
+            UnityEngine.Debug.Log(
+                $"Future temp in deg C - {futureTemperatureCelsius}"
+            );
 
             // === Future Sea level ===
 
@@ -187,21 +190,35 @@ namespace TTT.ClimateModel
 
             // if current sea level is within the range of the training dataset
             if (
-                (modelInput.currSeaLevelMM >= MLModel.TRAINING_DATASET_GMSL_LOWER_BOUND) 
-                    && 
-                (modelInput.currTemperatureCelsius >= MLModel.TRAINING_DATASET_TEMP_LOWER_BOUND)
-                    && 
-                (modelInput.currAtmosphericCO2ConcentrationPpm >= MLModel.TRAINING_DATASET_CO2_POL_LOWER_BOUND)
-
-                && 
-
-                (modelInput.currSeaLevelMM <= MLModel.TRAINING_DATASET_GMSL_UPPER_BOUND) 
-                    && 
-                (modelInput.currTemperatureCelsius <= MLModel.TRAINING_DATASET_TEMP_UPPER_BOUND)
-                    && 
-                (modelInput.currAtmosphericCO2ConcentrationPpm <= MLModel.TRAINING_DATASET_CO2_POL_UPPER_BOUND)
-            ) {
-                UnityEngine.Debug.Log("Using ML model for sea level prediction");
+                (
+                    modelInput.currSeaLevelMM
+                    >= MLModel.TRAINING_DATASET_GMSL_LOWER_BOUND
+                )
+                && (
+                    modelInput.currTemperatureCelsius
+                    >= MLModel.TRAINING_DATASET_TEMP_LOWER_BOUND
+                )
+                && (
+                    modelInput.currAtmosphericCO2ConcentrationPpm
+                    >= MLModel.TRAINING_DATASET_CO2_POL_LOWER_BOUND
+                )
+                && (
+                    modelInput.currSeaLevelMM
+                    <= MLModel.TRAINING_DATASET_GMSL_UPPER_BOUND
+                )
+                && (
+                    modelInput.currTemperatureCelsius
+                    <= MLModel.TRAINING_DATASET_TEMP_UPPER_BOUND
+                )
+                && (
+                    modelInput.currAtmosphericCO2ConcentrationPpm
+                    <= MLModel.TRAINING_DATASET_CO2_POL_UPPER_BOUND
+                )
+            )
+            {
+                UnityEngine.Debug.Log(
+                    "Using ML model for sea level prediction"
+                );
 
                 // Predict future sea level using the ml model
                 futureSeaLevelMM = mlModel.PredictFutureSeaLevel(
@@ -227,7 +244,9 @@ namespace TTT.ClimateModel
             float futureSeaLevelMetres =
                 (float)futureSeaLevelMM / SEA_LEVEL_SCALE_FACTOR;
 
-            UnityEngine.Debug.Log($"Future sea level in m - {futureSeaLevelMetres}");
+            UnityEngine.Debug.Log(
+                $"Future sea level in m - {futureSeaLevelMetres}"
+            );
 
             WorldState futureWorldState = new()
             {

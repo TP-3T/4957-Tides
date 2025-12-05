@@ -304,15 +304,15 @@ namespace TTT.Managers
                 }
 
                 TriangulateSeaMeshClientRpc(flooded.ToArray());
-                AudioEvent.Raise(
-                    new AudioEventArgs()
-                    {
-                        Type = AudioTypes.ONESHOT,
-                        ToPlay = "water_rise",
-                    }
-                );
                 yield return null;
             }
+            AudioEvent.Raise(
+                new AudioEventArgs()
+                {
+                    Type = AudioTypes.ONESHOT,
+                    ToPlay = "water_rise",
+                }
+            );
 
             onFloodEnded.Raise();
         }
