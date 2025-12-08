@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using TTT.DataClasses.HexData;
 using TTT.DataClasses.PlayerResources;
 using TTT.DataClasses.States;
@@ -59,14 +57,13 @@ public class FeatureBuilder : MonoBehaviour
     {
         if (eventArgs is not FeatureDestroyArgs dtrArgs)
         {
-            Debug.LogWarning("[FeatureBuilder] cannot invoke this event with parameter type not FeatureDestroyArgs");
+            Debug.LogWarning(
+                "[FeatureBuilder] cannot invoke this event with parameter type not FeatureDestroyArgs"
+            );
             return;
         }
 
-        TryToDestroy(
-            FixLocation(dtrArgs.Location),
-            dtrArgs.DestroyerId
-        );
+        TryToDestroy(FixLocation(dtrArgs.Location), dtrArgs.DestroyerId);
     }
 
     public void OnFeaturePlace(Object eventArgs)
@@ -87,7 +84,9 @@ public class FeatureBuilder : MonoBehaviour
     {
         if (eventArgs is not FeatureRemoveArgs bfArgs)
         {
-            Debug.LogWarning("[FeatureBuilder] cannot invoke this event with parameter type not FeatureRemoveArgs");
+            Debug.LogWarning(
+                "[FeatureBuilder] cannot invoke this event with parameter type not FeatureRemoveArgs"
+            );
             return;
         }
 
@@ -128,32 +127,37 @@ public class FeatureBuilder : MonoBehaviour
 
         if (!CheckCost(featureType))
         {
-            Debug.LogWarning("Tried to build a feature that you cannot afford!");
+            Debug.LogWarning(
+                "Tried to build a feature that you cannot afford!"
+            );
             return;
         }
-        
+
         if (checkForCost)
             DeductCost(featureType);
 
-        _onBuildFeature.Raise(new BuildingFeatureArgs()
-        {
-            OwnerId = ownerId,
-            Location = location,
-            FeatureType = featureType
-        });
+        _onBuildFeature.Raise(
+            new BuildingFeatureArgs()
+            {
+                OwnerId = ownerId,
+                Location = location,
+                FeatureType = featureType,
+            }
+        );
     }
 
     private void TryToDestroy(Vector3 location, ulong destroyerId)
     {
-        Debug.Log($"[FeatureBuilder] attempting to destroy feature {location}, I am {destroyerId}");
+        Debug.Log(
+            $"[FeatureBuilder] attempting to destroy feature {location}, I am {destroyerId}"
+        );
 
         Feature[] allfA = PlayerFeatures.GetItems();
         if (allfA.Any(f => f.CellPosition.Equals(location)))
         {
-            _onDestroyFeature.Raise(new FeatureDestroyArgs()
-            {
-                Location = location
-            });
+            _onDestroyFeature.Raise(
+                new FeatureDestroyArgs() { Location = location }
+            );
         }
     }
 
@@ -180,7 +184,6 @@ public class FeatureBuilder : MonoBehaviour
             Debug.LogWarning("Tried to build but couldn't find a HexCell");
             return false;
         }
-
 
         // build area
         HexCell[] adjacentTiles = MapManager
@@ -278,7 +281,11 @@ public class FeatureBuilder : MonoBehaviour
         return ((HexCell)exactCell).CellPosition;
     }
 
-    private Feature BuildAt(ulong ownerId, Vector3 location, FeatureType featureType)
+    private Feature BuildAt(
+        ulong ownerId,
+        Vector3 location,
+        FeatureType featureType
+    )
     {
         GameObject modelInstance = Instantiate(featureType.Prefab);
 
@@ -377,7 +384,6 @@ public class FeatureBuilder : MonoBehaviour
         SpawnedFeatures.Remove(feature);
         PlayerFeatures.Remove(feature); // returns quietly if not player owned
     }
-
 
     private static float Hypotenuse(float x, float y)
     {

@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using TTT.DataClasses;
 using TTT.DataClasses.TileFeatures;
 using TTT.Helpers;
 using UnityEngine;
@@ -26,6 +28,11 @@ namespace TTT.Managers
 
         public void OnSeasonEnding(UnityEngine.Object _)
         {
+            float newPollution = playerFeatures
+                .GetItems()
+                .Sum(item => item.Type.PollutionEmission);
+
+            GameManager.Instance.CO2_Pollution.Value += newPollution;
             seasonEnding?.Invoke();
         }
 

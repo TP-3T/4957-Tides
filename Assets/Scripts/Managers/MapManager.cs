@@ -107,12 +107,12 @@ namespace TTT.Managers
             _seaMeshId.OnValueChanged += OnSeaMeshIdChanged;
         }
 
-        protected override void OnDestroy()
+        public override void OnDestroy()
         {
-            base.OnDestroy();
             // Unsubscribe from NetworkVariable changes
             _hexMeshId.OnValueChanged -= OnHexMeshIdChanged;
             _seaMeshId.OnValueChanged -= OnSeaMeshIdChanged;
+            base.OnDestroy();
         }
 
         private void OnHexMeshIdChanged(ulong oldValue, ulong newValue)
@@ -138,19 +138,31 @@ namespace TTT.Managers
         private IEnumerator WaitAndTriangulateHexMesh()
         {
             // Wait until the NetworkObject is spawned and available on client
-            while (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(_hexMeshId.Value))
+            while (
+                !NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(
+                    _hexMeshId.Value
+                )
+            )
             {
                 yield return null;
             }
 
-            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
-                _hexMeshId.Value,
-                out NetworkObject hexMeshNetworkObject))
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _hexMeshId.Value,
+                    out NetworkObject hexMeshNetworkObject
+                )
+            )
             {
-                HexMesh hexMeshInstance = hexMeshNetworkObject.GetComponent<HexMesh>();
-                hexMeshInstance.Triangulate(HexCells, MapManager.HexSize, MapManager.HexOrientation);
+                HexMesh hexMeshInstance =
+                    hexMeshNetworkObject.GetComponent<HexMesh>();
+                hexMeshInstance.Triangulate(
+                    HexCells,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
                 // Debug.Log("[MapManager] Client successfully triangulated hex mesh");
-                
+
                 // Spawn features after triangulation
                 StartCoroutine(SpawnPendingFeaturesAsync());
             }
@@ -159,17 +171,30 @@ namespace TTT.Managers
         private IEnumerator WaitAndTriangulateSeaMesh()
         {
             // Wait until the NetworkObject is spawned and available on client
-            while (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(_seaMeshId.Value))
+            while (
+                !NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(
+                    _seaMeshId.Value
+                )
+            )
             {
                 yield return null;
             }
 
-            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
-                _seaMeshId.Value,
-                out NetworkObject seaMeshNetworkObject))
+            if (
+                NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(
+                    _seaMeshId.Value,
+                    out NetworkObject seaMeshNetworkObject
+                )
+            )
             {
-                SeaMesh seaMeshInstance = seaMeshNetworkObject.GetComponent<SeaMesh>();
-                seaMeshInstance.Triangulate(HexCells, GameManager.Instance.SeaLevel.Value, MapManager.HexSize, MapManager.HexOrientation);
+                SeaMesh seaMeshInstance =
+                    seaMeshNetworkObject.GetComponent<SeaMesh>();
+                seaMeshInstance.Triangulate(
+                    HexCells,
+                    GameManager.Instance.SeaLevel.Value,
+                    MapManager.HexSize,
+                    MapManager.HexOrientation
+                );
                 // Debug.Log("[MapManager] Client successfully triangulated sea mesh");
             }
         }
@@ -184,6 +209,7 @@ namespace TTT.Managers
                 _featureTypesByUniqueId.Add(featureType.UniqueID, featureType);
             }
         }
+
         #region:RPC Definitions
 
         [Rpc(SendTo.ClientsAndHost)]
@@ -217,7 +243,6 @@ namespace TTT.Managers
             };
             _onFeatureRemoved.Raise(rmArgs);
         }
-
 
         public void TriangulateMeshes()
         {
@@ -465,18 +490,28 @@ namespace TTT.Managers
                     HexCells.Add(hc);
                 }
 
-                GameManager.Instance.SeaLevel.Value = _gameMapData
-                    .WorldState
-                    .SeaLevel;
+                //* CB: Update world Variables here.
+                var seaLevel = _gameMapData.WorldState.SeaLevel;
 
+                GameManager.Instance.SeaLevel.Value =
+                    seaLevel < GameManager.INITIAL_SEA_LEVEL_M
+                        ? GameManager.INITIAL_SEA_LEVEL_M
+                        : seaLevel;
+
+                var poll = _gameMapData.WorldState.Pollution;
                 // Load pollution from map data into game manager
-                GameManager.Instance.CO2_Pollution.Value = _gameMapData
-                    .WorldState
-                    .Pollution;
+                GameManager.Instance.CO2_Pollution.Value =
+                    poll < GameManager.INITIAL_CO2_PPM
+                        ? GameManager.INITIAL_CO2_PPM
+                        : poll;
+
+                var temp = _gameMapData.WorldState.Temp;
+
                 //load temperature from map data into game manager
-                GameManager.Instance.Temperature.Value = _gameMapData
-                    .WorldState
-                    .Temp;
+                GameManager.Instance.Temperature.Value =
+                    temp < GameManager.INITIAL_TEMPERATURE_DEG_C
+                        ? GameManager.INITIAL_TEMPERATURE_DEG_C
+                        : temp;
                 // GameManager.Instance.Year = _gameMapData.WorldState.Year;
                 ToFlood.Clear();
                 ToFlood.Enqueue(HexCells[0]); // There was some idea for this

@@ -32,6 +32,8 @@ MonoBehaviour:
     <ResourceAmounts>k__BackingField:
     - <Thing>k__BackingField: {fileID: 11400000, guid: 0364a9e20993188479100b6a284734b1, type: 2}
       <Count>k__BackingField: 50
+    - <Thing>k__BackingField: {fileID: 11400000, guid: 42ab95fe1d4a97c45ac3c75ab8416f38, type: 2}
+      <Count>k__BackingField: 50
   <Cost>k__BackingField:
   - <Thing>k__BackingField: {fileID: 11400000, guid: eba3c36e2564c4c45ac97ef31e9e1f76, type: 2}
     <Count>k__BackingField: 5

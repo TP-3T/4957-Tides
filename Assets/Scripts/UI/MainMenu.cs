@@ -28,12 +28,6 @@ public class MainMenu : MonoBehaviour
     private GameObject CreateMenu;
 
     [SerializeField]
-    private GameObject GameUI;
-
-    [SerializeField]
-    private GameObject LoadingScreen;
-
-    [SerializeField]
     private int MapID;
 
     [SerializeField]
@@ -107,22 +101,6 @@ public class MainMenu : MonoBehaviour
         ChangeActiveMenu(MapBrowserMenu);
     }
 
-    /// <summary>
-    /// Opens Game UI on start
-    /// </summary>
-    public void StartGameMenu()
-    {
-        // Debug.Log("Clicked Start Game!");
-        ChangeActiveMenu(LoadingScreen);
-        MenuBackground.SetActive(true);
-        // Defer map loading until after network starts (handled post-host/client start)
-    }
-
-    public void OpenGameUI()
-    {
-        ChangeActiveMenu(GameUI);
-    }
-
     public void QuitGame()
     {
         // Debug.Log("Quitting game...");
@@ -149,9 +127,6 @@ public class MainMenu : MonoBehaviour
         MultiplayerMenu.SetActive(false);
         LobbyRoom.SetActive(false);
         MapBrowserMenu.SetActive(false);
-        GameUI.SetActive(false);
-        LoadingScreen.SetActive(false);
-
         CurrentMenu.SetActive(true);
     }
 
@@ -168,7 +143,6 @@ public class MainMenu : MonoBehaviour
     {
         // Debug.LogWarning(msg);
     }
-
 
     /// <summary>
     /// Raises startNetworkEvent and starts as host with default IP and Port.
@@ -201,5 +175,4 @@ public class MainMenu : MonoBehaviour
             startNetworkEvent.Raise(args);
         }
     }
-
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms.VisualStyles;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
 using TTT.GameEvents;
@@ -260,10 +259,12 @@ namespace TTT.UI
 
         public void DestroyModeEngaged()
         {
-            InteractModeChange.Raise(new InteractionModeChangeEventArgs()
-            {
-                NewMode = InteractionMode.DESTROYING
-            });
+            InteractModeChange.Raise(
+                new InteractionModeChangeEventArgs()
+                {
+                    NewMode = InteractionMode.DESTROYING,
+                }
+            );
         }
 
         #region:SCROBJECT handlers

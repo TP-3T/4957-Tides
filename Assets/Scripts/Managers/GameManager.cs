@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Codice.Client.BaseCommands;
-using NUnit.Framework.Constraints;
 using TTT.ClimateModel;
 using TTT.DataClasses;
 using TTT.DataClasses.HexData;
@@ -13,9 +9,8 @@ using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Collections;
 using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
-using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace TTT.Managers
 {
@@ -32,20 +27,10 @@ namespace TTT.Managers
         [field: SerializeField]
         public InteractionMode InteractionMode { get; private set; }
 
-        // // ! TODO: Remove
-        // private readonly string[] Seasons =
-        // {
-        //     "Spring",
-        //     "Summer",
-        //     "Fall",
-        //     "Winter",
-        // };
-
         public NetworkVariable<ulong> CurrentPlayerId = new();
 
         [field: SerializeField]
         public int Year { get; private set; } = 1;
-
 
         [SerializeField]
         public bool FTTaken { get; private set; } = false;
@@ -78,7 +63,7 @@ namespace TTT.Managers
 
         [field: SerializeField]
         public NetworkVariable<float> SeaLevel { get; private set; } =
-            new(INITIAL_TEMPERATURE_DEG_C);
+            new(INITIAL_SEA_LEVEL_M);
 
         [field: SerializeField]
         public NetworkVariable<float> CO2_Pollution { get; private set; } =
@@ -86,7 +71,7 @@ namespace TTT.Managers
 
         [field: SerializeField]
         public NetworkVariable<float> Temperature { get; private set; } =
-            new(INITIAL_SEA_LEVEL_M);
+            new(INITIAL_TEMPERATURE_DEG_C);
 
         void Start()
         {
@@ -137,16 +122,24 @@ namespace TTT.Managers
             // Debug.Log(
             //     "Year has changed, this should go in a AI manager or just query the AI here  - GameManager line 124"
             // );
-
             Year += 1;
-
-            // Calculate and apply sea level change based on pollution
-            if (PlayerStats != null)
+            WorldState currentWorldState = new()
             {
-                // float seaLevelIncrease = PlayerStats.CalculateSeaLevelFromPollution();
-                // MapManager.Instance.SeaLevel.Value += seaLevelIncrease;
-                // Debug.Log($"Sea level increased by {seaLevelIncrease} due to pollution");
-            }
+                Pollution = CO2_Pollution.Value,
+                SeaLevel = SeaLevel.Value,
+                Temp = Temperature.Value,
+                Year = Year,
+            };
+
+            WorldState futureWorldState =
+                ClimatePredictionModel.PredictFutureClimateDataForNextTurn(
+                    currentWorldState
+                );
+
+            Temperature.Value = futureWorldState.Temp;
+            SeaLevel.Value = futureWorldState.SeaLevel.Equals(SeaLevel.Value)
+                ? SeaLevel.Value += 0.2f
+                : futureWorldState.SeaLevel;
 
             endingYearEvent.Raise();
         }
@@ -159,9 +152,6 @@ namespace TTT.Managers
         public void OnTurnEndingClientRpc(int year, FixedString32Bytes season)
         {
             NetworkingInformationLog();
-            // Debug.Log($"[GameManager] on client turn ending matches current {self == nextClient}");
-            // Debug.Log($"[GameManager] on client turn ending client rpc {NetworkManager.Singleton.LocalClientId}, start turn");
-            // startTurnEvent.Raise(new NextTurnEventArgs() {});
 
             endTurnEvent.Raise(
                 new EndTurnEventArgs()
@@ -173,35 +163,32 @@ namespace TTT.Managers
         }
 
         [Rpc(SendTo.SpecifiedInParams)]
-        public void StartNextTurnCilentRpc(RpcParams paramS = default)
+        public void StartNextTurnClientRpc(RpcParams paramS = default)
         {
-            // Debug.Log(
-            //     $"[GameManager] cilent rpc IT SHOULD ONLY BE ME {NetworkManager.Singleton.LocalClientId}"
-            // );
             startTurnEvent.Raise();
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void OnTurnEndingServerRpc()
         {
-            // Debug.Log($"{Season.Equals(Seasons[0])}");
-            // Debug.Log($"[GameManager] server rpc, current season {Season}");
-            // Debug.Log($"[GameManager] server rpc, first season {Seasons[0]}");
-
             ulong nextPlayerId =
                 (CurrentPlayerId.Value + 1)
                 % ((ulong)NetworkManager.Singleton.ConnectedClientsList.Count);
 
-            if (FTTaken && nextPlayerId == 0) // The next season
+            if (FTTaken && nextPlayerId == 0)
+            { // The next season
                 EndSeason();
-            if (FTTaken && nextPlayerId == 0 && Season.Equals(Seasons.Spring)) // The year is over
-                EndYear();
+                if (Season.Equals(Seasons.Spring))
+                { // The year is over
+                    EndYear();
+                }
+            }
 
             CurrentPlayerId.Value = nextPlayerId;
             FTTaken = true;
 
             OnTurnEndingClientRpc(Year, Season.ToString());
-            StartNextTurnCilentRpc(
+            StartNextTurnClientRpc(
                 RpcTarget.Single(nextPlayerId, RpcTargetUse.Temp)
             );
         }
@@ -227,17 +214,20 @@ namespace TTT.Managers
                     }
                 }
                 string cleanIp = ipBuilder.ToString().Trim();
-                
+
                 // Configure transport with IP and Port from args using SetConnectionData
-                var transport = NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
-                
+                var transport =
+                    NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
+
                 if (args.IsHost)
                 {
                     // For host, use "0.0.0.0" as listen address to accept connections on all interfaces
                     transport.SetConnectionData(cleanIp, args.Port, cleanIp);
                     // Debug.Log($"Starting host on {cleanIp}:{args.Port}");
                     NetworkManager.Singleton.StartHost();
-                    CurrentPlayerId.Value = NetworkManager.Singleton.LocalClientId;
+                    CurrentPlayerId.Value = NetworkManager
+                        .Singleton
+                        .LocalClientId;
                 }
                 else
                 {
@@ -296,7 +286,7 @@ namespace TTT.Managers
             }
             else
             {
-                Debug.LogWarning("MAP FAILED TO LOAD! RETURNING TO MAIN MENU!");
+                // Debug.LogWarning("MAP FAILED TO LOAD! RETURNING TO MAIN MENU!");
                 SystemStateChange.Raise(
                     new StateSystemChangeEventArgs()
                     {
@@ -307,95 +297,5 @@ namespace TTT.Managers
         }
 
         #endregion
-        // public void OnTurnEnding(Object _)
-        // {
-        //     //Get all the connected clients
-        //     var ConnectedClientsList =
-        //         NetworkManager.Singleton.ConnectedClientsList.ToList();
-        //     var self = NetworkManager.Singleton.LocalClient;
-
-        //     //If I am not the last connected client
-        //     if (!ConnectedClientsList.Last().Equals(self))
-        //     {
-        //         //Increment the current client
-        //         var currentIndex = ConnectedClientsList.IndexOf(CurrentPlayer);
-        //         CurrentPlayer = ConnectedClientsList[currentIndex + 1];
-        //         StartNextTurn(new());
-        //     }
-        //     else
-        //     {
-        //         CurrentPlayer = ConnectedClientsList.First();
-        //         // end the season before saying the turn ended
-        //         EndSeason();
-        //         if (Season.Equals(Seasons.Spring))
-        //         {
-        //             EndYear();
-        //         }
-        //         else
-        //         {
-        //             StartNextTurn(new());
-        //         }
-        //     }
-        // }
-
-        // /// <summary>
-        // /// Increments the season, and the year if applicable.
-        // /// </summary>
-        // private void EndSeason()
-        // {
-        //     endingSeasonEvent.Raise();
-        //     Season = Season.NextEnumValue();
-        //     // int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
-
-        //     // // % to wrap around to the beginning after winter
-        //     // int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
-        //     // Season = Seasons[nextSeasonIndex];
-        // }
-
-        // private void EndYear()
-        // {
-        //     Year += 1;
-
-        //     // --- Calculate future climate values ---
-
-        //     WorldState currentWorldState = new()
-        //     {
-        //         Pollution = CO2_Pollution.Value,
-        //         SeaLevel = SeaLevel.Value,
-        //         Temp = Temperature.Value,
-        //         Year = Year,
-        //     };
-
-        //     WorldState futureWorldState =
-        //         ClimatePredictionModel.PredictFutureClimateDataForNextTurn(
-        //             currentWorldState
-        //         );
-
-        //     Temperature.Value = futureWorldState.Temp;
-        //     SeaLevel.Value = futureWorldState.SeaLevel;
-        //     // (CO2 not updated by climate prediction model)
-
-        //     endingYearEvent.Raise();
-        // }
-
-        // public void StartNextTurn(object _)
-        // {
-        //     endTurnEvent.Raise();
-        //     startTurnEvent.Raise();
-        // }
-
-        // public void OnPlayerLose(Object _)
-        // {
-        //     Debug.Log("Player has lost the game.");
-        // }
-
-        // public bool CanEndTurn()
-        // {
-        //     bool hasEnoughResources = PlayerResources.All(resources =>
-        //         resources.AmountOwned >= 0
-        //     );
-
-        //     return hasEnoughResources;
-        // }
     }
 }

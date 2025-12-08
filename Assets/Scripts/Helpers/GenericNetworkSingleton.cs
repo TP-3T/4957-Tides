@@ -52,13 +52,14 @@ namespace TTT.Helpers
             }
         }
 
-        protected virtual void OnDestroy()
+        public override void OnDestroy()
         {
             // Clear the instance reference when destroyed
             if (_instance == this as T)
             {
                 _instance = null;
             }
+            base.OnDestroy();
         }
     }
 }
