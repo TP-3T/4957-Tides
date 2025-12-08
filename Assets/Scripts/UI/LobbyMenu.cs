@@ -14,10 +14,9 @@ public class LobbyMenu : MonoBehaviour
 
     [SerializeField]
     public GameObject IpAddress;
-    
+
     [SerializeField]
     public GameObject Port;
-
 
     /// <summary>
     /// Gets the IP address from the TextMeshPro component.
@@ -55,7 +54,7 @@ public class LobbyMenu : MonoBehaviour
                         numericOnly += c;
                     }
                 }
-                
+
                 if (ushort.TryParse(numericOnly, out ushort port))
                 {
                     return port;

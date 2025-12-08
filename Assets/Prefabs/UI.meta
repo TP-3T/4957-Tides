@@ -1,12 +1,8 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Prefabs/UI.meta
 guid: 99f40adffcf905d45ace8e53e9174e23
-========
-guid: 57e25b4a578dba94c9353f4633b20549
->>>>>>>> d1dcafc7f656a4694e544bf3700cbcaee24537d9:Assets/StandaloneFileBrowser.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  userData:
+  assetBundleName:
+  assetBundleVariant:

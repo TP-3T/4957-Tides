@@ -7,7 +7,7 @@ namespace TTT.Managers
     /// <summary>
     /// Singleton class for managing audio related to the game including music and SFX
     /// </summary>
-    public partial class AudioManager : GenericSingleton<AudioManager>
+    public partial class AudioManager : MonoBehaviour
     {
         [Header("One-Shot Sounds")]
         [Tooltip("Array of one-shot sound effect AudioEntries")]

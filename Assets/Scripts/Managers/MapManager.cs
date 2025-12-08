@@ -107,12 +107,12 @@ namespace TTT.Managers
             _seaMeshId.OnValueChanged += OnSeaMeshIdChanged;
         }
 
-        protected override void OnDestroy()
+        public override void OnDestroy()
         {
-            base.OnDestroy();
             // Unsubscribe from NetworkVariable changes
             _hexMeshId.OnValueChanged -= OnHexMeshIdChanged;
             _seaMeshId.OnValueChanged -= OnSeaMeshIdChanged;
+            base.OnDestroy();
         }
 
         private void OnHexMeshIdChanged(ulong oldValue, ulong newValue)

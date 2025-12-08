@@ -1,4 +1,3 @@
-using log4net.DateFormatter;
 using TMPro;
 using TTT.DataClasses.States;
 using TTT.DataClasses.TileFeatures;
@@ -73,6 +72,9 @@ namespace TTT.Player
         private GameObject LoseUI;
 
         [SerializeField]
+        private GameObject LoadingUI;
+
+        [SerializeField]
         private GameObject CurrentUI;
 
         public GameEvent playerLoseEvent;
@@ -92,6 +94,7 @@ namespace TTT.Player
         public void OnStart()
         {
             transform.position = startingPosition;
+            SetCurrentUI(GameUI);
             if (playerCamera != null)
             {
                 playerCamera.enabled = true;
@@ -113,14 +116,27 @@ namespace TTT.Player
             SetCurrentUI(MainMenu);
         }
 
+        public void OnSystemStateChange(object args)
+        {
+            var eventArgs = args as StateSystemChangeEventArgs;
+            GameObject newUI = eventArgs.NewState switch
+            {
+                SystemState.PLAYING => GameUI,
+                SystemState.LOADING => LoadingUI,
+                SystemState.MAIN_MENU => MainMenu,
+                _ => CurrentUI,
+            };
+            SetCurrentUI(newUI);
+        }
+
         private void SetCurrentUI(GameObject newUI)
         {
             if (CurrentUI != null)
             {
-                Extensions.SmartDestroy(CurrentUI);
+                CurrentUI.SetActive(false);
             }
-            CurrentUI = Instantiate(newUI);
-            CurrentUI.transform.parent = this.transform;
+            newUI.SetActive(true);
+            CurrentUI = newUI;
         }
 
         //? CB: There must be an event driven way to handle this.

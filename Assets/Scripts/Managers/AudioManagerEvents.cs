@@ -6,7 +6,7 @@ using WebSocketSharp;
 
 namespace TTT.Managers
 {
-    public partial class AudioManager : GenericSingleton<AudioManager>
+    public partial class AudioManager : MonoBehaviour
     {
         public void OnPlayAudioEvent(object args)
         {

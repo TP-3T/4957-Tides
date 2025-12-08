@@ -82,8 +82,7 @@ MonoBehaviour:
   - m_GUID: a574734cbcc1411429593620b463cc3a
     m_Address: P_HexMesh
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - ui
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d2fc9cdc2eae8f04181273b343e0526f
     m_Address: B_Nuclear
