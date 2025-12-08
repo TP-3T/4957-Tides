@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Codice.Client.BaseCommands;
-using NUnit.Framework.Constraints;
 using TTT.ClimateModel;
 using TTT.DataClasses;
 using TTT.DataClasses.HexData;
@@ -13,16 +9,12 @@ using TTT.GameEvents;
 using TTT.Helpers;
 using Unity.Collections;
 using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
-using UnityEditor.SearchService;
 using UnityEngine;
 
 namespace TTT.Managers
 {
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
-        private Queue<WorldState> AIDataQueue = new();
-
         [field: SerializeField]
         public List<PlayerResource> PlayerResources { get; private set; }
 
@@ -32,20 +24,10 @@ namespace TTT.Managers
         [field: SerializeField]
         public InteractionMode InteractionMode { get; private set; }
 
-        // // ! TODO: Remove
-        // private readonly string[] Seasons =
-        // {
-        //     "Spring",
-        //     "Summer",
-        //     "Fall",
-        //     "Winter",
-        // };
-
         public NetworkVariable<ulong> CurrentPlayerId = new();
 
         [field: SerializeField]
         public int Year { get; private set; } = 1;
-
 
         [SerializeField]
         public bool FTTaken { get; private set; } = false;
@@ -173,10 +155,10 @@ namespace TTT.Managers
         }
 
         [Rpc(SendTo.SpecifiedInParams)]
-        public void StartNextTurnCilentRpc(RpcParams paramS = default)
+        public void StartNextTurnClientRpc(RpcParams paramS = default)
         {
             // Debug.Log(
-            //     $"[GameManager] cilent rpc IT SHOULD ONLY BE ME {NetworkManager.Singleton.LocalClientId}"
+            //     $"[GameManager] client rpc IT SHOULD ONLY BE ME {NetworkManager.Singleton.LocalClientId}"
             // );
             startTurnEvent.Raise();
         }
@@ -201,7 +183,7 @@ namespace TTT.Managers
             FTTaken = true;
 
             OnTurnEndingClientRpc(Year, Season.ToString());
-            StartNextTurnCilentRpc(
+            StartNextTurnClientRpc(
                 RpcTarget.Single(nextPlayerId, RpcTargetUse.Temp)
             );
         }
@@ -227,17 +209,20 @@ namespace TTT.Managers
                     }
                 }
                 string cleanIp = ipBuilder.ToString().Trim();
-                
+
                 // Configure transport with IP and Port from args using SetConnectionData
-                var transport = NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
-                
+                var transport =
+                    NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
+
                 if (args.IsHost)
                 {
                     // For host, use "0.0.0.0" as listen address to accept connections on all interfaces
                     transport.SetConnectionData(cleanIp, args.Port, cleanIp);
                     // Debug.Log($"Starting host on {cleanIp}:{args.Port}");
                     NetworkManager.Singleton.StartHost();
-                    CurrentPlayerId.Value = NetworkManager.Singleton.LocalClientId;
+                    CurrentPlayerId.Value = NetworkManager
+                        .Singleton
+                        .LocalClientId;
                 }
                 else
                 {
@@ -307,95 +292,5 @@ namespace TTT.Managers
         }
 
         #endregion
-        // public void OnTurnEnding(Object _)
-        // {
-        //     //Get all the connected clients
-        //     var ConnectedClientsList =
-        //         NetworkManager.Singleton.ConnectedClientsList.ToList();
-        //     var self = NetworkManager.Singleton.LocalClient;
-
-        //     //If I am not the last connected client
-        //     if (!ConnectedClientsList.Last().Equals(self))
-        //     {
-        //         //Increment the current client
-        //         var currentIndex = ConnectedClientsList.IndexOf(CurrentPlayer);
-        //         CurrentPlayer = ConnectedClientsList[currentIndex + 1];
-        //         StartNextTurn(new());
-        //     }
-        //     else
-        //     {
-        //         CurrentPlayer = ConnectedClientsList.First();
-        //         // end the season before saying the turn ended
-        //         EndSeason();
-        //         if (Season.Equals(Seasons.Spring))
-        //         {
-        //             EndYear();
-        //         }
-        //         else
-        //         {
-        //             StartNextTurn(new());
-        //         }
-        //     }
-        // }
-
-        // /// <summary>
-        // /// Increments the season, and the year if applicable.
-        // /// </summary>
-        // private void EndSeason()
-        // {
-        //     endingSeasonEvent.Raise();
-        //     Season = Season.NextEnumValue();
-        //     // int currentSeasonIndex = System.Array.IndexOf(Seasons, Season);
-
-        //     // // % to wrap around to the beginning after winter
-        //     // int nextSeasonIndex = (currentSeasonIndex + 1) % Seasons.Length;
-        //     // Season = Seasons[nextSeasonIndex];
-        // }
-
-        // private void EndYear()
-        // {
-        //     Year += 1;
-
-        //     // --- Calculate future climate values ---
-
-        //     WorldState currentWorldState = new()
-        //     {
-        //         Pollution = CO2_Pollution.Value,
-        //         SeaLevel = SeaLevel.Value,
-        //         Temp = Temperature.Value,
-        //         Year = Year,
-        //     };
-
-        //     WorldState futureWorldState =
-        //         ClimatePredictionModel.PredictFutureClimateDataForNextTurn(
-        //             currentWorldState
-        //         );
-
-        //     Temperature.Value = futureWorldState.Temp;
-        //     SeaLevel.Value = futureWorldState.SeaLevel;
-        //     // (CO2 not updated by climate prediction model)
-
-        //     endingYearEvent.Raise();
-        // }
-
-        // public void StartNextTurn(object _)
-        // {
-        //     endTurnEvent.Raise();
-        //     startTurnEvent.Raise();
-        // }
-
-        // public void OnPlayerLose(Object _)
-        // {
-        //     Debug.Log("Player has lost the game.");
-        // }
-
-        // public bool CanEndTurn()
-        // {
-        //     bool hasEnoughResources = PlayerResources.All(resources =>
-        //         resources.AmountOwned >= 0
-        //     );
-
-        //     return hasEnoughResources;
-        // }
     }
 }

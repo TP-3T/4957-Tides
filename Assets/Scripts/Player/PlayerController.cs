@@ -120,7 +120,7 @@ namespace TTT.Player
                 Extensions.SmartDestroy(CurrentUI);
             }
             CurrentUI = Instantiate(newUI);
-            CurrentUI.transform.parent = this.transform;
+            CurrentUI.transform.SetParent(this.transform);
         }
 
         //? CB: There must be an event driven way to handle this.

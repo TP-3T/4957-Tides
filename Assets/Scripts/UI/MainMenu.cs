@@ -169,7 +169,6 @@ public class MainMenu : MonoBehaviour
         // Debug.LogWarning(msg);
     }
 
-
     /// <summary>
     /// Raises startNetworkEvent and starts as host with default IP and Port.
     /// Uses listen address "0.0.0.0" to listen on all network interfaces.
@@ -201,5 +200,4 @@ public class MainMenu : MonoBehaviour
             startNetworkEvent.Raise(args);
         }
     }
-
 }
