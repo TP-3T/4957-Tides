@@ -338,7 +338,7 @@ namespace TTT.Managers
             //     $"Starting async spawn of {_pendingFeatures.Count} features..."
             // );
 
-            foreach (var featureNet in _pendingFeaturesGoated)
+            foreach (var featureNet in _pendingNetworkFeatures)
             {
                 var featureIdS = featureNet.FeatureId.ToString();
                 if (
@@ -371,24 +371,7 @@ namespace TTT.Managers
                         yield return null; // Wait one frame
                     }
                 }
-                else
-                {
-                    // Debug.LogWarning(
-                    //     $"skipped unknown feature '{featureIdS}' at {featureNet.FeaturePosition}"
-                    // ); //THis basically never happens but I put this here just in case :/
-                }
             }
-
-            if (spawnedCount > 0)
-            {
-                // Debug.Log($"Finished spawning {spawnedCount} features:");
-                // foreach (var kvp in featureTypeCounts)
-                // {
-                //     Debug.Log($"  {kvp.Key}: {kvp.Value}");
-                // }
-            }
-
-            // _pendingFeatures.Clear();
 
             _mapLoadFinishEvent.Raise(
                 new NewMapFinishedEventArgs()

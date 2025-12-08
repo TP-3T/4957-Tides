@@ -1,7 +1,7 @@
+using TMPro;
 using TTT.GameEvents;
 using TTT.Helpers;
 using UnityEngine;
-using TMPro;
 
 public class NetworkButton : MonoBehaviour
 {
@@ -83,20 +83,30 @@ public class NetworkButton : MonoBehaviour
             startNetworkEvent.Raise(args);
         }
     }
+
     public void OnMapLoad()
     {
         gameObject.SetActive(false);
-        
+
         // Load the map from the path specified in MainMenu.selectedMap
         if (!string.IsNullOrEmpty(MainMenu.selectedMap))
         {
-            if (LoadExternalJson.TryGetMapJson(MainMenu.selectedMap, out TextAsset loadedMap))
+            if (
+                LoadExternalJson.TryGetMapJson(
+                    MainMenu.selectedMap,
+                    out TextAsset loadedMap
+                )
+            )
             {
-                newMapEvent.Raise(new NewMapEventArgs() { DataFile = loadedMap });
+                newMapEvent.Raise(
+                    new NewMapEventArgs() { DataFile = loadedMap }
+                );
             }
             else
             {
-                Debug.LogError($"[NetworkButton] Failed to load map from path: {MainMenu.selectedMap}");
+                Debug.LogError(
+                    $"[NetworkButton] Failed to load map from path: {MainMenu.selectedMap}"
+                );
             }
         }
         else

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TMPro;
 using TTT.DataClasses.HexData;
@@ -38,9 +37,12 @@ namespace TTT.UI
         private List<MapInfo> localMapInfoList = new();
         private List<GameObject> instantiatedMapItems = new();
 
-        private static readonly string folderPath = "./Assets/Resources";
+        private string folderPath;
 
-        void Start() { }
+        void Awake()
+        {
+            folderPath = Application.persistentDataPath;
+        }
 
         private void OnEnable()
         {
@@ -88,10 +90,7 @@ namespace TTT.UI
 
         public IEnumerator FetchLocalMapList()
         {
-            string[] jsonFileNames = Directory.GetFiles(
-                Path.GetFullPath(folderPath),
-                "*.json"
-            );
+            string[] jsonFileNames = Directory.GetFiles(folderPath, "*.json");
 
             foreach (var jsonFileName in jsonFileNames)
             {
@@ -126,7 +125,7 @@ namespace TTT.UI
             LoadingPanel.SetActive(true);
             var loadingText =
                 LoadingPanel.GetComponentInChildren<TextMeshProUGUI>();
-            string filePath = $"./Assets/Resources/{selectedMapId}.json";
+            var filePath = Path.Combine(folderPath, $"{selectedMapId}.json");
             if (!File.Exists(filePath))
             {
                 loadingText.text = "Downloading...";
@@ -152,13 +151,11 @@ namespace TTT.UI
         {
             MapData mapJson = JsonConvert.DeserializeObject<MapData>(mapData);
 
-            string localPath = $"{selectedMapId}";
-
             File.WriteAllText(
                 filePath,
                 JsonConvert.SerializeObject(mapJson, Formatting.Indented)
             );
-            MainMenu.selectedMap = localPath;
+            MainMenu.selectedMap = filePath;
             var loadingText =
                 LoadingPanel.GetComponentInChildren<TextMeshProUGUI>();
             StartCoroutine(LogError(loadingText, "Map loaded!"));

@@ -94,7 +94,7 @@ namespace TTT.Managers
         private List<(Vector3 position, string featureId)> _pendingFeatures =
             new();
 
-        private NetworkList<FeatureNet> _pendingFeaturesGoated = new();
+        private NetworkList<FeatureNet> _pendingNetworkFeatures = new();
 
         IEnumerator Start()
         {
@@ -487,7 +487,7 @@ namespace TTT.Managers
                             var n = new FeatureNet();
                             n.FeatureId = tileData.Feature;
                             n.FeaturePosition = hexCell.CellPosition;
-                            _pendingFeaturesGoated.Add(n);
+                            _pendingNetworkFeatures.Add(n);
                         }
                     }
                 }
