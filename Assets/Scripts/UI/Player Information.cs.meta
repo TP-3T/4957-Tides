@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 72f6115e5b019ea40ae5ba9b5e122d00
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _moneyText: {instanceID: 0}
+  - _powerText: {instanceID: 0}
+  - _populationText: {instanceID: 0}
+  - playerStats: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

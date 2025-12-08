@@ -1,0 +1,19 @@
+{
+    "name": "TTT.Helpers",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:4fc462806a32aa245a7b28367381bf24",
+        "GUID:a229a84e8e23db742918a3b10ed177ac",
+        "GUID:7e6c88045c6d6cb499d55a47044b4c5f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

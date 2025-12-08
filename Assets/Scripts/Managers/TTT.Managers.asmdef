@@ -1,0 +1,28 @@
+{
+    "name": "TTT.Managers",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:faaccf58d3509f8479e9a35ed1a867be",
+        "GUID:9e24947de15b9834991c9d8411ea37cf",
+        "GUID:84651a3751eca9349aac36a66bba901b",
+        "GUID:4c861275823ef884d91df8647f4caa34",
+        "GUID:0584c7e699b26eb43bd6f8f5022c28bc",
+        "GUID:7e6c88045c6d6cb499d55a47044b4c5f",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:de2ca83ec28bad84ea08b6c94aaa6e23",
+        "GUID:80a120755bd37c14f8c7866f38551991",
+        "GUID:f71654149011e8749bf96afd539012df",
+        "GUID:33fa1a77a93c87a4cae970e1e487bb77"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

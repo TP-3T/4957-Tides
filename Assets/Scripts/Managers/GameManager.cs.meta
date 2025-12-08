@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f19361180d20d1e418bc74eecec020b5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - <PlayerStats>k__BackingField: {fileID: 11400000, guid: 3717ef79dd07719469b9236a39b74df1, type: 2}
+  - startTurnEvent: {instanceID: 0}
+  - endTurnEvent: {instanceID: 0}
+  - endingSeasonEvent: {instanceID: 0}
+  - endingYearEvent: {instanceID: 0}
+  - newMapEvent: {instanceID: 0}
+  - BuildingFeatureEvent: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

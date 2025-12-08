@@ -1,0 +1,29 @@
+{
+    "name": "PlayMode",
+    "rootNamespace": "",
+    "references": [
+        "TTT.Hex",
+        "TTT.Helpers",
+        "TTT.GameEvents",
+        "TTT.Managers",
+        "Unity.Netcode.Runtime",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.Addressables",
+        "Unity.ResourceManager",
+        "TTT.DataClasses"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
