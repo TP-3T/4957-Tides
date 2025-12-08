@@ -43,6 +43,9 @@ namespace TTT.Managers
         private GameEvent _mapLoadFinishEvent;
 
         [SerializeField]
+        private GameEvent NewGameStateEvent;
+
+        [SerializeField]
         private TerrainDictionary _allowedTerrains;
 
         [SerializeField]
@@ -405,6 +408,12 @@ namespace TTT.Managers
             // Maybe...
             try
             {
+                NewGameStateEvent.Raise(
+                    new StateSystemChangeEventArgs()
+                    {
+                        NewState = SystemState.LOADING,
+                    }
+                );
                 _pendingFeatures.Clear();
 
                 // Deserialized data (cringe)

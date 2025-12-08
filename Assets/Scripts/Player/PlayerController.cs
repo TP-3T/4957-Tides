@@ -135,8 +135,9 @@ namespace TTT.Player
             {
                 CurrentUI.SetActive(false);
             }
-            newUI.SetActive(true);
             CurrentUI = newUI;
+            newUI.SetActive(true);
+            // CurrentUI.transform.SetParent(this.transform);
         }
 
         //? CB: There must be an event driven way to handle this.

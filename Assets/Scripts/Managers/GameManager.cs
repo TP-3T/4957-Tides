@@ -16,8 +16,6 @@ namespace TTT.Managers
 {
     public class GameManager : GenericNetworkSingleton<GameManager>
     {
-        private Queue<WorldState> AIDataQueue = new();
-
         [field: SerializeField]
         public List<PlayerResource> PlayerResources { get; private set; }
 
