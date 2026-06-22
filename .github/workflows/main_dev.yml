@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         name: format
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@v7
             - uses: actions/setup-dotnet@v5
               with:
                   dotnet-version: "9.0.x"
@@ -22,7 +22,7 @@ jobs:
 
         steps:
             - name: checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
 
             - name: run playmode tests
               uses: game-ci/unity-test-runner@v4
